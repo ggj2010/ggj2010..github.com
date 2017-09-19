@@ -1,0 +1,740 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="redis主从redis一主可以对应多个从节点，主节点可以读写，从节点只能查询 配置文件salve节点文件里面添加以下内容 slaveof &amp;lt;masterip&amp;gt; &amp;lt;masterport&amp;gt; //主节点的ip masterauth &amp;lt;master-password&amp;gt;   //主节点的密码 客户端实现对于写的操作需要路由到主节点redis数据源 对于读操作需要路由到从">
+<meta property="og:type" content="article">
+<meta property="og:title" content="缓存相关记录">
+<meta property="og:url" content="http://ggj2010.github.io/2017/07/06/缓存相关记录/index.html">
+<meta property="og:site_name" content="高广金博客">
+<meta property="og:description" content="redis主从redis一主可以对应多个从节点，主节点可以读写，从节点只能查询 配置文件salve节点文件里面添加以下内容 slaveof &amp;lt;masterip&amp;gt; &amp;lt;masterport&amp;gt; //主节点的ip masterauth &amp;lt;master-password&amp;gt;   //主节点的密码 客户端实现对于写的操作需要路由到主节点redis数据源 对于读操作需要路由到从">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-08-30T08:57:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="缓存相关记录">
+<meta name="twitter:description" content="redis主从redis一主可以对应多个从节点，主节点可以读写，从节点只能查询 配置文件salve节点文件里面添加以下内容 slaveof &amp;lt;masterip&amp;gt; &amp;lt;masterport&amp;gt; //主节点的ip masterauth &amp;lt;master-password&amp;gt;   //主节点的密码 客户端实现对于写的操作需要路由到主节点redis数据源 对于读操作需要路由到从">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://ggj2010.github.io/2017/07/06/缓存相关记录/"/>
+
+
+
+
+
+  <title> 缓存相关记录 | 高广金博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">高广金博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-webmagic">
+          <a href="https://ggj2010.bid" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            爬虫
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://ggj2010.github.io/2017/07/06/缓存相关记录/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ggj2010">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="高广金博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                缓存相关记录
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-06T15:58:53+08:00">
+                2017-07-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="redis主从"><a href="#redis主从" class="headerlink" title="redis主从"></a>redis主从</h3><pre><code>redis一主可以对应多个从节点，主节点可以读写，从节点只能查询
+</code></pre><h4 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h4><pre><code>salve节点文件里面添加以下内容
+slaveof &lt;masterip&gt; &lt;masterport&gt; //主节点的ip
+masterauth &lt;master-password&gt;   //主节点的密码
+</code></pre><h4 id="客户端实现"><a href="#客户端实现" class="headerlink" title="客户端实现"></a>客户端实现</h4><pre><code>对于写的操作需要路由到主节点redis数据源
+对于读操作需要路由到从节点的数据源。
+</code></pre><h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><pre><code>如果redis主节点挂了，从节点不会自动切换， 需要借助redis的Sentinel或者keepalive来实现主的故障转移
+</code></pre><h4 id="redis-Sentinel"><a href="#redis-Sentinel" class="headerlink" title="redis Sentinel"></a>redis Sentinel</h4><pre><code>配置可参考：https://cachecloud.github.io/2016/03/11/Redis%203.2.0-Sentinel%E6%95%85%E9%9A%9C%E8%BD%AC%E7%A7%BB%E6%B5%8B%E8%AF%95/
+./redis-server.sh sentinel.conf --sentinel //--sentinel是哨兵模式启动需要带的参数
+</code></pre><h3 id="redis集群"><a href="#redis集群" class="headerlink" title="redis集群"></a>redis集群</h3><pre><code>因为单台服务器内存的局限性，必须要进行横向扩展，主从模式不能保证高可用,redis官方自带的redis-cluter
+</code></pre><h3 id="缓存穿透、并发、失效、一致性"><a href="#缓存穿透、并发、失效、一致性" class="headerlink" title="缓存穿透、并发、失效、一致性"></a>缓存穿透、并发、失效、一致性</h3><h4 id="穿透"><a href="#穿透" class="headerlink" title="穿透"></a>穿透</h4><pre><code>    一般缓存数据流程都是先查缓存系统，如果缓存系统不存在，再查db，然后异步更新缓存系统，正常的这样流程是没有
+任何风险的，可当黑客攻击的时候，会模拟一个不存在的缓存KEY，导致缓存无法命中直接查询DB。
+防止缓存穿透首先要过滤缓存key,比如key不符合要求直接打回，如果key查询db后返回的结果为null,我们可以为这个key预设一个
+特定的值比如“&amp;&amp;”，这样后续的查询返回的都是“&amp;&amp;”，就不会直接查询db了。
+</code></pre><h4 id="并发"><a href="#并发" class="headerlink" title="并发"></a>并发</h4><pre><code>    比如手机app首页的推荐位数据一般都是从缓存里面取的，比如在用户访问高峰期的时候缓存失效了，用户打开app首页的时候，加载的
+推荐位数据会并发请求到数据库，这种情况就需要对查询db的操作进行加分布式锁的功能了。可以使用一个锁，也可以初始化多个锁，保证
+打到数据库的请求是在可控范围。或者使用本地缓存，当nosql缓存失效的时候，直接先拿本地缓存挡着，但是要注意本地缓存的大小。
+</code></pre><h4 id="失效"><a href="#失效" class="headerlink" title="失效"></a>失效</h4><pre><code>    一般使用缓存都会加上失效时间，防止一些冷数据一直占用缓存。假如用户集中在18:00登录，登录后会把用户信息放到缓存里面，同时设置
+缓存失效时间是24小时，也就是说到第二天18:00的时候，这些用户的缓存信息同时失效了，系统会有大量请求打到DB，为了防止缓存集中性的
+失效，我们可以对缓存的失效设置一个随机时间，比如20~24小时之间，将缓存的失效时间分开减小并发压力。
+</code></pre><h4 id="一致性"><a href="#一致性" class="headerlink" title="一致性"></a>一致性</h4><pre><code> 一般都是先修改DB然后再修改缓存，如果缓存系统突然挂了，就会导致db与缓存的数据不一致。
+如何解决：更新缓存系统的时候增加重试功能，比如更新个三四次，如果三四次还不成功那就往消息队列里面
+丢一条更新缓存的请求，异步的去更新缓存。
+</code></pre><h4 id="缓存雪崩"><a href="#缓存雪崩" class="headerlink" title="缓存雪崩"></a>缓存雪崩</h4><pre><code>如果缓存服务器不是高可用了，使用hystrix拦截
+</code></pre><h3 id="memcache"><a href="#memcache" class="headerlink" title="memcache"></a>memcache</h3><pre><code>memcache是完全基于内存的，不能持久化存储，只能存储key value
+</code></pre><h4 id="缓存序列化与反序列化"><a href="#缓存序列化与反序列化" class="headerlink" title="缓存序列化与反序列化"></a>缓存序列化与反序列化</h4>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/21/阿里巴巴电话面试记录/" rel="next" title="阿里巴巴电话面试记录">
+                <i class="fa fa-chevron-left"></i> 阿里巴巴电话面试记录
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/14/书单/" rel="prev" title="书单">
+                书单 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg"
+               alt="ggj2010" />
+          <p class="site-author-name" itemprop="name">ggj2010</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ggj2010" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/ggjlvzjy" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#redis主从"><span class="nav-number">1.</span> <span class="nav-text">redis主从</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#配置文件"><span class="nav-number">1.1.</span> <span class="nav-text">配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#客户端实现"><span class="nav-number">1.2.</span> <span class="nav-text">客户端实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#缺点"><span class="nav-number">1.3.</span> <span class="nav-text">缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#redis-Sentinel"><span class="nav-number">1.4.</span> <span class="nav-text">redis Sentinel</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redis集群"><span class="nav-number">2.</span> <span class="nav-text">redis集群</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存穿透、并发、失效、一致性"><span class="nav-number">3.</span> <span class="nav-text">缓存穿透、并发、失效、一致性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#穿透"><span class="nav-number">3.1.</span> <span class="nav-text">穿透</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#并发"><span class="nav-number">3.2.</span> <span class="nav-text">并发</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#失效"><span class="nav-number">3.3.</span> <span class="nav-text">失效</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一致性"><span class="nav-number">3.4.</span> <span class="nav-text">一致性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#缓存雪崩"><span class="nav-number">3.5.</span> <span class="nav-text">缓存雪崩</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#memcache"><span class="nav-number">4.</span> <span class="nav-text">memcache</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#缓存序列化与反序列化"><span class="nav-number">4.1.</span> <span class="nav-text">缓存序列化与反序列化</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ggj2010</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

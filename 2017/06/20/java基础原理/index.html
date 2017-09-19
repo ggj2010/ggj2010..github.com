@@ -1,0 +1,962 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="集合Map HashMap  实现原理 HashMap实际上是一个“链表散列”的数据结构，即数组+链表,Entry[] table+ entry链表DK1.8中，HashMap采用数组+链表+红黑树实现，当链表长度超过阈值（8）时，将链表转换为红黑树，这样大大减少了查找时间。 非线程安全，key值可以为空（当key值为空的时候hash的值为0，总是在table数据第一个节点） hashMap在多线">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java基础原理">
+<meta property="og:url" content="http://ggj2010.github.io/2017/06/20/java基础原理/index.html">
+<meta property="og:site_name" content="高广金博客">
+<meta property="og:description" content="集合Map HashMap  实现原理 HashMap实际上是一个“链表散列”的数据结构，即数组+链表,Entry[] table+ entry链表DK1.8中，HashMap采用数组+链表+红黑树实现，当链表长度超过阈值（8）时，将链表转换为红黑树，这样大大减少了查找时间。 非线程安全，key值可以为空（当key值为空的时候hash的值为0，总是在table数据第一个节点） hashMap在多线">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://ocg3iebmc.bkt.clouddn.com/20160918105655_12.jpg">
+<meta property="og:image" content="http://ocg3iebmc.bkt.clouddn.com/011042300165927.png">
+<meta property="og:updated_time" content="2017-07-13T15:41:57.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="java基础原理">
+<meta name="twitter:description" content="集合Map HashMap  实现原理 HashMap实际上是一个“链表散列”的数据结构，即数组+链表,Entry[] table+ entry链表DK1.8中，HashMap采用数组+链表+红黑树实现，当链表长度超过阈值（8）时，将链表转换为红黑树，这样大大减少了查找时间。 非线程安全，key值可以为空（当key值为空的时候hash的值为0，总是在table数据第一个节点） hashMap在多线">
+<meta name="twitter:image" content="http://ocg3iebmc.bkt.clouddn.com/20160918105655_12.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://ggj2010.github.io/2017/06/20/java基础原理/"/>
+
+
+
+
+
+  <title> java基础原理 | 高广金博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">高广金博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-webmagic">
+          <a href="https://ggj2010.bid" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            爬虫
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://ggj2010.github.io/2017/06/20/java基础原理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ggj2010">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="高广金博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                java基础原理
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-20T10:18:13+08:00">
+                2017-06-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h4><h5 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h5><ul>
+<li><p>HashMap</p>
+<ul>
+<li>实现原理 HashMap实际上是一个“链表散列”的数据结构，即数组+链表,Entry[] table+ entry链表<br>DK1.8中，HashMap采用数组+链表+红黑树实现，当链表长度超过阈值（8）时，将链表转换为红黑树，这样大大减少了查找时间。<br><img src="http://ocg3iebmc.bkt.clouddn.com/20160918105655_12.jpg" alt=""></li>
+<li><p>非线程安全，key值可以为空（当key值为空的时候hash的值为0，总是在table数据第一个节点）</p>
+<pre><code>hashMap在多线程环境下会出现死循环，主要是多线程同时put时，
+如果同时触发了rehash操作，会导致HashMap中的链表中出现循环节点，进而使得后面get的时候，会死循环
+</code></pre></li>
+<li><p>初始容量16（必须是2的倍数，这样会让hash key散列的更均匀），初始因子0.75f（一般不用修改）</p>
+</li>
+<li>HashMap是对Map接口的实现</li>
+<li><p>hasMap遇到hash冲突解决</p>
+<pre><code>采用链地址法，将所有关键字为同义词的记录存储在同一线性链表中
+</code></pre></li>
+<li><p>关键代码取hash与indexFor</p>
+<pre><code>public V put(K key, V value) {
+    if (table == EMPTY_TABLE) {
+        inflateTable(threshold);
+    }
+    if (key == null)
+        return putForNullKey(value);
+    int hash = hash(key);
+    int i = indexFor(hash, table.length);
+    for (Entry&lt;K,V&gt; e = table[i]; e != null; e = e.next) {
+        Object k;
+        if (e.hash == hash &amp;&amp; ((k = e.key) == key || key.equals(k))) {
+            V oldValue = e.value;
+            e.value = value;
+            e.recordAccess(this);
+            return oldValue;
+        }
+    }
+    modCount++;
+    addEntry(hash, key, value, i);
+    return null;
+}
+final int hash(Object k) {
+    int h = hashSeed;
+    if (0 != h &amp;&amp; k instanceof String) {
+        return sun.misc.Hashing.stringHash32((String) k);
+    }
+    h ^= k.hashCode();
+    h ^= (h &gt;&gt;&gt; 20) ^ (h &gt;&gt;&gt; 12);
+    return h ^ (h &gt;&gt;&gt; 7) ^ (h &gt;&gt;&gt; 4);
+}
+static int indexFor(int h, int length) {
+    // assert Integer.bitCount(length) == 1 : &quot;length must be a non-zero power of 2&quot;;
+    return h &amp; (length-1);
+}
+</code></pre></li>
+</ul>
+</li>
+<li><p>HashTable</p>
+<ul>
+<li>实现原理 散列表，数组+链表结构实现</li>
+<li>线程安全（synchronized对方法加锁），key值不可以为空</li>
+<li>HashTable实现了Map接口和Dictionary抽象类</li>
+<li>初始容量11 初始因子0.75f</li>
+</ul>
+</li>
+<li><p>ThreeMap</p>
+<ul>
+<li>实现原理：是一个有序的key-value集合，基于红黑树（Red-Black tree）实现。<br>该映射根据其键的自然顺序进行排序，或者根据创建映射时提供的 Comparator 进行排序，具体取决于使用的构造方法</li>
+<li>非线程安全</li>
+</ul>
+</li>
+<li>LinkedHashMap<ul>
+<li>LinkedHashMap是HashMap的一个子类，它保留插入的顺序，先进先出，如果需要输出的顺序和输入时的相同，那么就选用LinkedHashMap</li>
+<li>非线程安全</li>
+<li>当LinkedHashMap工作在这个模式时，不能再迭代器中使用get()操作。Map的遍历建议使用entrySet的方式<br>  for(Map.Entry<string,integer> entry:map.entrySet()){<pre><code>System.out.println(entry.getKey()+&quot;:&quot;+entry.getValue());
+</code></pre>  }</string,integer></li>
+</ul>
+</li>
+<li><p>WeakHashMap</p>
+<ul>
+<li><p>原理和hashMap类似，通过WeakReference和ReferenceQueue实现的。</p>
+<pre><code>WeakHashMap的key是“弱键”，即是WeakReference类型的；ReferenceQueue是一个队列，它会保存被GC回收的“弱键”
+如果某个业务的数据不是特别重要，可以放到weakHashMap里面处理，可以随机的丢去一些数据，
+WeakHashMap中的key都存在强引用，那么WeakHashMap就会退化成HashMap。
+如果在系统中希望通过WeakHashMap自动清除数据，请尽量不要在系统的其他地方强引用WeakHashMap的key
+</code></pre><h5 id="List"><a href="#List" class="headerlink" title="List"></a>List</h5></li>
+</ul>
+</li>
+<li>LinkedList<ul>
+<li>原理：LinkedList 删除和新增效率高，基于链表实现的</li>
+<li>数组长度扩容是1.5倍，默认容量是10</li>
+<li>foeach性能比迭代性能差，通过反编译可看出，foeach的代码都是转成迭代，但多一步赋值操作</li>
+</ul>
+</li>
+<li>ArrayList<ul>
+<li>原理：ArrayList的随机访问更高，基于数组实现的ArrayList可直接定位到目标对象</li>
+</ul>
+</li>
+<li>Vector<ul>
+<li>Vector是线程安全的，而ArrayList不是</li>
+<li>由于Vector中的方法基本都是synchronized的，其性能低于ArrayList</li>
+<li>Vector可以定义数组长度扩容的因子，默认容量是10</li>
+</ul>
+</li>
+</ul>
+<h4 id="java-util-concurrent包下面常用类的原理"><a href="#java-util-concurrent包下面常用类的原理" class="headerlink" title="java.util.concurrent包下面常用类的原理"></a>java.util.concurrent包下面常用类的原理</h4><ul>
+<li><p>ConcurrentHashMap</p>
+<ul>
+<li>参考：<a href="http://ifeve.com/concurrenthashmap/" target="_blank" rel="external">聊聊并发（四）深入分析ConcurrentHashMap</a></li>
+<li>key值不可以为空</li>
+<li><p>原理:锁分段技术</p>
+<pre><code>ConcurrentHashMap是由Segment数组结构和HashEntry数组结构组成，Segment的结构和HashMap类似，是一种数组和链表结构，
+ 一个Segment里包含一个HashEntry数组，每个HashEntry是一个链表结构的元素，每个Segment守护者一个HashEntry数组里的元素,
+ 当对HashEntry数组的数据进行修改时，必须首先获得它对应的Segment锁.
+</code></pre></li>
+<li><p>锁：使用ReentrantLock和volatile</p>
+<pre><code>写的时候首先根据hash值获取对应的segment锁，
+读的时候不加锁 根据volatile
+get操作的高效之处在于整个get过程不需要加锁，除非读到的值是空的才会加锁重读，
+我们知道HashTable容器的get方法是需要加锁的，那么ConcurrentHashMap的get操作是如何做到不加锁的呢？
+原因是它的get方法里将要使用的共享变量都定义成volatile，
+如用于统计当前Segement大小的count字段和用于存储值的HashEntry的value。定义成volatile的变量，
+能够在线程之间保持可见性，能够被多线程同时读，并且保证不会读到过期的值，
+但是只能被单线程写（有一种情况可以被多线程写，就是写入的值不依赖于原值），
+在get操作里只需要读不需要写共享变量count和value，所以可以不用加锁。之所以不会读到过期的值，
+是根据java内存模型的happen before原则，对volatile字段的写入操作先于读操作，
+即使两个线程同时修改和获取volatile变量，get操作也能拿到最新的值，这是用volatile替换锁的经典应用场景。
+</code></pre><p>  <img src="http://ocg3iebmc.bkt.clouddn.com/011042300165927.png" alt=""></p>
+</li>
+</ul>
+</li>
+<li><p>CopyOnWriteArrayList</p>
+<ul>
+<li><p>原理：写加Reentrant锁，读不加锁</p>
+<pre><code>CopyOnWriteArrayList的核心思想是利用高并发往往是读多写少的特性，对读操作不加锁，对写操作，
+先复制一份新的集合，在新的集合上面修改，然后将新集合赋值给旧的引用，并通过volatile 保证其可见性，
+当然写操作的锁是必不可少的了。
+</code></pre></li>
+<li><p>使用场景与问题：适用写多读少的场景</p>
+<pre><code>　内存占用问题。因为CopyOnWrite的写时复制机制，所以在进行写操作的时候，内存里会同时驻扎两个对象的内存，旧的对象和新写入的对象
+（注意:在复制的时候只是复制容器里的引用，只是在写的时候会创建新对象添加到新容器里，而旧容器的对象还在使用，所以有两份对象内存）。
+如果这些对象占用的内存比较大，比如说200M左右，那么再写入100M数据进去，内存就会占用300M，那么这个时候很有可能造成频繁的Yong GC和Full GC。
+之前我们系统中使用了一个服务由于每晚使用CopyOnWrite机制更新大对象，造成了每晚15秒的Full GC，应用响应时间也随之变长。
+针对内存占用问题，可以通过压缩容器中的元素的方法来减少大对象的内存消耗，比如，如果元素全是10进制的数字，可以考虑把它压缩成36进制或64进制。
+或者不使用CopyOnWrite容器，而使用其他的并发容器，如ConcurrentHashMap。
+数据一致性问题。CopyOnWrite容器只能保证数据的最终一致性，不能保证数据的实时一致性。所以如果你希望写入的的数据，马上能读到，请不要使用CopyOnWrite容器
+</code></pre></li>
+</ul>
+</li>
+<li><p>ReentrantLock</p>
+<ul>
+<li><p>分为ReentrantReadWriteLock与ReentrantLock</p>
+<pre><code>需要手动去关闭锁，锁的类型有ReentrantLock（可重入锁），ReentrantReadWriteLock 读写锁
+lock()、tryLock()、lock.newCondition()、tryLock(long time, TimeUnit unit)
+和lockInterruptibly() Lock里面的接口。如果同时启动两个线程调用tryLock()，其中一个线程会获取不到锁，退出执行；
+如果调用tryLock(long time, TimeUnit unit)其中一个线程获取不到锁会等待一段时间，然后继续执行。
+condition.signal();condition.await();和wait()和notify()一个意思，不过condition是和lock绑定的
+</code></pre><ul>
+<li><p>lock与synchronized区别：</p>
+<pre><code>1）Lock是一个接口，而synchronized是Java中的关键字，synchronized是内置的语言实现；
+2）synchronized在发生异常时，会自动释放线程占有的锁，因此不会导致死锁现象发生；而Lock在发生异常时，
+如果没有主动通过unLock()去释放锁，则很可能造成死锁现象，因此使用Lock时需要在finally块中释放锁；
+3）Lock可以让等待锁的线程响应中断，而synchronized却不行，使用synchronized时，等待的线程会一直等待下去，不能够响应中断；
+4）通过Lock可以知道有没有成功获取锁，而synchronized却无法办到。
+5）Lock可以提高多个线程进行读操作的效率。
+6）lock可以实现ReentrantReadWriteLock  实现读取不加锁，而写加锁
+</code></pre></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>AtomicInteger</p>
+<ul>
+<li><p>原理</p>
+<pre><code>首先使用了volatile 保证了内存可见性。
+然后使用了CAS（compare-and-swap）算法 保证了原子性，cas是借助C来调用CPU底层指令实现的
+其中CAS算法的原理就是里面包含三个值：内存值A  预估值V  更新值 B
+当且仅当 V == A 时，V = B; 否则，不会执行任何操作。
+Unsafe是CAS的核心类
+</code></pre></li>
+</ul>
+</li>
+<li><p>volatile</p>
+<pre><code>被volatile修饰的变量，具备可见性和禁止指令排序。
+通过Java的内存模型可知，线程执行的时候，分为工作内存和主内存，操作变量的时候
+一般都是先从主内存里面读取变量的值，然后再load到工作内存，例如A线程执行的期间，B线程对此变量修改值，然后write到主内存。
+但是A线程操作的还是工作内存的数据。
+</code></pre></li>
+<li><p>Synchronized</p>
+<pre><code>代码块同步原理是使用monitorenter和monitorexit指令实现
+</code></pre></li>
+<li><p>ReentrantLock</p>
+<pre><code>ReentrantLock是基于AQS实现的，AbstractQueuedSynchronizer基础又是CAS
+</code></pre></li>
+<li><p>ThreadPool</p>
+<pre><code>线程重用的核心是，它把Thread.start()给屏蔽起来了（一定不要重复调用），然后它自己有一个Runnable.run()，
+循环在跑，跑的过程中不断检查我们是否有新加入的子Runnable对象，有就调一下我们的run()，其实就一个大run()把其它小run()#1,run()#2,...给串联起来了，基本原理就这么简单。
+源码：ThreadPoolExecutor.Worker类
+   /** Delegates main run loop to outer runWorker  */
+        public void run() {
+            runWorker(this);
+        }
+
+final void runWorker(Worker w) {
+        Thread wt = Thread.currentThread();
+        Runnable task = w.firstTask;
+        w.firstTask = null;
+        w.unlock(); // allow interrupts
+        boolean completedAbruptly = true;
+        try {
+        //循环执行run方法，getTask()如果没有要执行的任务会堵塞
+            while (task != null || (task = getTask()) != null) {
+                w.lock();
+                // If pool is stopping, ensure thread is interrupted;
+                // if not, ensure thread is not interrupted.  This
+                // requires a recheck in second case to deal with
+                // shutdownNow race while clearing interrupt
+                if ((runStateAtLeast(ctl.get(), STOP) ||
+                     (Thread.interrupted() &amp;&amp;
+                      runStateAtLeast(ctl.get(), STOP))) &amp;&amp;
+                    !wt.isInterrupted())
+                    wt.interrupt();
+                try {
+                    beforeExecute(wt, task);
+                    Throwable thrown = null;
+                    try {
+                        task.run();
+                    } catch (RuntimeException x) {
+                        thrown = x; throw x;
+                    } catch (Error x) {
+                        thrown = x; throw x;
+                    } catch (Throwable x) {
+                        thrown = x; throw new Error(x);
+                    } finally {
+                        afterExecute(task, thrown);
+                    }
+                } finally {
+                    task = null;
+                    w.completedTasks++;
+                    w.unlock();
+                }
+            }
+            completedAbruptly = false;
+        } finally {
+            processWorkerExit(w, completedAbruptly);
+        }
+    }
+</code></pre></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/13/阿里巴巴技术开发手册记录/" rel="next" title="阿里巴巴技术开发手册记录">
+                <i class="fa fa-chevron-left"></i> 阿里巴巴技术开发手册记录
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/21/阿里巴巴电话面试记录/" rel="prev" title="阿里巴巴电话面试记录">
+                阿里巴巴电话面试记录 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg"
+               alt="ggj2010" />
+          <p class="site-author-name" itemprop="name">ggj2010</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ggj2010" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/ggjlvzjy" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#集合"><span class="nav-number">1.</span> <span class="nav-text">集合</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Map"><span class="nav-number">1.1.</span> <span class="nav-text">Map</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List"><span class="nav-number">1.2.</span> <span class="nav-text">List</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java-util-concurrent包下面常用类的原理"><span class="nav-number">2.</span> <span class="nav-text">java.util.concurrent包下面常用类的原理</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ggj2010</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

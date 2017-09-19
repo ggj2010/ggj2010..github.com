@@ -1,0 +1,843 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="集群," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="通过keepalived搭建ningx集群，实现nginx高可用。  流程  keepalived作用Keepalived是一个基于VRRP协议来实现的服务高可用方案，可以利用其来避免IP单点故障， 对外虚拟一个vip ip节点。vrrp协议可以百度到 nginx+keepalived搭建 准备工作 linux虚拟机2台。master ip=192.168.112.97   slave ip=19">
+<meta name="keywords" content="集群">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nginx+keepalived实现高可用集群搭建">
+<meta property="og:url" content="http://ggj2010.github.io/2016/11/28/nginx-keepalived实现高可用集群搭建/index.html">
+<meta property="og:site_name" content="高广金博客">
+<meta property="og:description" content="通过keepalived搭建ningx集群，实现nginx高可用。  流程  keepalived作用Keepalived是一个基于VRRP协议来实现的服务高可用方案，可以利用其来避免IP单点故障， 对外虚拟一个vip ip节点。vrrp协议可以百度到 nginx+keepalived搭建 准备工作 linux虚拟机2台。master ip=192.168.112.97   slave ip=19">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://ocg3iebmc.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20161130105901.png">
+<meta property="og:image" content="http://ocg3iebmc.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20161130103148.png">
+<meta property="og:image" content="http://ocg3iebmc.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20161130103233.png">
+<meta property="og:updated_time" content="2017-05-04T10:32:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nginx+keepalived实现高可用集群搭建">
+<meta name="twitter:description" content="通过keepalived搭建ningx集群，实现nginx高可用。  流程  keepalived作用Keepalived是一个基于VRRP协议来实现的服务高可用方案，可以利用其来避免IP单点故障， 对外虚拟一个vip ip节点。vrrp协议可以百度到 nginx+keepalived搭建 准备工作 linux虚拟机2台。master ip=192.168.112.97   slave ip=19">
+<meta name="twitter:image" content="http://ocg3iebmc.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20161130105901.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://ggj2010.github.io/2016/11/28/nginx-keepalived实现高可用集群搭建/"/>
+
+
+
+
+
+  <title> nginx+keepalived实现高可用集群搭建 | 高广金博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">高广金博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-webmagic">
+          <a href="https://ggj2010.bid" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            爬虫
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://ggj2010.github.io/2016/11/28/nginx-keepalived实现高可用集群搭建/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ggj2010">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="高广金博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                nginx+keepalived实现高可用集群搭建
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-11-28T10:05:52+08:00">
+                2016-11-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javabase/" itemprop="url" rel="index">
+                    <span itemprop="name">基础</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <pre><code>通过keepalived搭建ningx集群，实现nginx高可用。
+</code></pre><hr>
+<h4 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h4><p> <img src="http://ocg3iebmc.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20161130105901.png" alt="截图" title="流程"></p>
+<h4 id="keepalived作用"><a href="#keepalived作用" class="headerlink" title="keepalived作用"></a>keepalived作用</h4><pre><code>Keepalived是一个基于VRRP协议来实现的服务高可用方案，可以利用其来避免IP单点故障，
+对外虚拟一个vip ip节点。vrrp协议可以百度到
+</code></pre><h4 id="nginx-keepalived搭建"><a href="#nginx-keepalived搭建" class="headerlink" title="nginx+keepalived搭建"></a>nginx+keepalived搭建</h4><ul>
+<li>准备工作<ul>
+<li>linux虚拟机2台。master ip=192.168.112.97   slave ip=192.168.112.98   虚拟VIP ip=192.168.112.50</li>
+<li>在两台服务器上面都安装nginx和keepalived</li>
+<li>在slave节点绑定 虚拟静态ip ifconfig <strong>eth0:1</strong> 192.168.112.50 netmask 255.255.255.0 up</li>
+</ul>
+</li>
+<li><p>keepalived安装过程</p>
+<ul>
+<li>安装命令：apt-get install keepalived</li>
+<li>启动和停止命令：service keepalived start、 service keepalived stop</li>
+<li>keepalived 默认读取/etc/keepalived/keepalived.conf 下面的配置文件，我们可以cat /var/log/syslog   查看keepalived的启动日志</li>
+<li><p>/etc/keepalived/keepalived.conf  配置文件：</p>
+<pre><code>vi  keepalived.conf
+   global_defs {
+       notification_email {
+           zhouxiao@example.com
+           itsection@example.com
+       }
+       notification_email_from itsection@example.com
+       smtp_server mail.example.com
+       smtp_connect_timeout 30
+       router_id LVS_DEVEL
+   }
+
+   vrrp_script chk_nginx {
+       script &quot;/etc/keepalived/check_nginx.sh&quot; 
+       interval 2 
+       weight -5 
+       fall 3  
+       rise 2 
+   }
+
+   vrrp_instance VI_1 {
+    #节点状态
+       state MASTER
+    # 网卡
+       interface eth0
+    # 当前ip
+       mcast_src_ip 192.168.112.97
+    # 虚拟节点id 必须一样
+       virtual_router_id 51
+    #优先级
+       priority 101
+       advert_int 2
+       authentication {
+           auth_type PASS
+           auth_pass 1111
+       }
+    #虚拟节点ip
+       virtual_ipaddress {
+           192.168.112.50
+       }
+    # 监控脚本
+       track_script {
+          chk_nginx 
+       }
+   }
+</code></pre></li>
+<li><p>/etc/keepalived/check_nginx.sh</p>
+<pre><code>vi check_nginx.sh
+#!/bin/bash
+#这种方式会把ps的信息打印出来，显示的不准确
+#num=`ps -ef|grep nginx|wc -l`
+num=$(ps -C nginx --no-heading|wc -l)
+if [ $num -le 0 ]
+  then
+        #启动ngingx
+        /usr/local/nginx/sbin/nginx
+        #休眠2秒
+        sleep 2
+        num=$(ps -C nginx --no-heading|wc -l)
+  if [ $num -le 0 ];then
+        service keepalived stop
+        cd /etc/keepalived/
+        echo &quot;no nginx start&quot;&gt;&gt;gao.txt
+   fi
+fi
+</code></pre><ul>
+<li>相关解释：<br>  check_nginx.sh是用来检测 nginx是否正常运行的脚本，keepalived可以动态根据检测执行这个脚本 决定那台服务器的keepalived是vip节点。<br>  master 的配置文件和 slave的keepalived.conf 文件区别在于  state MASTER -&gt; state BACKUP，priority 101 -&gt; priority 100，mcast_src_ip 192.168.112.97 -&gt; mcast_src_ip 192.168.112.98即可</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h4><pre><code>启动nginx和keepalived，访问VIP ip 192.168.112.50  显示的是master的nginx内容。
+</code></pre><p> <img src="http://ocg3iebmc.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20161130103148.png" alt="截图" title="master节点"></p>
+<pre><code>stop master的keepalive的  再访问vip节点  显示的是slave的内容
+</code></pre><p>   <img src="http://ocg3iebmc.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20161130103233.png" alt="截图" title="slave节点"></p>
+<h4 id="参考网址"><a href="#参考网址" class="headerlink" title="参考网址"></a>参考网址</h4><p>   <a href="https://segmentfault.com/a/1190000002881132" target="_blank" rel="external">https://segmentfault.com/a/1190000002881132</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/集群/" rel="tag"># 集群</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/08/利用webmagic爬虫做些有意思的事情/" rel="next" title="利用webmagic爬虫做些有意思的事情">
+                <i class="fa fa-chevron-left"></i> 利用webmagic爬虫做些有意思的事情
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/10/docker记录/" rel="prev" title="docker记录">
+                docker记录 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg"
+               alt="ggj2010" />
+          <p class="site-author-name" itemprop="name">ggj2010</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ggj2010" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/ggjlvzjy" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#流程"><span class="nav-number">1.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#keepalived作用"><span class="nav-number">2.</span> <span class="nav-text">keepalived作用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#nginx-keepalived搭建"><span class="nav-number">3.</span> <span class="nav-text">nginx+keepalived搭建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试"><span class="nav-number">4.</span> <span class="nav-text">测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参考网址"><span class="nav-number">5.</span> <span class="nav-text">参考网址</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ggj2010</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>
