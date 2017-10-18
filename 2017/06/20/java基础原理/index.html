@@ -96,7 +96,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://ocg3iebmc.bkt.clouddn.com/20160918105655_12.jpg">
 <meta property="og:image" content="http://ocg3iebmc.bkt.clouddn.com/011042300165927.png">
-<meta property="og:updated_time" content="2017-07-13T15:41:57.000Z">
+<meta property="og:updated_time" content="2017-09-22T06:21:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java基础原理">
 <meta name="twitter:description" content="集合Map HashMap  实现原理 HashMap实际上是一个“链表散列”的数据结构，即数组+链表,Entry[] table+ entry链表DK1.8中，HashMap采用数组+链表+红黑树实现，当链表长度超过阈值（8）时，将链表转换为红黑树，这样大大减少了查找时间。 非线程安全，key值可以为空（当key值为空的时候hash的值为0，总是在table数据第一个节点） hashMap在多线">
@@ -451,9 +451,14 @@ WeakHashMap中的key都存在强引用，那么WeakHashMap就会退化成HashMap
 <li>Vector<ul>
 <li>Vector是线程安全的，而ArrayList不是</li>
 <li>由于Vector中的方法基本都是synchronized的，其性能低于ArrayList</li>
-<li>Vector可以定义数组长度扩容的因子，默认容量是10</li>
+<li>Vector可以定义数组长度扩容的因子，默认容量是10<h4 id="Thread"><a href="#Thread" class="headerlink" title="Thread"></a>Thread</h4></li>
 </ul>
 </li>
+<li>Thread<br>  一般启动线程有两种方式。最终都是调用<br>   private native void start0();<br>   native方法会调用run(),如果是子类方式启动线程，就是调用子类重写的run(),如果是实现runable接口方式<br>   启动线程就是调用Thread的run(),最终也是调用接口重写的run()<br>   public void run() {<pre><code>       if (target != null) {
+           target.run();
+       }
+}
+</code></pre></li>
 </ul>
 <h4 id="java-util-concurrent包下面常用类的原理"><a href="#java-util-concurrent包下面常用类的原理" class="headerlink" title="java.util.concurrent包下面常用类的原理"></a>java.util.concurrent包下面常用类的原理</h4><ul>
 <li><p>ConcurrentHashMap</p>
@@ -790,7 +795,7 @@ final void runWorker(Worker w) {
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#集合"><span class="nav-number">1.</span> <span class="nav-text">集合</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Map"><span class="nav-number">1.1.</span> <span class="nav-text">Map</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List"><span class="nav-number">1.2.</span> <span class="nav-text">List</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java-util-concurrent包下面常用类的原理"><span class="nav-number">2.</span> <span class="nav-text">java.util.concurrent包下面常用类的原理</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#集合"><span class="nav-number">1.</span> <span class="nav-text">集合</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Map"><span class="nav-number">1.1.</span> <span class="nav-text">Map</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List"><span class="nav-number">1.2.</span> <span class="nav-text">List</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Thread"><span class="nav-number">2.</span> <span class="nav-text">Thread</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java-util-concurrent包下面常用类的原理"><span class="nav-number">3.</span> <span class="nav-text">java.util.concurrent包下面常用类的原理</span></a></li></ol></div>
             
 
           </div>
