@@ -1,0 +1,740 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Paxos是一个用于实现可容错的分布式系统的算法，主要用于保证分布式集群中多备份系统之间的操作和数据的一致性。 这样集群中的每台机器对外相当于完全一致，从而其互相之间可以互为备份，从而使得系统能够容忍一定数量的机器出问题（宕机、断网、硬盘损坏等等）。 相关概念paxos是什么Paxos算法是莱斯利·兰伯特（Leslie Lamport，就是 LaTeX 中的&amp;quot;La&amp;quot;，此">
+<meta property="og:type" content="article">
+<meta property="og:title" content="paxos算法记录">
+<meta property="og:url" content="http://ggj2010.github.io/2017/11/02/paxos算法记录/index.html">
+<meta property="og:site_name" content="高广金博客">
+<meta property="og:description" content="Paxos是一个用于实现可容错的分布式系统的算法，主要用于保证分布式集群中多备份系统之间的操作和数据的一致性。 这样集群中的每台机器对外相当于完全一致，从而其互相之间可以互为备份，从而使得系统能够容忍一定数量的机器出问题（宕机、断网、硬盘损坏等等）。 相关概念paxos是什么Paxos算法是莱斯利·兰伯特（Leslie Lamport，就是 LaTeX 中的&amp;quot;La&amp;quot;，此">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-06T02:21:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="paxos算法记录">
+<meta name="twitter:description" content="Paxos是一个用于实现可容错的分布式系统的算法，主要用于保证分布式集群中多备份系统之间的操作和数据的一致性。 这样集群中的每台机器对外相当于完全一致，从而其互相之间可以互为备份，从而使得系统能够容忍一定数量的机器出问题（宕机、断网、硬盘损坏等等）。 相关概念paxos是什么Paxos算法是莱斯利·兰伯特（Leslie Lamport，就是 LaTeX 中的&amp;quot;La&amp;quot;，此">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://ggj2010.github.io/2017/11/02/paxos算法记录/"/>
+
+
+
+
+
+  <title> paxos算法记录 | 高广金博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">高广金博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-webmagic">
+          <a href="http://scedai.com/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            爬虫
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://ggj2010.github.io/2017/11/02/paxos算法记录/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ggj2010">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="高广金博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                paxos算法记录
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-02T16:49:22+08:00">
+                2017-11-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <pre><code>    Paxos是一个用于实现可容错的分布式系统的算法，主要用于保证分布式集群中多备份系统之间的操作和数据的一致性。
+这样集群中的每台机器对外相当于完全一致，从而其互相之间可以互为备份，从而使得系统能够容忍一定数量的机器出问题（宕机、断网、硬盘损坏等等）。
+</code></pre><h4 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h4><h5 id="paxos是什么"><a href="#paxos是什么" class="headerlink" title="paxos是什么"></a>paxos是什么</h5><pre><code>Paxos算法是莱斯利·兰伯特（Leslie Lamport，就是 LaTeX 中的&quot;La&quot;，此人现在在微软研究院）于1990年提出的一种基于消息传递的一致性算法。
+</code></pre><h5 id="paxos诞生背景"><a href="#paxos诞生背景" class="headerlink" title="paxos诞生背景"></a>paxos诞生背景</h5><pre><code>Paxos 算法解决的问题是一个分布式系统如何就某个值（决议）达成一致。
+在分布式系统中，多个系统维护数据的最终一致性，Paxos算法就是一种基于消息传递模型的一致性算法。
+paxos算法适用的几种情况：一台机器中多个进程/线程达成数据一致；分布式文件系统或者分布式数据库中多客户端
+并发读写数据；分布式存储中多个副本响应读写请求的一致性
+</code></pre><h5 id="paxos算法定义的三个角色"><a href="#paxos算法定义的三个角色" class="headerlink" title="paxos算法定义的三个角色"></a>paxos算法定义的三个角色</h5><ul>
+<li>proposers：提案提出</li>
+<li>acceptors：提案表决者</li>
+<li>learners：提案获取者<br>提案可以用【编号+value】表示，编号为全局递增唯一<h5 id="安全性前提"><a href="#安全性前提" class="headerlink" title="安全性前提"></a>安全性前提</h5></li>
+<li>只有通过提案，才可以接受值，如果没有提案则没有值被接受</li>
+<li>一个提案只会有一个值被接受</li>
+<li>只有当一个值被接受后，proposers才知道那个值被接受了<h3 id="推理过程"><a href="#推理过程" class="headerlink" title="推理过程"></a>推理过程</h3>   整个流程可以简单描述为，proposers发出提案，然后acceptors投票表决提案，learners决定用那个提案。<br>下面通过从简单到复杂的情况推理出算法。        <h4 id="只有一个proposer，一个acceptor"><a href="#只有一个proposer，一个acceptor" class="headerlink" title="只有一个proposer，一个acceptor"></a>只有一个proposer，一个acceptor</h4>   因为只有一个提案被提出，当然应该被批准通过。但如果acceptor所在的机器挂了，就没法选举提案了，所有proposers都会等待acceptor<br>的表决，整个流程没法继续下去。<br>约束1：acceptor必须批准它收到的第一个提案。<h4 id="只有一个proposer，多个acceptor"><a href="#只有一个proposer，多个acceptor" class="headerlink" title="只有一个proposer，多个acceptor"></a>只有一个proposer，多个acceptor</h4>   proposer发出提案后，假设acceptors返回两种决策结果，一部分同意改提案，另外一部分就是不同意该提案，为了公平性，超过一半<br>的acceptors决策者的结果为最终结果，这就意味着需要acceptors的数量为奇数，而且proposer知道acceptor的数量。<br>约束2：一个提案的选定，需要半数以上的acceptor批准<h4 id="多个proposer，多个acceptor"><a href="#多个proposer，多个acceptor" class="headerlink" title="多个proposer，多个acceptor"></a>多个proposer，多个acceptor</h4>   如果有多个proposer，如果每个proposer的提案都不一样，这样所有acceptor接受的值都不一样，这样就没法选出唯一的值。<br>所以acceptor可以接受多个proposer的提案，但只要是同一个acceptor，接受的提案值必须一致。<br>这样的话我们就需要给每个proposer提案加个id和值，并且必须保证不同提案的id一定不同。id越大，提案时间就越近,ID递增<br>约束3：如果一个提案【m+value】，并且这个提案通过了，那么后面所有被acceptor接受的提案值都必须是【value】<br>   由于提案如果想被接受，则至少有一个acceptor接受它。为了达到约束3要求，我们可以在满足约束3的基础上，加强约束：<br>约束4：如果一个值为【m+value】的提案被通过，那么之后被任意一个acceptor接受的提案，其值必须为v<br>   假设有proposer1 向acceptorA、acceptorB、acceptorC提出提案1【m+value】，acceptorA和acceptorB都接受了，acceptorC因为网络问题没有接受，<br>这时候proposer2 向acceptorB发出提案，acceptorC网络好了，在约束一的作用下，acceptorC通过了提案2，<br>那这样就会同时又两个提案被通过了，会和约束三矛盾，为了达到约束三的要求，我们就需要继续加约束<br>约束5：如果一个值为【m+value】的提案被通过，则之后(提案的编号大于被接受的提案编号M)任意一个proposer提出的每个提案，值都必须为【value】<br>   当约束1、约束2、约束5满足的时候，约束4一定满足，从而约束3满足。约束5蕴含着约束4(因为acceptor接受的值都是proposer提出的)，是一个更强的约束。<br>但在P2b的要求下，proposer需要知道最后一个被通过的提案是哪个，其值是多少。<h4 id="约束5的特殊情况"><a href="#约束5的特殊情况" class="headerlink" title="约束5的特殊情况"></a>约束5的特殊情况</h4>会不会出现多个proposer同时提出提案，由于消息传输时间任意，一个proposer无法在提交自己的提案前，无法知道另一个proposer提交的提案是否在未来先到达acceptor被通过。<br>比如proposerA、proposerB，提出提案值为m n，A先提出提案,B这时也要提出提案，它该提还是不提呢？<br>约束5要求下，A需要知道B的提案是否能被通过，从而判断自己提案的值是否必须和B提案一样，还是可以自己选一个新值？这个对A来说无法回答。<br>所以我们要加强约束5。<br>假设有编号为m的提案，值V已经被通过了，我们要证明M之后的提案必须是值V从而证明约束5。<br>设 n &gt; m，假设 m .. (n - 1) 提案的值都是v。 提案我们假设被通过，则一定有多个acceptor组成集合C，C内每个acceptor都接受了v这个值。<br>在约束4的要求下，我们可以说，C集合内的每个acceptor都接受了从m ~ (n-1)中的某个提案(单是假设就保证了这些acceptor都至少接受了m提案)，<br>并且m ~ (n-1)个提案中，被任意一个C集合内的acceptor接受的提案，值都得为v。<br>那么递推到第n个提案，它找出一个集合S，由多个acceptor组成。那么n提案如果想被接受，S内所有acceptor要么从未接受过任何提案(当前面m提案被通过的假设成立的时候这个条件不成立)，<br>要么第n提案的值也为v。因为S集合必然会和C集合有交集，都是多数的。作为交集的那个acceptor值已经接受了v值，所以n提案如果不用v值，则不可能让S内所有acceptor都接受。<br>约束6 : 有多个acceptor组成集合S，为了值为v提案号为n的提案被通过，必须保证以下条件之一成立<br>a) S内所有acceptor没有接受过任何在n之前的提案；<br>b) S内任意一个acceptor之前接受过的小于n的提案值为v。<br>但如果n提案之前的n-1提案，可能还在传输过程中。proposer在提出提案n的时候，即使询问acceptor并得到回应说从未接受过某提案，<br>proposer提出提案n的时候可能还是比n-1提案晚。<br>出现询问n提案能不能提出 &lt; n-1提案被接受 &lt; n提案到达acceptor。的时间序，从而破坏约束6<br>所以，proposer询问acceptor是否能提出提案n时，必须要求acceptor给出一个保证，保证n提案之前的提案一定不被接受，从而保证约束6。</li>
+</ul>
+<h3 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h3><h4 id="prepare阶段"><a href="#prepare阶段" class="headerlink" title="prepare阶段"></a>prepare阶段</h4><pre><code>    prepare请求只需要带着提案号，而不需要带着值。
+    1、proposer获取一个提案编号M，根据M向一个acceptor集合（超过半数）的所有acceptor询问当前是否有已经被批准的提案
+acceptor判断M是否大于自己已经批准过的所有的提案编号，如果是，则返回已批准的编号&lt;M且最大的提案，
+    2、如果否，可以不响应，如果acceptor之前没有批准过任何提案，则返回空
+    3、acceptor不再批准编号小于M的提案
+    4、proposer收到acceptor的响应（acceptor超过半数），如果为空，则自己可以任意设置value的值，如果返回了已批准的提案，
+    则必须以编号最大的提案的value作为自己的value，生成&lt;M,value&gt;作为自己要发起的提案，如果未超过半数，则重复此阶段。
+</code></pre><h4 id="表决阶段"><a href="#表决阶段" class="headerlink" title="表决阶段"></a>表决阶段</h4><pre><code>1、proposer确定了自己的提案&lt;M,value&gt;后，会向一个acceptor集合（超过半数且不一定是上一个集合）的所有acceptor发起提案
+2、当且仅当acceptor没有对某个编号大于M的prepare请求做过响应时就可以批准该提案。
+3、超过半数的acceptor批准了提案后，就对value的值达到了一致性，没有的话，则从询问阶段重复
+</code></pre><h4 id="学习阶段"><a href="#学习阶段" class="headerlink" title="学习阶段"></a>学习阶段</h4><pre><code>提案被确定后就可以通过learner获取了，获取的方式有很多种，可以根据具体情况选择，如：
+1、acceptor批准提案后，立即发送给所有learner
+2、acceptor批准后都把提案发给特定的learner，然后由此learner通知其它learner
+3、acceptor批准后都把提案发给特定的learner集合，由此集合通知其它learner
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/18/工作中涉及到优化的总结/" rel="next" title="工作中涉及到优化的总结">
+                <i class="fa fa-chevron-left"></i> 工作中涉及到优化的总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg"
+               alt="ggj2010" />
+          <p class="site-author-name" itemprop="name">ggj2010</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ggj2010" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/ggjlvzjy" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#相关概念"><span class="nav-number">1.</span> <span class="nav-text">相关概念</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#paxos是什么"><span class="nav-number">1.1.</span> <span class="nav-text">paxos是什么</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#paxos诞生背景"><span class="nav-number">1.2.</span> <span class="nav-text">paxos诞生背景</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#paxos算法定义的三个角色"><span class="nav-number">1.3.</span> <span class="nav-text">paxos算法定义的三个角色</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#安全性前提"><span class="nav-number">1.4.</span> <span class="nav-text">安全性前提</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#推理过程"><span class="nav-number"></span> <span class="nav-text">推理过程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#只有一个proposer，一个acceptor"><span class="nav-number">1.</span> <span class="nav-text">只有一个proposer，一个acceptor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#只有一个proposer，多个acceptor"><span class="nav-number">2.</span> <span class="nav-text">只有一个proposer，多个acceptor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多个proposer，多个acceptor"><span class="nav-number">3.</span> <span class="nav-text">多个proposer，多个acceptor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#约束5的特殊情况"><span class="nav-number">4.</span> <span class="nav-text">约束5的特殊情况</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算法流程"><span class="nav-number"></span> <span class="nav-text">算法流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#prepare阶段"><span class="nav-number">1.</span> <span class="nav-text">prepare阶段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#表决阶段"><span class="nav-number">2.</span> <span class="nav-text">表决阶段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#学习阶段"><span class="nav-number">3.</span> <span class="nav-text">学习阶段</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ggj2010</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

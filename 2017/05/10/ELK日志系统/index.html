@@ -99,7 +99,7 @@
 <meta property="og:image" content="http://ocg3iebmc.bkt.clouddn.com/elklog1.png">
 <meta property="og:image" content="http://ocg3iebmc.bkt.clouddn.com/elklog2.png">
 <meta property="og:image" content="http://ocg3iebmc.bkt.clouddn.com/elklog4.png">
-<meta property="og:updated_time" content="2017-05-10T07:54:15.000Z">
+<meta property="og:updated_time" content="2017-10-19T07:42:28.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ELK日志系统">
 <meta name="twitter:description" content="当公司达到一定规模，基础日志平台是必不可少的。传统的tail -fn100 xxx.log 只能一次性查看某一台服务器的项目，对于集群项目想定位bug,是一件非常痛苦的事情， 对于一个自动化日志平台至少得有一下几个功能，1、可以根据日期和关键字组合定位日志，2、可以实时跟踪多台服务器的日志类似于tail -fn3、实现权限控制，因为公司不同组别 只允许看到所在组的日志，如果要精细化日志平">
@@ -249,7 +249,7 @@
       
         
         <li class="menu-item menu-item-webmagic">
-          <a href="https://ggj2010.bid" rel="section">
+          <a href="http://scedai.com/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
             
@@ -401,8 +401,8 @@
 <li>搭建过程略可参考博客：<a href="http://www.cnblogs.com/yincheng/p/logstash.html" target="_blank" rel="external">博客地址一</a><br> <a href="http://www.cnblogs.com/zrbfree/p/6484926.html" target="_blank" rel="external">博客地址二</a></li>
 <li><p>elk启动顺序</p>
 <pre><code>首先启动elasticsearch集群和Kibana ,然后启动Logstash 再启动filebeat
-</code></pre></li>
-<li>filebeat配置文件filebeat.yml需要修改的地方<ul>
+</code></pre><ul>
+<li>filebeat配置文件filebeat.yml需要修改的地方</li>
 <li>filebeat.prospectors可以配置多个-input_type节点，这样可以监控不同的目录</li>
 <li>input_type的类型为log时候将会每次读取一行文件</li>
 <li>document_type的值可以为后来的elasticsearch的索引命名</li>
@@ -645,7 +645,7 @@ logging:
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-count">16</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
