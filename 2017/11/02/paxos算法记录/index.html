@@ -87,17 +87,17 @@
 
 
 
-<meta name="description" content="Paxos是一个用于实现可容错的分布式系统的算法，主要用于保证分布式集群中多备份系统之间的操作和数据的一致性。 这样集群中的每台机器对外相当于完全一致，从而其互相之间可以互为备份，从而使得系统能够容忍一定数量的机器出问题（宕机、断网、硬盘损坏等等）。 相关概念paxos是什么Paxos算法是莱斯利·兰伯特（Leslie Lamport，就是 LaTeX 中的&amp;quot;La&amp;quot;，此">
+<meta name="description" content="Paxos是一个用于实现可容错的分布式系统的算法，主要用于保证分布式集群中多备份系统之间的操作和数据的一致性。 这样集群中的每台机器对外相当于完全一致，从而其互相之间可以互为备份，从而使得系统能够容忍一定数量的机器出问题（宕机、断网、硬盘损坏等等）。 一、相关概念paxos是什么Paxos算法是莱斯利·兰伯特（Leslie Lamport，就是 LaTeX 中的&amp;quot;La&amp;quot;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="paxos算法记录">
 <meta property="og:url" content="http://ggj2010.github.io/2017/11/02/paxos算法记录/index.html">
 <meta property="og:site_name" content="高广金博客">
-<meta property="og:description" content="Paxos是一个用于实现可容错的分布式系统的算法，主要用于保证分布式集群中多备份系统之间的操作和数据的一致性。 这样集群中的每台机器对外相当于完全一致，从而其互相之间可以互为备份，从而使得系统能够容忍一定数量的机器出问题（宕机、断网、硬盘损坏等等）。 相关概念paxos是什么Paxos算法是莱斯利·兰伯特（Leslie Lamport，就是 LaTeX 中的&amp;quot;La&amp;quot;，此">
+<meta property="og:description" content="Paxos是一个用于实现可容错的分布式系统的算法，主要用于保证分布式集群中多备份系统之间的操作和数据的一致性。 这样集群中的每台机器对外相当于完全一致，从而其互相之间可以互为备份，从而使得系统能够容忍一定数量的机器出问题（宕机、断网、硬盘损坏等等）。 一、相关概念paxos是什么Paxos算法是莱斯利·兰伯特（Leslie Lamport，就是 LaTeX 中的&amp;quot;La&amp;quot;">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-12T12:56:10.000Z">
+<meta property="og:updated_time" content="2017-12-12T13:15:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="paxos算法记录">
-<meta name="twitter:description" content="Paxos是一个用于实现可容错的分布式系统的算法，主要用于保证分布式集群中多备份系统之间的操作和数据的一致性。 这样集群中的每台机器对外相当于完全一致，从而其互相之间可以互为备份，从而使得系统能够容忍一定数量的机器出问题（宕机、断网、硬盘损坏等等）。 相关概念paxos是什么Paxos算法是莱斯利·兰伯特（Leslie Lamport，就是 LaTeX 中的&amp;quot;La&amp;quot;，此">
+<meta name="twitter:description" content="Paxos是一个用于实现可容错的分布式系统的算法，主要用于保证分布式集群中多备份系统之间的操作和数据的一致性。 这样集群中的每台机器对外相当于完全一致，从而其互相之间可以互为备份，从而使得系统能够容忍一定数量的机器出问题（宕机、断网、硬盘损坏等等）。 一、相关概念paxos是什么Paxos算法是莱斯利·兰伯特（Leslie Lamport，就是 LaTeX 中的&amp;quot;La&amp;quot;">
 
 
 
@@ -354,7 +354,7 @@
       
         <pre><code>    Paxos是一个用于实现可容错的分布式系统的算法，主要用于保证分布式集群中多备份系统之间的操作和数据的一致性。
 这样集群中的每台机器对外相当于完全一致，从而其互相之间可以互为备份，从而使得系统能够容忍一定数量的机器出问题（宕机、断网、硬盘损坏等等）。
-</code></pre><h4 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h4><h5 id="paxos是什么"><a href="#paxos是什么" class="headerlink" title="paxos是什么"></a>paxos是什么</h5><pre><code>Paxos算法是莱斯利·兰伯特（Leslie Lamport，就是 LaTeX 中的&quot;La&quot;，此人现在在微软研究院）于1990年提出的一种基于消息传递的一致性算法。
+</code></pre><h4 id="一、相关概念"><a href="#一、相关概念" class="headerlink" title="一、相关概念"></a>一、相关概念</h4><h5 id="paxos是什么"><a href="#paxos是什么" class="headerlink" title="paxos是什么"></a>paxos是什么</h5><pre><code>Paxos算法是莱斯利·兰伯特（Leslie Lamport，就是 LaTeX 中的&quot;La&quot;，此人现在在微软研究院）于1990年提出的一种基于消息传递的一致性算法。
 </code></pre><h5 id="paxos诞生背景"><a href="#paxos诞生背景" class="headerlink" title="paxos诞生背景"></a>paxos诞生背景</h5><pre><code>Paxos 算法解决的问题是一个分布式系统如何就某个值（决议）达成一致。
 在分布式系统中，多个系统维护数据的最终一致性，Paxos算法就是一种基于消息传递模型的一致性算法。
 paxos算法适用的几种情况：一台机器中多个进程/线程达成数据一致；分布式文件系统或者分布式数据库中多客户端
@@ -362,12 +362,14 @@ paxos算法适用的几种情况：一台机器中多个进程/线程达成数�
 </code></pre><h5 id="paxos算法定义的三个角色"><a href="#paxos算法定义的三个角色" class="headerlink" title="paxos算法定义的三个角色"></a>paxos算法定义的三个角色</h5><ul>
 <li>proposers：提案提出</li>
 <li>acceptors：提案表决者</li>
-<li>learners：提案获取者<br>提案可以用【编号+value】表示，编号为全局递增唯一<h5 id="安全性前提"><a href="#安全性前提" class="headerlink" title="安全性前提"></a>安全性前提</h5></li>
+<li>learners：提案获取者<br>提案可以用【编号+value】表示，编号为全局递增唯一</li>
+</ul>
+<h5 id="安全性前提"><a href="#安全性前提" class="headerlink" title="安全性前提"></a>安全性前提</h5><ul>
 <li>只有通过提案，才可以接受值，如果没有提案则没有值被接受</li>
 <li>一个提案只会有一个值被接受</li>
 <li>只有当一个值被接受后，proposers才知道那个值被接受了</li>
 </ul>
-<h3 id="推理过程"><a href="#推理过程" class="headerlink" title="推理过程"></a>推理过程</h3><pre><code>    整个流程可以简单描述为，proposers发出提案，然后acceptors投票表决提案，learners决定用那个提案。
+<h3 id="二、推理过程"><a href="#二、推理过程" class="headerlink" title="二、推理过程"></a>二、推理过程</h3><pre><code>    整个流程可以简单描述为，proposers发出提案，然后acceptors投票表决提案，learners决定用那个提案。
 下面通过从简单到复杂的情况推理出算法。        
 </code></pre><h4 id="只有一个proposer，一个acceptor"><a href="#只有一个proposer，一个acceptor" class="headerlink" title="只有一个proposer，一个acceptor"></a>只有一个proposer，一个acceptor</h4><pre><code>    因为只有一个提案被提出，当然应该被批准通过。但如果acceptor所在的机器挂了，就没法选举提案了，所有proposers都会等待acceptor
 的表决，整个流程没法继续下去。
@@ -404,17 +406,17 @@ b) S内任意一个acceptor之前接受过的小于n的提案值为v。
 proposer提出提案n的时候可能还是比n-1提案晚。
 出现询问n提案能不能提出 &lt; n-1提案被接受 &lt; n提案到达acceptor。的时间序，从而破坏约束6
 所以，proposer询问acceptor是否能提出提案n时，必须要求acceptor给出一个保证，保证n提案之前的提案一定不被接受，从而保证约束6。
-</code></pre><h3 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h3><h4 id="prepare阶段"><a href="#prepare阶段" class="headerlink" title="prepare阶段"></a>prepare阶段</h4><pre><code>    prepare请求只需要带着提案号，而不需要带着值。
+</code></pre><h3 id="三、算法流程"><a href="#三、算法流程" class="headerlink" title="三、算法流程"></a>三、算法流程</h3><h4 id="1、准备阶段"><a href="#1、准备阶段" class="headerlink" title="1、准备阶段"></a>1、准备阶段</h4><pre><code>    prepare请求只需要带着提案号，而不需要带着值。
     1、proposer获取一个提案编号M，根据M向一个acceptor集合（超过半数）的所有acceptor询问当前是否有已经被批准的提案
 acceptor判断M是否大于自己已经批准过的所有的提案编号，如果是，则返回已批准的编号&lt;M且最大的提案，
     2、如果否，可以不响应，如果acceptor之前没有批准过任何提案，则返回空
     3、acceptor不再批准编号小于M的提案
     4、proposer收到acceptor的响应（acceptor超过半数），如果为空，则自己可以任意设置value的值，如果返回了已批准的提案，
     则必须以编号最大的提案的value作为自己的value，生成&lt;M,value&gt;作为自己要发起的提案，如果未超过半数，则重复此阶段。
-</code></pre><h4 id="表决阶段"><a href="#表决阶段" class="headerlink" title="表决阶段"></a>表决阶段</h4><pre><code>1、proposer确定了自己的提案&lt;M,value&gt;后，会向一个acceptor集合（超过半数且不一定是上一个集合）的所有acceptor发起提案
+</code></pre><h4 id="2、表决阶段"><a href="#2、表决阶段" class="headerlink" title="2、表决阶段"></a>2、表决阶段</h4><pre><code>1、proposer确定了自己的提案&lt;M,value&gt;后，会向一个acceptor集合（超过半数且不一定是上一个集合）的所有acceptor发起提案
 2、当且仅当acceptor没有对某个编号大于M的prepare请求做过响应时就可以批准该提案。
 3、超过半数的acceptor批准了提案后，就对value的值达到了一致性，没有的话，则从询问阶段重复
-</code></pre><h4 id="学习阶段"><a href="#学习阶段" class="headerlink" title="学习阶段"></a>学习阶段</h4><pre><code>提案被确定后就可以通过learner获取了，获取的方式有很多种，可以根据具体情况选择，如：
+</code></pre><h4 id="3、学习阶段"><a href="#3、学习阶段" class="headerlink" title="3、学习阶段"></a>3、学习阶段</h4><pre><code>提案被确定后就可以通过learner获取了，获取的方式有很多种，可以根据具体情况选择，如：
 1、acceptor批准提案后，立即发送给所有learner
 2、acceptor批准后都把提案发给特定的learner，然后由此learner通知其它learner
 3、acceptor批准后都把提案发给特定的learner集合，由此集合通知其它learner
@@ -605,7 +607,7 @@ acceptor判断M是否大于自己已经批准过的所有的提案编号，如�
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#相关概念"><span class="nav-number">1.</span> <span class="nav-text">相关概念</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#paxos是什么"><span class="nav-number">1.1.</span> <span class="nav-text">paxos是什么</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#paxos诞生背景"><span class="nav-number">1.2.</span> <span class="nav-text">paxos诞生背景</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#paxos算法定义的三个角色"><span class="nav-number">1.3.</span> <span class="nav-text">paxos算法定义的三个角色</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#安全性前提"><span class="nav-number">1.4.</span> <span class="nav-text">安全性前提</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#推理过程"><span class="nav-number"></span> <span class="nav-text">推理过程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#只有一个proposer，一个acceptor"><span class="nav-number">1.</span> <span class="nav-text">只有一个proposer，一个acceptor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#只有一个proposer，多个acceptor"><span class="nav-number">2.</span> <span class="nav-text">只有一个proposer，多个acceptor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多个proposer，多个acceptor"><span class="nav-number">3.</span> <span class="nav-text">多个proposer，多个acceptor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#约束5的特殊情况"><span class="nav-number">4.</span> <span class="nav-text">约束5的特殊情况</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算法流程"><span class="nav-number"></span> <span class="nav-text">算法流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#prepare阶段"><span class="nav-number">1.</span> <span class="nav-text">prepare阶段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#表决阶段"><span class="nav-number">2.</span> <span class="nav-text">表决阶段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#学习阶段"><span class="nav-number">3.</span> <span class="nav-text">学习阶段</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#一、相关概念"><span class="nav-number">1.</span> <span class="nav-text">一、相关概念</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#paxos是什么"><span class="nav-number">1.1.</span> <span class="nav-text">paxos是什么</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#paxos诞生背景"><span class="nav-number">1.2.</span> <span class="nav-text">paxos诞生背景</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#paxos算法定义的三个角色"><span class="nav-number">1.3.</span> <span class="nav-text">paxos算法定义的三个角色</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#安全性前提"><span class="nav-number">1.4.</span> <span class="nav-text">安全性前提</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、推理过程"><span class="nav-number"></span> <span class="nav-text">二、推理过程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#只有一个proposer，一个acceptor"><span class="nav-number">1.</span> <span class="nav-text">只有一个proposer，一个acceptor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#只有一个proposer，多个acceptor"><span class="nav-number">2.</span> <span class="nav-text">只有一个proposer，多个acceptor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多个proposer，多个acceptor"><span class="nav-number">3.</span> <span class="nav-text">多个proposer，多个acceptor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#约束5的特殊情况"><span class="nav-number">4.</span> <span class="nav-text">约束5的特殊情况</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、算法流程"><span class="nav-number"></span> <span class="nav-text">三、算法流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、准备阶段"><span class="nav-number">1.</span> <span class="nav-text">1、准备阶段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、表决阶段"><span class="nav-number">2.</span> <span class="nav-text">2、表决阶段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3、学习阶段"><span class="nav-number">3.</span> <span class="nav-text">3、学习阶段</span></a></li></ol></div>
             
 
           </div>
