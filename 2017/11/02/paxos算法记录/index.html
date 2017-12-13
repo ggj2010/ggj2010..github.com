@@ -95,7 +95,8 @@
 <meta property="og:description" content="Paxos是一个用于实现可容错的分布式系统的算法，主要用于保证分布式集群中多备份系统之间的操作和数据的 一致性。这样集群中的每台机器对外相当于完全一致，从而其互相之间可以互为备份，从而使得系统能够容忍一定 数量的机器出问题（宕机、断网、硬盘损坏等等）。 一、相关概念paxos是什么  Paxos算法是莱斯利·兰伯特（Leslie Lamport，就是 LaTeX 中的&amp;quot;La&amp;quo">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://p0.meituan.net/education/46a20e6c35006adee3a26a9364e4ec51101089.png">
-<meta property="og:updated_time" content="2017-12-13T09:16:55.000Z">
+<meta property="og:image" content="http://p1.meituan.net/education/ef57589df5d0e2f468aef7f1cc4fe51b94441.png">
+<meta property="og:updated_time" content="2017-12-13T09:34:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="paxos算法记录">
 <meta name="twitter:description" content="Paxos是一个用于实现可容错的分布式系统的算法，主要用于保证分布式集群中多备份系统之间的操作和数据的 一致性。这样集群中的每台机器对外相当于完全一致，从而其互相之间可以互为备份，从而使得系统能够容忍一定 数量的机器出问题（宕机、断网、硬盘损坏等等）。 一、相关概念paxos是什么  Paxos算法是莱斯利·兰伯特（Leslie Lamport，就是 LaTeX 中的&amp;quot;La&amp;quo">
@@ -421,13 +422,18 @@ proposer提出提案n的时候可能还是比n-1提案晚。
 acceptor判断M是否大于自己已经批准过的所有的提案编号，如果是，则返回已批准的编号&lt;M且最大的提案，
 2、如果否，可以不响应，如果acceptor之前没有批准过任何提案，则返回空
 3、acceptor不再批准编号小于M的提案
-4、proposer收到acceptor的响应（acceptor超过半数），如果为空，则自己可以任意设置value的值，如果返回了已批准的提案，
-则必须以编号最大的提案的value作为自己的value，生成&lt;M,value&gt;作为自己要发起的提案，如果未超过半数，则重复此阶段。
-</code></pre><p>   例如下图：<br>   假设：acceptor1，acceptor3之前都同意过批案M1<br>   acceptor4之前同意过批案M0，acceptor2没有批准过任何批案。由此可以推导出proposer将以M1作为自己的提案发起表决请求<br>   <img src="http://p0.meituan.net/education/46a20e6c35006adee3a26a9364e4ec51101089.png" alt="prepare阶段"></p>
-<h4 id="2、表决阶段"><a href="#2、表决阶段" class="headerlink" title="2、表决阶段"></a>2、表决阶段</h4><pre><code>1、proposer确定了自己的提案&lt;M,value&gt;后，会向一个acceptor集合（超过半数且不一定是上一个集合）的所有acceptor发起提案
+4、proposer收到acceptor的响应（acceptor超过半数），如果为空，则自己可以任意设置value的值，
+如果返回了已批准的提案，则必须以编号最大的提案的value作为自己的value，生成&lt;M,value&gt;作为自己要发起的提案，
+如果未超过半数，则重复此阶段。
+</code></pre><p>   <img src="http://p0.meituan.net/education/46a20e6c35006adee3a26a9364e4ec51101089.png" alt="prepare阶段"></p>
+<pre><code>  假设：M&gt;M1&gt;m0,acceptor1，acceptor3之前都同意过批案M1，acceptor4之前同意过批案M0，acceptor2没有批准过任何批案。
+超过半数返回，而且M1编号最大，由此可以推导出proposer将以M1的value作为自己的提案&lt;M,value&gt;发起表决请求。
+</code></pre><h4 id="2、表决阶段"><a href="#2、表决阶段" class="headerlink" title="2、表决阶段"></a>2、表决阶段</h4><pre><code>1、proposer确定了自己的提案&lt;M,value&gt;后，会向一个acceptor集合（超过半数且不一定是上一个集合）的所有acceptor发起提案
 2、当且仅当acceptor没有对某个编号大于M的prepare请求做过响应时就可以批准该提案，
 或者acceptor没有批准过比M编号更小的提案，就可以批准该提案。
 3、超过半数的acceptor批准了提案后，就对value的值达到了一致性，没有的话，则从准备阶段重复
+</code></pre><p>   <img src="http://p1.meituan.net/education/ef57589df5d0e2f468aef7f1cc4fe51b94441.png" alt="prepare阶段"></p>
+<pre><code>假设：acceptor4，acceptor5，acceptor6 都没有批准过比M更小的提案，那就可以通过该提案了。
 </code></pre><h4 id="3、学习阶段"><a href="#3、学习阶段" class="headerlink" title="3、学习阶段"></a>3、学习阶段</h4><pre><code>提案被确定后就可以通过learner获取了，获取的方式有很多种，可以根据具体情况选择，如：
 1、acceptor批准提案后，立即发送给所有learner
 2、acceptor批准后都把提案发给特定的learner，然后由此learner通知其它learner
