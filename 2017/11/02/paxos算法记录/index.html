@@ -87,17 +87,17 @@
 
 
 
-<meta name="description" content="Paxos是一个用于实现可容错的分布式系统的算法，主要用于保证分布式集群中多备份系统之间的操作和数据的一致性。 这样集群中的每台机器对外相当于完全一致，从而其互相之间可以互为备份，从而使得系统能够容忍一定数量的机器出问题（宕机、断网、硬盘损坏等等）。 一、相关概念paxos是什么Paxos算法是莱斯利·兰伯特（Leslie Lamport，就是 LaTeX 中的&amp;quot;La&amp;quot;">
+<meta name="description" content="Paxos是一个用于实现可容错的分布式系统的算法，主要用于保证分布式集群中多备份系统之间的操作和数据的 一致性。这样集群中的每台机器对外相当于完全一致，从而其互相之间可以互为备份，从而使得系统能够容忍一定 数量的机器出问题（宕机、断网、硬盘损坏等等）。 一、相关概念paxos是什么  Paxos算法是莱斯利·兰伯特（Leslie Lamport，就是 LaTeX 中的&amp;quot;La&amp;quo">
 <meta property="og:type" content="article">
 <meta property="og:title" content="paxos算法记录">
 <meta property="og:url" content="http://ggj2010.github.io/2017/11/02/paxos算法记录/index.html">
 <meta property="og:site_name" content="高广金博客">
-<meta property="og:description" content="Paxos是一个用于实现可容错的分布式系统的算法，主要用于保证分布式集群中多备份系统之间的操作和数据的一致性。 这样集群中的每台机器对外相当于完全一致，从而其互相之间可以互为备份，从而使得系统能够容忍一定数量的机器出问题（宕机、断网、硬盘损坏等等）。 一、相关概念paxos是什么Paxos算法是莱斯利·兰伯特（Leslie Lamport，就是 LaTeX 中的&amp;quot;La&amp;quot;">
+<meta property="og:description" content="Paxos是一个用于实现可容错的分布式系统的算法，主要用于保证分布式集群中多备份系统之间的操作和数据的 一致性。这样集群中的每台机器对外相当于完全一致，从而其互相之间可以互为备份，从而使得系统能够容忍一定 数量的机器出问题（宕机、断网、硬盘损坏等等）。 一、相关概念paxos是什么  Paxos算法是莱斯利·兰伯特（Leslie Lamport，就是 LaTeX 中的&amp;quot;La&amp;quo">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-13T08:26:03.000Z">
+<meta property="og:updated_time" content="2017-12-13T08:30:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="paxos算法记录">
-<meta name="twitter:description" content="Paxos是一个用于实现可容错的分布式系统的算法，主要用于保证分布式集群中多备份系统之间的操作和数据的一致性。 这样集群中的每台机器对外相当于完全一致，从而其互相之间可以互为备份，从而使得系统能够容忍一定数量的机器出问题（宕机、断网、硬盘损坏等等）。 一、相关概念paxos是什么Paxos算法是莱斯利·兰伯特（Leslie Lamport，就是 LaTeX 中的&amp;quot;La&amp;quot;">
+<meta name="twitter:description" content="Paxos是一个用于实现可容错的分布式系统的算法，主要用于保证分布式集群中多备份系统之间的操作和数据的 一致性。这样集群中的每台机器对外相当于完全一致，从而其互相之间可以互为备份，从而使得系统能够容忍一定 数量的机器出问题（宕机、断网、硬盘损坏等等）。 一、相关概念paxos是什么  Paxos算法是莱斯利·兰伯特（Leslie Lamport，就是 LaTeX 中的&amp;quot;La&amp;quo">
 
 
 
@@ -352,9 +352,11 @@
       
 
       
-        <pre><code>    Paxos是一个用于实现可容错的分布式系统的算法，主要用于保证分布式集群中多备份系统之间的操作和数据的一致性。
-这样集群中的每台机器对外相当于完全一致，从而其互相之间可以互为备份，从而使得系统能够容忍一定数量的机器出问题（宕机、断网、硬盘损坏等等）。
-</code></pre><h4 id="一、相关概念"><a href="#一、相关概念" class="headerlink" title="一、相关概念"></a>一、相关概念</h4><h5 id="paxos是什么"><a href="#paxos是什么" class="headerlink" title="paxos是什么"></a>paxos是什么</h5><pre><code>Paxos算法是莱斯利·兰伯特（Leslie Lamport，就是 LaTeX 中的&quot;La&quot;，此人现在在微软研究院）于1990年提出的一种基于消息传递的一致性算法。
+        <pre><code>   Paxos是一个用于实现可容错的分布式系统的算法，主要用于保证分布式集群中多备份系统之间的操作和数据的
+一致性。这样集群中的每台机器对外相当于完全一致，从而其互相之间可以互为备份，从而使得系统能够容忍一定
+数量的机器出问题（宕机、断网、硬盘损坏等等）。
+</code></pre><h4 id="一、相关概念"><a href="#一、相关概念" class="headerlink" title="一、相关概念"></a>一、相关概念</h4><h5 id="paxos是什么"><a href="#paxos是什么" class="headerlink" title="paxos是什么"></a>paxos是什么</h5><pre><code>  Paxos算法是莱斯利·兰伯特（Leslie Lamport，就是 LaTeX 中的&quot;La&quot;，此人现在在微软研究院）于1990年提出的
+一种基于消息传递的一致性算法。
 </code></pre><h5 id="paxos诞生背景"><a href="#paxos诞生背景" class="headerlink" title="paxos诞生背景"></a>paxos诞生背景</h5><pre><code>Paxos 算法解决的问题是一个分布式系统如何就某个值（决议）达成一致。
 在分布式系统中，多个系统维护数据的最终一致性，Paxos算法就是一种基于消息传递模型的一致性算法。
 paxos算法适用的几种情况：一台机器中多个进程/线程达成数据一致；分布式文件系统或者分布式数据库中多客户端
@@ -375,8 +377,9 @@ paxos算法适用的几种情况：一台机器中多个进程/线程达成数�
 我们也希望能选择一个提案。因此推导出以下约束
 </code></pre><p>  <strong>约束1：acceptor必须批准它接收到的第一个提案</strong>。</p>
 <pre><code>但如果acceptor所在的机器挂了，就没法批准提案了， proposer会等待acceptor的表决，整个流程没法继续下去。
-</code></pre><h4 id="只有一个proposer，多个acceptor"><a href="#只有一个proposer，多个acceptor" class="headerlink" title="只有一个proposer，多个acceptor"></a>只有一个proposer，多个acceptor</h4><pre><code>    proposer发出提案后，假设acceptors返回两种决策结果，一部分同意改提案，另外一部分就是不同意该提案，为了公平性，超过一半
-的acceptors决策者的结果为最终结果，这就意味着需要acceptors的数量为奇数，而且proposer知道acceptor的数量。
+</code></pre><h4 id="只有一个proposer，多个acceptor"><a href="#只有一个proposer，多个acceptor" class="headerlink" title="只有一个proposer，多个acceptor"></a>只有一个proposer，多个acceptor</h4><pre><code>  proposer发出提案后，假设acceptors返回两种决策结果，一部分同意改提案，另外一部分就是不同意该提案，
+为了公平性，超过一半的acceptors决策者的结果为最终结果，这就意味着需要acceptors的数量为奇数，
+而且proposer知道acceptor的数量。
 </code></pre><p>  <strong>约束2：一个提案的选定，需要半数以上的acceptor批准</strong></p>
 <pre><code>acceptor接受一个提案称为“接受”，当有majority个acceptor都接受某提案后，这个提案被“通过&quot;。
 同样单个proposer也会出现机器挂了的可能，因此需要多个proposer
@@ -386,13 +389,14 @@ paxos算法适用的几种情况：一台机器中多个进程/线程达成数�
 </code></pre><p>   <strong>约束3：如果一个提案【m+value】，并且这个提案通过了，那么后面所有被acceptor接受的提案值都必须是【value】</strong></p>
 <pre><code>由于提案如果想被接受，则至少有一个acceptor接受它。为了达到约束3要求，我们可以在满足约束3的基础上，加强约束：
 </code></pre><p>   <strong>约束4：如果一个值为【m+value】的提案被通过，那么之后被任意一个acceptor接受的提案，其值必须为【value】</strong></p>
-<pre><code>   假设有proposer1 向acceptorA、acceptorB、acceptorC提出提案1【m+value】，acceptorA和acceptorB都接受了，acceptorC因为网络问题没有接受，
-这时候proposer2 向acceptorB发出提案，acceptorC网络好了，在约束一的作用下，acceptorC通过了提案2，
-那这样就会同时又两个提案被通过了，会和约束三矛盾，为了达到约束三的要求，我们就需要继续加约束
+<pre><code>   假设有proposer1 向acceptorA、acceptorB、acceptorC提出提案1【m+value】，acceptorA和acceptorB都接受了，
+acceptorC因为网络问题没有接受，这时候proposer2 向acceptorB发出提案，acceptorC网络好了，在约束一的作用下，
+acceptorC通过了提案2，那这样就会同时又两个提案被通过了，会和约束三矛盾，为了达到约束三的要求，我们就需要继续加约束
 </code></pre><p>   <strong>约束5：如果一个值为【m+value】的提案被通过，则之后(提案的编号大于被接受的提案编号M)任意一个proposer提出的每个提案，值都必须为【value】</strong></p>
-<pre><code>    当约束1、约束2、约束5满足的时候，约束4一定满足，从而约束3满足。约束5蕴含着约束4(因为acceptor接受的值都是proposer提出的)，是一个更强的约束。
-但在约束5的要求下，proposer需要知道最后一个被通过的提案是哪个，其值是多少。
-</code></pre><h4 id="约束5的特殊情况"><a href="#约束5的特殊情况" class="headerlink" title="约束5的特殊情况"></a>约束5的特殊情况</h4><pre><code>会不会出现多个proposer同时提出提案，由于消息传输时间任意，一个proposer无法在提交自己的提案前，无法知道另一个proposer提交的提案是否在未来先到达acceptor被通过。
+<pre><code>   当约束1、约束2、约束5满足的时候，约束4一定满足，从而约束3满足。约束5蕴含着约束4(因为acceptor接受的值都是proposer提出的)，
+是一个更强的约束。但在约束5的要求下，proposer需要知道最后一个被通过的提案是哪个，其值是多少。
+</code></pre><h4 id="约束5的特殊情况"><a href="#约束5的特殊情况" class="headerlink" title="约束5的特殊情况"></a>约束5的特殊情况</h4><pre><code>会不会出现多个proposer同时提出提案，由于消息传输时间任意，一个proposer无法在提交自己的提案前，
+无法知道另一个proposer提交的提案是否在未来先到达acceptor被通过。
 比如proposerA、proposerB，提出提案值为m n，A先提出提案,B这时也要提出提案，它该提还是不提呢？
 约束5要求下，A需要知道B的提案是否能被通过，从而判断自己提案的值是否必须和B提案一样，还是可以自己选一个新值？这个对A来说无法回答。
 所以我们要加强约束5。
@@ -400,8 +404,10 @@ paxos算法适用的几种情况：一台机器中多个进程/线程达成数�
 设 n &gt; m，假设 m .. (n - 1) 提案的值都是v。 提案我们假设被通过，则一定有多个acceptor组成集合C，C内每个acceptor都接受了v这个值。
 在约束4的要求下，我们可以说，C集合内的每个acceptor都接受了从m ~ (n-1)中的某个提案(单是假设就保证了这些acceptor都至少接受了m提案)，
 并且m ~ (n-1)个提案中，被任意一个C集合内的acceptor接受的提案，值都得为v。
-那么递推到第n个提案，它找出一个集合S，由多个acceptor组成。那么n提案如果想被接受，S内所有acceptor要么从未接受过任何提案(当前面m提案被通过的假设成立的时候这个条件不成立)，
-要么第n提案的值也为v。因为S集合必然会和C集合有交集，都是多数的。作为交集的那个acceptor值已经接受了v值，所以n提案如果不用v值，则不可能让S内所有acceptor都接受。
+那么递推到第n个提案，它找出一个集合S，由多个acceptor组成。那么n提案如果想被接受，
+S内所有acceptor要么从未接受过任何提案(当前面m提案被通过的假设成立的时候这个条件不成立)，
+要么第n提案的值也为v。因为S集合必然会和C集合有交集，都是多数的。作为交集的那个acceptor值已经接受了v值，
+所以n提案如果不用v值，则不可能让S内所有acceptor都接受。
 </code></pre><p>   <strong>约束6 : 有多个acceptor组成集合S，为了值为v提案号为n的提案被通过，必须保证以下条件之一成立<br>    a) S内所有acceptor没有接受过任何在n之前的提案；<br>    b) S内任意一个acceptor之前接受过的小于n的提案值为v。</strong></p>
 <pre><code>但如果n提案之前的n-1提案，可能还在传输过程中。proposer在提出提案n的时候，即使询问acceptor并得到回应说从未接受过某提案，
 proposer提出提案n的时候可能还是比n-1提案晚。
@@ -416,7 +422,8 @@ acceptor判断M是否大于自己已经批准过的所有的提案编号，如�
 4、proposer收到acceptor的响应（acceptor超过半数），如果为空，则自己可以任意设置value的值，如果返回了已批准的提案，
 则必须以编号最大的提案的value作为自己的value，生成&lt;M,value&gt;作为自己要发起的提案，如果未超过半数，则重复此阶段。
 </code></pre><h4 id="2、表决阶段"><a href="#2、表决阶段" class="headerlink" title="2、表决阶段"></a>2、表决阶段</h4><pre><code>1、proposer确定了自己的提案&lt;M,value&gt;后，会向一个acceptor集合（超过半数且不一定是上一个集合）的所有acceptor发起提案
-2、当且仅当acceptor没有对某个编号大于M的prepare请求做过响应时就可以批准该提案，或者acceptor没有批准过比M编号更小的提案，就可以批准该提案。
+2、当且仅当acceptor没有对某个编号大于M的prepare请求做过响应时就可以批准该提案，
+或者acceptor没有批准过比M编号更小的提案，就可以批准该提案。
 3、超过半数的acceptor批准了提案后，就对value的值达到了一致性，没有的话，则从准备阶段重复
 </code></pre><h4 id="3、学习阶段"><a href="#3、学习阶段" class="headerlink" title="3、学习阶段"></a>3、学习阶段</h4><pre><code>提案被确定后就可以通过learner获取了，获取的方式有很多种，可以根据具体情况选择，如：
 1、acceptor批准提案后，立即发送给所有learner
