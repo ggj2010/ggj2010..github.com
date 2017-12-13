@@ -96,7 +96,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://p0.meituan.net/education/46a20e6c35006adee3a26a9364e4ec51101089.png">
 <meta property="og:image" content="http://p1.meituan.net/education/ef57589df5d0e2f468aef7f1cc4fe51b94441.png">
-<meta property="og:updated_time" content="2017-12-13T09:34:33.000Z">
+<meta property="og:updated_time" content="2017-12-13T09:37:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="paxos算法记录">
 <meta name="twitter:description" content="Paxos是一个用于实现可容错的分布式系统的算法，主要用于保证分布式集群中多备份系统之间的操作和数据的 一致性。这样集群中的每台机器对外相当于完全一致，从而其互相之间可以互为备份，从而使得系统能够容忍一定 数量的机器出问题（宕机、断网、硬盘损坏等等）。 一、相关概念paxos是什么  Paxos算法是莱斯利·兰伯特（Leslie Lamport，就是 LaTeX 中的&amp;quot;La&amp;quo">
@@ -396,39 +396,44 @@ paxos算法适用的几种情况：一台机器中多个进程/线程达成数�
 acceptorC因为网络问题没有接受，这时候proposer2 向acceptorB发出提案，acceptorC网络好了，在约束一的作用下，
 acceptorC通过了提案2，那这样就会同时又两个提案被通过了，会和约束三矛盾，为了达到约束三的要求，我们就需要继续加约束
 </code></pre><p>   <strong>约束5：如果一个值为【m+value】的提案被通过，则之后(提案的编号大于被接受的提案编号M)任意一个proposer提出的每个提案，值都必须为【value】</strong></p>
-<pre><code>   当约束1、约束2、约束5满足的时候，约束4一定满足，从而约束3满足。约束5蕴含着约束4(因为acceptor接受的值都是proposer提出的)，
-是一个更强的约束。但在约束5的要求下，proposer需要知道最后一个被通过的提案是哪个，其值是多少。
+<pre><code>   当约束1、约束2、约束5满足的时候，约束4一定满足，从而约束3满足。约束5蕴含着约束4
+(因为acceptor接受的值都是proposer提出的)，是一个更强的约束。但在约束5的要求下，proposer
+需要知道最后一个被通过的提案是哪个，其值是多少。
 </code></pre><h4 id="约束5的特殊情况"><a href="#约束5的特殊情况" class="headerlink" title="约束5的特殊情况"></a>约束5的特殊情况</h4><pre><code>会不会出现多个proposer同时提出提案，由于消息传输时间任意，一个proposer无法在提交自己的提案前，
 无法知道另一个proposer提交的提案是否在未来先到达acceptor被通过。
 比如proposerA、proposerB，提出提案值为m n，A先提出提案,B这时也要提出提案，它该提还是不提呢？
-约束5要求下，A需要知道B的提案是否能被通过，从而判断自己提案的值是否必须和B提案一样，还是可以自己选一个新值？这个对A来说无法回答。
-所以我们要加强约束5。
+约束5要求下，A需要知道B的提案是否能被通过，从而判断自己提案的值是否必须和B提案一样，
+还是可以自己选一个新值？这个对A来说无法回答。所以我们要加强约束5。
 假设有编号为m的提案，值V已经被通过了，我们要证明M之后的提案必须是值V从而证明约束5。
-设 n &gt; m，假设 m .. (n - 1) 提案的值都是v。 提案我们假设被通过，则一定有多个acceptor组成集合C，C内每个acceptor都接受了v这个值。
-在约束4的要求下，我们可以说，C集合内的每个acceptor都接受了从m ~ (n-1)中的某个提案(单是假设就保证了这些acceptor都至少接受了m提案)，
+设 n &gt; m，假设 m .. (n - 1) 提案的值都是v。 提案我们假设被通过，
+则一定有多个acceptor组成集合C，C内每个acceptor都接受了v这个值。
+在约束4的要求下，我们可以说，C集合内的每个acceptor都接受了从m ~ (n-1)中的
+某个提案(单是假设就保证了这些acceptor都至少接受了m提案)，
 并且m ~ (n-1)个提案中，被任意一个C集合内的acceptor接受的提案，值都得为v。
 那么递推到第n个提案，它找出一个集合S，由多个acceptor组成。那么n提案如果想被接受，
 S内所有acceptor要么从未接受过任何提案(当前面m提案被通过的假设成立的时候这个条件不成立)，
 要么第n提案的值也为v。因为S集合必然会和C集合有交集，都是多数的。作为交集的那个acceptor值已经接受了v值，
 所以n提案如果不用v值，则不可能让S内所有acceptor都接受。
 </code></pre><p>   <strong>约束6 : 有多个acceptor组成集合S，为了值为v提案号为n的提案被通过，必须保证以下条件之一成立<br>    a) S内所有acceptor没有接受过任何在n之前的提案；<br>    b) S内任意一个acceptor之前接受过的小于n的提案值为v。</strong></p>
-<pre><code>但如果n提案之前的n-1提案，可能还在传输过程中。proposer在提出提案n的时候，即使询问acceptor并得到回应说从未接受过某提案，
-proposer提出提案n的时候可能还是比n-1提案晚。
+<pre><code>但如果n提案之前的n-1提案，可能还在传输过程中。proposer在提出提案n的时候，即使询问acceptor并
+得到回应说从未接受过某提案，proposer提出提案n的时候可能还是比n-1提案晚。
 出现询问n提案能不能提出 &lt; n-1提案被接受 &lt; n提案到达acceptor。的时间序，从而破坏约束6
 所以，
 </code></pre><p>   <strong>约束7：proposer询问acceptor是否能提出提案n时，必须要求acceptor给出一个保证，保证n提案之前的提案一定不被接受，<br>          或者acceptor可以批准一个编号为n的提案，当且仅当它没有回应过一个编号大于n的提案，从而保证约束6。</strong></p>
 <h3 id="三、算法流程"><a href="#三、算法流程" class="headerlink" title="三、算法流程"></a>三、算法流程</h3><h4 id="1、准备阶段"><a href="#1、准备阶段" class="headerlink" title="1、准备阶段"></a>1、准备阶段</h4><pre><code>prepare请求只需要带着提案号，而不需要带着值。
-1、proposer获取一个提案编号M，根据M向一个acceptor集合（超过半数）的所有acceptor询问当前是否有已经被批准的提案
-acceptor判断M是否大于自己已经批准过的所有的提案编号，如果是，则返回已批准的编号&lt;M且最大的提案，
+1、proposer获取一个提案编号M，根据M向一个acceptor集合（超过半数）的所有acceptor询问当前是否有已经被
+批准的提案acceptor判断M是否大于自己已经批准过的所有的提案编号，如果是，则返回已批准的编号&lt;M且最大的提案。
 2、如果否，可以不响应，如果acceptor之前没有批准过任何提案，则返回空
 3、acceptor不再批准编号小于M的提案
 4、proposer收到acceptor的响应（acceptor超过半数），如果为空，则自己可以任意设置value的值，
-如果返回了已批准的提案，则必须以编号最大的提案的value作为自己的value，生成&lt;M,value&gt;作为自己要发起的提案，
+如果返回了已批准的提案，则必须以编号最大的提案的value作为自己的value，生成&lt;M,value&gt;作为自己要发起的提案。
 如果未超过半数，则重复此阶段。
 </code></pre><p>   <img src="http://p0.meituan.net/education/46a20e6c35006adee3a26a9364e4ec51101089.png" alt="prepare阶段"></p>
-<pre><code>  假设：M&gt;M1&gt;m0,acceptor1，acceptor3之前都同意过批案M1，acceptor4之前同意过批案M0，acceptor2没有批准过任何批案。
+<pre><code>  假设：M&gt;M1&gt;m0,acceptor1，acceptor3之前都同意过批案M1，acceptor4之前同意过批案M0，acceptor2
+  没有批准过任何批案。
 超过半数返回，而且M1编号最大，由此可以推导出proposer将以M1的value作为自己的提案&lt;M,value&gt;发起表决请求。
-</code></pre><h4 id="2、表决阶段"><a href="#2、表决阶段" class="headerlink" title="2、表决阶段"></a>2、表决阶段</h4><pre><code>1、proposer确定了自己的提案&lt;M,value&gt;后，会向一个acceptor集合（超过半数且不一定是上一个集合）的所有acceptor发起提案
+</code></pre><h4 id="2、表决阶段"><a href="#2、表决阶段" class="headerlink" title="2、表决阶段"></a>2、表决阶段</h4><pre><code>1、proposer确定了自己的提案&lt;M,value&gt;后，会向一个acceptor集合（超过半数且不一定是上一个集合）
+的所有acceptor发起提案
 2、当且仅当acceptor没有对某个编号大于M的prepare请求做过响应时就可以批准该提案，
 或者acceptor没有批准过比M编号更小的提案，就可以批准该提案。
 3、超过半数的acceptor批准了提案后，就对value的值达到了一致性，没有的话，则从准备阶段重复
