@@ -87,20 +87,19 @@
 
 
 
-<meta name="description" content="集合Map HashMap  实现原理 HashMap实际上是一个“链表散列”的数据结构，即数组+链表,Entry[] table+ entry链表DK1.8中，HashMap采用数组+链表+红黑树实现，当链表长度超过阈值（8）时，将链表转换为红黑树，这样大大减少了查找时间。 非线程安全，key值可以为空（当key值为空的时候hash的值为0，总是在table数据第一个节点） hashMap在多线">
+<meta name="description" content="八种基本数据类型常见概念1byte=8b(bit)，1KB=1024B，1MB=1024KB，1GB=1024MB 为什么1个字节为8位二进制勒？标准来自于IBM system/360，导致后来的硬件都是按照这个标签设计的 bytebyte的取值范围为-128~127（-2的7次方到2的7次方-1），byte也就是俗称的1个字节 整型java可以表示整数类型的有short(短整型)、int（整型）">
 <meta property="og:type" content="article">
-<meta property="og:title" content="java基础原理">
+<meta property="og:title" content="java基础原理记录">
 <meta property="og:url" content="http://ggj2010.github.io/2017/06/20/java基础原理/index.html">
 <meta property="og:site_name" content="高广金博客">
-<meta property="og:description" content="集合Map HashMap  实现原理 HashMap实际上是一个“链表散列”的数据结构，即数组+链表,Entry[] table+ entry链表DK1.8中，HashMap采用数组+链表+红黑树实现，当链表长度超过阈值（8）时，将链表转换为红黑树，这样大大减少了查找时间。 非线程安全，key值可以为空（当key值为空的时候hash的值为0，总是在table数据第一个节点） hashMap在多线">
+<meta property="og:description" content="八种基本数据类型常见概念1byte=8b(bit)，1KB=1024B，1MB=1024KB，1GB=1024MB 为什么1个字节为8位二进制勒？标准来自于IBM system/360，导致后来的硬件都是按照这个标签设计的 bytebyte的取值范围为-128~127（-2的7次方到2的7次方-1），byte也就是俗称的1个字节 整型java可以表示整数类型的有short(短整型)、int（整型）">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://ocg3iebmc.bkt.clouddn.com/20160918105655_12.jpg">
 <meta property="og:image" content="http://ocg3iebmc.bkt.clouddn.com/011042300165927.png">
-<meta property="og:updated_time" content="2017-09-22T06:21:43.000Z">
+<meta property="og:updated_time" content="2018-04-11T03:57:23.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="java基础原理">
-<meta name="twitter:description" content="集合Map HashMap  实现原理 HashMap实际上是一个“链表散列”的数据结构，即数组+链表,Entry[] table+ entry链表DK1.8中，HashMap采用数组+链表+红黑树实现，当链表长度超过阈值（8）时，将链表转换为红黑树，这样大大减少了查找时间。 非线程安全，key值可以为空（当key值为空的时候hash的值为0，总是在table数据第一个节点） hashMap在多线">
-<meta name="twitter:image" content="http://ocg3iebmc.bkt.clouddn.com/20160918105655_12.jpg">
+<meta name="twitter:title" content="java基础原理记录">
+<meta name="twitter:description" content="八种基本数据类型常见概念1byte=8b(bit)，1KB=1024B，1MB=1024KB，1GB=1024MB 为什么1个字节为8位二进制勒？标准来自于IBM system/360，导致后来的硬件都是按照这个标签设计的 bytebyte的取值范围为-128~127（-2的7次方到2的7次方-1），byte也就是俗称的1个字节 整型java可以表示整数类型的有short(短整型)、int（整型）">
+<meta name="twitter:image" content="http://ocg3iebmc.bkt.clouddn.com/011042300165927.png">
 
 
 
@@ -134,7 +133,7 @@
 
 
 
-  <title> java基础原理 | 高广金博客 </title>
+  <title> java基础原理记录 | 高广金博客 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -304,7 +303,7 @@
             
             
               
-                java基础原理
+                java基础原理记录
               
             
           </h1>
@@ -355,10 +354,104 @@
       
 
       
-        <h4 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h4><h5 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h5><ul>
-<li><p>HashMap</p>
-<ul>
-<li>实现原理 HashMap实际上是一个“链表散列”的数据结构，即数组+链表,Entry[] table+ entry链表<br>DK1.8中，HashMap采用数组+链表+红黑树实现，当链表长度超过阈值（8）时，将链表转换为红黑树，这样大大减少了查找时间。<br><img src="http://ocg3iebmc.bkt.clouddn.com/20160918105655_12.jpg" alt=""></li>
+        <h4 id="八种基本数据类型"><a href="#八种基本数据类型" class="headerlink" title="八种基本数据类型"></a>八种基本数据类型</h4><h5 id="常见概念"><a href="#常见概念" class="headerlink" title="常见概念"></a>常见概念</h5><pre><code>1byte=8b(bit)，1KB=1024B，1MB=1024KB，1GB=1024MB
+为什么1个字节为8位二进制勒？标准来自于IBM system/360，导致后来的硬件都是按照这个标签设计的
+</code></pre><h5 id="byte"><a href="#byte" class="headerlink" title="byte"></a>byte</h5><pre><code>byte的取值范围为-128~127（-2的7次方到2的7次方-1），byte也就是俗称的1个字节
+</code></pre><h5 id="整型"><a href="#整型" class="headerlink" title="整型"></a>整型</h5><pre><code>java可以表示整数类型的有short(短整型)、int（整型）、long（长整型）
+</code></pre><ul>
+<li>short</li>
+</ul>
+<pre><code>short的取值范围为-32768~32767，占用2个字节（-2的15次方到2的15次方-1）
+</code></pre><ul>
+<li>int</li>
+</ul>
+<pre><code>int的取值范围为-2147483648~2147483647，占用4个字节（-2的31次方到2的31次方-1）
+为何32位最大的正整数不是4294967295而是2147483647？
+因为左起第一位做符号保留，0 正数，1.负数 
+</code></pre><ul>
+<li>long </li>
+</ul>
+<pre><code>long的取值范围为（-9223372036854774808~9223372036854774807），占用8个字节（-2的63次方到2的63次方-1）
+</code></pre><h5 id="浮点型"><a href="#浮点型" class="headerlink" title="浮点型"></a>浮点型</h5><pre><code>float和double是表示浮点型的数据类型，他们之间的区别在于他们的精确度不同 
+</code></pre><ul>
+<li>float </li>
+</ul>
+<pre><code>占用4个字节，需要用f表示 
+</code></pre><ul>
+<li>double</li>
+</ul>
+<pre><code>占用8个字节 double型比float型存储范围更大，精度更高，
+</code></pre><h5 id="boolean型"><a href="#boolean型" class="headerlink" title="boolean型"></a>boolean型</h5><pre><code>这个类型只有两个值，true和false
+</code></pre><h5 id="char型"><a href="#char型" class="headerlink" title="char型"></a>char型</h5><pre><code>用于存放字符的数据类型，占用2个字节，因为没有符号位，所以是(0000 0000 0000 0000 ~ 1111 1111 1111 1111 1111 1111 (65535))，
+采用unicode编码，它的前128字节编码与ASCII兼容 
+字符的存储范围在\u0000~\uFFFF，在定义字符型的数据时候要注意加&apos; &apos;，比如 &apos;1&apos;表示字符&apos;1&apos;而不是数值1，
+char+char，char+int——类型均提升为int
+</code></pre><h5 id="一些概念"><a href="#一些概念" class="headerlink" title="一些概念"></a>一些概念</h5><pre><code>转换规则：
+从低位类型到高位类型自动转换；从高位类型到低位类型需要强制类型转换：
+算术运算 中的类型转换：1 基本就是先转换为高位数据类型，再参加运算，结果也是最高位的数据类型；
+2 byte short char运算会转换为Int；
+</code></pre><h4 id="java-IO整理"><a href="#java-IO整理" class="headerlink" title="java IO整理"></a>java IO整理</h4><h5 id="字节与字符的区别"><a href="#字节与字符的区别" class="headerlink" title="字节与字符的区别"></a>字节与字符的区别</h5><pre><code>它们完全不是一个位面的概念，所以两者之间没有“区别”这个说法，字节Byte是一种计量单位，表示数据量多少，它是计算机信息技术用于计量存储容量的一种计量单位。
+字符是指计算机中使用的文字和符号，不同编码里，字符和字节的对应关系不同。
+例如：UTF-8编码中，一个英文字符等于一个字节，一个中文（含繁体）等于三个字节
+     在GBK编码，一个英文字符等于一个字节，一个汉字占两个字节
+</code></pre><h5 id="字节流与字符流"><a href="#字节流与字符流" class="headerlink" title="字节流与字符流"></a>字节流与字符流</h5><pre><code>字节流在输出的时候直接操作文件本身。
+字符流在输出的时候会使用缓冲区，最直观的就是如果我们在写文件的时候，如果使用字符流，不flush或者close（），内容
+是不会写到文件里面的，而字节流输出时候是实时的。            
+</code></pre><h4 id="java类的整理"><a href="#java类的整理" class="headerlink" title="java类的整理"></a>java类的整理</h4><h5 id="java类的生命周期"><a href="#java类的生命周期" class="headerlink" title="java类的生命周期"></a>java类的生命周期</h5><pre><code>当我们编写一个xx.java文件时候,会被编译成XX.class的文件，俗称字节码文件也就是Java程序对应的二进制格式的文件，只有字节码才能在Java虚拟机
+中运行。java类的生命周期就是指一个class文件从加载到卸载的全过程。
+java类的完整的生命周期会经历加载、连接、初始化、使用、和卸载五个阶段，当然也有在加载或者连接之后没有被初始化就直接被使用的情况
+</code></pre><h6 id="加载"><a href="#加载" class="headerlink" title="加载"></a>加载</h6><p>   类的加载方式有多种：</p>
+<pre><code>1、根据classes路径，找到所有.class文件，然后再从class文件里面读取文件的字节码。
+2、从程序依赖的jar包里面读取
+3、动态代理生成各种代理类
+</code></pre><p>   Class.forName()与ClassLoader.load()区别</p>
+<pre><code>Class.forName()底层是调用Class.forName0(String name, boolean initialize, ClassLoader loader)
+默认initialize是true,也就是加载+初始化（执行static静态代码块）
+ClassLoader.load()底层是调用Classloder. loadClass(String name, boolean resolve)
+默认resolve是false,也就是不解析，就只是加载改类。
+</code></pre><p>   Class.forName()的场景</p>
+<pre><code>例如加载mysql驱动器的代码，Class.froName(“com.mysql.jdbc.Driver”)，这种是显示声明，
+其实：Driver这个类只有一个static块,我们必须要初始化才可以使用
+ public class Driver extends NonRegisteringDriver implements java.sql.Driver {
+
+     public Driver() throws SQLException {
+
+     } 
+     static {
+         try {
+             DriverManager.registerDriver(new Driver());
+         } catch (SQLException var1) {
+             throw new RuntimeException(&quot;Can\&apos;t register driver!&quot;);
+         }
+     }
+ } 
+</code></pre><p>   class、Class、Object的关系</p>
+<pre><code>class是个关键字，一般用与修饰类
+Class是个特殊的类，一般用与反射，用来获取类的字段，属性，构造器，方法等等
+Object是一个特殊的类，所有的类都继承该类，包括Class也继承Object
+</code></pre><h6 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h6><pre><code>连接包括（验证-&gt;准备-&gt;解析）三个部分
+验证：包括件格式验证，是否以魔数开头，主版本是否在当前虚拟机处理范围内等
+准备：为类变量分配内存，并设置类变量初始值。（static修饰的变量）例如给int赋值0
+解析：类和接口的解析、字段解析、类方法解析、接口方法解析
+</code></pre><h6 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h6><pre><code>如果一个类被直接引用，就会触发初始化，间接引用除外，例如调用类的静态方法
+</code></pre><p>   类的实例化与初始化</p>
+<pre><code>一个类如果想实例化，那么JVM首先会检查相关类型是否已经加载并初始，如果没有，则JVM立即进行加载并调用类构造器完成类的初始化。
+在类初始化过程中或初始化完毕后，根据具体情况才会去对类进行实例化
+</code></pre><p>   那些情况会触发类的初始化</p>
+<pre><code>1、遇到new，getstatic等字节码指令。
+2、利用reflect方法对类进行反射调用以上几种凡是。
+3、当初始化一个类，如果父类没初始化，首先初始化父类。
+4、虚拟机启动时候，需要指定一个要执行的类，也就是main方法。
+</code></pre><h4 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h4><h5 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h5><ul>
+<li>HashMap<ul>
+<li>实现原理 </li>
+</ul>
+</li>
+</ul>
+<pre><code>HashMap实际上是一个“链表散列”的数据结构，即数组+链表,Entry[] table+ entry链表
+DK1.8中，HashMap采用数组+链表+红黑树实现，当链表长度超过阈值（8）时，将链表转换为红黑树，这样大大减少了查找时间。
+![](http://ocg3iebmc.bkt.clouddn.com/20160918105655_12.jpg)
+</code></pre><ul>
 <li><p>非线程安全，key值可以为空（当key值为空的时候hash的值为0，总是在table数据第一个节点）</p>
 <pre><code>hashMap在多线程环境下会出现死循环，主要是多线程同时put时，
 如果同时触发了rehash操作，会导致HashMap中的链表中出现循环节点，进而使得后面get的时候，会死循环
@@ -406,7 +499,7 @@ static int indexFor(int h, int length) {
 }
 </code></pre></li>
 </ul>
-</li>
+<ul>
 <li><p>HashTable</p>
 <ul>
 <li>实现原理 散列表，数组+链表结构实现</li>
@@ -718,7 +811,7 @@ final void runWorker(Worker w) {
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-count">18</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -795,7 +888,7 @@ final void runWorker(Worker w) {
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#集合"><span class="nav-number">1.</span> <span class="nav-text">集合</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Map"><span class="nav-number">1.1.</span> <span class="nav-text">Map</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List"><span class="nav-number">1.2.</span> <span class="nav-text">List</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Thread"><span class="nav-number">2.</span> <span class="nav-text">Thread</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java-util-concurrent包下面常用类的原理"><span class="nav-number">3.</span> <span class="nav-text">java.util.concurrent包下面常用类的原理</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#八种基本数据类型"><span class="nav-number">1.</span> <span class="nav-text">八种基本数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#常见概念"><span class="nav-number">1.1.</span> <span class="nav-text">常见概念</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#byte"><span class="nav-number">1.2.</span> <span class="nav-text">byte</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#整型"><span class="nav-number">1.3.</span> <span class="nav-text">整型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#浮点型"><span class="nav-number">1.4.</span> <span class="nav-text">浮点型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#boolean型"><span class="nav-number">1.5.</span> <span class="nav-text">boolean型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#char型"><span class="nav-number">1.6.</span> <span class="nav-text">char型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#一些概念"><span class="nav-number">1.7.</span> <span class="nav-text">一些概念</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java-IO整理"><span class="nav-number">2.</span> <span class="nav-text">java IO整理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#字节与字符的区别"><span class="nav-number">2.1.</span> <span class="nav-text">字节与字符的区别</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#字节流与字符流"><span class="nav-number">2.2.</span> <span class="nav-text">字节流与字符流</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java类的整理"><span class="nav-number">3.</span> <span class="nav-text">java类的整理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#java类的生命周期"><span class="nav-number">3.1.</span> <span class="nav-text">java类的生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#加载"><span class="nav-number">3.1.1.</span> <span class="nav-text">加载</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#连接"><span class="nav-number">3.1.2.</span> <span class="nav-text">连接</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#初始化"><span class="nav-number">3.1.3.</span> <span class="nav-text">初始化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#集合"><span class="nav-number">4.</span> <span class="nav-text">集合</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Map"><span class="nav-number">4.1.</span> <span class="nav-text">Map</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List"><span class="nav-number">4.2.</span> <span class="nav-text">List</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Thread"><span class="nav-number">5.</span> <span class="nav-text">Thread</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java-util-concurrent包下面常用类的原理"><span class="nav-number">6.</span> <span class="nav-text">java.util.concurrent包下面常用类的原理</span></a></li></ol></div>
             
 
           </div>

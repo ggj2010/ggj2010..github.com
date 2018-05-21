@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="内存泄露," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -87,22 +87,17 @@
 
 
 
-<meta name="description" content="java版本ios推送架包网上用的最多的是java-apns 和 javapns，还有个才开源的http://relayrides.github.io/pushy/ 没试过不知道性能如何 java-apns 效率大于javapns 尤其是大批量消息推送的时候，公司线上跑的定时推送用的是JavaPNS_2.2，定时项目跑了一段时间就挂了， 但线上有脚本，10分钟执行一次定时脚本，如果检测定时挂了就会">
-<meta name="keywords" content="内存泄露">
+<meta name="description" content="什么是happens before“Happens before”是由Leslie Lamport引入的用来描述程序事件的一种偏序关系。  用通俗的话来说就是，我们定义系列规则保证A线程修改变量什么时候对线程B是可见的，这种规则  可以抽象出来happens-before。 概要    happens-before是JMM最核心的概念，理解happens-before是理解JMM的关键， JSR-">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JavaPNS_2.2内存泄露定位和解决">
-<meta property="og:url" content="http://ggj2010.github.io/2017/05/04/JavaPNS-2-2内存溢出定位和解决/index.html">
+<meta property="og:title" content="happens-before记录">
+<meta property="og:url" content="http://ggj2010.github.io/2018/05/15/happens-before记录/index.html">
 <meta property="og:site_name" content="高广金博客">
-<meta property="og:description" content="java版本ios推送架包网上用的最多的是java-apns 和 javapns，还有个才开源的http://relayrides.github.io/pushy/ 没试过不知道性能如何 java-apns 效率大于javapns 尤其是大批量消息推送的时候，公司线上跑的定时推送用的是JavaPNS_2.2，定时项目跑了一段时间就挂了， 但线上有脚本，10分钟执行一次定时脚本，如果检测定时挂了就会">
+<meta property="og:description" content="什么是happens before“Happens before”是由Leslie Lamport引入的用来描述程序事件的一种偏序关系。  用通俗的话来说就是，我们定义系列规则保证A线程修改变量什么时候对线程B是可见的，这种规则  可以抽象出来happens-before。 概要    happens-before是JMM最核心的概念，理解happens-before是理解JMM的关键， JSR-">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://o8c5x5dg6.bkt.clouddn.com/jstack.png">
-<meta property="og:image" content="http://o8c5x5dg6.bkt.clouddn.com/memoryanalyzer2.png">
-<meta property="og:image" content="http://o8c5x5dg6.bkt.clouddn.com/memoryanalyzer3.png">
-<meta property="og:updated_time" content="2017-07-18T06:51:00.000Z">
+<meta property="og:updated_time" content="2018-05-21T02:40:29.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JavaPNS_2.2内存泄露定位和解决">
-<meta name="twitter:description" content="java版本ios推送架包网上用的最多的是java-apns 和 javapns，还有个才开源的http://relayrides.github.io/pushy/ 没试过不知道性能如何 java-apns 效率大于javapns 尤其是大批量消息推送的时候，公司线上跑的定时推送用的是JavaPNS_2.2，定时项目跑了一段时间就挂了， 但线上有脚本，10分钟执行一次定时脚本，如果检测定时挂了就会">
-<meta name="twitter:image" content="http://o8c5x5dg6.bkt.clouddn.com/jstack.png">
+<meta name="twitter:title" content="happens-before记录">
+<meta name="twitter:description" content="什么是happens before“Happens before”是由Leslie Lamport引入的用来描述程序事件的一种偏序关系。  用通俗的话来说就是，我们定义系列规则保证A线程修改变量什么时候对线程B是可见的，这种规则  可以抽象出来happens-before。 概要    happens-before是JMM最核心的概念，理解happens-before是理解JMM的关键， JSR-">
 
 
 
@@ -130,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="http://ggj2010.github.io/2017/05/04/JavaPNS-2-2内存溢出定位和解决/"/>
+  <link rel="canonical" href="http://ggj2010.github.io/2018/05/15/happens-before记录/"/>
 
 
 
 
 
-  <title> JavaPNS_2.2内存泄露定位和解决 | 高广金博客 </title>
+  <title> happens-before记录 | 高广金博客 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -285,7 +280,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://ggj2010.github.io/2017/05/04/JavaPNS-2-2内存溢出定位和解决/">
+    <link itemprop="mainEntityOfPage" href="http://ggj2010.github.io/2018/05/15/happens-before记录/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ggj2010">
@@ -306,7 +301,7 @@
             
             
               
-                JavaPNS_2.2内存泄露定位和解决
+                happens-before记录
               
             
           </h1>
@@ -321,8 +316,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-04T17:20:48+08:00">
-                2017-05-04
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-15T17:57:48+08:00">
+                2018-05-15
               </time>
             
 
@@ -331,28 +326,6 @@
             
           </span>
 
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/javabase/" itemprop="url" rel="index">
-                    <span itemprop="name">基础</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -379,31 +352,37 @@
       
 
       
-        <pre><code>java版本ios推送架包网上用的最多的是java-apns 和 javapns，还有个才开源的http://relayrides.github.io/pushy/ 没试过不知道性能如何
-java-apns 效率大于javapns 尤其是大批量消息推送的时候，公司线上跑的定时推送用的是JavaPNS_2.2，定时项目跑了一段时间就挂了，
-但线上有脚本，10分钟执行一次定时脚本，如果检测定时挂了就会自动重启，这是以前公司同事在定时项目挂了的时候处理的逻辑，没有
-深入研究为什么定时项目会挂。
-</code></pre><h4 id="问题定位"><a href="#问题定位" class="headerlink" title="问题定位"></a>问题定位</h4><ul>
-<li>造测试推送数据，然后本地启动项目开启jstack监控堆内存和线程的使用情况。</li>
-<li>jstack监控图，可以出看来堆内存一路飙升<br><img src="http://o8c5x5dg6.bkt.clouddn.com/jstack.png" alt="堆栈"></li>
-<li><p>jmap dump出当前pid（windows下pid可以通过jstack看到）内存快照，命令如下：</p>
-<pre><code>jmap -dump:format=b,file=dumfile3.hprof 20996
-</code></pre></li>
-<li><p>利用MemoryAnalyzer分析快照信息</p>
-<pre><code>通过截图分析可以看出来是因为ThreadGroup里面存了大量的NotificationThreads
-导致内存泄露
-</code></pre><p><img src="http://o8c5x5dg6.bkt.clouddn.com/memoryanalyzer2.png" alt="MemoryAnalyzer"><br><img src="http://o8c5x5dg6.bkt.clouddn.com/memoryanalyzer3.png" alt="MemoryAnalyzer"></p>
-</li>
-<li><p>代码跟踪</p>
-<pre><code>增加threadGroup.destroy(),在当前线程组里面的线程结束时候去除threadGroup的依赖
-NotificationThreads work = new NotificationThreads(server, ppdList, PushMsgHelper.IPHONE_THREADS);
-work.setListener(this.getListener(deviceType));// 对线程的监听，一定要加上这个监听
-work.start(); // 启动线程
-work.waitForAllThreads(); //等待所有线程结束*/
-work.destroy();//解决内存泄露关键代码
-</code></pre></li>
-</ul>
-
+        <h4 id="什么是happens-before"><a href="#什么是happens-before" class="headerlink" title="什么是happens before"></a>什么是happens before</h4><pre><code>“Happens before”是由Leslie Lamport引入的用来描述程序事件的一种偏序关系。
+ 用通俗的话来说就是，我们定义系列规则保证A线程修改变量什么时候对线程B是可见的，这种规则
+ 可以抽象出来happens-before。
+</code></pre><h4 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h4><pre><code>    happens-before是JMM最核心的概念，理解happens-before是理解JMM的关键，
+JSR-133使用happens-before的概念来指定两个操作之间的执行顺序。由于这两个操作可以在一个线程之内，
+也可以是在不同线程之间。因此，JMM可以通过happens-before关系向程序员提供跨线程的内存可见性保证
+（如果A线程的写操作a与B线程的读操作b之间存在happensbefore关系，尽管a操作和b操作在不同的线程中执行，
+但JMM向程序员保证a操作将对b操作可见
+</code></pre><h4 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h4><pre><code>    如果一个操作happens-before另一个操作，那么第一个操作的执行结果将对第二个操作可见，
+而且第一个操作的执行顺序排在第二个操作之前
+    两个操作之间存在happens-before关系，并不意味着Java平台的具体实现必须要按照happens-before关系指定的顺序来执行。
+如果重排序之后的执行结果，与按happens-before关系来执行的结果一致，那么这种重排序并不非法。
+Happens-Before原则是判断数据是否存在竞争、线程是否安全的主要依据
+</code></pre><h4 id="Java内存模型下Happens-Before规则"><a href="#Java内存模型下Happens-Before规则" class="headerlink" title="Java内存模型下Happens-Before规则"></a>Java内存模型下Happens-Before规则</h4><pre><code>1、程序顺序规则：一个线程中的每个操作，happens-before于该线程中的任意后续操作
+2、监视器锁规则：对一个锁的解锁，happens-before于随后对这个锁的加锁（符合synchronized的可见性）
+3、volatile变量规则：对一个volatile域的写，happens-before于任意后续对这个volatile域的读
+4、传递性：如果A happens-before B，且B happens-before C，那么A happens-before C
+5.start规则：如果线程A执行操作ThreadB.start()（启动线程B），那么A线程的ThreadB.start()操作happens-before于线程B中的任意操作
+6.join规则：如果线程A执行操作ThreadB.join()并成功返回，那么线程B中的任意操作happens-before于线程A从ThreadB.join()操作成功返回。
+</code></pre><h4 id="双重检测锁dcl"><a href="#双重检测锁dcl" class="headerlink" title="双重检测锁dcl"></a>双重检测锁dcl</h4><pre><code>如果a没有使用volatile修饰，就会发生指令重排序可能
+if(a==null){
+  synchronized(DCL.class){
+     //这两步会发生指令重排
+   if(a==null){
+        a=new DCL();
+    }
+  }
+}
+</code></pre><h4 id="volatile怎么保证有序性"><a href="#volatile怎么保证有序性" class="headerlink" title="volatile怎么保证有序性"></a>volatile怎么保证有序性</h4><pre><code>Lock前缀指令实际上相当于一个内存屏障（也成内存栅栏），它确保指令重排序时不会把其后面的指令排到内存屏障之前的位置，
+也不会把前面的指令排到内存屏障的后面；即在执行到内存屏障这句指令时，在它前面的操作已经全部完成         
+</code></pre>
       
     </div>
 
@@ -424,12 +403,6 @@ work.destroy();//解决内存泄露关键代码
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/内存泄露/" rel="tag"># 内存泄露</a>
-          
-        </div>
-      
 
       
         
@@ -439,8 +412,8 @@ work.destroy();//解决内存泄露关键代码
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/02/22/技术储备-长期记录/" rel="next" title="技术储备-长期记录">
-                <i class="fa fa-chevron-left"></i> 技术储备-长期记录
+              <a href="/2018/03/22/Thread-回顾/" rel="next" title="Thread 回顾">
+                <i class="fa fa-chevron-left"></i> Thread 回顾
               </a>
             
           </div>
@@ -448,10 +421,6 @@ work.destroy();//解决内存泄露关键代码
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/05/10/ELK日志系统/" rel="prev" title="ELK日志系统">
-                ELK日志系统 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -600,7 +569,7 @@ work.destroy();//解决内存泄露关键代码
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#问题定位"><span class="nav-number">1.</span> <span class="nav-text">问题定位</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#什么是happens-before"><span class="nav-number">1.</span> <span class="nav-text">什么是happens before</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#概要"><span class="nav-number">2.</span> <span class="nav-text">概要</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#定义"><span class="nav-number">3.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Java内存模型下Happens-Before规则"><span class="nav-number">4.</span> <span class="nav-text">Java内存模型下Happens-Before规则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#双重检测锁dcl"><span class="nav-number">5.</span> <span class="nav-text">双重检测锁dcl</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#volatile怎么保证有序性"><span class="nav-number">6.</span> <span class="nav-text">volatile怎么保证有序性</span></a></li></ol></div>
             
 
           </div>

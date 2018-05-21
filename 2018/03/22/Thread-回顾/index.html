@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="内存泄露," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -87,22 +87,17 @@
 
 
 
-<meta name="description" content="java版本ios推送架包网上用的最多的是java-apns 和 javapns，还有个才开源的http://relayrides.github.io/pushy/ 没试过不知道性能如何 java-apns 效率大于javapns 尤其是大批量消息推送的时候，公司线上跑的定时推送用的是JavaPNS_2.2，定时项目跑了一段时间就挂了， 但线上有脚本，10分钟执行一次定时脚本，如果检测定时挂了就会">
-<meta name="keywords" content="内存泄露">
+<meta name="description" content="Thread的六种状态NEW新创建，没有执行 RUNNABLE当start()方法被执行，就进入执行状态 BLOCKED线程堵塞了，多个线程竞争带锁的方法，没有获取到锁的方法会被堵塞 WAITING某个方法调用了wait()或者join() 线程会进入等待唤醒状态 TIMED_WAITING某个方法调用了wait(time)或者sleep(time),join(time) 线程会进入等待唤醒状态">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JavaPNS_2.2内存泄露定位和解决">
-<meta property="og:url" content="http://ggj2010.github.io/2017/05/04/JavaPNS-2-2内存溢出定位和解决/index.html">
+<meta property="og:title" content="Thread 回顾">
+<meta property="og:url" content="http://ggj2010.github.io/2018/03/22/Thread-回顾/index.html">
 <meta property="og:site_name" content="高广金博客">
-<meta property="og:description" content="java版本ios推送架包网上用的最多的是java-apns 和 javapns，还有个才开源的http://relayrides.github.io/pushy/ 没试过不知道性能如何 java-apns 效率大于javapns 尤其是大批量消息推送的时候，公司线上跑的定时推送用的是JavaPNS_2.2，定时项目跑了一段时间就挂了， 但线上有脚本，10分钟执行一次定时脚本，如果检测定时挂了就会">
+<meta property="og:description" content="Thread的六种状态NEW新创建，没有执行 RUNNABLE当start()方法被执行，就进入执行状态 BLOCKED线程堵塞了，多个线程竞争带锁的方法，没有获取到锁的方法会被堵塞 WAITING某个方法调用了wait()或者join() 线程会进入等待唤醒状态 TIMED_WAITING某个方法调用了wait(time)或者sleep(time),join(time) 线程会进入等待唤醒状态">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://o8c5x5dg6.bkt.clouddn.com/jstack.png">
-<meta property="og:image" content="http://o8c5x5dg6.bkt.clouddn.com/memoryanalyzer2.png">
-<meta property="og:image" content="http://o8c5x5dg6.bkt.clouddn.com/memoryanalyzer3.png">
-<meta property="og:updated_time" content="2017-07-18T06:51:00.000Z">
+<meta property="og:updated_time" content="2018-04-18T13:49:15.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JavaPNS_2.2内存泄露定位和解决">
-<meta name="twitter:description" content="java版本ios推送架包网上用的最多的是java-apns 和 javapns，还有个才开源的http://relayrides.github.io/pushy/ 没试过不知道性能如何 java-apns 效率大于javapns 尤其是大批量消息推送的时候，公司线上跑的定时推送用的是JavaPNS_2.2，定时项目跑了一段时间就挂了， 但线上有脚本，10分钟执行一次定时脚本，如果检测定时挂了就会">
-<meta name="twitter:image" content="http://o8c5x5dg6.bkt.clouddn.com/jstack.png">
+<meta name="twitter:title" content="Thread 回顾">
+<meta name="twitter:description" content="Thread的六种状态NEW新创建，没有执行 RUNNABLE当start()方法被执行，就进入执行状态 BLOCKED线程堵塞了，多个线程竞争带锁的方法，没有获取到锁的方法会被堵塞 WAITING某个方法调用了wait()或者join() 线程会进入等待唤醒状态 TIMED_WAITING某个方法调用了wait(time)或者sleep(time),join(time) 线程会进入等待唤醒状态">
 
 
 
@@ -130,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="http://ggj2010.github.io/2017/05/04/JavaPNS-2-2内存溢出定位和解决/"/>
+  <link rel="canonical" href="http://ggj2010.github.io/2018/03/22/Thread-回顾/"/>
 
 
 
 
 
-  <title> JavaPNS_2.2内存泄露定位和解决 | 高广金博客 </title>
+  <title> Thread 回顾 | 高广金博客 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -285,7 +280,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://ggj2010.github.io/2017/05/04/JavaPNS-2-2内存溢出定位和解决/">
+    <link itemprop="mainEntityOfPage" href="http://ggj2010.github.io/2018/03/22/Thread-回顾/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ggj2010">
@@ -306,7 +301,7 @@
             
             
               
-                JavaPNS_2.2内存泄露定位和解决
+                Thread 回顾
               
             
           </h1>
@@ -321,8 +316,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-04T17:20:48+08:00">
-                2017-05-04
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-22T18:04:54+08:00">
+                2018-03-22
               </time>
             
 
@@ -331,28 +326,6 @@
             
           </span>
 
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/javabase/" itemprop="url" rel="index">
-                    <span itemprop="name">基础</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -379,31 +352,80 @@
       
 
       
-        <pre><code>java版本ios推送架包网上用的最多的是java-apns 和 javapns，还有个才开源的http://relayrides.github.io/pushy/ 没试过不知道性能如何
-java-apns 效率大于javapns 尤其是大批量消息推送的时候，公司线上跑的定时推送用的是JavaPNS_2.2，定时项目跑了一段时间就挂了，
-但线上有脚本，10分钟执行一次定时脚本，如果检测定时挂了就会自动重启，这是以前公司同事在定时项目挂了的时候处理的逻辑，没有
-深入研究为什么定时项目会挂。
-</code></pre><h4 id="问题定位"><a href="#问题定位" class="headerlink" title="问题定位"></a>问题定位</h4><ul>
-<li>造测试推送数据，然后本地启动项目开启jstack监控堆内存和线程的使用情况。</li>
-<li>jstack监控图，可以出看来堆内存一路飙升<br><img src="http://o8c5x5dg6.bkt.clouddn.com/jstack.png" alt="堆栈"></li>
-<li><p>jmap dump出当前pid（windows下pid可以通过jstack看到）内存快照，命令如下：</p>
-<pre><code>jmap -dump:format=b,file=dumfile3.hprof 20996
-</code></pre></li>
-<li><p>利用MemoryAnalyzer分析快照信息</p>
-<pre><code>通过截图分析可以看出来是因为ThreadGroup里面存了大量的NotificationThreads
-导致内存泄露
-</code></pre><p><img src="http://o8c5x5dg6.bkt.clouddn.com/memoryanalyzer2.png" alt="MemoryAnalyzer"><br><img src="http://o8c5x5dg6.bkt.clouddn.com/memoryanalyzer3.png" alt="MemoryAnalyzer"></p>
-</li>
-<li><p>代码跟踪</p>
-<pre><code>增加threadGroup.destroy(),在当前线程组里面的线程结束时候去除threadGroup的依赖
-NotificationThreads work = new NotificationThreads(server, ppdList, PushMsgHelper.IPHONE_THREADS);
-work.setListener(this.getListener(deviceType));// 对线程的监听，一定要加上这个监听
-work.start(); // 启动线程
-work.waitForAllThreads(); //等待所有线程结束*/
-work.destroy();//解决内存泄露关键代码
-</code></pre></li>
-</ul>
+        <h3 id="Thread的六种状态"><a href="#Thread的六种状态" class="headerlink" title="Thread的六种状态"></a>Thread的六种状态</h3><h4 id="NEW"><a href="#NEW" class="headerlink" title="NEW"></a>NEW</h4><pre><code>新创建，没有执行
+</code></pre><h4 id="RUNNABLE"><a href="#RUNNABLE" class="headerlink" title="RUNNABLE"></a>RUNNABLE</h4><pre><code>当start()方法被执行，就进入执行状态
+</code></pre><h4 id="BLOCKED"><a href="#BLOCKED" class="headerlink" title="BLOCKED"></a>BLOCKED</h4><pre><code>线程堵塞了，多个线程竞争带锁的方法，没有获取到锁的方法会被堵塞
+</code></pre><h4 id="WAITING"><a href="#WAITING" class="headerlink" title="WAITING"></a>WAITING</h4><pre><code>某个方法调用了wait()或者join() 线程会进入等待唤醒状态
+</code></pre><h4 id="TIMED-WAITING"><a href="#TIMED-WAITING" class="headerlink" title="TIMED_WAITING"></a>TIMED_WAITING</h4><pre><code>某个方法调用了wait(time)或者sleep(time),join(time) 线程会进入等待唤醒状态
+</code></pre><h4 id="TERMINATED"><a href="#TERMINATED" class="headerlink" title="TERMINATED"></a>TERMINATED</h4><pre><code>线程执行结束状态 
+</code></pre><h3 id="线程的优先级"><a href="#线程的优先级" class="headerlink" title="线程的优先级"></a>线程的优先级</h3><pre><code>线程优先级的大小从1到10，默认是5，优先级越高获得调度的时间可能就越大,但是不一定先执行。
+如果超过这个范围就报IllegalArgumentException 优先级调度依赖于具体的操作系统调度方式，
+不能完全依赖于优先级进行线程的资源调度，只有在底层平台不支持线程时，JVM才会自己实现线程的管理和调度,
+在Linux上，Java线程的调度最终转化为了操作系统中的进程调度.
+不要依赖线程的优先级，如果要设置线程的执行顺序，最好试用加锁方式实现 
+</code></pre><h3 id="用户线程和守护线程"><a href="#用户线程和守护线程" class="headerlink" title="用户线程和守护线程"></a>用户线程和守护线程</h3><pre><code>默认创建的线程是用户线程，而守护线程的优先级比较低，当主程序执行完只剩下守护线程时候，JVM就会退出
+守护线程最经典的应用就是Java垃圾回收期
+</code></pre><h3 id="线程组"><a href="#线程组" class="headerlink" title="线程组"></a>线程组</h3><pre><code>可以批量管理线程或线程组对象，有效地对线程或线程组对象进行组织
+常见的功能比如讲多个线程放到同一个线程组里面，可以查询线程组里面的活跃线程数，
+或者当某个线程执行失败，可以让整个线程组里面的线程都interrupt
+</code></pre><h3 id="suspend与resume"><a href="#suspend与resume" class="headerlink" title="suspend与resume"></a>suspend与resume</h3><pre><code>为什么suspend与resume被废弃了？
+thread.suspend 天生容易引起死锁。
+如果目标线程挂起时获取到了锁，它会一直保持对锁的占有，一直到其他的线程调用resume方法，它才能继续向下执行。
+假如有A，B两个线程，A线程在获得某个锁之后被suspend阻塞，这时A不能继续执行，
+线程B在或者相同的锁之后才能调用resume方法将A唤醒，
+但是此时的锁被A占有，B不能继续执行，也就不能及时的唤醒A，
+此时A，B两个线程都不能继续向下执行而形成了死锁。这就是suspend被弃用的原因。
+</code></pre><h3 id="stop"><a href="#stop" class="headerlink" title="stop"></a>stop</h3><pre><code>为什么stop为被废弃？
+stop会即刻停止run()方法中剩余的全部工作，包括在catch或finally语句中，并抛出ThreadDeath异常
+会立即释放该线程所持有的所有的锁，导致数据得不到同步的处理，出现数据不一致的问题。
+</code></pre><h3 id="wait与notify"><a href="#wait与notify" class="headerlink" title="wait与notify"></a>wait与notify</h3><pre><code>因为suspend会引起死锁，所以我们可以用wait与notify来替代他们。
+wait是线程间通信常用的信号量，作用就是让线程暂时停止运行，等待其他线程使用notify来唤醒或者达到一定条件自己苏醒。
+wait是一个本地方法，属于Object类，其底层实现是JVM内部实现，是基于monitor对象监视锁。
+wait必须要在同步方法里面，因为只有在同步方法里面才会有锁的概念，在任意时刻有且仅有一个拥有该对象独占锁的线程能够调用它们。
+wait是让当前调用线程等待了，比如说如果wait()是在 Thread的run方法里面，那么就是该thread等待并且释放锁
+如果wait()在main方法里面,那么就是主线程被wait()
+如果wait(0)是在Thread的同步方法里面，当Thread执行完毕后，会被自动唤醒，利用这个原理，可以实现join
+</code></pre><h3 id="join"><a href="#join" class="headerlink" title="join"></a>join</h3><pre><code>join 会让线程的执行按照一定顺序,其实本质就是堵塞当前主线程，直到子线程执行结束。
+ public final synchronized void join(long millis)
+     throws InterruptedException {
+         long base = System.currentTimeMillis();
+         long now = 0;
 
+         if (millis &lt; 0) {
+             throw new IllegalArgumentException(&quot;timeout value is negative&quot;);
+         }
+
+         if (millis == 0) {
+             while (isAlive()) {
+                 wait(0);
+             }
+         } else {
+             while (isAlive()) {
+                 long delay = millis - now;
+                 if (delay &lt;= 0) {
+                     break;
+                 }
+                 wait(delay);
+                 now = System.currentTimeMillis() - base;
+             }
+         }
+ }
+ join的底层其实就用利用wait的特性，join同步方法获取到的主线程对象的内置锁，只有当该thread执行结束后会
+ 自动唤醒当前wait的主线程,从而实现当某个线程执行join的时候，会等待这个线程完全执行完后再执行别的线程。
+   join代码的注释
+  * &lt;p&gt; This implementation uses a loop of {@code this.wait} calls
+  * conditioned on {@code this.isAlive}. As a thread terminates the
+  * {@code this.notifyAll} method is invoked. It is recommended that
+  * applications not use {@code wait}, {@code notify}, or
+  * {@code notifyAll} on {@code Thread} instances.
+  当一个线程类执行结束之后，会调用this.notifyAll()方法。所以不推荐在Thread实例里面
+  用wait()和notifyall
+</code></pre><h3 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h3><pre><code>用法：1、修饰方法，方法又分实例方法和static方法。如果是实例方法，那就是对当前实例的对象加锁，如果是静态方法,
+那就是对该类进行加锁       
+     2、修饰代码块，是对指定的对象加锁，可以实现局部代码块加锁，提高并发效率。
+一般开发的时候使用synchronized对代码块加锁场景多，对方法加锁效率太低了。
+底层原理：
+</code></pre>
       
     </div>
 
@@ -424,12 +446,6 @@ work.destroy();//解决内存泄露关键代码
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/内存泄露/" rel="tag"># 内存泄露</a>
-          
-        </div>
-      
 
       
         
@@ -439,8 +455,8 @@ work.destroy();//解决内存泄露关键代码
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/02/22/技术储备-长期记录/" rel="next" title="技术储备-长期记录">
-                <i class="fa fa-chevron-left"></i> 技术储备-长期记录
+              <a href="/2017/11/02/paxos算法记录/" rel="next" title="paxos算法记录">
+                <i class="fa fa-chevron-left"></i> paxos算法记录
               </a>
             
           </div>
@@ -449,8 +465,8 @@ work.destroy();//解决内存泄露关键代码
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/05/10/ELK日志系统/" rel="prev" title="ELK日志系统">
-                ELK日志系统 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/05/15/happens-before记录/" rel="prev" title="happens-before记录">
+                happens-before记录 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -600,7 +616,7 @@ work.destroy();//解决内存泄露关键代码
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#问题定位"><span class="nav-number">1.</span> <span class="nav-text">问题定位</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Thread的六种状态"><span class="nav-number">1.</span> <span class="nav-text">Thread的六种状态</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#NEW"><span class="nav-number">1.1.</span> <span class="nav-text">NEW</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RUNNABLE"><span class="nav-number">1.2.</span> <span class="nav-text">RUNNABLE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BLOCKED"><span class="nav-number">1.3.</span> <span class="nav-text">BLOCKED</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#WAITING"><span class="nav-number">1.4.</span> <span class="nav-text">WAITING</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TIMED-WAITING"><span class="nav-number">1.5.</span> <span class="nav-text">TIMED_WAITING</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TERMINATED"><span class="nav-number">1.6.</span> <span class="nav-text">TERMINATED</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程的优先级"><span class="nav-number">2.</span> <span class="nav-text">线程的优先级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用户线程和守护线程"><span class="nav-number">3.</span> <span class="nav-text">用户线程和守护线程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程组"><span class="nav-number">4.</span> <span class="nav-text">线程组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#suspend与resume"><span class="nav-number">5.</span> <span class="nav-text">suspend与resume</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stop"><span class="nav-number">6.</span> <span class="nav-text">stop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#wait与notify"><span class="nav-number">7.</span> <span class="nav-text">wait与notify</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#join"><span class="nav-number">8.</span> <span class="nav-text">join</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized"><span class="nav-number">9.</span> <span class="nav-text">synchronized</span></a></li></ol></div>
             
 
           </div>
