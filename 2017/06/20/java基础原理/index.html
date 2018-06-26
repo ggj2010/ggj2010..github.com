@@ -87,18 +87,18 @@
 
 
 
-<meta name="description" content="八种基本数据类型常见概念1byte=8b(bit)，1KB=1024B，1MB=1024KB，1GB=1024MB 为什么1个字节为8位二进制勒？标准来自于IBM system/360，导致后来的硬件都是按照这个标签设计的 bytebyte的取值范围为-128~127（-2的7次方到2的7次方-1），byte也就是俗称的1个字节 整型java可以表示整数类型的有short(短整型)、int（整型）">
+<meta name="description" content="八种基本数据类型常见概念1byte=8b(bit)，1KB=1024B，1MB=1024KB，1GB=1024MB 为什么1个字节为8位二进制勒？标准来自于IBM system/360，导致后来的硬件都是按照这个标签设计的 在UTF-8下中文占3个字节，在GBK下面中文占2字节， 英文在utf-8和gbk下面都是占一个字节 bytebyte的取值范围为-128~127（-2的7次方到2的7次方-1">
 <meta property="og:type" content="article">
 <meta property="og:title" content="java基础原理记录">
 <meta property="og:url" content="http://ggj2010.github.io/2017/06/20/java基础原理/index.html">
 <meta property="og:site_name" content="高广金博客">
-<meta property="og:description" content="八种基本数据类型常见概念1byte=8b(bit)，1KB=1024B，1MB=1024KB，1GB=1024MB 为什么1个字节为8位二进制勒？标准来自于IBM system/360，导致后来的硬件都是按照这个标签设计的 bytebyte的取值范围为-128~127（-2的7次方到2的7次方-1），byte也就是俗称的1个字节 整型java可以表示整数类型的有short(短整型)、int（整型）">
+<meta property="og:description" content="八种基本数据类型常见概念1byte=8b(bit)，1KB=1024B，1MB=1024KB，1GB=1024MB 为什么1个字节为8位二进制勒？标准来自于IBM system/360，导致后来的硬件都是按照这个标签设计的 在UTF-8下中文占3个字节，在GBK下面中文占2字节， 英文在utf-8和gbk下面都是占一个字节 bytebyte的取值范围为-128~127（-2的7次方到2的7次方-1">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://ocg3iebmc.bkt.clouddn.com/011042300165927.png">
-<meta property="og:updated_time" content="2018-04-11T03:57:23.000Z">
+<meta property="og:updated_time" content="2018-06-20T11:50:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java基础原理记录">
-<meta name="twitter:description" content="八种基本数据类型常见概念1byte=8b(bit)，1KB=1024B，1MB=1024KB，1GB=1024MB 为什么1个字节为8位二进制勒？标准来自于IBM system/360，导致后来的硬件都是按照这个标签设计的 bytebyte的取值范围为-128~127（-2的7次方到2的7次方-1），byte也就是俗称的1个字节 整型java可以表示整数类型的有short(短整型)、int（整型）">
+<meta name="twitter:description" content="八种基本数据类型常见概念1byte=8b(bit)，1KB=1024B，1MB=1024KB，1GB=1024MB 为什么1个字节为8位二进制勒？标准来自于IBM system/360，导致后来的硬件都是按照这个标签设计的 在UTF-8下中文占3个字节，在GBK下面中文占2字节， 英文在utf-8和gbk下面都是占一个字节 bytebyte的取值范围为-128~127（-2的7次方到2的7次方-1">
 <meta name="twitter:image" content="http://ocg3iebmc.bkt.clouddn.com/011042300165927.png">
 
 
@@ -356,6 +356,7 @@
       
         <h4 id="八种基本数据类型"><a href="#八种基本数据类型" class="headerlink" title="八种基本数据类型"></a>八种基本数据类型</h4><h5 id="常见概念"><a href="#常见概念" class="headerlink" title="常见概念"></a>常见概念</h5><pre><code>1byte=8b(bit)，1KB=1024B，1MB=1024KB，1GB=1024MB
 为什么1个字节为8位二进制勒？标准来自于IBM system/360，导致后来的硬件都是按照这个标签设计的
+在UTF-8下中文占3个字节，在GBK下面中文占2字节， 英文在utf-8和gbk下面都是占一个字节
 </code></pre><h5 id="byte"><a href="#byte" class="headerlink" title="byte"></a>byte</h5><pre><code>byte的取值范围为-128~127（-2的7次方到2的7次方-1），byte也就是俗称的1个字节
 </code></pre><h5 id="整型"><a href="#整型" class="headerlink" title="整型"></a>整型</h5><pre><code>java可以表示整数类型的有short(短整型)、int（整型）、long（长整型）
 </code></pre><ul>
@@ -697,7 +698,10 @@ final void runWorker(Worker w) {
     }
 </code></pre></li>
 </ul>
-
+<h4 id="JDBC"><a href="#JDBC" class="headerlink" title="JDBC"></a>JDBC</h4><h5 id="jdbc中execute、executeQuery和executeUpdate的区别"><a href="#jdbc中execute、executeQuery和executeUpdate的区别" class="headerlink" title="jdbc中execute、executeQuery和executeUpdate的区别"></a>jdbc中execute、executeQuery和executeUpdate的区别</h5><pre><code>execute是指在不知道执行sql的类型情况下使用的，一般使用场景不多，当然如果我们
+执行存储过程，需要用 execute
+当我们知道DML的sql的场景就可以使用对应的executeQuery或者executeUpdate
+</code></pre>
       
     </div>
 
@@ -811,7 +815,7 @@ final void runWorker(Worker w) {
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-count">24</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -888,7 +892,7 @@ final void runWorker(Worker w) {
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#八种基本数据类型"><span class="nav-number">1.</span> <span class="nav-text">八种基本数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#常见概念"><span class="nav-number">1.1.</span> <span class="nav-text">常见概念</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#byte"><span class="nav-number">1.2.</span> <span class="nav-text">byte</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#整型"><span class="nav-number">1.3.</span> <span class="nav-text">整型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#浮点型"><span class="nav-number">1.4.</span> <span class="nav-text">浮点型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#boolean型"><span class="nav-number">1.5.</span> <span class="nav-text">boolean型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#char型"><span class="nav-number">1.6.</span> <span class="nav-text">char型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#一些概念"><span class="nav-number">1.7.</span> <span class="nav-text">一些概念</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java-IO整理"><span class="nav-number">2.</span> <span class="nav-text">java IO整理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#字节与字符的区别"><span class="nav-number">2.1.</span> <span class="nav-text">字节与字符的区别</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#字节流与字符流"><span class="nav-number">2.2.</span> <span class="nav-text">字节流与字符流</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java类的整理"><span class="nav-number">3.</span> <span class="nav-text">java类的整理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#java类的生命周期"><span class="nav-number">3.1.</span> <span class="nav-text">java类的生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#加载"><span class="nav-number">3.1.1.</span> <span class="nav-text">加载</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#连接"><span class="nav-number">3.1.2.</span> <span class="nav-text">连接</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#初始化"><span class="nav-number">3.1.3.</span> <span class="nav-text">初始化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#集合"><span class="nav-number">4.</span> <span class="nav-text">集合</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Map"><span class="nav-number">4.1.</span> <span class="nav-text">Map</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List"><span class="nav-number">4.2.</span> <span class="nav-text">List</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Thread"><span class="nav-number">5.</span> <span class="nav-text">Thread</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java-util-concurrent包下面常用类的原理"><span class="nav-number">6.</span> <span class="nav-text">java.util.concurrent包下面常用类的原理</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#八种基本数据类型"><span class="nav-number">1.</span> <span class="nav-text">八种基本数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#常见概念"><span class="nav-number">1.1.</span> <span class="nav-text">常见概念</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#byte"><span class="nav-number">1.2.</span> <span class="nav-text">byte</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#整型"><span class="nav-number">1.3.</span> <span class="nav-text">整型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#浮点型"><span class="nav-number">1.4.</span> <span class="nav-text">浮点型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#boolean型"><span class="nav-number">1.5.</span> <span class="nav-text">boolean型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#char型"><span class="nav-number">1.6.</span> <span class="nav-text">char型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#一些概念"><span class="nav-number">1.7.</span> <span class="nav-text">一些概念</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java-IO整理"><span class="nav-number">2.</span> <span class="nav-text">java IO整理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#字节与字符的区别"><span class="nav-number">2.1.</span> <span class="nav-text">字节与字符的区别</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#字节流与字符流"><span class="nav-number">2.2.</span> <span class="nav-text">字节流与字符流</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java类的整理"><span class="nav-number">3.</span> <span class="nav-text">java类的整理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#java类的生命周期"><span class="nav-number">3.1.</span> <span class="nav-text">java类的生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#加载"><span class="nav-number">3.1.1.</span> <span class="nav-text">加载</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#连接"><span class="nav-number">3.1.2.</span> <span class="nav-text">连接</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#初始化"><span class="nav-number">3.1.3.</span> <span class="nav-text">初始化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#集合"><span class="nav-number">4.</span> <span class="nav-text">集合</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Map"><span class="nav-number">4.1.</span> <span class="nav-text">Map</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List"><span class="nav-number">4.2.</span> <span class="nav-text">List</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Thread"><span class="nav-number">5.</span> <span class="nav-text">Thread</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java-util-concurrent包下面常用类的原理"><span class="nav-number">6.</span> <span class="nav-text">java.util.concurrent包下面常用类的原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JDBC"><span class="nav-number">7.</span> <span class="nav-text">JDBC</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#jdbc中execute、executeQuery和executeUpdate的区别"><span class="nav-number">7.1.</span> <span class="nav-text">jdbc中execute、executeQuery和executeUpdate的区别</span></a></li></ol></li></ol></div>
             
 
           </div>

@@ -98,7 +98,7 @@
 <meta property="og:image" content="http://o8c5x5dg6.bkt.clouddn.com/jstack.png">
 <meta property="og:image" content="http://o8c5x5dg6.bkt.clouddn.com/memoryanalyzer2.png">
 <meta property="og:image" content="http://o8c5x5dg6.bkt.clouddn.com/memoryanalyzer3.png">
-<meta property="og:updated_time" content="2017-07-18T06:51:00.000Z">
+<meta property="og:updated_time" content="2018-05-31T11:53:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JavaPNS_2.2内存泄露定位和解决">
 <meta name="twitter:description" content="java版本ios推送架包网上用的最多的是java-apns 和 javapns，还有个才开源的http://relayrides.github.io/pushy/ 没试过不知道性能如何 java-apns 效率大于javapns 尤其是大批量消息推送的时候，公司线上跑的定时推送用的是JavaPNS_2.2，定时项目跑了一段时间就挂了， 但线上有脚本，10分钟执行一次定时脚本，如果检测定时挂了就会">
@@ -394,16 +394,15 @@ java-apns 效率大于javapns 尤其是大批量消息推送的时候，公司�
 导致内存泄露
 </code></pre><p><img src="http://o8c5x5dg6.bkt.clouddn.com/memoryanalyzer2.png" alt="MemoryAnalyzer"><br><img src="http://o8c5x5dg6.bkt.clouddn.com/memoryanalyzer3.png" alt="MemoryAnalyzer"></p>
 </li>
-<li><p>代码跟踪</p>
+<li>代码跟踪</li>
+</ul>
 <pre><code>增加threadGroup.destroy(),在当前线程组里面的线程结束时候去除threadGroup的依赖
 NotificationThreads work = new NotificationThreads(server, ppdList, PushMsgHelper.IPHONE_THREADS);
 work.setListener(this.getListener(deviceType));// 对线程的监听，一定要加上这个监听
 work.start(); // 启动线程
 work.waitForAllThreads(); //等待所有线程结束*/
 work.destroy();//解决内存泄露关键代码
-</code></pre></li>
-</ul>
-
+</code></pre>
       
     </div>
 
@@ -523,7 +522,7 @@ work.destroy();//解决内存泄露关键代码
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-count">24</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

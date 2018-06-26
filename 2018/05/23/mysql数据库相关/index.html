@@ -1,0 +1,815 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="相关命令用到一个记一个吧~ 事物ACID针对事务的所有行为都是围绕ACID来做的  A(Atomicity)原子性       一个事务必须被视为一个不可分割的最小工作单元，整个事务中的所有操作要么全部提交成功，要么全部失败，对于一个事务来说，不可能只执行其中的一部分操作  C(Consistency) 一致性   数据的一致，操作的一致，  I(Isolation)隔离性  事务开始和结束之间的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mysql数据库相关">
+<meta property="og:url" content="http://ggj2010.github.io/2018/05/23/mysql数据库相关/index.html">
+<meta property="og:site_name" content="高广金博客">
+<meta property="og:description" content="相关命令用到一个记一个吧~ 事物ACID针对事务的所有行为都是围绕ACID来做的  A(Atomicity)原子性       一个事务必须被视为一个不可分割的最小工作单元，整个事务中的所有操作要么全部提交成功，要么全部失败，对于一个事务来说，不可能只执行其中的一部分操作  C(Consistency) 一致性   数据的一致，操作的一致，  I(Isolation)隔离性  事务开始和结束之间的">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-06-20T12:31:27.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="mysql数据库相关">
+<meta name="twitter:description" content="相关命令用到一个记一个吧~ 事物ACID针对事务的所有行为都是围绕ACID来做的  A(Atomicity)原子性       一个事务必须被视为一个不可分割的最小工作单元，整个事务中的所有操作要么全部提交成功，要么全部失败，对于一个事务来说，不可能只执行其中的一部分操作  C(Consistency) 一致性   数据的一致，操作的一致，  I(Isolation)隔离性  事务开始和结束之间的">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://ggj2010.github.io/2018/05/23/mysql数据库相关/"/>
+
+
+
+
+
+  <title> mysql数据库相关 | 高广金博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">高广金博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-webmagic">
+          <a href="http://scedai.com/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            爬虫
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://ggj2010.github.io/2018/05/23/mysql数据库相关/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ggj2010">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="高广金博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                mysql数据库相关
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-23T16:25:14+08:00">
+                2018-05-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <pre><code>相关命令用到一个记一个吧~
+</code></pre><h3 id="事物"><a href="#事物" class="headerlink" title="事物"></a>事物</h3><h4 id="ACID"><a href="#ACID" class="headerlink" title="ACID"></a>ACID</h4><pre><code>针对事务的所有行为都是围绕ACID来做的
+</code></pre><ul>
+<li>A(Atomicity)原子性     </li>
+</ul>
+<pre><code>一个事务必须被视为一个不可分割的最小工作单元，整个事务中的所有操作要么全部提交成功，要么全部失败，对于一个事务来说，不可能只执行其中的一部分操作
+</code></pre><ul>
+<li>C(Consistency) 一致性 </li>
+</ul>
+<pre><code>数据的一致，操作的一致，
+</code></pre><ul>
+<li>I(Isolation)隔离性</li>
+</ul>
+<pre><code>事务开始和结束之间的中间状态不会被其他事务看到，事务的隔离级别是适当的破坏一致性来提升性能与并行速度
+</code></pre><ul>
+<li>D(Durability) 持久性</li>
+</ul>
+<pre><code>事务提交之后，需要将提交的事务持久化到磁盘。即使系统崩溃，提交的数据也不应该丢失。
+</code></pre><h4 id="事务实现的原理"><a href="#事务实现的原理" class="headerlink" title="事务实现的原理"></a>事务实现的原理</h4><pre><code>    事务的实现是基于数据库的存储引擎,不同的存储引擎对事务的支持程度不一样，事务通过破坏一致性来提升性能与并行速度来控制
+数据库的隔离性.
+    事务的隔离性是通过锁实现，而事务的原子性、一致性和持久性则是通过事务日志(UNDO+REDO)实现。
+事务的核心包括两个方面:锁和并发,MySQL默认的存储引擎是InnoDB，默认的隔离级别是RR，并且在RR的级别下，通过
+多版本并发控制（MVCC，Multiversion Concurrency Control），加上GAP LOCK解决了幻读问题(不考虑快照读的情况下)，
+InnoDB的默认隔离级别RR实现了串行化级别的效果，而且保留了比较好的并发性能。
+</code></pre><h4 id="数据库事物隔离级别"><a href="#数据库事物隔离级别" class="headerlink" title="数据库事物隔离级别"></a>数据库事物隔离级别</h4><ul>
+<li>Read uncommitted</li>
+</ul>
+<pre><code>会出现脏读、重复读、幻读情况
+</code></pre><ul>
+<li>Read committed</li>
+</ul>
+<pre><code>会出现重复读、幻读情况
+</code></pre><ul>
+<li>Repeatable read</li>
+</ul>
+<pre><code>会出现幻读情况，mysql默认级别
+</code></pre><ul>
+<li>Serializable<h4 id="REDO-LOG"><a href="#REDO-LOG" class="headerlink" title="REDO LOG"></a>REDO LOG</h4> 为了满足事物的持久性，防止buffer pool数据丢失引入了redo log<br> redo log就是保存执行的SQL语句到一个指定的Log文件，当mysql执行数据恢复时，重新执行redo log记录的SQL操作即可<h4 id="UNDO-LOG"><a href="#UNDO-LOG" class="headerlink" title="UNDO LOG"></a>UNDO LOG</h4> 为了满足事物的一致性，引入了undo log,在操作任何数据之前，首先将数据备份到Undo Log，然后进行数据的修改。<br> 如果出现了错误或者用户执行了ROLLBACK语句，系统可以利用Undo Log中的备份将数据恢复到事务开始之前的状态。<br> 与redo log不同的是，磁盘上不存在单独的undo log文件，它存放在数据库内部的一个特殊段(segment)中，<br> 这称为undo段(undo segment)，undo段位于共享表空间内,<br> 记录undo log时候也会插入一条redo记录。<h4 id="事物时序"><a href="#事物时序" class="headerlink" title="事物时序"></a>事物时序</h4> 比如执行一个update操作，a原来的值为1 ，update table set a=3;<br> 1、开始事物<br> 2、记录undo log（记录undo log时候也会写入redo log的）<br> 3、记录redo log<br> 4、将redo log 写入磁盘<br> 5、提交事物<br> 6、binglog<br> 7、刷新磁盘<br> Undo + Redo事务的特点<br> 为了保证持久性，必须在事务提交前将Redo Log持久，<br>  数据不需要在事务提交前写入磁盘，而是缓存在内存中<h4 id="事物回滚"><a href="#事物回滚" class="headerlink" title="事物回滚"></a>事物回滚</h4>  事物回滚其实就是执行当前事物记录的undo日志。     <h4 id="数据恢复"><a href="#数据恢复" class="headerlink" title="数据恢复"></a>数据恢复</h4>  数据恢复其实就是对redo log进行重新执行，因为undo log 也会记录到redo log里面的，<br>  innodb对事物回滚时候的操作也会记录到redo log里面的，回滚操作本质上也是对数据进行修改，<br>  因此回滚时对数据的操作也会记录到Redo Log中。    </li>
+</ul>
+<h3 id="binlog"><a href="#binlog" class="headerlink" title="binlog"></a>binlog</h3><pre><code>binlog日志用于记录所有更新且提交了数据或者已经潜在更新提交了数据（例如，没有匹配任何行的一个DELETE）的所有语句。语句以“事件”的形式保存，它描述数据更改。
+binlog作用：1.恢复使能够最大可能地更新数据库，因为二进制日志包含备份后进行的所有更新。2.在主复制服务器上记录所有将发送给从服务器的语句。
+binlog一般用于主从同步。
+</code></pre><h3 id="MyISAM与innodb"><a href="#MyISAM与innodb" class="headerlink" title="MyISAM与innodb"></a>MyISAM与innodb</h3><pre><code>MyISAM是不支持事物的，innodb支持。
+MyISAM 适合于一些需要大量查询的应用，但其对于有大量写操作并不是很好。
+甚至你只是需要update一个字段，整个表都会被锁起来
+如果一些初始化大量数据，不需要用到事物，可以先将表类型改成MyISAM插入，完成后
+再改成innodb类型 ALTER TABLE test ENGINE = InnoDB;
+</code></pre><h3 id="如何查看连接当前数据库连接数"><a href="#如何查看连接当前数据库连接数" class="headerlink" title="如何查看连接当前数据库连接数"></a>如何查看连接当前数据库连接数</h3><pre><code>show full processlist 
+max_connections 为mysql默认配置的连接数量，全局的限制连接数
+max_user_connections  这个就是单用户的连接数
+</code></pre><h3 id="查询数据库相关配置"><a href="#查询数据库相关配置" class="headerlink" title="查询数据库相关配置"></a>查询数据库相关配置</h3><pre><code>show variables 
+</code></pre><h3 id="获取数据库某个表自增id"><a href="#获取数据库某个表自增id" class="headerlink" title="获取数据库某个表自增id"></a>获取数据库某个表自增id</h3><pre><code>当有插入的sql执行后调用下面sql就可以获取到当前表的id
+SELECT LAST_INSERT_ID() from  table
+mybatis 就是利用这个特性获取到自增id的
+</code></pre><h3 id="表的存储空间大小"><a href="#表的存储空间大小" class="headerlink" title="表的存储空间大小"></a>表的存储空间大小</h3><pre><code>mysql创建的表默认的空间大小分数据存储的大小和索引的存储大小
+--查询当前数据的所有存储大小
+select concat(round(sum(DATA_LENGTH/1024/1024),2),&apos;M&apos;) from information_schema.tables where table_schema=&apos;DPEducation&apos; 
+mysql空表默认的data size=16kb  inde size 0kb
+--查询单个表的存储大小
+select sum(DATA_LENGTH)+sum(INDEX_LENGTH) from information_schema.tables where table_schema=&apos;DPEducation&apos; AND table_name=&apos;DP_EduCardPromotionScanDetail&apos;; 
+单行记录长度为 data size/row=avg_row_length
+</code></pre><h3 id="表的空间估算"><a href="#表的空间估算" class="headerlink" title="表的空间估算"></a>表的空间估算</h3><p>   <a href="&quot;https://www.cnblogs.com/Aiapple/p/5697912.html&quot;">参考</a></p>
+<pre><code>数据库业务特点关键词
+OLTP/OLAP、并发请求、读写比例、数据量、冷热数据比、数据分级存储
+1、OLTP与OLAP 
+T=Transaction，面向广大用户，高并发，较短事务操作 互联网应用绝大部分属于OLTP
+OLTP看中服务器CPU,内存，写事务较多或内存不够则依赖磁盘IO
+A=Analytical，通常面向内部人员，大规模复杂查询，OLAP看中磁盘扫描的IO能力，部分依赖内存排序
+2、qps估算与读写比例
+3、多读场景相关资源：内存，多写场景相关资源：磁盘IO
+4、数据总量与冷热数据比（冷数据迁移历史库）
+5、数据库服务器选型
+   磁盘IO性能（单盘和盘针 sas和sata 机械盘和SSD）
+   内存容量、cpu(单核、多核)
+   网络吞吐量（千兆和万兆，单网卡和多路）
+</code></pre><h3 id="mysql千万表"><a href="#mysql千万表" class="headerlink" title="mysql千万表"></a>mysql千万表</h3><pre><code>DELIMITER ;;
+CREATE DEFINER=`mobile`@`%` PROCEDURE `test2`()
+begin
+declare v_cnt decimal (10)  default 0 ; 
+dd:loop            
+        insert  into `test` values         
+        (null,&apos;11111111111&apos;),
+        (null,&apos;11111111111&apos;),
+        (null,&apos;11111111111&apos;),
+        (null,&apos;11111111111&apos;),
+        (null,&apos;11111111111&apos;),
+        (null,&apos;11111111111&apos;),
+        (null,&apos;11111111111&apos;),
+        (null,&apos;11111111111&apos;),
+        (null,&apos;11111111111&apos;),
+        (null,&apos;11111111111&apos;);                   
+        commit;                     
+        set v_cnt = v_cnt+10 ;                            
+            if  v_cnt = 10000000 then leave dd;                           
+            end if;          
+        end loop dd ; 
+end;;
+DELIMITER ;
+//执行存储过程
+call test2();
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/23/计算机基础原理记录/" rel="next" title="计算机基础原理记录">
+                <i class="fa fa-chevron-left"></i> 计算机基础原理记录
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/06/14/技术阅读笔记/" rel="prev" title="技术阅读笔记">
+                技术阅读笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg"
+               alt="ggj2010" />
+          <p class="site-author-name" itemprop="name">ggj2010</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ggj2010" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/ggjlvzjy" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#事物"><span class="nav-number">1.</span> <span class="nav-text">事物</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ACID"><span class="nav-number">1.1.</span> <span class="nav-text">ACID</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事务实现的原理"><span class="nav-number">1.2.</span> <span class="nav-text">事务实现的原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据库事物隔离级别"><span class="nav-number">1.3.</span> <span class="nav-text">数据库事物隔离级别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#REDO-LOG"><span class="nav-number">1.4.</span> <span class="nav-text">REDO LOG</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UNDO-LOG"><span class="nav-number">1.5.</span> <span class="nav-text">UNDO LOG</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事物时序"><span class="nav-number">1.6.</span> <span class="nav-text">事物时序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事物回滚"><span class="nav-number">1.7.</span> <span class="nav-text">事物回滚</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据恢复"><span class="nav-number">1.8.</span> <span class="nav-text">数据恢复</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#binlog"><span class="nav-number">2.</span> <span class="nav-text">binlog</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MyISAM与innodb"><span class="nav-number">3.</span> <span class="nav-text">MyISAM与innodb</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何查看连接当前数据库连接数"><span class="nav-number">4.</span> <span class="nav-text">如何查看连接当前数据库连接数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询数据库相关配置"><span class="nav-number">5.</span> <span class="nav-text">查询数据库相关配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取数据库某个表自增id"><span class="nav-number">6.</span> <span class="nav-text">获取数据库某个表自增id</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#表的存储空间大小"><span class="nav-number">7.</span> <span class="nav-text">表的存储空间大小</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#表的空间估算"><span class="nav-number">8.</span> <span class="nav-text">表的空间估算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql千万表"><span class="nav-number">9.</span> <span class="nav-text">mysql千万表</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ggj2010</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>
