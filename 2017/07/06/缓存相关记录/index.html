@@ -94,10 +94,12 @@
 <meta property="og:site_name" content="高广金博客">
 <meta property="og:description" content="redis主从redis一主可以对应多个从节点，主节点可以读写，从节点只能查询 配置文件salve节点文件里面添加以下内容 slaveof &amp;lt;masterip&amp;gt; &amp;lt;masterport&amp;gt; //主节点的ip masterauth &amp;lt;master-password&amp;gt;   //主节点的密码 客户端实现对于写的操作需要路由到主节点redis数据源 对于读操作需要路由到从">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-11T10:29:13.000Z">
+<meta property="og:image" content="http://p0.meituan.net/education/1f8745786a2934b3dea4fee5ef2bd764564463.png">
+<meta property="og:updated_time" content="2018-07-11T11:12:40.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="缓存相关记录">
 <meta name="twitter:description" content="redis主从redis一主可以对应多个从节点，主节点可以读写，从节点只能查询 配置文件salve节点文件里面添加以下内容 slaveof &amp;lt;masterip&amp;gt; &amp;lt;masterport&amp;gt; //主节点的ip masterauth &amp;lt;master-password&amp;gt;   //主节点的密码 客户端实现对于写的操作需要路由到主节点redis数据源 对于读操作需要路由到从">
+<meta name="twitter:image" content="http://p0.meituan.net/education/1f8745786a2934b3dea4fee5ef2bd764564463.png">
 
 
 
@@ -377,7 +379,7 @@ masterauth &lt;master-password&gt;   //主节点的密码
 丢一条更新缓存的请求，异步的去更新缓存。
 </code></pre><h4 id="缓存雪崩"><a href="#缓存雪崩" class="headerlink" title="缓存雪崩"></a>缓存雪崩</h4><pre><code>如果缓存服务器不是高可用了，使用hystrix拦截
 </code></pre><h3 id="memcache"><a href="#memcache" class="headerlink" title="memcache"></a>memcache</h3><pre><code>memcache是完全基于内存的，不能持久化存储，只能存储key value
-</code></pre><h4 id="缓存序列化与反序列化"><a href="#缓存序列化与反序列化" class="headerlink" title="缓存序列化与反序列化"></a>缓存序列化与反序列化</h4><h3 id="内存访问速度"><a href="#内存访问速度" class="headerlink" title="内存访问速度"></a>内存访问速度</h3><p>   ！<a href="http://p0.meituan.net/education/1f8745786a2934b3dea4fee5ef2bd764564463.png" target="_blank" rel="external"></a></p>
+</code></pre><h4 id="缓存序列化与反序列化"><a href="#缓存序列化与反序列化" class="headerlink" title="缓存序列化与反序列化"></a>缓存序列化与反序列化</h4><h3 id="内存访问速度"><a href="#内存访问速度" class="headerlink" title="内存访问速度"></a>内存访问速度</h3><p>   <img src="http://p0.meituan.net/education/1f8745786a2934b3dea4fee5ef2bd764564463.png" alt=""></p>
 <table>
 <thead>
 <tr>
