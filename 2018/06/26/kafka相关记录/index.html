@@ -95,7 +95,7 @@
 <meta property="og:description" content="消息中间件的作用有，业务解耦，高并发场景削弱流量异步处理  Quick Start   Quick Start bin/zookeeper-server-start.sh config/zookeeper.properties bin/kafka-server-start.sh config/server-1.properties &amp;amp; bin/kafka-server-stop.sh">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://ggj2010.github.io/2018/06/26/kafka相关记录/%27http://p0.meituan.net/education/11bfdbece18c564785e5e11da886b6a1156117.png%27">
-<meta property="og:updated_time" content="2018-06-26T14:27:40.000Z">
+<meta property="og:updated_time" content="2018-07-10T07:26:16.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="kafka相关记录">
 <meta name="twitter:description" content="消息中间件的作用有，业务解耦，高并发场景削弱流量异步处理  Quick Start   Quick Start bin/zookeeper-server-start.sh config/zookeeper.properties bin/kafka-server-start.sh config/server-1.properties &amp;amp; bin/kafka-server-stop.sh">
@@ -363,14 +363,16 @@ bin/kafka-server-stop.sh
 </code></pre><h4 id="整体流程"><a href="#整体流程" class="headerlink" title="整体流程"></a>整体流程</h4><p>   <img src="&#39;http://p0.meituan.net/education/11bfdbece18c564785e5e11da886b6a1156117.png&#39;" alt="流程图"></p>
 <h4 id="关键词概念"><a href="#关键词概念" class="headerlink" title="关键词概念"></a>关键词概念</h4><h5 id="Broker"><a href="#Broker" class="headerlink" title="Broker"></a>Broker</h5><pre><code>kafka集群是由多个broker组成，一台kafka服务器就是可以简单理解就是一个broker.
 </code></pre><p>   <a href="&#39;http://kafka.apache.org/documentation/#quickstart_multibroker&#39;">kafka集群配置</a></p>
-<pre><code>#集群配置要换成内网ip
+<pre><code>如果服务器是在阿里云，记得要开放端口
+集群配置要换成内网ip
 listeners=PLAINTEXT://172.18.34.235:9094
-#外网ip
+外网ip
 advertised.listeners=PLAINTEXT://120.78.62.137:9094
 </code></pre><h5 id="Topic"><a href="#Topic" class="headerlink" title="Topic"></a>Topic</h5><pre><code>某一个消息队列，topic的名称是不能重复的,topic的信息存储在zookeeper
 </code></pre><h5 id="Producer"><a href="#Producer" class="headerlink" title="Producer"></a>Producer</h5><pre><code>消息生产者，就是向Kafkabroker发消息的客户端。
+发送消息可以指定pation
 </code></pre><h5 id="Consumer"><a href="#Consumer" class="headerlink" title="Consumer"></a>Consumer</h5><pre><code>消息消费者，向Kafkabroker取消息的客户端。
-consumer数量不能超过partition数量
+同一个group中不能有多于partitions个数的consumer同时消费，否则将意味着某些consumer将无法得到消息
 </code></pre><h5 id="Partition"><a href="#Partition" class="headerlink" title="Partition"></a>Partition</h5><pre><code>partitions的设计目的有多个.最根本原因是kafka基于文件存储.通过分区,可以将日志内容分散到多个server上,
 来避免文件尺寸达到单机磁盘的上限,每个partiton都会被当前server(kafka实例)保存;
 可以将一个topic切分多任意多个partitions,来消息保存/消费的效率.
@@ -392,8 +394,10 @@ kafka会将&quot;leader&quot;均衡的分散在每个实例上，来确保整体
 
 指定pation为3和replicationFactor为1，
 那么消息将在b1记录为/tmp/log/b1/xx-topic-0，b2为 /tmp/log/b2/xx-topic-1，b3为/tmp/log/b3/xx-topic-2
+b1的备份可能在b2或者b3,同理b2,b3备份
 
 也就是说创建topic的时候，为了消息的横向扩展和可备份下，设置partion的值最好和broker一样。
+如果为了消息的有序性，可以只设置一个pariton
 </code></pre>
       
     </div>
