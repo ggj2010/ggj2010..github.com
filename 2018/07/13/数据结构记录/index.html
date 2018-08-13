@@ -87,17 +87,20 @@
 
 
 
-<meta name="description" content="当我们开发一个新功能的时候，一定要考虑这段代码或者这个功能是否有被他人攻击利用的可能。 越权通俗解释就是操作或者访问非自己权限下面的数据，越权的手段有很多种。 任意密码修改 一般密码修改有很多漏洞，有逻辑上的，有流程上的。例如有些网站根据短信验证码去验证修改密码的权限， 但是调用接口的时候却把验证吗和接口一块返回，这算是比较低级的漏洞了，当然类似的情况有很多。 任意用户相关信息增删改当某些关键信息">
+<meta name="description" content="树记录树度结点拥有的子树称为结点的度， 树的度为树内各节点的度的最大值 叶子度为0的节点为叶子 结点结点的子树称为该结点的孩子  层次结点的层次从根开始定义，根为第一层，根的孩子为第二层  二叉树二叉树是树的另外一种树形结构， 二叉树的特点：每个结点最多有两颗树，子树有左右之分 满二叉树一颗树深度为h，最大层数为k，深度与最大层数相同，k=h; 叶子数为2h; 第k层的结点数是：2^k-1;; 总">
 <meta property="og:type" content="article">
-<meta property="og:title" content="web安全记录">
-<meta property="og:url" content="http://ggj2010.github.io/2018/05/21/web安全记录/index.html">
+<meta property="og:title" content="数据结构记录">
+<meta property="og:url" content="http://ggj2010.github.io/2018/07/13/数据结构记录/index.html">
 <meta property="og:site_name" content="高广金博客">
-<meta property="og:description" content="当我们开发一个新功能的时候，一定要考虑这段代码或者这个功能是否有被他人攻击利用的可能。 越权通俗解释就是操作或者访问非自己权限下面的数据，越权的手段有很多种。 任意密码修改 一般密码修改有很多漏洞，有逻辑上的，有流程上的。例如有些网站根据短信验证码去验证修改密码的权限， 但是调用接口的时候却把验证吗和接口一块返回，这算是比较低级的漏洞了，当然类似的情况有很多。 任意用户相关信息增删改当某些关键信息">
+<meta property="og:description" content="树记录树度结点拥有的子树称为结点的度， 树的度为树内各节点的度的最大值 叶子度为0的节点为叶子 结点结点的子树称为该结点的孩子  层次结点的层次从根开始定义，根为第一层，根的孩子为第二层  二叉树二叉树是树的另外一种树形结构， 二叉树的特点：每个结点最多有两颗树，子树有左右之分 满二叉树一颗树深度为h，最大层数为k，深度与最大层数相同，k=h; 叶子数为2h; 第k层的结点数是：2^k-1;; 总">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-05-31T03:56:27.000Z">
+<meta property="og:image" content="http://p1.meituan.net/education/624d81744292b9643e5cc980df72702614991.png">
+<meta property="og:image" content="http://p1.meituan.net/education/2b918d4fd14e51e1c9a3a758954f4f8f22384.jpg">
+<meta property="og:updated_time" content="2018-07-13T11:28:41.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="web安全记录">
-<meta name="twitter:description" content="当我们开发一个新功能的时候，一定要考虑这段代码或者这个功能是否有被他人攻击利用的可能。 越权通俗解释就是操作或者访问非自己权限下面的数据，越权的手段有很多种。 任意密码修改 一般密码修改有很多漏洞，有逻辑上的，有流程上的。例如有些网站根据短信验证码去验证修改密码的权限， 但是调用接口的时候却把验证吗和接口一块返回，这算是比较低级的漏洞了，当然类似的情况有很多。 任意用户相关信息增删改当某些关键信息">
+<meta name="twitter:title" content="数据结构记录">
+<meta name="twitter:description" content="树记录树度结点拥有的子树称为结点的度， 树的度为树内各节点的度的最大值 叶子度为0的节点为叶子 结点结点的子树称为该结点的孩子  层次结点的层次从根开始定义，根为第一层，根的孩子为第二层  二叉树二叉树是树的另外一种树形结构， 二叉树的特点：每个结点最多有两颗树，子树有左右之分 满二叉树一颗树深度为h，最大层数为k，深度与最大层数相同，k=h; 叶子数为2h; 第k层的结点数是：2^k-1;; 总">
+<meta name="twitter:image" content="http://p1.meituan.net/education/624d81744292b9643e5cc980df72702614991.png">
 
 
 
@@ -125,13 +128,13 @@
 
 
 
-  <link rel="canonical" href="http://ggj2010.github.io/2018/05/21/web安全记录/"/>
+  <link rel="canonical" href="http://ggj2010.github.io/2018/07/13/数据结构记录/"/>
 
 
 
 
 
-  <title> web安全记录 | 高广金博客 </title>
+  <title> 数据结构记录 | 高广金博客 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -280,7 +283,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://ggj2010.github.io/2018/05/21/web安全记录/">
+    <link itemprop="mainEntityOfPage" href="http://ggj2010.github.io/2018/07/13/数据结构记录/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ggj2010">
@@ -301,7 +304,7 @@
             
             
               
-                web安全记录
+                数据结构记录
               
             
           </h1>
@@ -316,8 +319,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-21T11:21:00+08:00">
-                2018-05-21
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-13T17:15:06+08:00">
+                2018-07-13
               </time>
             
 
@@ -352,26 +355,34 @@
       
 
       
-        <pre><code>当我们开发一个新功能的时候，一定要考虑这段代码或者这个功能是否有被他人攻击利用的可能。
-</code></pre><h3 id="越权"><a href="#越权" class="headerlink" title="越权"></a>越权</h3><pre><code>通俗解释就是操作或者访问非自己权限下面的数据，越权的手段有很多种。
-</code></pre><h4 id="任意密码修改"><a href="#任意密码修改" class="headerlink" title="任意密码修改"></a>任意密码修改</h4><pre><code> 一般密码修改有很多漏洞，有逻辑上的，有流程上的。例如有些网站根据短信验证码去验证修改密码的权限，
-但是调用接口的时候却把验证吗和接口一块返回，这算是比较低级的漏洞了，当然类似的情况有很多。
-</code></pre><h4 id="任意用户相关信息增删改"><a href="#任意用户相关信息增删改" class="headerlink" title="任意用户相关信息增删改"></a>任意用户相关信息增删改</h4><pre><code>当某些关键信息只能某个用户查看或者操作的时候，我们就需要校验权限了，不能根据唯一id去确定权限，某些情况下面
-唯一id是可以伪造的，比如查看订单详情，如果没有校验这个订单id是否属于某个人就存在越权的操作。
-</code></pre><h3 id="上传文件漏洞"><a href="#上传文件漏洞" class="headerlink" title="上传文件漏洞"></a>上传文件漏洞</h3><pre><code>公司都有自己的文件存储服务器，但是也需要对上传的文件做些必要的校验
-</code></pre><h4 id="格式检验"><a href="#格式检验" class="headerlink" title="格式检验"></a>格式检验</h4><pre><code>对所有上传的文件格式都要限制死，前后端都要检验。
-比如如果用户上传的是个html,那么微信分享出去的地址前缀域名就是公司的域名，会有可能被微信封住域名。
-</code></pre><h3 id="SSRF漏洞"><a href="#SSRF漏洞" class="headerlink" title="SSRF漏洞"></a>SSRF漏洞</h3><pre><code>SSRF(Server-Side Request Forgery:服务器端请求伪造) 是一种由攻击者构造形成由服务端发起请求的一个安全漏洞。
-一般情况下，SSRF攻击的目标是从外网无法访问的内部系统。
-利用一个可以发起网络请求的服务当作跳板来攻击内部其他服务
-（正是因为它是由服务端发起的，所以它能够请求到与它相连而与外网隔离的内部系统）        
-例如：http://www.a.com?url=xxxx,如果这个url算是参数，那么就是问题了,如果我们
-根据这个参数url进行get或者post请求，就可能发生SSRF攻击。
-以下业务场景容易出现这种漏洞：
-1、应用从用户指定的url获取图片。然后把它用一个随即文件名保存在硬盘上，并展示给用户；
-2、应用获取用户制定url的数据（文件或者html）。这个函数会使用socket跟服务器建立tcp连接，传输原始数据；
-3、应用根据用户提供的URL，抓取用户的web站点，并且自动生成移动wap站；
-4、应用提供测速功能，能够根据用户提供的URL，访问目标站点，以获取其在对应经纬度的访问速度；    
+        <h3 id="树记录"><a href="#树记录" class="headerlink" title="树记录"></a>树记录</h3><h4 id="树"><a href="#树" class="headerlink" title="树"></a>树</h4><h5 id="度"><a href="#度" class="headerlink" title="度"></a>度</h5><pre><code>结点拥有的子树称为结点的度，
+树的度为树内各节点的度的最大值
+</code></pre><h5 id="叶子"><a href="#叶子" class="headerlink" title="叶子"></a>叶子</h5><pre><code>度为0的节点为叶子
+</code></pre><h5 id="结点"><a href="#结点" class="headerlink" title="结点"></a>结点</h5><pre><code>结点的子树称为该结点的孩子 
+</code></pre><h5 id="层次"><a href="#层次" class="headerlink" title="层次"></a>层次</h5><pre><code>结点的层次从根开始定义，根为第一层，根的孩子为第二层 
+</code></pre><h4 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h4><pre><code>二叉树是树的另外一种树形结构，
+二叉树的特点：每个结点最多有两颗树，子树有左右之分
+</code></pre><h4 id="满二叉树"><a href="#满二叉树" class="headerlink" title="满二叉树"></a>满二叉树</h4><pre><code>一颗树深度为h，最大层数为k，深度与最大层数相同，k=h;
+叶子数为2h;
+第k层的结点数是：2^k-1;;
+总结点数是：2^k-1，且总节点数一定是奇数。    
+</code></pre><h4 id="完全二叉树"><a href="#完全二叉树" class="headerlink" title="完全二叉树"></a>完全二叉树</h4><pre><code>如果一个二叉树与满二叉树前m个节点的结构相同，这样的二叉树被称为完全二叉树 
+</code></pre><h4 id="二叉排序树"><a href="#二叉排序树" class="headerlink" title="二叉排序树"></a>二叉排序树</h4><pre><code>任何节点的键值一定大于其左子树中的每一个节点的键值，并小于其右子树中的每一个节点的键值。 
+</code></pre><h4 id="二叉树排序前序、中序、后序"><a href="#二叉树排序前序、中序、后序" class="headerlink" title="二叉树排序前序、中序、后序"></a>二叉树排序前序、中序、后序</h4><p>   <img src="http://p1.meituan.net/education/624d81744292b9643e5cc980df72702614991.png" alt="流程图"></p>
+<pre><code>二叉树排序（根节点和孩子结点，子树是指最子的叶子结点）
+前序：遍历顺序为，根节点、前序遍历左子树、前序遍历右子树；
+中序：遍历顺序为，中序遍历左子树、根节点、中序遍历右子树；
+后序：遍历顺序为，后序遍历左子树左子树、后序遍历左子树右子树、根节点 
+
+如上图的根为A ,左子树为（bde）, 右子树为（cf）,
+前序（根左右）,a 再对左子树进行前序就是（b,d,e）, 再对右边子树就是cf
+中序（左根右），左子树为中序就是（dbe）,a ,右子树中序就是（fc） 
+后序（左右根），左子树后续就是（deb）,右边子树就是（fc） a  
+</code></pre><p> <img src="http://p1.meituan.net/education/2b918d4fd14e51e1c9a3a758954f4f8f22384.jpg" alt=""> </p>
+<pre><code>如上图的根为1 ,左子树为（24678）, 右子树为（35）,
+前序（根左右）,1 再对左子树进行前序就是（2，4，678，）, 再对右边子树就是（35）
+中序（左根右），左子树为中序就是（4，768，2）,1 ,右子树中序就是（35） 
+后序（左右根），左子树后续就是（786，4，2）,右边子树就是（53） 1 
 </code></pre>
       
     </div>
@@ -402,8 +413,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/21/公司常用组件记录/" rel="next" title="公司常用组件记录">
-                <i class="fa fa-chevron-left"></i> 公司常用组件记录
+              <a href="/2018/07/13/系统故障定位/" rel="next" title="系统故障定位">
+                <i class="fa fa-chevron-left"></i> 系统故障定位
               </a>
             
           </div>
@@ -411,10 +422,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/05/23/计算机基础原理记录/" rel="prev" title="计算机基础原理记录">
-                计算机基础原理记录 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -563,7 +570,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#越权"><span class="nav-number">1.</span> <span class="nav-text">越权</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#任意密码修改"><span class="nav-number">1.1.</span> <span class="nav-text">任意密码修改</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#任意用户相关信息增删改"><span class="nav-number">1.2.</span> <span class="nav-text">任意用户相关信息增删改</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#上传文件漏洞"><span class="nav-number">2.</span> <span class="nav-text">上传文件漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#格式检验"><span class="nav-number">2.1.</span> <span class="nav-text">格式检验</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSRF漏洞"><span class="nav-number">3.</span> <span class="nav-text">SSRF漏洞</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#树记录"><span class="nav-number">1.</span> <span class="nav-text">树记录</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#树"><span class="nav-number">1.1.</span> <span class="nav-text">树</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#度"><span class="nav-number">1.1.1.</span> <span class="nav-text">度</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#叶子"><span class="nav-number">1.1.2.</span> <span class="nav-text">叶子</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#结点"><span class="nav-number">1.1.3.</span> <span class="nav-text">结点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#层次"><span class="nav-number">1.1.4.</span> <span class="nav-text">层次</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二叉树"><span class="nav-number">1.2.</span> <span class="nav-text">二叉树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#满二叉树"><span class="nav-number">1.3.</span> <span class="nav-text">满二叉树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#完全二叉树"><span class="nav-number">1.4.</span> <span class="nav-text">完全二叉树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二叉排序树"><span class="nav-number">1.5.</span> <span class="nav-text">二叉排序树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二叉树排序前序、中序、后序"><span class="nav-number">1.6.</span> <span class="nav-text">二叉树排序前序、中序、后序</span></a></li></ol></li></ol></div>
             
 
           </div>

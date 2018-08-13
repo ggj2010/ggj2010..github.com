@@ -87,17 +87,17 @@
 
 
 
-<meta name="description" content="当我们开发一个新功能的时候，一定要考虑这段代码或者这个功能是否有被他人攻击利用的可能。 越权通俗解释就是操作或者访问非自己权限下面的数据，越权的手段有很多种。 任意密码修改 一般密码修改有很多漏洞，有逻辑上的，有流程上的。例如有些网站根据短信验证码去验证修改密码的权限， 但是调用接口的时候却把验证吗和接口一块返回，这算是比较低级的漏洞了，当然类似的情况有很多。 任意用户相关信息增删改当某些关键信息">
+<meta name="description" content="公司有监控组件cat，系统的所有信息在cat上面都可以看到，用久了平常的一些命令就忘完了 CPUtop命令 Mem中的free不是当前系统可用的最大物理内存，当前可用的物理内存数应该为Mem:free+Mem:buffers+Swap:cached  Load average  0.7 &amp;lt; load &amp;lt; 1: 此时是不错的状态，如果进来更多的汽车，你的马路仍然可以应付。 load =">
 <meta property="og:type" content="article">
-<meta property="og:title" content="web安全记录">
-<meta property="og:url" content="http://ggj2010.github.io/2018/05/21/web安全记录/index.html">
+<meta property="og:title" content="系统故障定位">
+<meta property="og:url" content="http://ggj2010.github.io/2018/07/13/系统故障定位/index.html">
 <meta property="og:site_name" content="高广金博客">
-<meta property="og:description" content="当我们开发一个新功能的时候，一定要考虑这段代码或者这个功能是否有被他人攻击利用的可能。 越权通俗解释就是操作或者访问非自己权限下面的数据，越权的手段有很多种。 任意密码修改 一般密码修改有很多漏洞，有逻辑上的，有流程上的。例如有些网站根据短信验证码去验证修改密码的权限， 但是调用接口的时候却把验证吗和接口一块返回，这算是比较低级的漏洞了，当然类似的情况有很多。 任意用户相关信息增删改当某些关键信息">
+<meta property="og:description" content="公司有监控组件cat，系统的所有信息在cat上面都可以看到，用久了平常的一些命令就忘完了 CPUtop命令 Mem中的free不是当前系统可用的最大物理内存，当前可用的物理内存数应该为Mem:free+Mem:buffers+Swap:cached  Load average  0.7 &amp;lt; load &amp;lt; 1: 此时是不错的状态，如果进来更多的汽车，你的马路仍然可以应付。 load =">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-05-31T03:56:27.000Z">
+<meta property="og:updated_time" content="2018-07-13T08:46:50.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="web安全记录">
-<meta name="twitter:description" content="当我们开发一个新功能的时候，一定要考虑这段代码或者这个功能是否有被他人攻击利用的可能。 越权通俗解释就是操作或者访问非自己权限下面的数据，越权的手段有很多种。 任意密码修改 一般密码修改有很多漏洞，有逻辑上的，有流程上的。例如有些网站根据短信验证码去验证修改密码的权限， 但是调用接口的时候却把验证吗和接口一块返回，这算是比较低级的漏洞了，当然类似的情况有很多。 任意用户相关信息增删改当某些关键信息">
+<meta name="twitter:title" content="系统故障定位">
+<meta name="twitter:description" content="公司有监控组件cat，系统的所有信息在cat上面都可以看到，用久了平常的一些命令就忘完了 CPUtop命令 Mem中的free不是当前系统可用的最大物理内存，当前可用的物理内存数应该为Mem:free+Mem:buffers+Swap:cached  Load average  0.7 &amp;lt; load &amp;lt; 1: 此时是不错的状态，如果进来更多的汽车，你的马路仍然可以应付。 load =">
 
 
 
@@ -125,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="http://ggj2010.github.io/2018/05/21/web安全记录/"/>
+  <link rel="canonical" href="http://ggj2010.github.io/2018/07/13/系统故障定位/"/>
 
 
 
 
 
-  <title> web安全记录 | 高广金博客 </title>
+  <title> 系统故障定位 | 高广金博客 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -280,7 +280,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://ggj2010.github.io/2018/05/21/web安全记录/">
+    <link itemprop="mainEntityOfPage" href="http://ggj2010.github.io/2018/07/13/系统故障定位/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ggj2010">
@@ -301,7 +301,7 @@
             
             
               
-                web安全记录
+                系统故障定位
               
             
           </h1>
@@ -316,8 +316,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-21T11:21:00+08:00">
-                2018-05-21
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-13T15:03:46+08:00">
+                2018-07-13
               </time>
             
 
@@ -352,26 +352,55 @@
       
 
       
-        <pre><code>当我们开发一个新功能的时候，一定要考虑这段代码或者这个功能是否有被他人攻击利用的可能。
-</code></pre><h3 id="越权"><a href="#越权" class="headerlink" title="越权"></a>越权</h3><pre><code>通俗解释就是操作或者访问非自己权限下面的数据，越权的手段有很多种。
-</code></pre><h4 id="任意密码修改"><a href="#任意密码修改" class="headerlink" title="任意密码修改"></a>任意密码修改</h4><pre><code> 一般密码修改有很多漏洞，有逻辑上的，有流程上的。例如有些网站根据短信验证码去验证修改密码的权限，
-但是调用接口的时候却把验证吗和接口一块返回，这算是比较低级的漏洞了，当然类似的情况有很多。
-</code></pre><h4 id="任意用户相关信息增删改"><a href="#任意用户相关信息增删改" class="headerlink" title="任意用户相关信息增删改"></a>任意用户相关信息增删改</h4><pre><code>当某些关键信息只能某个用户查看或者操作的时候，我们就需要校验权限了，不能根据唯一id去确定权限，某些情况下面
-唯一id是可以伪造的，比如查看订单详情，如果没有校验这个订单id是否属于某个人就存在越权的操作。
-</code></pre><h3 id="上传文件漏洞"><a href="#上传文件漏洞" class="headerlink" title="上传文件漏洞"></a>上传文件漏洞</h3><pre><code>公司都有自己的文件存储服务器，但是也需要对上传的文件做些必要的校验
-</code></pre><h4 id="格式检验"><a href="#格式检验" class="headerlink" title="格式检验"></a>格式检验</h4><pre><code>对所有上传的文件格式都要限制死，前后端都要检验。
-比如如果用户上传的是个html,那么微信分享出去的地址前缀域名就是公司的域名，会有可能被微信封住域名。
-</code></pre><h3 id="SSRF漏洞"><a href="#SSRF漏洞" class="headerlink" title="SSRF漏洞"></a>SSRF漏洞</h3><pre><code>SSRF(Server-Side Request Forgery:服务器端请求伪造) 是一种由攻击者构造形成由服务端发起请求的一个安全漏洞。
-一般情况下，SSRF攻击的目标是从外网无法访问的内部系统。
-利用一个可以发起网络请求的服务当作跳板来攻击内部其他服务
-（正是因为它是由服务端发起的，所以它能够请求到与它相连而与外网隔离的内部系统）        
-例如：http://www.a.com?url=xxxx,如果这个url算是参数，那么就是问题了,如果我们
-根据这个参数url进行get或者post请求，就可能发生SSRF攻击。
-以下业务场景容易出现这种漏洞：
-1、应用从用户指定的url获取图片。然后把它用一个随即文件名保存在硬盘上，并展示给用户；
-2、应用获取用户制定url的数据（文件或者html）。这个函数会使用socket跟服务器建立tcp连接，传输原始数据；
-3、应用根据用户提供的URL，抓取用户的web站点，并且自动生成移动wap站；
-4、应用提供测速功能，能够根据用户提供的URL，访问目标站点，以获取其在对应经纬度的访问速度；    
+        <pre><code>公司有监控组件cat，系统的所有信息在cat上面都可以看到，用久了平常的一些命令就忘完了
+</code></pre><h3 id="CPU"><a href="#CPU" class="headerlink" title="CPU"></a>CPU</h3><pre><code>top命令
+Mem中的free不是当前系统可用的最大物理内存，当前可用的物理内存数应该为Mem:free+Mem:buffers+Swap:cached
+
+Load average 
+0.7 &lt; load &lt; 1: 此时是不错的状态，如果进来更多的汽车，你的马路仍然可以应付。
+load = 1: 你的马路即将拥堵，而且没有更多的资源额外的任务，赶紧看看发生了什么吧。
+load &gt; 5: 非常严重拥堵，我们的马路非常繁忙，每辆车都无法很快的运行
+load average:0.15, 0.16, 0.15
+系统负载，即任务队列的平均长度。三个数值分别为 1分钟、5分钟、15分钟前到现在的平均值。
+
+us:user_cpu,可以认为是 户进程占总cpu时间的百分，如果这个占比较高,多数是程序陷入死循环。(操作系统认为是正常逻辑)
+sy:sys_cpu,运 内核及内核调 所占的cpu时间百分，如果这个占比较高,多数是死锁(卡在某些系统调 上)
+ni:nice_cpu,修改过优先级的进程所占的cpu时间百分比，一般删log,压缩文件等io占CPU较多的进程推荐nice
+id:idle_cpu,空闲cpu占比,越高代表cpu越闲
+wa:wait_cpu,io等待所占的cpu时间 ,可能是硬盘,也可能是网络较慢
+
+
+mem_total 总物理内存
+mem_used 被进程占
+mem_free 空闲
+mem_buffers:(数据块)缓冲区,硬盘块层面,准备刷新到硬盘上的数据
+mem_cached:(文件)缓存区, 文件系统层面 ,从硬盘读取文件以备后面备使用
+mem_swap:(内存页)缓存区,内存管理层面,物理内存不足时，用硬盘来模拟内存，一般占用量大后会导致性能急剧下降
+
+查询最耗CPU时的线程
+ ps -mp pid -o THREAD,tid,time
+ jstack 28155 &gt; test.txt 将当期pid的栈信息打印到text.txt里面
+ grep `printf &quot;%x\n&quot; 28159` test.txt -A 30
+</code></pre><h3 id="物理内存"><a href="#物理内存" class="headerlink" title="物理内存"></a>物理内存</h3><pre><code>查看系统当前可用内容
+free -m     
+</code></pre><h3 id="硬盘内存"><a href="#硬盘内存" class="headerlink" title="硬盘内存"></a>硬盘内存</h3><pre><code>查看系统磁盘剩余空间
+df -h
+du -h  --max-depth=1 /path：可以查看目录的大小，并控制子目录级别，找占用磁盘空间的文件是特别有用
+如果日志不定时删除，会将硬盘空间写慢。
+</code></pre><h3 id="gc"><a href="#gc" class="headerlink" title="gc"></a>gc</h3><pre><code>dump出当前内存信息或者 启动时加入参数XX:+HeapDumpOnOutOfMemoryError, 在OOM触发时会自动dump日志
+jmap -dump:format=b,file=/tmp/dump.dat 4813 
+来统计所有存活对象的个数
+jmap -histo:live 20545 &gt;&gt;a.txt
+打印出当前堆每个分区是使用详情，定位触发fullgc原因时特别有用，类似top的效果
+jmap -heap pid
+java当前gc信息
+jstat -gcutil 1756 1000    
+
+
+jps -lv:加上lv可以列出启动类和启动参数，方便区别应用
+jinfo pid:可以打印出进程生效的环境变量和参数的值
+</code></pre><h3 id="日志命令"><a href="#日志命令" class="headerlink" title="日志命令"></a>日志命令</h3><pre><code>grep -n -E 100
+ less  xx.log, shift+g移动到最后一行,ctrl+b往前 
 </code></pre>
       
     </div>
@@ -402,8 +431,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/21/公司常用组件记录/" rel="next" title="公司常用组件记录">
-                <i class="fa fa-chevron-left"></i> 公司常用组件记录
+              <a href="/2018/06/26/kafka相关记录/" rel="next" title="kafka相关记录">
+                <i class="fa fa-chevron-left"></i> kafka相关记录
               </a>
             
           </div>
@@ -412,8 +441,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/05/23/计算机基础原理记录/" rel="prev" title="计算机基础原理记录">
-                计算机基础原理记录 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/07/13/数据结构记录/" rel="prev" title="数据结构记录">
+                数据结构记录 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -563,7 +592,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#越权"><span class="nav-number">1.</span> <span class="nav-text">越权</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#任意密码修改"><span class="nav-number">1.1.</span> <span class="nav-text">任意密码修改</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#任意用户相关信息增删改"><span class="nav-number">1.2.</span> <span class="nav-text">任意用户相关信息增删改</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#上传文件漏洞"><span class="nav-number">2.</span> <span class="nav-text">上传文件漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#格式检验"><span class="nav-number">2.1.</span> <span class="nav-text">格式检验</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSRF漏洞"><span class="nav-number">3.</span> <span class="nav-text">SSRF漏洞</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU"><span class="nav-number">1.</span> <span class="nav-text">CPU</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#物理内存"><span class="nav-number">2.</span> <span class="nav-text">物理内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#硬盘内存"><span class="nav-number">3.</span> <span class="nav-text">硬盘内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gc"><span class="nav-number">4.</span> <span class="nav-text">gc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#日志命令"><span class="nav-number">5.</span> <span class="nav-text">日志命令</span></a></li></ol></div>
             
 
           </div>

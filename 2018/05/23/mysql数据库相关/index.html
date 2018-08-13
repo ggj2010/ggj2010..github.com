@@ -94,7 +94,7 @@
 <meta property="og:site_name" content="高广金博客">
 <meta property="og:description" content="相关命令用到一个记一个吧~ 事物ACID针对事务的所有行为都是围绕ACID来做的  A(Atomicity)原子性       一个事务必须被视为一个不可分割的最小工作单元，整个事务中的所有操作要么全部提交成功，要么全部失败，对于一个事务来说，不可能只执行其中的一部分操作  C(Consistency) 一致性   数据的一致，操作的一致，  I(Isolation)隔离性  事务开始和结束之间的">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-11T06:40:49.000Z">
+<meta property="og:updated_time" content="2018-07-12T11:56:45.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysql数据库相关">
 <meta name="twitter:description" content="相关命令用到一个记一个吧~ 事物ACID针对事务的所有行为都是围绕ACID来做的  A(Atomicity)原子性       一个事务必须被视为一个不可分割的最小工作单元，整个事务中的所有操作要么全部提交成功，要么全部失败，对于一个事务来说，不可能只执行其中的一部分操作  C(Consistency) 一致性   数据的一致，操作的一致，  I(Isolation)隔离性  事务开始和结束之间的">
@@ -403,6 +403,7 @@ MyISAM 适合于一些需要大量查询的应用，但其对于有大量写操�
 max_connections 为mysql默认配置的连接数量，全局的限制连接数
 max_user_connections  这个就是单用户的连接数
 </code></pre><h3 id="查询数据库相关配置"><a href="#查询数据库相关配置" class="headerlink" title="查询数据库相关配置"></a>查询数据库相关配置</h3><pre><code>show variables 
+SELECT VERSION(); mysql版本
 </code></pre><h3 id="获取数据库某个表自增id"><a href="#获取数据库某个表自增id" class="headerlink" title="获取数据库某个表自增id"></a>获取数据库某个表自增id</h3><pre><code>当有插入的sql执行后调用下面sql就可以获取到当前表的id
 SELECT LAST_INSERT_ID() from  table
 mybatis 就是利用这个特性获取到自增id的
@@ -457,6 +458,26 @@ call test2();
 3、数据库使用物理主机，避免使用虚拟云主机，提升IO性能
 4、使用SSD磁盘，提升IO性能。SSD的随机IO性能约是SATA硬盘的10倍。
 5、业务代码优化，将实时性要求高的某些操作，使用主库做读操作
+</code></pre><h3 id="mysql-大表DDL操作锁表"><a href="#mysql-大表DDL操作锁表" class="headerlink" title="mysql 大表DDL操作锁表"></a>mysql 大表DDL操作锁表</h3><pre><code>当给一个千万级表进行ddl操作的时候回锁表，导致服务不可用。
+Mysql在5.6版本之前，直接修改表结构的过程中会锁表 ，在线ddl(加字段、加索引等修改表结构之类的操作）
+A.对表加锁(表此时只读)
+B.复制原表物理结构
+C.修改表的物理结构
+D.把原表数据导入中间表中，数据同步完后，锁定中间表，并删除原表
+E.rename中间表为原表
+F.刷新数据字典，并释放锁 
+
+对于大表的变更有以下几种方式：
+1、选择业务低峰期DDL
+2、原表A，新建零时表B，同步B表数据到A表，同时上线双写A、B功能，只读A表，
+当A和B表数据一致时候，切换只读B表，再上线只写A表。
+</code></pre><h3 id="mysql-解锁"><a href="#mysql-解锁" class="headerlink" title="mysql 解锁"></a>mysql 解锁</h3><pre><code>锁单个表：LOCK TABLES tablename read/write
+锁多个表：LOCK TABLES tablename1 read/write,tablename2 read/write
+</code></pre><p>   1、找到锁进程，kill id</p>
+<pre><code>show processlist;
+</code></pre><p>   2、查询到死锁表，再解锁</p>
+<pre><code>show OPEN TABLES where In_use &gt; 0;
+UNLOCK TABLES          
 </code></pre>
       
     </div>
@@ -571,7 +592,7 @@ call test2();
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-count">26</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -648,7 +669,7 @@ call test2();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#事物"><span class="nav-number">1.</span> <span class="nav-text">事物</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ACID"><span class="nav-number">1.1.</span> <span class="nav-text">ACID</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事务实现的原理"><span class="nav-number">1.2.</span> <span class="nav-text">事务实现的原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据库事物隔离级别"><span class="nav-number">1.3.</span> <span class="nav-text">数据库事物隔离级别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#REDO-LOG"><span class="nav-number">1.4.</span> <span class="nav-text">REDO LOG</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UNDO-LOG"><span class="nav-number">1.5.</span> <span class="nav-text">UNDO LOG</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事物时序"><span class="nav-number">1.6.</span> <span class="nav-text">事物时序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事物回滚"><span class="nav-number">1.7.</span> <span class="nav-text">事物回滚</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据恢复"><span class="nav-number">1.8.</span> <span class="nav-text">数据恢复</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#binlog"><span class="nav-number">2.</span> <span class="nav-text">binlog</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MyISAM与innodb"><span class="nav-number">3.</span> <span class="nav-text">MyISAM与innodb</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何查看连接当前数据库连接数"><span class="nav-number">4.</span> <span class="nav-text">如何查看连接当前数据库连接数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询数据库相关配置"><span class="nav-number">5.</span> <span class="nav-text">查询数据库相关配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取数据库某个表自增id"><span class="nav-number">6.</span> <span class="nav-text">获取数据库某个表自增id</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#表的存储空间大小"><span class="nav-number">7.</span> <span class="nav-text">表的存储空间大小</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#表的空间估算"><span class="nav-number">8.</span> <span class="nav-text">表的空间估算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql千万表"><span class="nav-number">9.</span> <span class="nav-text">mysql千万表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库主从延迟"><span class="nav-number">10.</span> <span class="nav-text">数据库主从延迟</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#事物"><span class="nav-number">1.</span> <span class="nav-text">事物</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ACID"><span class="nav-number">1.1.</span> <span class="nav-text">ACID</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事务实现的原理"><span class="nav-number">1.2.</span> <span class="nav-text">事务实现的原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据库事物隔离级别"><span class="nav-number">1.3.</span> <span class="nav-text">数据库事物隔离级别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#REDO-LOG"><span class="nav-number">1.4.</span> <span class="nav-text">REDO LOG</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UNDO-LOG"><span class="nav-number">1.5.</span> <span class="nav-text">UNDO LOG</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事物时序"><span class="nav-number">1.6.</span> <span class="nav-text">事物时序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事物回滚"><span class="nav-number">1.7.</span> <span class="nav-text">事物回滚</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据恢复"><span class="nav-number">1.8.</span> <span class="nav-text">数据恢复</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#binlog"><span class="nav-number">2.</span> <span class="nav-text">binlog</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MyISAM与innodb"><span class="nav-number">3.</span> <span class="nav-text">MyISAM与innodb</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何查看连接当前数据库连接数"><span class="nav-number">4.</span> <span class="nav-text">如何查看连接当前数据库连接数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询数据库相关配置"><span class="nav-number">5.</span> <span class="nav-text">查询数据库相关配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取数据库某个表自增id"><span class="nav-number">6.</span> <span class="nav-text">获取数据库某个表自增id</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#表的存储空间大小"><span class="nav-number">7.</span> <span class="nav-text">表的存储空间大小</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#表的空间估算"><span class="nav-number">8.</span> <span class="nav-text">表的空间估算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql千万表"><span class="nav-number">9.</span> <span class="nav-text">mysql千万表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库主从延迟"><span class="nav-number">10.</span> <span class="nav-text">数据库主从延迟</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql-大表DDL操作锁表"><span class="nav-number">11.</span> <span class="nav-text">mysql 大表DDL操作锁表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql-解锁"><span class="nav-number">12.</span> <span class="nav-text">mysql 解锁</span></a></li></ol></div>
             
 
           </div>

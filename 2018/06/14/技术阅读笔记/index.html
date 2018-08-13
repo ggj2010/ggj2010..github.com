@@ -94,7 +94,7 @@
 <meta property="og:site_name" content="高广金博客">
 <meta property="og:description" content="好记性不如烂笔头。 日志级别动态调整   日志级别动态调整——小工具解决大问题     日志是每个项目必备的组件，这几年从开始工作接触的log4j到后来的logback，再到现在用的log4j2,日志文件 的查看从最开始的登录单台机器查看，到shell脚本一次性查看多台机器，再到后来ELK搜索搭建的可视化日志查询 系统。     日志使用不当对于高qps的服务来说会导致的线上严重的故障，所以统一化">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-06-20T12:40:49.000Z">
+<meta property="og:updated_time" content="2018-07-12T06:03:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="技术阅读笔记">
 <meta name="twitter:description" content="好记性不如烂笔头。 日志级别动态调整   日志级别动态调整——小工具解决大问题     日志是每个项目必备的组件，这几年从开始工作接触的log4j到后来的logback，再到现在用的log4j2,日志文件 的查看从最开始的登录单台机器查看，到shell脚本一次性查看多台机器，再到后来ELK搜索搭建的可视化日志查询 系统。     日志使用不当对于高qps的服务来说会导致的线上严重的故障，所以统一化">
@@ -392,7 +392,15 @@ ctx.updateLoggers();
    数据量
    冷热数据比
    数据分级存储 
-</code></pre>
+</code></pre><h4 id="达达-高性能服务端优化之路"><a href="#达达-高性能服务端优化之路" class="headerlink" title="达达-高性能服务端优化之路"></a>达达-高性能服务端优化之路</h4><p>   <a href="&quot;https://mp.weixin.qq.com/s?__biz=MzAwMzg1ODMwNw==&amp;mid=406041593&amp;idx=1&amp;sn=635c65f16cbe0cdbf0873b4090516661&amp;scene=38#wechat_redirect&quot;">达达京东到家技术公众号</a><br>   1、最初技术选型<br>       多应用，单库<br>   2、读写分离，主库和从库<br>   3、垂直分库，按照应用分成多个库</p>
+<pre><code>垂直分库过程中的经验教训，使我们制定了SQL最佳实践，其中一条便是程序中禁用或少用join，
+而应该在程序中组装数据，让SQL更简单。一方面为以后进一步垂直拆分业务做准备，
+另一方面也避免了Mysql中join的性能较低的问题。
+</code></pre><p>   4、水平分库分表</p>
+<pre><code>单表超千万就可以考虑分表了
+</code></pre><h4 id="如何高效的提问"><a href="#如何高效的提问" class="headerlink" title="如何高效的提问"></a>如何高效的提问</h4><p>   ![](<a href="http://p0.meituan.net/education/81e90fe7a3a31ee68a892e79830fb61b209197.png" target="_blank" rel="external">http://p0.meituan.net/education/81e90fe7a3a31ee68a892e79830fb61b209197.png</a></p>
+<p>)             </p>
+
       
     </div>
 
@@ -506,7 +514,7 @@ ctx.updateLoggers();
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-count">26</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -583,7 +591,7 @@ ctx.updateLoggers();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#日志级别动态调整"><span class="nav-number">1.</span> <span class="nav-text">日志级别动态调整</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#mysql-性能容量评估"><span class="nav-number">2.</span> <span class="nav-text">mysql 性能容量评估</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#日志级别动态调整"><span class="nav-number">1.</span> <span class="nav-text">日志级别动态调整</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#mysql-性能容量评估"><span class="nav-number">2.</span> <span class="nav-text">mysql 性能容量评估</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#达达-高性能服务端优化之路"><span class="nav-number">3.</span> <span class="nav-text">达达-高性能服务端优化之路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何高效的提问"><span class="nav-number">4.</span> <span class="nav-text">如何高效的提问</span></a></li></ol></div>
             
 
           </div>

@@ -87,17 +87,17 @@
 
 
 
-<meta name="description" content="Thread的六种状态NEW新创建，没有执行 RUNNABLE当start()方法被执行，就进入执行状态 BLOCKED线程堵塞了，多个线程竞争带锁的方法，没有获取到锁的方法会被堵塞 WAITING某个方法调用了wait()或者join() 线程会进入等待唤醒状态 TIMED_WAITING某个方法调用了wait(time)或者sleep(time),join(time) 线程会进入等待唤醒状态">
+<meta name="description" content="操作系统相关概念CPUcpu主要是用来解释计算机指令以及处理计算机软件的中的数据 主频，单位是兆赫（MHz）或千兆赫（GHz），用来表示CPU的运算、处理数据的速度。通常，主频越高，CPU处理数据的速度就越快。 缓存，缓存大小也是CPU的重要指标之一，而且缓存的结构和大小对CPU速度的影响非常大。 cpu有L1 Cache和L2　Cache、L3　Cache 物理核物理核=cpu数(机子上装的cp">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Thread 回顾">
 <meta property="og:url" content="http://ggj2010.github.io/2018/03/22/Thread-回顾/index.html">
 <meta property="og:site_name" content="高广金博客">
-<meta property="og:description" content="Thread的六种状态NEW新创建，没有执行 RUNNABLE当start()方法被执行，就进入执行状态 BLOCKED线程堵塞了，多个线程竞争带锁的方法，没有获取到锁的方法会被堵塞 WAITING某个方法调用了wait()或者join() 线程会进入等待唤醒状态 TIMED_WAITING某个方法调用了wait(time)或者sleep(time),join(time) 线程会进入等待唤醒状态">
+<meta property="og:description" content="操作系统相关概念CPUcpu主要是用来解释计算机指令以及处理计算机软件的中的数据 主频，单位是兆赫（MHz）或千兆赫（GHz），用来表示CPU的运算、处理数据的速度。通常，主频越高，CPU处理数据的速度就越快。 缓存，缓存大小也是CPU的重要指标之一，而且缓存的结构和大小对CPU速度的影响非常大。 cpu有L1 Cache和L2　Cache、L3　Cache 物理核物理核=cpu数(机子上装的cp">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-04-18T13:49:15.000Z">
+<meta property="og:updated_time" content="2018-08-13T13:18:21.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Thread 回顾">
-<meta name="twitter:description" content="Thread的六种状态NEW新创建，没有执行 RUNNABLE当start()方法被执行，就进入执行状态 BLOCKED线程堵塞了，多个线程竞争带锁的方法，没有获取到锁的方法会被堵塞 WAITING某个方法调用了wait()或者join() 线程会进入等待唤醒状态 TIMED_WAITING某个方法调用了wait(time)或者sleep(time),join(time) 线程会进入等待唤醒状态">
+<meta name="twitter:description" content="操作系统相关概念CPUcpu主要是用来解释计算机指令以及处理计算机软件的中的数据 主频，单位是兆赫（MHz）或千兆赫（GHz），用来表示CPU的运算、处理数据的速度。通常，主频越高，CPU处理数据的速度就越快。 缓存，缓存大小也是CPU的重要指标之一，而且缓存的结构和大小对CPU速度的影响非常大。 cpu有L1 Cache和L2　Cache、L3　Cache 物理核物理核=cpu数(机子上装的cp">
 
 
 
@@ -352,7 +352,77 @@
       
 
       
-        <h3 id="Thread的六种状态"><a href="#Thread的六种状态" class="headerlink" title="Thread的六种状态"></a>Thread的六种状态</h3><h4 id="NEW"><a href="#NEW" class="headerlink" title="NEW"></a>NEW</h4><pre><code>新创建，没有执行
+        <h3 id="操作系统相关概念"><a href="#操作系统相关概念" class="headerlink" title="操作系统相关概念"></a>操作系统相关概念</h3><h4 id="CPU"><a href="#CPU" class="headerlink" title="CPU"></a>CPU</h4><pre><code>cpu主要是用来解释计算机指令以及处理计算机软件的中的数据
+主频，单位是兆赫（MHz）或千兆赫（GHz），用来表示CPU的运算、处理数据的速度。通常，主频越高，CPU处理数据的速度就越快。
+缓存，缓存大小也是CPU的重要指标之一，而且缓存的结构和大小对CPU速度的影响非常大。
+cpu有L1 Cache和L2　Cache、L3　Cache
+</code></pre><h4 id="物理核"><a href="#物理核" class="headerlink" title="物理核"></a>物理核</h4><pre><code>物理核=cpu数(机子上装的cpu的数量)*每个cpu的核心数    
+</code></pre><h4 id="单核与多核"><a href="#单核与多核" class="headerlink" title="单核与多核"></a>单核与多核</h4><pre><code>都是一个cpu，不同的是每个cpu上的核心数，多核cpu是多个单核cpu的替代方案，多核cpu减小了体积，同时也减少了功耗
+一个核心只能同时执行一个线程   
+</code></pre><h4 id="进程和线程"><a href="#进程和线程" class="headerlink" title="进程和线程"></a>进程和线程</h4><table>
+<thead>
+<tr>
+<th>对比</th>
+<th style="text-align:center">进程</th>
+<th style="text-align:center">线程</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>定义</td>
+<td style="text-align:center">进程是操作系统进行资源（包括cpu、内存、磁盘IO等）分配的最小单位</td>
+<td style="text-align:center">线程是进程运行和执行的最小调度单位</td>
+</tr>
+<tr>
+<td>系统开销</td>
+<td style="text-align:center">创建撤销切换开销大，资源要重新分配和收回</td>
+<td style="text-align:center">仅保存少量寄存器的内容，开销小，在进程的地址空间执行代码</td>
+</tr>
+<tr>
+<td>安全性</td>
+<td style="text-align:center">程间相互独立，互不影响</td>
+<td style="text-align:center">线程共享一个进程下面的资源，可以互相通信和影响</td>
+</tr>
+</tbody>
+</table>
+<pre><code>线程的切换和创建都会增加cpu的开销，
+</code></pre><h4 id="串行、并行、并发"><a href="#串行、并行、并发" class="headerlink" title="串行、并行、并发"></a>串行、并行、并发</h4><pre><code>串行就是多个任务按顺序执行
+并行就是每个线程分配给独立的核心，线程各自运行
+并发，多个线程在单个核心运行，同一时间一个线程运行，系统不同切换线程，看起来像同时运行
+其实是线程不同切换。
+并发是逻辑上的同时发生（simultaneous），而并行是物理上的同时发生。 
+
+如果系统只有一个CPU,则它根本不可能真正同时进行一个以上的线程,
+它只能把CPU运行时间划分成若干个时间段,再将时间段分配给各个线程执行,
+在一个时间段的线程代码运行时,其它线程处于挂起状态.这种方式我们称之为并发(Concurrent)。
+当系统有一个以上CPU时,则线程的操作有可能非并发.当一个CPU执行一个线程时,
+另一个CPU可以执行另一个线程,两个线程互不抢占CPU资源,可以同时进行,这种方式我们称之为并行(Parallel)。  
+</code></pre><h4 id="io密集与计算密集"><a href="#io密集与计算密集" class="headerlink" title="io密集与计算密集"></a>io密集与计算密集</h4><pre><code>io密集主要是IO操作，CPU利用率不高，可以多开点线程
+计算密集主要是复杂的逻辑运算，CPU利用率比较高，不需要开太多线程
+</code></pre><h3 id="java线程相关"><a href="#java线程相关" class="headerlink" title="java线程相关"></a>java线程相关</h3><h4 id="为什么使用多线程"><a href="#为什么使用多线程" class="headerlink" title="为什么使用多线程"></a>为什么使用多线程</h4><pre><code>想象一下，一个应用程序需要从本地文件系统中读取和处理文件的情景。比方说，从磁盘读取一个文件需要5秒，处理一个文件需要2秒。处理两个文件则需要：
+   1：5秒读取文件A
+   2：2秒处理文件A
+   3：5秒读取文件B
+   4：2秒处理文件B
+   总共需要14秒
+   从磁盘中读取文件的时候，大部分的CPU时间用于等待磁盘去读取数据。在这段时间里，CPU非常的空闲。它可以做一些别的事情。通过改变操作的顺序，就能够更好的使用CPU资源。看下面的顺序：
+
+   1：5秒读取文件A
+   2：5秒读取文件B + 2秒处理文件A
+   3：2秒处理文件B
+   4
+   ---------------------
+   5
+   总共需要12秒
+   CPU等待第一个文件被读取完。然后开始读取第二个文件。当第二文件在被读取的时候，CPU会去处理第一个文件。
+</code></pre><h5 id="资源利用率更好"><a href="#资源利用率更好" class="headerlink" title="资源利用率更好"></a>资源利用率更好</h5><pre><code>提高系统CPU的使用效率，因为当系统进行磁盘IO或者网络IO的时候CPU是空闲的。
+</code></pre><h5 id="程序设计更简单"><a href="#程序设计更简单" class="headerlink" title="程序设计更简单"></a>程序设计更简单</h5><h5 id="程序响应更快"><a href="#程序响应更快" class="headerlink" title="程序响应更快"></a>程序响应更快</h5><h4 id="多线程的代价"><a href="#多线程的代价" class="headerlink" title="多线程的代价"></a>多线程的代价</h4><h5 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h5><pre><code>设计更复杂
+</code></pre><h5 id="上下文切换的开销"><a href="#上下文切换的开销" class="headerlink" title="上下文切换的开销"></a>上下文切换的开销</h5><h5 id="增加资源消耗"><a href="#增加资源消耗" class="headerlink" title="增加资源消耗"></a>增加资源消耗</h5><h4 id="线程数"><a href="#线程数" class="headerlink" title="线程数"></a>线程数</h4><pre><code>线程池里面线程数是不是越多越好？答案是否定的，因为线程的切换会增加CPU的开销。
+一般来推荐线程数来说IO密集的都是两倍CPU个数+1，计算密集的都是1CPU个数+1
+//线程等待时间所占比例越高，需要越多线程。线程CPU时间所占比例越高，需要越少线程。 
+最佳线程数目 = （（线程等待时间+线程CPU时间）/线程CPU时间 ）* CPU数目
+最佳线程数目 = （线程等待时间与线程CPU时间之比 + 1）* CPU数目
+</code></pre><h3 id="Thread的六种状态"><a href="#Thread的六种状态" class="headerlink" title="Thread的六种状态"></a>Thread的六种状态</h3><h4 id="NEW"><a href="#NEW" class="headerlink" title="NEW"></a>NEW</h4><pre><code>新创建，没有执行
 </code></pre><h4 id="RUNNABLE"><a href="#RUNNABLE" class="headerlink" title="RUNNABLE"></a>RUNNABLE</h4><pre><code>当start()方法被执行，就进入执行状态
 </code></pre><h4 id="BLOCKED"><a href="#BLOCKED" class="headerlink" title="BLOCKED"></a>BLOCKED</h4><pre><code>线程堵塞了，多个线程竞争带锁的方法，没有获取到锁的方法会被堵塞
 </code></pre><h4 id="WAITING"><a href="#WAITING" class="headerlink" title="WAITING"></a>WAITING</h4><pre><code>某个方法调用了wait()或者join() 线程会进入等待唤醒状态
@@ -420,12 +490,133 @@ wait是让当前调用线程等待了，比如说如果wait()是在 Thread的run
   * {@code notifyAll} on {@code Thread} instances.
   当一个线程类执行结束之后，会调用this.notifyAll()方法。所以不推荐在Thread实例里面
   用wait()和notifyall
-</code></pre><h3 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h3><pre><code>用法：1、修饰方法，方法又分实例方法和static方法。如果是实例方法，那就是对当前实例的对象加锁，如果是静态方法,
+</code></pre><h3 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h3><pre><code>作用：1）确保线程互斥的访问同步代码（2）保证共享变量的修改能够及时可见（3）有效解决重排序问题
+用法：1、修饰方法，方法又分实例方法和static方法。如果是实例方法，那就是对当前实例的对象加锁，如果是静态方法,
 那就是对该类进行加锁       
      2、修饰代码块，是对指定的对象加锁，可以实现局部代码块加锁，提高并发效率。
 一般开发的时候使用synchronized对代码块加锁场景多，对方法加锁效率太低了。
-底层原理：
-</code></pre>
+</code></pre><p>   同步代码块synchronized底层原理：</p>
+<pre><code>例如代码：
+      public void minus() {
+              synchronized (this) {
+                  age--;
+              }
+          } 
+反编译后的代码：
+       public minus()V
+           TRYCATCHBLOCK L0 L1 L2 null
+           TRYCATCHBLOCK L2 L3 L2 null
+          L4
+           LINENUMBER 15 L4
+           ALOAD 0
+           DUP
+           ASTORE 1
+           MONITORENTER
+          L0
+           LINENUMBER 16 L0
+           ALOAD 0
+           DUP
+           GETFIELD synchronizedthread/SynchronizedByteCode.age : I
+           ICONST_1
+           ISUB
+           PUTFIELD synchronizedthread/SynchronizedByteCode.age : I
+          L5
+           LINENUMBER 17 L5
+           ALOAD 1
+           MONITOREXIT
+</code></pre><p>   我们需要关心的反编译后的字节码命令：</p>
+<pre><code>MONITORENTER与MONITOREXIT
+</code></pre><p>   MONITORENTER</p>
+<pre><code>每个对象有一个监视器锁（monitor）。当monitor被占用时就会处于锁定状态，线程执行monitorenter指令时尝试获取monitor的所有权，过程如下：
+1、如果monitor的进入数为0，则该线程进入monitor，然后将进入数设置为1，该线程即为monitor的所有者。
+2、如果线程已经占有该monitor，只是重新进入，则进入monitor的进入数加1.
+3.如果其他线程已经占用了monitor，则该线程进入阻塞状态，直到monitor的进入数为0，再重新尝试获取monitor的所有权。 
+</code></pre><p>   MONITOREXIT</p>
+<pre><code>执行monitorexit的线程必须是objectref所对应的monitor的所有者。
+指令执行时，monitor的进入数减1，如果减1后进入数为0，那线程退出monitor，不再是这个monitor的所有者。其他被这个monitor阻塞的线程可以尝试去获取这个 monitor 的所有权。
+</code></pre><p>   同步方法锁的底层原理：</p>
+<pre><code>当方法调用时，调用指令将会检查方法的 ACC_SYNCHRONIZED 访问标志是否被设置，如果设置了，
+执行线程将先获取monitor，获取成功之后才能执行方法体，方法执行完后再释放monitor。
+在方法执行期间，其他任何线程都无法再获得同一个monitor对象。 
+其实本质上没有区别，只是方法的同步是一种隐式的方式来实现，无需通过字节码来完成。
+</code></pre><h3 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h3><h4 id="可见性"><a href="#可见性" class="headerlink" title="可见性"></a>可见性</h4><pre><code>volatile修饰的变量通过查看字节码，会发现多个lock前缀的指令，根据lock指令可以得到
+1、修改volatile修饰的变量会强制将修改后的值刷新到主内存，
+2、这个写回内存的操作会引起在其他CPU里缓存了该内存地址的数据无效。
+由volatile修饰的变量在写之后会插入一个store屏障，在读之前插入一个load屏障。
+store屏障保证写操作被后面的线程立即可见。load屏障保证所有的读操作之前的写立即生效
+</code></pre><h4 id="有序性"><a href="#有序性" class="headerlink" title="有序性"></a>有序性</h4><pre><code>根据happens-before原则，对一个volatile域的写，happens-before于任意后续对这个volatile域的读。
+volatile关键字通过提供“内存屏障”的方式来防止指令被重排序，为了实现volatile的内存语义，编译器在生成字节码时，
+会在指令序列中插入内存屏障来禁止特定类型的处理器重排序。
+</code></pre><h3 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h3><h4 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h4><p>   如果想实现每个线程都有自己的局部变量副本，有两种方式，一种是直接加锁，还有一种就是每个线程分配一个变量副本，<br>   ThreadLocal就是使用这种方式。</p>
+<pre><code>public void set(T value) {
+        Thread t = Thread.currentThread();
+        ThreadLocalMap map = getMap(t);
+        if (map != null)
+            map.set(this, value);
+        else
+            createMap(t, value);
+    } 
+
+ private void set(ThreadLocal&lt;?&gt; key, Object value) {
+             Entry[] tab = table;
+             int len = tab.length;
+             //得到ThreadLocal对应的hash值
+             int i = key.threadLocalHashCode &amp; (len-1);
+            //判断当前key 是否已经存在过了，如果存在就是修改，如果不存在
+            就是获取i的最新值，然后重新set
+             for (Entry e = tab[i];
+                  e != null;
+                  e = tab[i = nextIndex(i, len)]) {
+                 ThreadLocal&lt;?&gt; k = e.get();
+
+                 if (k == key) {
+                     e.value = value;
+                     return;
+                 }
+
+                 if (k == null) {
+                     replaceStaleEntry(key, value, i);
+                     return;
+                 }
+             }
+
+             tab[i] = new Entry(key, value);
+             int sz = ++size;
+             if (!cleanSomeSlots(i, sz) &amp;&amp; sz &gt;= threshold)
+                 rehash();
+  }   
+
+
+void createMap(Thread t, T firstValue) {
+         t.threadLocals = new ThreadLocalMap(this, firstValue);
+     }   
+Thread==&gt; ThreadLocal.ThreadLocalMap threadLocals = null;      
+</code></pre><h4 id="为什么使用ThreadLocalMap"><a href="#为什么使用ThreadLocalMap" class="headerlink" title="为什么使用ThreadLocalMap"></a>为什么使用ThreadLocalMap</h4><p>   以前总是不理解为什么Thread上面绑定的是ThreadLocal.ThreadLocalMap而不是ThreadLocal，因为我们设置值<br>   时候无非就是set和get，但当一个线程需要多个局部变量副本的时候，如果线程绑定的是ThreadLocal肯定是不满足<br>   多个变量的场景，所以只能是ThreadLocalMap，而且ThreadLocalMap的key就是ThreadLocal实例.<br>   每一个ThreadLocal都一个唯一的threadLocalHashCode（）</p>
+<h4 id="防止内存泄漏"><a href="#防止内存泄漏" class="headerlink" title="防止内存泄漏"></a>防止内存泄漏</h4><pre><code>ThreadLocalMap内部Entry中key使用的是对ThreadLocal对象的弱引用，这为避免内存泄露是一个进步，因为如果是强引用，那么即使其他地方没有对ThreadLocal对象的引用，ThreadLocalMap中的ThreadLocal对象还是不会被回收，而如果是弱引用则这时候ThreadLocal引用是会被回收掉的，虽然对于的value还是不能被回收，这时候ThreadLocalMap里面就会存在key为null但是value不为null的entry项，虽然ThreadLocalMap提供了set,get,remove方法在一些时机下会对这些Entry项进行清理，但是这是不及时的，也不是每次都会执行的，所以一些情况下还是会发生内存泄露，所以在使用完毕后即使调用remove方法才是解决内存泄露的王道。
+首先从ThreadLocal的直接索引位置(通过ThreadLocal.threadLocalHashCode &amp; (table.length-1)运算得到)获取Entry e，如果e不为null并且key相同则返回e；
+如果e为null或者key不一致则向下一个位置查询，如果下一个位置的key和当前需要查询的key相等，则返回对应的Entry。否则，如果key值为null，则擦除该位置的Entry，并继续向下一个位置查询。在这个过程中遇到的key为null的Entry都会被擦除，那么Entry内的value也就没有强引用链，自然会被回收。仔细研究代码可以发现，set操作也有类似的思想，将key为null的这些Entry都删除，防止内存泄露。
+　　但是光这样还是不够的，上面的设计思路依赖一个前提条件：要调用ThreadLocalMap的getEntry函数或者set函数。这当然是不可能任何情况都成立的，所以很多情况下需要使用者手动调用ThreadLocal的remove函数，手动删除不再需要的ThreadLocal，防止内存泄露。所以JDK建议将ThreadLocal变量定义成private static的，这样的话ThreadLocal的生命周期就更长，由于一直存在ThreadLocal的强引用，所以ThreadLocal也就不会被回收，也就能保证任何时候都能根据ThreadLocal的弱引用访问到Entry的value值，然后remove它，防止内存泄露。    
+</code></pre><h3 id="Thread启动源码"><a href="#Thread启动源码" class="headerlink" title="Thread启动源码"></a>Thread启动源码</h3><p>   参考：<a href="https://www.ibm.com/developerworks/cn/java/j-lo-processthread/#icomments" target="_blank" rel="external">https://www.ibm.com/developerworks/cn/java/j-lo-processthread/#icomments</a><br>   无论是实现Runnable还是继承Thread启动线程，底层都是调用Thread的本地方法<strong>start0</strong></p>
+<pre><code>private native void start0();
+</code></pre><p>   Thread类有个registerNatives本地方法，然后这个方法就是注册一些本地方法提供给Thread类用。</p>
+<pre><code>static {
+        registerNatives();
+    }
+</code></pre><p>   当线程调用start（）方法后，会创建一个本地线程，然后会调用到Thread.c的JVM_StartThread方法，JVM_StartThread会调用，Thread的run()方法，</p>
+<pre><code>public void run() {
+        if (target != null) {
+            target.run();
+        }
+    }
+</code></pre><h3 id="Java内存模型"><a href="#Java内存模型" class="headerlink" title="Java内存模型"></a>Java内存模型</h3><p>   理解java内容模型才能了解线程安全</p>
+<pre><code>每一个运行在Java虚拟机里的线程都拥有自己的线程栈。这个线程栈包含了这个线程调用的方法当前执行点相关的信息。一个线程仅能访问自己的线程栈。一个线程创建的本地变量对其它线程不可见，仅自己可见。即使两个线程执行同样的代码，这两个线程任然在在自己的线程栈中的代码来创建本地变量。因此，每个线程拥有每个本地变量的独有版本。
+
+所有原始类型的本地变量都存放在线程栈上，因此对其它线程不可见。一个线程可能向另一个线程传递一个原始类型变量的拷贝，但是它不能共享这个原始类型变量自身。
+
+堆上包含在Java程序中创建的所有对象，无论是哪一个对象创建的。这包括原始类型的对象版本。如果一个对象被创建然后赋值给一个局部变量，或者用来作为另一个对象的成员变量，这个对象任然是存放在堆上。
+</code></pre><h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p>   <a href="http://ifeve.com/%E4%BD%BF%E7%94%A8threadlocal%E4%B8%8D%E5%BD%93%E5%8F%AF%E8%83%BD%E4%BC%9A%E5%AF%BC%E8%87%B4%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2/" target="_blank" rel="external">http://ifeve.com/%E4%BD%BF%E7%94%A8threadlocal%E4%B8%8D%E5%BD%93%E5%8F%AF%E8%83%BD%E4%BC%9A%E5%AF%BC%E8%87%B4%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2/</a>           </p>
+<p>   <a href="http://ifeve.com/java-concurrency-thread-directory/" target="_blank" rel="external">http://ifeve.com/java-concurrency-thread-directory/</a><br>   <a href="http://ifeve.com/volatile/" target="_blank" rel="external">http://ifeve.com/volatile/</a><br>   <a href="https://www.cnblogs.com/paddix/p/5367116.html" target="_blank" rel="external">https://www.cnblogs.com/paddix/p/5367116.html</a>           </p>
+
       
     </div>
 
@@ -539,7 +730,7 @@ wait是让当前调用线程等待了，比如说如果wait()是在 Thread的run
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-count">26</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -616,7 +807,7 @@ wait是让当前调用线程等待了，比如说如果wait()是在 Thread的run
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Thread的六种状态"><span class="nav-number">1.</span> <span class="nav-text">Thread的六种状态</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#NEW"><span class="nav-number">1.1.</span> <span class="nav-text">NEW</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RUNNABLE"><span class="nav-number">1.2.</span> <span class="nav-text">RUNNABLE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BLOCKED"><span class="nav-number">1.3.</span> <span class="nav-text">BLOCKED</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#WAITING"><span class="nav-number">1.4.</span> <span class="nav-text">WAITING</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TIMED-WAITING"><span class="nav-number">1.5.</span> <span class="nav-text">TIMED_WAITING</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TERMINATED"><span class="nav-number">1.6.</span> <span class="nav-text">TERMINATED</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程的优先级"><span class="nav-number">2.</span> <span class="nav-text">线程的优先级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用户线程和守护线程"><span class="nav-number">3.</span> <span class="nav-text">用户线程和守护线程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程组"><span class="nav-number">4.</span> <span class="nav-text">线程组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#suspend与resume"><span class="nav-number">5.</span> <span class="nav-text">suspend与resume</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stop"><span class="nav-number">6.</span> <span class="nav-text">stop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#wait与notify"><span class="nav-number">7.</span> <span class="nav-text">wait与notify</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#join"><span class="nav-number">8.</span> <span class="nav-text">join</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized"><span class="nav-number">9.</span> <span class="nav-text">synchronized</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#操作系统相关概念"><span class="nav-number">1.</span> <span class="nav-text">操作系统相关概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CPU"><span class="nav-number">1.1.</span> <span class="nav-text">CPU</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#物理核"><span class="nav-number">1.2.</span> <span class="nav-text">物理核</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单核与多核"><span class="nav-number">1.3.</span> <span class="nav-text">单核与多核</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#进程和线程"><span class="nav-number">1.4.</span> <span class="nav-text">进程和线程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#串行、并行、并发"><span class="nav-number">1.5.</span> <span class="nav-text">串行、并行、并发</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#io密集与计算密集"><span class="nav-number">1.6.</span> <span class="nav-text">io密集与计算密集</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java线程相关"><span class="nav-number">2.</span> <span class="nav-text">java线程相关</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#为什么使用多线程"><span class="nav-number">2.1.</span> <span class="nav-text">为什么使用多线程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#资源利用率更好"><span class="nav-number">2.1.1.</span> <span class="nav-text">资源利用率更好</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#程序设计更简单"><span class="nav-number">2.1.2.</span> <span class="nav-text">程序设计更简单</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#程序响应更快"><span class="nav-number">2.1.3.</span> <span class="nav-text">程序响应更快</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多线程的代价"><span class="nav-number">2.2.</span> <span class="nav-text">多线程的代价</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#线程安全"><span class="nav-number">2.2.1.</span> <span class="nav-text">线程安全</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#上下文切换的开销"><span class="nav-number">2.2.2.</span> <span class="nav-text">上下文切换的开销</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#增加资源消耗"><span class="nav-number">2.2.3.</span> <span class="nav-text">增加资源消耗</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线程数"><span class="nav-number">2.3.</span> <span class="nav-text">线程数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thread的六种状态"><span class="nav-number">3.</span> <span class="nav-text">Thread的六种状态</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#NEW"><span class="nav-number">3.1.</span> <span class="nav-text">NEW</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RUNNABLE"><span class="nav-number">3.2.</span> <span class="nav-text">RUNNABLE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BLOCKED"><span class="nav-number">3.3.</span> <span class="nav-text">BLOCKED</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#WAITING"><span class="nav-number">3.4.</span> <span class="nav-text">WAITING</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TIMED-WAITING"><span class="nav-number">3.5.</span> <span class="nav-text">TIMED_WAITING</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TERMINATED"><span class="nav-number">3.6.</span> <span class="nav-text">TERMINATED</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程的优先级"><span class="nav-number">4.</span> <span class="nav-text">线程的优先级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用户线程和守护线程"><span class="nav-number">5.</span> <span class="nav-text">用户线程和守护线程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程组"><span class="nav-number">6.</span> <span class="nav-text">线程组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#suspend与resume"><span class="nav-number">7.</span> <span class="nav-text">suspend与resume</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stop"><span class="nav-number">8.</span> <span class="nav-text">stop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#wait与notify"><span class="nav-number">9.</span> <span class="nav-text">wait与notify</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#join"><span class="nav-number">10.</span> <span class="nav-text">join</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized"><span class="nav-number">11.</span> <span class="nav-text">synchronized</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#volatile"><span class="nav-number">12.</span> <span class="nav-text">volatile</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#可见性"><span class="nav-number">12.1.</span> <span class="nav-text">可见性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#有序性"><span class="nav-number">12.2.</span> <span class="nav-text">有序性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ThreadLocal"><span class="nav-number">13.</span> <span class="nav-text">ThreadLocal</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#实现原理"><span class="nav-number">13.1.</span> <span class="nav-text">实现原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#为什么使用ThreadLocalMap"><span class="nav-number">13.2.</span> <span class="nav-text">为什么使用ThreadLocalMap</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#防止内存泄漏"><span class="nav-number">13.3.</span> <span class="nav-text">防止内存泄漏</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thread启动源码"><span class="nav-number">14.</span> <span class="nav-text">Thread启动源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java内存模型"><span class="nav-number">15.</span> <span class="nav-text">Java内存模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文章"><span class="nav-number">16.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
             
 
           </div>
