@@ -96,7 +96,8 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://p1.meituan.net/education/624d81744292b9643e5cc980df72702614991.png">
 <meta property="og:image" content="http://p1.meituan.net/education/2b918d4fd14e51e1c9a3a758954f4f8f22384.jpg">
-<meta property="og:updated_time" content="2018-07-13T11:28:41.000Z">
+<meta property="og:image" content="http://p1.meituan.net/education/33f35bfb2ea84e10e76d43d8ec07dbe237751.png">
+<meta property="og:updated_time" content="2018-08-17T10:13:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据结构记录">
 <meta name="twitter:description" content="树记录树度结点拥有的子树称为结点的度， 树的度为树内各节点的度的最大值 叶子度为0的节点为叶子 结点结点的子树称为该结点的孩子  层次结点的层次从根开始定义，根为第一层，根的孩子为第二层  二叉树二叉树是树的另外一种树形结构， 二叉树的特点：每个结点最多有两颗树，子树有左右之分 满二叉树一颗树深度为h，最大层数为k，深度与最大层数相同，k=h; 叶子数为2h; 第k层的结点数是：2^k-1;; 总">
@@ -382,8 +383,28 @@
 <pre><code>如上图的根为1 ,左子树为（24678）, 右子树为（35）,
 前序（根左右）,1 再对左子树进行前序就是（2，4，678，）, 再对右边子树就是（35）
 中序（左根右），左子树为中序就是（4，768，2）,1 ,右子树中序就是（35） 
-后序（左右根），左子树后续就是（786，4，2）,右边子树就是（53） 1 
-</code></pre>
+后序（左右根），左子树后续就是（786，4，2）,右边子树就是（53） 1
+</code></pre><h4 id="B-树"><a href="#B-树" class="headerlink" title="B-树"></a>B-树</h4><pre><code>我们知道二叉查找树查询的时间复杂度是O（logN），查找速度最快和比较次数最少，既然性能已经如此优秀，
+但为什么实现索引是使用B-Tree而不是二叉查找树，关键因素是磁盘IO的次数, 减少磁盘IO的次数就必须要压缩树的高度，
+让瘦高的树尽量变成矮胖的树，所以B-Tree就在这样伟大的时代背景下诞生了。
+m阶B-Tree满足以下条件：
+1、每个节点最多拥有m个子树
+2、根节点至少有2个子树
+3、分支节点至少拥有m/2颗子树（除根节点和叶子节点外都是分支节点）
+4、所有叶子节点都在同一层、每个节点最多可以有m-1个key，并且以升序排列
+</code></pre><h4 id="B-树-1"><a href="#B-树-1" class="headerlink" title="B+树"></a>B+树</h4><pre><code>B+Tree是B树的变种，有着比B树更高的查询性能，来看下m阶B+Tree特征：
+1、有m个子树的节点包含有m个元素（B-Tree中是m-1）
+2、根节点和分支节点中不保存数据，只用于索引，所有数据都保存在叶子节点中。
+3、所有分支节点和根节点都同时存在于子节点中，在子节点元素中是最大或者最小的元素。
+4、叶子节点会包含所有的关键字，以及指向数据记录的指针，并且叶子节点本身是根据关键字的大小从小到大顺序链接。
+</code></pre><h4 id="B-Tree与B-Tree区别"><a href="#B-Tree与B-Tree区别" class="headerlink" title="B+Tree与B-Tree区别"></a>B+Tree与B-Tree区别</h4><pre><code>非叶子结点的子树指针与关键字个数相同；
+非叶子结点的子树指针P[i]，指向关键字值属于[K[i], K[i+1])的子树（B-树是开区间）；
+为所有叶子结点增加一个链指针；
+内节点不存储data，只存储key；叶子节点不存储指针
+所有关键字都在叶子结点出现；
+</code></pre><h4 id="为什么数据索引用B-tree"><a href="#为什么数据索引用B-tree" class="headerlink" title="为什么数据索引用B+tree"></a>为什么数据索引用B+tree</h4><p>   <img src="http://p1.meituan.net/education/33f35bfb2ea84e10e76d43d8ec07dbe237751.png" alt=""><br>    1、更加高效的单元素查找，与二叉树相比可以大幅度减少IO次数，与B树相比，因为B+树的数据都是存在叶子节点的，<br>    所以同样大小的磁盘页可以容纳更多的节点元素<br>    2、叶子节点形成有顺链表，范围查找性能更优<br>    比如查询3到8的数据，如果是二叉树或者b树，io次数会远大于B+树     </p>
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><p>   <a href="https://www.cnblogs.com/dongguacai/p/7239599.html" target="_blank" rel="external">“么是B-Tree”</a> </p>
+
       
     </div>
 
@@ -570,7 +591,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#树记录"><span class="nav-number">1.</span> <span class="nav-text">树记录</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#树"><span class="nav-number">1.1.</span> <span class="nav-text">树</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#度"><span class="nav-number">1.1.1.</span> <span class="nav-text">度</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#叶子"><span class="nav-number">1.1.2.</span> <span class="nav-text">叶子</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#结点"><span class="nav-number">1.1.3.</span> <span class="nav-text">结点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#层次"><span class="nav-number">1.1.4.</span> <span class="nav-text">层次</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二叉树"><span class="nav-number">1.2.</span> <span class="nav-text">二叉树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#满二叉树"><span class="nav-number">1.3.</span> <span class="nav-text">满二叉树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#完全二叉树"><span class="nav-number">1.4.</span> <span class="nav-text">完全二叉树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二叉排序树"><span class="nav-number">1.5.</span> <span class="nav-text">二叉排序树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二叉树排序前序、中序、后序"><span class="nav-number">1.6.</span> <span class="nav-text">二叉树排序前序、中序、后序</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#树记录"><span class="nav-number">1.</span> <span class="nav-text">树记录</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#树"><span class="nav-number">1.1.</span> <span class="nav-text">树</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#度"><span class="nav-number">1.1.1.</span> <span class="nav-text">度</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#叶子"><span class="nav-number">1.1.2.</span> <span class="nav-text">叶子</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#结点"><span class="nav-number">1.1.3.</span> <span class="nav-text">结点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#层次"><span class="nav-number">1.1.4.</span> <span class="nav-text">层次</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二叉树"><span class="nav-number">1.2.</span> <span class="nav-text">二叉树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#满二叉树"><span class="nav-number">1.3.</span> <span class="nav-text">满二叉树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#完全二叉树"><span class="nav-number">1.4.</span> <span class="nav-text">完全二叉树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二叉排序树"><span class="nav-number">1.5.</span> <span class="nav-text">二叉排序树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二叉树排序前序、中序、后序"><span class="nav-number">1.6.</span> <span class="nav-text">二叉树排序前序、中序、后序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#B-树"><span class="nav-number">1.7.</span> <span class="nav-text">B-树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#B-树-1"><span class="nav-number">1.8.</span> <span class="nav-text">B+树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#B-Tree与B-Tree区别"><span class="nav-number">1.9.</span> <span class="nav-text">B+Tree与B-Tree区别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#为什么数据索引用B-tree"><span class="nav-number">1.10.</span> <span class="nav-text">为什么数据索引用B+tree</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参考"><span class="nav-number">1.11.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
             
 
           </div>

@@ -94,7 +94,7 @@
 <meta property="og:site_name" content="高广金博客">
 <meta property="og:description" content="当我们开发一个新功能的时候，一定要考虑这段代码或者这个功能是否有被他人攻击利用的可能。 越权通俗解释就是操作或者访问非自己权限下面的数据，越权的手段有很多种。 任意密码修改 一般密码修改有很多漏洞，有逻辑上的，有流程上的。例如有些网站根据短信验证码去验证修改密码的权限， 但是调用接口的时候却把验证吗和接口一块返回，这算是比较低级的漏洞了，当然类似的情况有很多。 任意用户相关信息增删改当某些关键信息">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-05-31T03:56:27.000Z">
+<meta property="og:updated_time" content="2018-08-15T03:00:46.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="web安全记录">
 <meta name="twitter:description" content="当我们开发一个新功能的时候，一定要考虑这段代码或者这个功能是否有被他人攻击利用的可能。 越权通俗解释就是操作或者访问非自己权限下面的数据，越权的手段有很多种。 任意密码修改 一般密码修改有很多漏洞，有逻辑上的，有流程上的。例如有些网站根据短信验证码去验证修改密码的权限， 但是调用接口的时候却把验证吗和接口一块返回，这算是比较低级的漏洞了，当然类似的情况有很多。 任意用户相关信息增删改当某些关键信息">
@@ -372,6 +372,11 @@
 2、应用获取用户制定url的数据（文件或者html）。这个函数会使用socket跟服务器建立tcp连接，传输原始数据；
 3、应用根据用户提供的URL，抓取用户的web站点，并且自动生成移动wap站；
 4、应用提供测速功能，能够根据用户提供的URL，访问目标站点，以获取其在对应经纬度的访问速度；    
+</code></pre><h3 id="xss漏洞"><a href="#xss漏洞" class="headerlink" title="xss漏洞"></a>xss漏洞</h3><pre><code>1.假定所有输入都是可疑的，必须对所有输入中的script、iframe等字样进行严格的检查。这里的输入不仅仅是用户可以直接交互的输入接口，也包括HTTP请求中的Cookie中的变量，HTTP请求头部中的变量等。
+2.不要仅仅验证数据的类型，还要验证其格式、长度、范围和内容(跨站脚本攻击内容常见包含的恶意字符包括 ,&amp;,&quot;,&apos;,[,] 等字符，可对此类字符进行安全过滤，可用的服务端过滤方法如下：php htmlspecialchars())。
+3．不要仅仅在客户端做数据的验证与过滤，关键的过滤步骤在服务端进行。
+4．对输出的数据也要检查，数据库里的值有可能会在一个大网站的多处都有输出，即使在输入做了编码等操作，在各处的输出点时也要进行安全检查。
+5．在网站发布之前建议测试所有已知的威胁。
 </code></pre>
       
     </div>
@@ -563,7 +568,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#越权"><span class="nav-number">1.</span> <span class="nav-text">越权</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#任意密码修改"><span class="nav-number">1.1.</span> <span class="nav-text">任意密码修改</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#任意用户相关信息增删改"><span class="nav-number">1.2.</span> <span class="nav-text">任意用户相关信息增删改</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#上传文件漏洞"><span class="nav-number">2.</span> <span class="nav-text">上传文件漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#格式检验"><span class="nav-number">2.1.</span> <span class="nav-text">格式检验</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSRF漏洞"><span class="nav-number">3.</span> <span class="nav-text">SSRF漏洞</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#越权"><span class="nav-number">1.</span> <span class="nav-text">越权</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#任意密码修改"><span class="nav-number">1.1.</span> <span class="nav-text">任意密码修改</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#任意用户相关信息增删改"><span class="nav-number">1.2.</span> <span class="nav-text">任意用户相关信息增删改</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#上传文件漏洞"><span class="nav-number">2.</span> <span class="nav-text">上传文件漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#格式检验"><span class="nav-number">2.1.</span> <span class="nav-text">格式检验</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSRF漏洞"><span class="nav-number">3.</span> <span class="nav-text">SSRF漏洞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#xss漏洞"><span class="nav-number">4.</span> <span class="nav-text">xss漏洞</span></a></li></ol></div>
             
 
           </div>
