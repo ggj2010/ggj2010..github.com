@@ -94,10 +94,14 @@
 <meta property="og:site_name" content="高广金博客">
 <meta property="og:description" content="公司有监控组件cat，系统的所有信息在cat上面都可以看到，用久了平常的一些命令就忘完了 CPUtop命令 Mem中的free不是当前系统可用的最大物理内存，当前可用的物理内存数应该为Mem:free+Mem:buffers+Swap:cached  Load average  0.7 &amp;lt; load &amp;lt; 1: 此时是不错的状态，如果进来更多的汽车，你的马路仍然可以应付。 load =">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-13T08:46:50.000Z">
+<meta property="og:image" content="http://p1.meituan.net/education/b2d62d5fe2b9cdb8f121ae3b408fd230296973.png">
+<meta property="og:image" content="http://p1.meituan.net/education/b2d62d5fe2b9cdb8f121ae3b408fd230296973.png">
+<meta property="og:image" content="http://p1.meituan.net/education/6bea9123af69fe4f6fa418b5c0e57155243894.png">
+<meta property="og:updated_time" content="2018-09-17T11:04:23.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="系统故障定位">
 <meta name="twitter:description" content="公司有监控组件cat，系统的所有信息在cat上面都可以看到，用久了平常的一些命令就忘完了 CPUtop命令 Mem中的free不是当前系统可用的最大物理内存，当前可用的物理内存数应该为Mem:free+Mem:buffers+Swap:cached  Load average  0.7 &amp;lt; load &amp;lt; 1: 此时是不错的状态，如果进来更多的汽车，你的马路仍然可以应付。 load =">
+<meta name="twitter:image" content="http://p1.meituan.net/education/b2d62d5fe2b9cdb8f121ae3b408fd230296973.png">
 
 
 
@@ -401,7 +405,89 @@ jps -lv:加上lv可以列出启动类和启动参数，方便区别应用
 jinfo pid:可以打印出进程生效的环境变量和参数的值
 </code></pre><h3 id="日志命令"><a href="#日志命令" class="headerlink" title="日志命令"></a>日志命令</h3><pre><code>grep -n -E 100
  less  xx.log, shift+g移动到最后一行,ctrl+b往前 
-</code></pre>
+</code></pre><h3 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h3><h4 id="系统响应变慢"><a href="#系统响应变慢" class="headerlink" title="系统响应变慢"></a>系统响应变慢</h4><h5 id="故障症状"><a href="#故障症状" class="headerlink" title="故障症状"></a>故障症状</h5><pre><code>系统登录页面都无法完全加载，客户端访问数据库也是响应特别慢，反正就是系统突然变得好慢
+</code></pre><h5 id="定位过程"><a href="#定位过程" class="headerlink" title="定位过程"></a>定位过程</h5><pre><code>ssh登录到系统之后，top看了下系统的load和内存使用状态都正常，
+这时候想看下项目的日志，发现一堆超时，然后看了下Nginx的日志，一堆日志狂刷。
+nginx日志格式：
+    log_format main &apos;$remote_addr - $remote_user [$time_local] &apos;
+                    &apos;fwf[$http_x_forwarded_for] tip[$http_true_client_ip] &apos;
+                    &apos;$upstream_addr $upstream_response_time $request_time &apos;
+                     &apos;$http_host $request &apos;
+                     &apos;&quot;$status&quot; $body_bytes_sent &quot;$http_referer&quot; &apos;
+                     &apos;&quot;$http_accept_language&quot; &quot;$http_user_agent&quot; &apos;;
+随便抓取某行日志：
+    139.199.30.109 - - [16/Sep/2018:06:01:52 +0800]
+    fwf[-] tip[-] 
+    127.0.0.1:81 0.004 0.004
+   kyfw.12306.cn GET /otn/leftTicket/queryA
+  &quot;302&quot; 0 &quot;https://kyfw.12306.cn/otn/leftTicket/init&quot;
+   &quot;zh-CN,zh;q=0.8&quot; 
+   &quot;Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36&quot;   
+    然后根据关键字统计总爬虫数：
+    cat host.access.log |grep &apos;kyfw.12306.cn&apos; -c
+    总共有2477947 接近250万请求。
+
+    统计2018-09-16一天的请求数：
+    cat host.access.log |grep &apos;kyfw.12306.cn&apos;|grep &apos;16/Sep/2018&apos;  -c
+    总共有1879513，接近190万
+
+    统计2018-09-16 11点一个小时的请求数量：
+    cat host.access.log |grep &apos;kyfw.12306.cn&apos;|grep &apos;16/Sep/2018:11&apos;  -c
+    总共有10万左右
+
+    也就是说，100000/60/60=28 每秒的qps为28
+    这个系统是给朋友做的一个自媒体稿件系统，单机的，线上机器配置是1核 2GB,带宽是1Mbps，因为爬虫访问的地址是/otn/leftTicket/queryA，
+    这个地址会被shiro拦截，会302跳转到登录页面，没有涉及到任何db io操作
+    因为线上的带宽很小就1M，所以考虑到会不会是带宽被打满导致的。
+
+    根据命令iftop 可以很直观的看到流量数
+    TX：发送流量
+    RX：接收流量
+    TOTAL：总流量
+    Cumm：运行iftop到目前时间的总流量
+    peak：流量峰值
+    rates：分别表示过去 2s 10s 40s 的平均流量
+</code></pre><p>  <img src="http://p1.meituan.net/education/b2d62d5fe2b9cdb8f121ae3b408fd230296973.png" alt=""></p>
+<pre><code>也就是说我们的流量活活被爬虫打满了，导致其他正常请求无法及时响应。
+</code></pre><h5 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h5><pre><code> 根据特定场景，ngingx禁用user_agent和path 
+可以根据日志查询
+tail -n 1000 /usr/local/nginx/logs/access.log | awk -F\&quot; &apos;{A[$(NF-1)]++}END{for(k in A)print A[k],k}&apos; | sort -n 
+得到重复度最高的关键字
+&quot;Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36&quot;
+
+Nginx的Location可以有以下几个匹配：
+1. =   严格匹配这个查询。如果找到，停止搜索。 
+2. ^~ 匹配路径的前缀，如果找到，停止搜索。
+3. ~   为区分大小写的正则匹配   
+4. ~* 为不区分大小写匹配
+5.!~和!~*分别为区分大小写不匹配及不区分大小写不匹配   
+
+#拦截agent
+    if ($http_user_agent ~ &quot;^Mozilla/5\.0 \(Windows NT 6\.3; WOW64\) AppleWebKit/537\.36 \(KHTML, like Gecko\) Chrome/46\.0\.2490\.80 Safari/537\.36$&quot;) {
+    return 403;
+    }
+
+location ~ /otn/leftTicket/ {
+    deny all;
+    }
+
+/usr/local/nginx/sbin/nginx -s reload 
+
+拦截之后的日志：
+82.61.143.135 - - [17/Sep/2018:18:43:12 +0800] fwf[-] tip[-] - - 0.000 kyfw.12306.cn GET /otn/leftTicket/queryA?leftTicketDTO
+.train_date=2018-09-22&amp;leftTicketDTO.from_station=GZQ&amp;leftTicketDTO.to_station=WCN&amp;purpose_codes=ADULT HTTP/1.1 &quot;403&quot; 570 
+&quot;https://kyfw.12306.cn/otn/leftTicket/queryA?leftTicketDTO.train_date=2018-09-22&amp;leftTicketDTO.from_station=GZQ&amp;leftTicketDTO
+.to_station=WCN&amp;purpose_codes=ADULT&quot; &quot;zh-CN,zh;q=0.8&quot; &quot;Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like 
+Gecko) Chrome/46.0.2490.80 Safari/537.36&quot;  
+
+可以看到响应变成了403
+还是有日志狂刷，虽然带宽流量下来了，看了下日志，爬虫的机器ip就在几个网段，所以是必要加入黑名单才可以
+#单个ip
+iptables -I INPUT -s 81.241.219.171 -j DROP 
+ #封IP段ip 
+ iptables -I INPUT -s 106.12.1.0/16 -j DROP
+</code></pre><h5 id="优化前后带宽对比"><a href="#优化前后带宽对比" class="headerlink" title="优化前后带宽对比"></a>优化前后带宽对比</h5><p> <img src="http://p1.meituan.net/education/b2d62d5fe2b9cdb8f121ae3b408fd230296973.png" alt=""><br><img src="http://p1.meituan.net/education/6bea9123af69fe4f6fa418b5c0e57155243894.png" alt=""></p>
+
       
     </div>
 
@@ -515,7 +601,7 @@ jinfo pid:可以打印出进程生效的环境变量和参数的值
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-count">28</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -537,7 +623,7 @@ jinfo pid:可以打印出进程生效的环境变量和参数的值
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -592,7 +678,7 @@ jinfo pid:可以打印出进程生效的环境变量和参数的值
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU"><span class="nav-number">1.</span> <span class="nav-text">CPU</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#物理内存"><span class="nav-number">2.</span> <span class="nav-text">物理内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#硬盘内存"><span class="nav-number">3.</span> <span class="nav-text">硬盘内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gc"><span class="nav-number">4.</span> <span class="nav-text">gc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#日志命令"><span class="nav-number">5.</span> <span class="nav-text">日志命令</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU"><span class="nav-number">1.</span> <span class="nav-text">CPU</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#物理内存"><span class="nav-number">2.</span> <span class="nav-text">物理内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#硬盘内存"><span class="nav-number">3.</span> <span class="nav-text">硬盘内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gc"><span class="nav-number">4.</span> <span class="nav-text">gc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#日志命令"><span class="nav-number">5.</span> <span class="nav-text">日志命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#案例"><span class="nav-number">6.</span> <span class="nav-text">案例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#系统响应变慢"><span class="nav-number">6.1.</span> <span class="nav-text">系统响应变慢</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#故障症状"><span class="nav-number">6.1.1.</span> <span class="nav-text">故障症状</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#定位过程"><span class="nav-number">6.1.2.</span> <span class="nav-text">定位过程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#解决方法"><span class="nav-number">6.1.3.</span> <span class="nav-text">解决方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#优化前后带宽对比"><span class="nav-number">6.1.4.</span> <span class="nav-text">优化前后带宽对比</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

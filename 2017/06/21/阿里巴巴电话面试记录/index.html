@@ -94,7 +94,7 @@
 <meta property="og:site_name" content="高广金博客">
 <meta property="og:description" content="机会是留给有准备的人，没有准备就只有被虐，其实面试官都很nice的，只怪自己基本功不扎实罢了。 分布式系统的事物问题分库分表实现细节服务的容灾如何实现比如调用其他组的服务，如果其他组的服务是集群，当中某一台挂了，如何实现。 hashMap与ConcurrentHashMaphashMap为什么线程不安全，举例子 ConcurrentHashMap原理，为什么线程安全 如果hash碰撞如何处理，h">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-08-02T09:32:23.000Z">
+<meta property="og:updated_time" content="2018-09-05T10:43:59.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="阿里巴巴电话面试记录">
 <meta name="twitter:description" content="机会是留给有准备的人，没有准备就只有被虐，其实面试官都很nice的，只怪自己基本功不扎实罢了。 分布式系统的事物问题分库分表实现细节服务的容灾如何实现比如调用其他组的服务，如果其他组的服务是集群，当中某一台挂了，如何实现。 hashMap与ConcurrentHashMaphashMap为什么线程不安全，举例子 ConcurrentHashMap原理，为什么线程安全 如果hash碰撞如何处理，h">
@@ -359,7 +359,7 @@
 ConcurrentHashMap原理，为什么线程安全
 如果hash碰撞如何处理，hash碰撞会导致什么
 </code></pre><h5 id="数据库事物隔离级别"><a href="#数据库事物隔离级别" class="headerlink" title="数据库事物隔离级别"></a>数据库事物隔离级别</h5><h5 id="spring动态代理实现方式"><a href="#spring动态代理实现方式" class="headerlink" title="spring动态代理实现方式"></a>spring动态代理实现方式</h5><pre><code>jdk动态代理和cglib的优缺点，底层怎么实现的
-</code></pre><h5 id="voliate的作用"><a href="#voliate的作用" class="headerlink" title="voliate的作用"></a>voliate的作用</h5><pre><code>voliate 原理
+</code></pre><h5 id="volatile的作用"><a href="#volatile的作用" class="headerlink" title="volatile的作用"></a>volatile的作用</h5><pre><code>volatile 原理
 </code></pre><h5 id="一个对象从产生到内存溢出的过程"><a href="#一个对象从产生到内存溢出的过程" class="headerlink" title="一个对象从产生到内存溢出的过程"></a>一个对象从产生到内存溢出的过程</h5><pre><code>内存分配、java垃圾回收
 </code></pre>
       
@@ -475,7 +475,7 @@ ConcurrentHashMap原理，为什么线程安全
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-count">28</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -497,7 +497,7 @@ ConcurrentHashMap原理，为什么线程安全
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -552,7 +552,7 @@ ConcurrentHashMap原理，为什么线程安全
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#分布式系统的事物问题"><span class="nav-number">1.</span> <span class="nav-text">分布式系统的事物问题</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#分库分表实现细节"><span class="nav-number">2.</span> <span class="nav-text">分库分表实现细节</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#服务的容灾如何实现"><span class="nav-number">3.</span> <span class="nav-text">服务的容灾如何实现</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#hashMap与ConcurrentHashMap"><span class="nav-number">4.</span> <span class="nav-text">hashMap与ConcurrentHashMap</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#数据库事物隔离级别"><span class="nav-number">5.</span> <span class="nav-text">数据库事物隔离级别</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#spring动态代理实现方式"><span class="nav-number">6.</span> <span class="nav-text">spring动态代理实现方式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#voliate的作用"><span class="nav-number">7.</span> <span class="nav-text">voliate的作用</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#一个对象从产生到内存溢出的过程"><span class="nav-number">8.</span> <span class="nav-text">一个对象从产生到内存溢出的过程</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#分布式系统的事物问题"><span class="nav-number">1.</span> <span class="nav-text">分布式系统的事物问题</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#分库分表实现细节"><span class="nav-number">2.</span> <span class="nav-text">分库分表实现细节</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#服务的容灾如何实现"><span class="nav-number">3.</span> <span class="nav-text">服务的容灾如何实现</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#hashMap与ConcurrentHashMap"><span class="nav-number">4.</span> <span class="nav-text">hashMap与ConcurrentHashMap</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#数据库事物隔离级别"><span class="nav-number">5.</span> <span class="nav-text">数据库事物隔离级别</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#spring动态代理实现方式"><span class="nav-number">6.</span> <span class="nav-text">spring动态代理实现方式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#volatile的作用"><span class="nav-number">7.</span> <span class="nav-text">volatile的作用</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#一个对象从产生到内存溢出的过程"><span class="nav-number">8.</span> <span class="nav-text">一个对象从产生到内存溢出的过程</span></a></li></ol></div>
             
 
           </div>

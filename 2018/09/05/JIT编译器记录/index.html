@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="好玩," />
+  <meta name="keywords" content="jvm," />
 
 
 
@@ -87,21 +87,18 @@
 
 
 
-<meta name="description" content="webmagic是一套开源的爬虫项目，官网文档使用gitbooks写的，基本分分钟就可以上手使用。 有了工具我们就可以随意往里面添加业务代码了。  想要实现的功能 实现贴吧排行榜数据抓取 抓取 本吧牛人排行榜所有数据，然后用echart折线图按照等级排序显示出来和显示某一等级有多少人的柱状图   实现贴吧带帖子图片爬去 定时抓取指定贴吧带图片的帖子，将图片存到七牛，同时将帖子标题加入elastic">
-<meta name="keywords" content="好玩">
+<meta name="description" content="计算机不能识别高级语言，只能识别机器语言，也就是俗称的二进制0和1，所以必须要把 高级语言翻译成机器语言，这样计算机才可以执行。 那么为什么java不直接编译成二进制机器码，而是偏要搞个字节码勒？ 因为在不同平台如果编译成机器码都是不一样的，如果要实现跨平台，就不能直接生成机器码。 我们编写的java源码，都是先用jvm编译成xx.class的字节码，然后再由各个平台的java虚拟机 将字节码翻译">
+<meta name="keywords" content="jvm">
 <meta property="og:type" content="article">
-<meta property="og:title" content="利用webmagic爬虫做些有意思的事情">
-<meta property="og:url" content="http://ggj2010.github.io/2016/10/08/利用webmagic爬虫做些有意思的事情/index.html">
+<meta property="og:title" content="JIT编译器记录">
+<meta property="og:url" content="http://ggj2010.github.io/2018/09/05/JIT编译器记录/index.html">
 <meta property="og:site_name" content="高广金博客">
-<meta property="og:description" content="webmagic是一套开源的爬虫项目，官网文档使用gitbooks写的，基本分分钟就可以上手使用。 有了工具我们就可以随意往里面添加业务代码了。  想要实现的功能 实现贴吧排行榜数据抓取 抓取 本吧牛人排行榜所有数据，然后用echart折线图按照等级排序显示出来和显示某一等级有多少人的柱状图   实现贴吧带帖子图片爬去 定时抓取指定贴吧带图片的帖子，将图片存到七牛，同时将帖子标题加入elastic">
+<meta property="og:description" content="计算机不能识别高级语言，只能识别机器语言，也就是俗称的二进制0和1，所以必须要把 高级语言翻译成机器语言，这样计算机才可以执行。 那么为什么java不直接编译成二进制机器码，而是偏要搞个字节码勒？ 因为在不同平台如果编译成机器码都是不一样的，如果要实现跨平台，就不能直接生成机器码。 我们编写的java源码，都是先用jvm编译成xx.class的字节码，然后再由各个平台的java虚拟机 将字节码翻译">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://o8c5x5dg6.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20161009180956.png">
-<meta property="og:image" content="http://o8c5x5dg6.bkt.clouddn.com/1webmagic.jpgQQ%E6%88%AA%E5%9B%BE20161009182920.png">
-<meta property="og:updated_time" content="2017-05-04T10:32:48.000Z">
+<meta property="og:updated_time" content="2018-09-06T03:59:16.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="利用webmagic爬虫做些有意思的事情">
-<meta name="twitter:description" content="webmagic是一套开源的爬虫项目，官网文档使用gitbooks写的，基本分分钟就可以上手使用。 有了工具我们就可以随意往里面添加业务代码了。  想要实现的功能 实现贴吧排行榜数据抓取 抓取 本吧牛人排行榜所有数据，然后用echart折线图按照等级排序显示出来和显示某一等级有多少人的柱状图   实现贴吧带帖子图片爬去 定时抓取指定贴吧带图片的帖子，将图片存到七牛，同时将帖子标题加入elastic">
-<meta name="twitter:image" content="http://o8c5x5dg6.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20161009180956.png">
+<meta name="twitter:title" content="JIT编译器记录">
+<meta name="twitter:description" content="计算机不能识别高级语言，只能识别机器语言，也就是俗称的二进制0和1，所以必须要把 高级语言翻译成机器语言，这样计算机才可以执行。 那么为什么java不直接编译成二进制机器码，而是偏要搞个字节码勒？ 因为在不同平台如果编译成机器码都是不一样的，如果要实现跨平台，就不能直接生成机器码。 我们编写的java源码，都是先用jvm编译成xx.class的字节码，然后再由各个平台的java虚拟机 将字节码翻译">
 
 
 
@@ -129,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="http://ggj2010.github.io/2016/10/08/利用webmagic爬虫做些有意思的事情/"/>
+  <link rel="canonical" href="http://ggj2010.github.io/2018/09/05/JIT编译器记录/"/>
 
 
 
 
 
-  <title> 利用webmagic爬虫做些有意思的事情 | 高广金博客 </title>
+  <title> JIT编译器记录 | 高广金博客 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -284,7 +281,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://ggj2010.github.io/2016/10/08/利用webmagic爬虫做些有意思的事情/">
+    <link itemprop="mainEntityOfPage" href="http://ggj2010.github.io/2018/09/05/JIT编译器记录/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ggj2010">
@@ -305,7 +302,7 @@
             
             
               
-                利用webmagic爬虫做些有意思的事情
+                JIT编译器记录
               
             
           </h1>
@@ -320,8 +317,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-08T21:44:16+08:00">
-                2016-10-08
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-05T19:00:24+08:00">
+                2018-09-05
               </time>
             
 
@@ -330,28 +327,6 @@
             
           </span>
 
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/javabase/" itemprop="url" rel="index">
-                    <span itemprop="name">基础</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -378,31 +353,47 @@
       
 
       
-        <pre><code>webmagic是一套开源的爬虫项目，官网文档使用gitbooks写的，基本分分钟就可以上手使用。
-有了工具我们就可以随意往里面添加业务代码了。
-</code></pre><hr>
-<h4 id="想要实现的功能"><a href="#想要实现的功能" class="headerlink" title="想要实现的功能"></a>想要实现的功能</h4><ul>
-<li>实现贴吧排行榜数据抓取<ul>
-<li>抓取 <a href="http://tieba.baidu.com/f/like/furank?kw=%E9%BB%84%E6%B2%B3%E7%A7%91%E6%8A%80%E5%AD%A6%E9%99%A2&amp;ie=utf-8" target="_blank" rel="external">本吧牛人排行榜</a>所有数据，然后用echart折线图按照等级排序显示出来和显示某一等级有多少人的柱状图</li>
-</ul>
-</li>
-<li>实现贴吧带帖子图片爬去<ul>
-<li>定时抓取指定贴吧带图片的帖子，将图片存到七牛，同时将帖子标题加入elasticsearch里面，添加搜索功能。</li>
-<li>比如在开学季抓取学校帖子，可以随时看到爆照妹子的照片</li>
-<li>如果抓取李毅吧那就有各种福利了。</li>
-</ul>
-</li>
-</ul>
-<h4 id="用到的技术"><a href="#用到的技术" class="headerlink" title="用到的技术"></a>用到的技术</h4><pre><code>springboot、angularjs、echart 、redis、七牛api、elasticsearch等  
-</code></pre><h4 id="遇到的坑"><a href="#遇到的坑" class="headerlink" title="遇到的坑"></a>遇到的坑</h4><ul>
-<li>redis hmget性能问题，当hashs里面存了好多条key value数据的话，使用hmget 会出现性能问题，一次性获取n条数据不是redis的强项。</li>
-</ul>
-<h4 id="项目概要"><a href="#项目概要" class="headerlink" title="项目概要"></a>项目概要</h4><ul>
-<li>项目git：<a href="https://github.com/ggj2010/javabase/tree/master/webmagic" target="_blank" rel="external">源码地址</a></li>
-<li>测试地址：<code>http://localhost/tieba/img/贴吧名称/0/10</code> <a href="http://localhost/tieba/img/李毅/0/10" target="_blank" rel="external">http://localhost/tieba/img/李毅/0/10</a></li>
-<li>项目运行截图：<br> <img src="http://o8c5x5dg6.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20161009180956.png" alt="贴吧图片页面" title="贴吧图片页面"><br> <img src="http://o8c5x5dg6.bkt.clouddn.com/1webmagic.jpgQQ%E6%88%AA%E5%9B%BE20161009182920.png" alt="关键字查询结果页面" title="关键字查询结果页面"></li>
-</ul>
-
+        <pre><code>计算机不能识别高级语言，只能识别机器语言，也就是俗称的二进制0和1，所以必须要把
+高级语言翻译成机器语言，这样计算机才可以执行。
+那么为什么java不直接编译成二进制机器码，而是偏要搞个字节码勒？
+因为在不同平台如果编译成机器码都是不一样的，如果要实现跨平台，就不能直接生成机器码。
+我们编写的java源码，都是先用jvm编译成xx.class的字节码，然后再由各个平台的java虚拟机
+将字节码翻译成特定的平台机器码再被运行。
+不同平台下jdk编译生成的字节码是一样的，虽然由JVM翻译成的机器码却不一样，但是可以实现跨平台。
+</code></pre><h3 id="编译与解释"><a href="#编译与解释" class="headerlink" title="编译与解释"></a>编译与解释</h3><pre><code>编译就是利用编译程序从源语言编写的源程序产生目标程序的过程。
+解释则不同，解释性语言的程序不需要编译，省了道工序，解释性语言在运行程序的时候才翻译，比如解释性basic语言，
+专门有一个解释器能够直接执行basic程序，每个语句都是执行的时候才翻译。这样解释性语言每执行一次就要翻译一次，
+效率比较低
+</code></pre><h3 id="java运行步骤"><a href="#java运行步骤" class="headerlink" title="java运行步骤"></a>java运行步骤</h3><pre><code>java文件-&gt;编译-&gt;.class文件，编译成.class字节码,.class需要jvm解释，然后解释执行。
+Java很特殊，Java程序需要编译但是没有直接编译成机器语言，即二进制语言，而是编译成字节码（.class）
+再用解释方式执行。java程序编译以后的class属于中间代码，并不是可执行程序exe，不是二进制文件，
+所以在执行的时候需要一个中介来解释中间代码，这既是java解释器，也就是所谓的java虚拟机（JVM），也叫JDK        
+</code></pre><h3 id="什么是JIT"><a href="#什么是JIT" class="headerlink" title="什么是JIT"></a>什么是JIT</h3><pre><code>Just In Time 俗称JIT.
+Java程序最初是通过解释器进行解释执行的，当虚拟机发现某个方法或代码块运行的特别频繁时，
+会把这些代码认定为“热点代码”（Hot Spot Code）。为了提高热点代码的执行效率，在运行时，
+虚拟机会把这些代码编译成本地平台相关的机器码，并进行各种层次的优化，完成这个任务的编译器称为即时编译器
+（JIT编译器，不是Java虚拟机内必须的部分）
+如果我们执行java代码时候，每次都是先解释字节码，然后将字节码转换成机器码,那么执行速度肯定比可执行的二进制机器码慢
+所以才有了JIT时编译技术，在运行时JIT会把翻译过的机器码保存起来，已备下次使用，因此从理论上来说，采用该JIT技术可以，可以接近以前纯编译技术,使用该技术可以加快java程序的执行。
+</code></pre><h3 id="什么情况下JIT起作用"><a href="#什么情况下JIT起作用" class="headerlink" title="什么情况下JIT起作用"></a>什么情况下JIT起作用</h3><h4 id="编译对象"><a href="#编译对象" class="headerlink" title="编译对象"></a>编译对象</h4><pre><code>被多次调用的方法：
+方法调用触发的编译，因此编译器会以整个方法作为编译对象，即标准的JIT编译方式
+被多次执行的循环体：
+循环体触发的编译动作，但编译器依然按照整个方法（而不是单独的循环体）作为编译对象
+</code></pre><h4 id="触发条件"><a href="#触发条件" class="headerlink" title="触发条件"></a>触发条件</h4><pre><code>判断一段代码是不是热点代码，是不是需要触发JIT编译，这样的行为称为：热点探测（Hot Spot Detection），
+基于计数器的热点探测：
+虚拟机会为每个方法（或每个代码块）建立计数器，统计执行次数，如果超过阀值那么就是热点代码。
+缺点是维护计数器开销。
+</code></pre><h4 id="HotSpot"><a href="#HotSpot" class="headerlink" title="HotSpot"></a>HotSpot</h4><pre><code>HotSpot每个方法准备了两类计数器：方法调用计数器（Invocation Counter）和回边计数器（Back Edge Counter）
+方法计数器
+    默认阀值，在Client模式下是1500次，Server是10000次，可以通过参数“-XX:CompileThreshold”来设定
+当一个方法被调用时会首先检查是否存在被JIT编译过得版本，如果存在则使用此本地代码来执行；如果不存在，则将方法计数器+1，然后判断“方法计数器和回边计数器之和”是否超过阀值，如果是则会向编译器提交一个方法编译请求
+默认情况下，执行引擎并不会同步等待上面的编译完成，而是会继续解释执行。当编译完成后，此方法的调用入口地址会被系统自动改写为新的本地代码地址
+还有一点，热度是会衰减的，也就是说不是仅仅+，也会-，热度衰减动作是在虚拟机的GC执行时顺便进行的
+回边计数器
+    回边，顾名思义，只有执行到大括号”}”时才算+1
+默认阀值，Client下13995，Server下10700
+它的调用逻辑和方法计数器差不多，只不过遇到回边指令时+1、超过阀值时会提交OSR编译请求以及这里没有热度衰减           
+</code></pre>
       
     </div>
 
@@ -425,7 +416,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/好玩/" rel="tag"># 好玩</a>
+            <a href="/tags/jvm/" rel="tag"># jvm</a>
           
         </div>
       
@@ -438,14 +429,18 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2018/07/13/数据结构记录/" rel="next" title="数据结构记录">
+                <i class="fa fa-chevron-left"></i> 数据结构记录
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/11/28/nginx-keepalived实现高可用集群搭建/" rel="prev" title="nginx+keepalived实现高可用集群搭建">
-                nginx+keepalived实现高可用集群搭建 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/09/06/openjdk源码/" rel="prev" title="openjdk源码">
+                openjdk源码 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -595,7 +590,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#想要实现的功能"><span class="nav-number">1.</span> <span class="nav-text">想要实现的功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#用到的技术"><span class="nav-number">2.</span> <span class="nav-text">用到的技术</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#遇到的坑"><span class="nav-number">3.</span> <span class="nav-text">遇到的坑</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#项目概要"><span class="nav-number">4.</span> <span class="nav-text">项目概要</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#编译与解释"><span class="nav-number">1.</span> <span class="nav-text">编译与解释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java运行步骤"><span class="nav-number">2.</span> <span class="nav-text">java运行步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是JIT"><span class="nav-number">3.</span> <span class="nav-text">什么是JIT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#什么情况下JIT起作用"><span class="nav-number">4.</span> <span class="nav-text">什么情况下JIT起作用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#编译对象"><span class="nav-number">4.1.</span> <span class="nav-text">编译对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#触发条件"><span class="nav-number">4.2.</span> <span class="nav-text">触发条件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HotSpot"><span class="nav-number">4.3.</span> <span class="nav-text">HotSpot</span></a></li></ol></li></ol></div>
             
 
           </div>

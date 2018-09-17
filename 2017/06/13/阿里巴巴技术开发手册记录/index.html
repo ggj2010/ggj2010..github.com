@@ -94,7 +94,7 @@
 <meta property="og:site_name" content="高广金博客">
 <meta property="og:description" content="编程规约需要注意的 抽象类必须以Abstract或者Base开头,自定义异常类以Exception结尾，单元测试类以Test结尾 布尔类型的变量不要以Is开头，防止部分框架序列化会有问题。 包名以统一小写，点分隔符之间有且仅有一个英语单词，而且必须是单数形式，类可以复数 如果用到了设计模式必须要将设计模式的名称体现在类名里面 OrderFactory PoolSingleton LoginProx">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-06-19T07:15:27.000Z">
+<meta property="og:updated_time" content="2018-09-05T01:59:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="阿里巴巴技术开发手册记录">
 <meta name="twitter:description" content="编程规约需要注意的 抽象类必须以Abstract或者Base开头,自定义异常类以Exception结尾，单元测试类以Test结尾 布尔类型的变量不要以Is开头，防止部分框架序列化会有问题。 包名以统一小写，点分隔符之间有且仅有一个英语单词，而且必须是单数形式，类可以复数 如果用到了设计模式必须要将设计模式的名称体现在类名里面 OrderFactory PoolSingleton LoginProx">
@@ -378,15 +378,15 @@ ResourceObserver
     3） 展示对象：xxxVO，xxx一般为网页名称。
     4） POJO是DO/DTO/BO/VO的统称，禁止命名成xxxPOJO。
 </code></pre><h4 id="常量定义"><a href="#常量定义" class="headerlink" title="常量定义"></a>常量定义</h4></li>
+<li>常量命名全大写，单词间用下划线隔开</li>
 <li><p>不要让未经定义的常量直接出现在代码。</p>
 <pre><code>哪怕改变量只出现一次，也要定义专门的常量
 String key = &quot;Id#taobao_&quot; + tradeId;
 cache.put(key, value);
 </code></pre></li>
 <li>long类型的变量赋值时候一大写的L结尾，防止混淆</li>
-<li><p>不要使用一个常量类维护所有常量，应该按常量功能进行归类，分开维护</p>
-<pre><code>缓存相关的常量放在类：CacheConsts下；系统配置相关的常量放在类：ConfigConsts下。
-</code></pre></li>
+<li>不要使用一个常量类维护所有常量，应该按常量功能进行归类，分开维护</li>
+<li>缓存相关的常量放在类：CacheConsts下；系统配置相关的常量放在类：ConfigConsts下。</li>
 </ul>
 <h4 id="代码格式"><a href="#代码格式" class="headerlink" title="代码格式"></a>代码格式</h4><ul>
 <li>if/for/while/switch/do等保留字与括号之间都必须加空</li>
@@ -546,7 +546,7 @@ Integer对象是在IntegerCache.cache产生，会复用已有对象
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-count">28</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -568,7 +568,7 @@ Integer对象是在IntegerCache.cache产生，会复用已有对象
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

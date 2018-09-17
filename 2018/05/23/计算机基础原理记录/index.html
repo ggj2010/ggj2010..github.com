@@ -94,7 +94,7 @@
 <meta property="og:site_name" content="高广金博客">
 <meta property="og:description" content="学校学的都还给老师了，╮(╯▽╰)╭哎 原码、反码、补码   首先计算机里面保存的数据都是由二进制组成0、1,既然有数据就有正负之分。 原码就是这些二进制的组合，首位为符号位，0表示正数，1表示负数。 例如1的4位二进制就是0001，-1的4位二进制就是1001 原码通俗点说就是给人看的，但是计算机需要对二进制进行运算啊，例如1+（-1）应该等于0， 如果用原码进行求和就是0001+1001=10">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-05-23T07:27:21.000Z">
+<meta property="og:updated_time" content="2018-09-05T10:59:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="计算机基础原理记录">
 <meta name="twitter:description" content="学校学的都还给老师了，╮(╯▽╰)╭哎 原码、反码、补码   首先计算机里面保存的数据都是由二进制组成0、1,既然有数据就有正负之分。 原码就是这些二进制的组合，首位为符号位，0表示正数，1表示负数。 例如1的4位二进制就是0001，-1的4位二进制就是1001 原码通俗点说就是给人看的，但是计算机需要对二进制进行运算啊，例如1+（-1）应该等于0， 如果用原码进行求和就是0001+1001=10">
@@ -365,6 +365,12 @@
   原码         反码    补码
 1+（-1）=》0001+1110=》0001+1111=10000，去掉最高位就是0000，解决了-0的问题。
 由此推导出计算机在运算中用的都会补码方式进行计算。
+</code></pre><h3 id="amp-运算"><a href="#amp-运算" class="headerlink" title="&amp;运算"></a>&amp;运算</h3><pre><code>与运算 &amp;  规则 ：都为1时才为1
+</code></pre><h3 id="运算"><a href="#运算" class="headerlink" title="|运算"></a>|运算</h3><pre><code>有一个为1，则为1
+</code></pre><h3 id="编译与解释"><a href="#编译与解释" class="headerlink" title="编译与解释"></a>编译与解释</h3><pre><code>java文件-&gt;编译-&gt;.class文件，编译成.class字节码,.class需要jvm解释，然后解释执行
+   。Java很特殊，Java程序需要编译但是没有直接编译成机器语言，即二进制语言，而是编译成字节码（.class）再用解释方式
+   执行。java程序编译以后的class属于中间代码，并不是可执行程序exe，不是二进制文件，
+   所以在执行的时候需要一个中介来解释中间代码，这既是java解释器，也就是所谓的java虚拟机（JVM），也叫JDK。
 </code></pre>
       
     </div>
@@ -479,7 +485,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-count">28</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -501,7 +507,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -556,7 +562,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#原码、反码、补码"><span class="nav-number">1.</span> <span class="nav-text">原码、反码、补码</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#原码、反码、补码"><span class="nav-number">1.</span> <span class="nav-text">原码、反码、补码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#amp-运算"><span class="nav-number">2.</span> <span class="nav-text">&运算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运算"><span class="nav-number">3.</span> <span class="nav-text">|运算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译与解释"><span class="nav-number">4.</span> <span class="nav-text">编译与解释</span></a></li></ol></div>
             
 
           </div>

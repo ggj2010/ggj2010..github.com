@@ -94,12 +94,13 @@
 <meta property="og:site_name" content="高广金博客">
 <meta property="og:description" content="八种基本数据类型常见概念1byte=8b(bit)，1KB=1024B，1MB=1024KB，1GB=1024MB 为什么1个字节为8位二进制勒？标准来自于IBM system/360，导致后来的硬件都是按照这个标签设计的 在UTF-8下中文占3个字节，在GBK下面中文占2字节， 英文在utf-8和gbk下面都是占一个字节 bytebyte的取值范围为-128~127（-2的7次方到2的7次方-1">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://ocg3iebmc.bkt.clouddn.com/20160918105655_12.jpg">
 <meta property="og:image" content="http://ocg3iebmc.bkt.clouddn.com/011042300165927.png">
-<meta property="og:updated_time" content="2018-07-11T10:13:42.000Z">
+<meta property="og:updated_time" content="2018-09-09T08:07:32.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java基础原理记录">
 <meta name="twitter:description" content="八种基本数据类型常见概念1byte=8b(bit)，1KB=1024B，1MB=1024KB，1GB=1024MB 为什么1个字节为8位二进制勒？标准来自于IBM system/360，导致后来的硬件都是按照这个标签设计的 在UTF-8下中文占3个字节，在GBK下面中文占2字节， 英文在utf-8和gbk下面都是占一个字节 bytebyte的取值范围为-128~127（-2的7次方到2的7次方-1">
-<meta name="twitter:image" content="http://ocg3iebmc.bkt.clouddn.com/011042300165927.png">
+<meta name="twitter:image" content="http://ocg3iebmc.bkt.clouddn.com/20160918105655_12.jpg">
 
 
 
@@ -398,8 +399,8 @@ char+char，char+int——类型均提升为int
 </code></pre><h5 id="字节流与字符流"><a href="#字节流与字符流" class="headerlink" title="字节流与字符流"></a>字节流与字符流</h5><pre><code>字节流在输出的时候直接操作文件本身。
 字符流在输出的时候会使用缓冲区，最直观的就是如果我们在写文件的时候，如果使用字符流，不flush或者close（），内容
 是不会写到文件里面的，而字节流输出时候是实时的。            
-</code></pre><h4 id="java类的整理"><a href="#java类的整理" class="headerlink" title="java类的整理"></a>java类的整理</h4><h5 id="java类的生命周期"><a href="#java类的生命周期" class="headerlink" title="java类的生命周期"></a>java类的生命周期</h5><pre><code>当我们编写一个xx.java文件时候,会被编译成XX.class的文件，俗称字节码文件也就是Java程序对应的二进制格式的文件，只有字节码才能在Java虚拟机
-中运行。java类的生命周期就是指一个class文件从加载到卸载的全过程。
+</code></pre><h4 id="java类的整理"><a href="#java类的整理" class="headerlink" title="java类的整理"></a>java类的整理</h4><h5 id="java类的生命周期"><a href="#java类的生命周期" class="headerlink" title="java类的生命周期"></a>java类的生命周期</h5><pre><code>当我们编写一个xx.java文件时候,会被编译成XX.class的文件，俗称字节码文件也就是Java程序对应的16进制格式的文件，只有字节码才能在Java虚拟机中运行。
+java类的生命周期就是指一个class文件从加载到卸载的全过程。
 java类的完整的生命周期会经历加载、连接、初始化、使用、和卸载五个阶段，当然也有在加载或者连接之后没有被初始化就直接被使用的情况
 </code></pre><h6 id="加载"><a href="#加载" class="headerlink" title="加载"></a>加载</h6><p>   类的加载方式有多种：</p>
 <pre><code>1、根据classes路径，找到所有.class文件，然后再从class文件里面读取文件的字节码。
@@ -443,28 +444,104 @@ Object是一个特殊的类，所有的类都继承该类，包括Class也继承
 2、利用reflect方法对类进行反射调用以上几种凡是。
 3、当初始化一个类，如果父类没初始化，首先初始化父类。
 4、虚拟机启动时候，需要指定一个要执行的类，也就是main方法。
-</code></pre><h4 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h4><h5 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h5><ul>
-<li>HashMap<ul>
-<li>实现原理 </li>
+</code></pre><h4 id="java字节码"><a href="#java字节码" class="headerlink" title="java字节码"></a>java字节码</h4><h4 id="编译和查看编译内容"><a href="#编译和查看编译内容" class="headerlink" title="编译和查看编译内容"></a>编译和查看编译内容</h4><pre><code>编译：javac Test.java
+查看.calss文件 javap -verbose  Test
+ 或者 vi Test.class 然后输入%!xxd将文件转成16进制 
+</code></pre><h4 id="ClassFile结构体"><a href="#ClassFile结构体" class="headerlink" title="ClassFile结构体"></a>ClassFile结构体</h4><pre><code>ClassFile { 
+    u4 magic; 
+    u2 minor_version; 
+    u2 major_version; 
+    u2 constant_pool_count; 
+    cp_info constant_pool[constant_pool_count-1]; 
+    u2 access_flags; 
+    u2 this_class; 
+    u2 super_class; 
+    u2 interfaces_count; 
+    u2 interfaces[interfaces_count]; 
+    u2 fields_count; 
+    field_info fields[fields_count]; 
+    u2 methods_count; 
+    method_info methods[methods_count]; 
+    u2 attributes_count; 
+    attribute_info attributes[attributes_count]; 
+}
+</code></pre><h5 id="magic"><a href="#magic" class="headerlink" title="magic"></a>magic</h5><pre><code>为了方便虚拟机识别一个文件是否是class类型的文件，SUN公司规定每个class文件都必须以一个word(四个字节)作为开始，
+这个数字就是魔数。魔数是由四个字节的无符号数组成的，而class文件的名字还挺好听的的，其魔数就是0xCAFEBABE
+</code></pre><h5 id="minor-version、major-version"><a href="#minor-version、major-version" class="headerlink" title="minor_version、major_version"></a>minor_version、major_version</h5><pre><code>其实就是Class文件的副、主版本    
+</code></pre><h5 id="constant-pool"><a href="#constant-pool" class="headerlink" title="constant_pool[]"></a>constant_pool[]</h5><pre><code>常量池，constant_pool是一种表结构，它包含Class文件结构及其子结构中引用的所有字符串常量、类或接口名、字段名和其它常量。
+常量池中的每一项都具备相同的格式特征——第一个字节作为类型标记用于识别该项是哪种类型的常量，称为“tag byte”。
+常量池的索引范围是1至constant_pool_count−1
+</code></pre><h5 id="access-flags"><a href="#access-flags" class="headerlink" title="access_flags"></a>access_flags</h5><pre><code>访问标志，access_flags是一种掩码标志，用于表示某个类或者接口的访问权限及基础属性。
+例如 ACC_PUBLIC, ACC_SUPER 就是public
+</code></pre><h4 id="java-util包源码分析"><a href="#java-util包源码分析" class="headerlink" title="java.util包源码分析"></a>java.util包源码分析</h4><h5 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h5><h6 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h6><ul>
+<li>源码注释</li>
 </ul>
-</li>
-</ul>
-<pre><code>HashMap实际上是一个“链表散列”的数据结构，即数组+链表,Entry[] table+ entry链表
-DK1.8中，HashMap采用数组+链表+红黑树实现，当链表长度超过阈值（8）时，将链表转换为红黑树，这样大大减少了查找时间。
-![](http://ocg3iebmc.bkt.clouddn.com/20160918105655_12.jpg)
+<pre><code>hashMap实现Map接口，允许key或者value为空（一般key为null的value放在链表数组第一位）
+源码：putForNullKey(value)方法,这样做的好处是查询key为null的速度快。
+hashMap不完全和HashTable类似，因为hashMap非线程安全。
+hashMap初始容量为16,构造方法提供capacity参数修改初始容量的值
+当我们可以预估hasMap需要存放的值，就可以设定初始容量，必须扩容带来的开销
+hashMap加载因子为0.75f,当hashMap容量达到capacity*loadFactor时候表示hashMap需要扩容
+至于hashMap的默认加载因子设定的值为什么是0.75f，其实是处于空间和时间上面考虑的，
+如果loadFactor过大，节省了空间，但是加大了链表查询速度，反之相反。
+
+如果我们想使用线程安全的hashMap，可以使用
+Map m = Collections.synchronizedMap(new HashMap(...))
+其实就是用SynchronizedMap(new HashMap())包装了一层hashMap,然后对map的所有方法加
+synchronized (mutex){...}同步代码块锁
+
+如果我们在迭代器里面修改增加或者减小manp的值会抛出ConcurrentModificationException
 </code></pre><ul>
-<li><p>非线程安全，key值可以为空（当key值为空的时候hash的值为0，总是在table数据第一个节点）</p>
-<pre><code>hashMap在多线程环境下会出现死循环，主要是多线程同时put时，
-如果同时触发了rehash操作，会导致HashMap中的链表中出现循环节点，进而使得后面get的时候，会死循环
-</code></pre></li>
-<li><p>初始容量16（必须是2的倍数，这样会让hash key散列的更均匀），初始因子0.75f（一般不用修改）</p>
+<li>原理概括    </li>
+</ul>
+<pre><code>HashMap实际上是一个“链表散列”的数据结构，即数组+链表,Entry[] table+entry链表
+JDK1.8中，HashMap采用数组+链表+红黑树实现，当链表长度超过阈值（8）时，将链表转换为红黑树，这样大大减少了查找时间。
+</code></pre><p>   <img src="http://ocg3iebmc.bkt.clouddn.com/20160918105655_12.jpg" alt=""></p>
+<pre><code>hashMap的容量是2的倍数，这样会让key散列的更均匀
+static int indexFor(int h, int length) {
+        // assert Integer.bitCount(length) == 1 : &quot;length must be a non-zero power of 2&quot;;
+        return h &amp; (length-1);
+}
+</code></pre><ul>
+<li><p>非线程安全地方</p>
+<ul>
+<li>并发put导致相同hash值可能丢失 </li>
+</ul>
+<p>如果多个线程同时put，并且对应的key的hash都一样，如果并发同时执行到createEntry方法<br>同时获取到头结点的table[bucketIndex]值e，这时候同时对e进行操作会丢失最新执行更新线程的value</p>
+<p>void createEntry(int hash, K key, V value, int bucketIndex) {</p>
+<pre><code>//并发同时获取到e值
+Entry&lt;K,V&gt; e = table[bucketIndex];
+//会导致最新执行的值被覆盖
+table[bucketIndex] = new Entry&lt;&gt;(hash, key, value, e);
+size++;
+</code></pre><p>}</p>
+<ul>
+<li>当hashMap在扩容时候多线程环境下面会导致死循环 </li>
+</ul>
 </li>
-<li>HashMap是对Map接口的实现</li>
-<li><p>hasMap遇到hash冲突解决</p>
+</ul>
+<pre><code>如果同时多个线程触发了rehash操作，会导致HashMap中的链表中出现循环节点，进而使得后面get的时候，会死循环。
+ void transfer(Entry[] newTable, boolean rehash) {
+        int newCapacity = newTable.length;
+        for (Entry&lt;K,V&gt; e : table) {
+            while(null != e) {
+                Entry&lt;K,V&gt; next = e.next;
+                if (rehash) {
+                    e.hash = null == e.key ? 0 : hash(e.key);
+                }
+                int i = indexFor(e.hash, newCapacity);
+                e.next = newTable[i];
+                newTable[i] = e;
+                e = next;
+            }
+        }
+    }
+</code></pre><ul>
+<li>hasMap遇到hash冲突解决</li>
+</ul>
 <pre><code>采用链地址法，将所有关键字为同义词的记录存储在同一线性链表中
-</code></pre></li>
-<li><p>关键代码取hash与indexFor</p>
-<pre><code>public V put(K key, V value) {
+关键代码取hash与indexFor
+public V put(K key, V value) {
     if (table == EMPTY_TABLE) {
         inflateTable(threshold);
     }
@@ -498,9 +575,7 @@ static int indexFor(int h, int length) {
     // assert Integer.bitCount(length) == 1 : &quot;length must be a non-zero power of 2&quot;;
     return h &amp; (length-1);
 }
-</code></pre></li>
-</ul>
-<ul>
+</code></pre><ul>
 <li><p>HashTable</p>
 <ul>
 <li>实现原理 散列表，数组+链表结构实现</li>
@@ -522,16 +597,15 @@ static int indexFor(int h, int length) {
 </code></pre>  }</string,integer></li>
 </ul>
 </li>
-<li><p>WeakHashMap</p>
-<ul>
-<li><p>原理和hashMap类似，通过WeakReference和ReferenceQueue实现的。</p>
-<pre><code>WeakHashMap的key是“弱键”，即是WeakReference类型的；ReferenceQueue是一个队列，它会保存被GC回收的“弱键”
+<li>WeakHashMap</li>
+</ul>
+<pre><code>原理和hashMap类似，通过WeakReference和ReferenceQueue实现的。
+WeakHashMap的key是“弱键”，即是WeakReference类型的；ReferenceQueue是一个队列，
+它会保存被GC回收的“弱键”
 如果某个业务的数据不是特别重要，可以放到weakHashMap里面处理，可以随机的丢去一些数据，
 WeakHashMap中的key都存在强引用，那么WeakHashMap就会退化成HashMap。
 如果在系统中希望通过WeakHashMap自动清除数据，请尽量不要在系统的其他地方强引用WeakHashMap的key
-</code></pre><h5 id="List"><a href="#List" class="headerlink" title="List"></a>List</h5></li>
-</ul>
-</li>
+</code></pre><h5 id="List"><a href="#List" class="headerlink" title="List"></a>List</h5><ul>
 <li>LinkedList<ul>
 <li>原理：LinkedList 删除和新增效率高，基于链表实现的</li>
 <li>数组长度扩容是1.5倍，默认容量是10</li>
@@ -644,8 +718,9 @@ Unsafe是CAS的核心类
 <pre><code>ReentrantLock是基于AQS实现的，AbstractQueuedSynchronizer基础又是CAS
 </code></pre></li>
 <li><p>ThreadPool</p>
-<pre><code>线程重用的核心是，它把Thread.start()给屏蔽起来了（一定不要重复调用），然后它自己有一个Runnable.run()，
-循环在跑，跑的过程中不断检查我们是否有新加入的子Runnable对象，有就调一下我们的run()，其实就一个大run()把其它小run()#1,run()#2,...给串联起来了，基本原理就这么简单。
+<pre><code>线程重用的核心是，ThreadPoolExecutor里面维护一个workers Set，当我们添加线程的时候，
+如果workQueue队列的线程数小于核心线程 则创建新的worker,同时执行thread任务里面的run()方法，
+worker里面的线程一直while(true)循环调用，当workQueue队列里面有任务就会执行。
 源码：ThreadPoolExecutor.Worker类
    /** Delegates main run loop to outer runWorker  */
         public void run() {
@@ -815,7 +890,7 @@ final void runWorker(Worker w) {
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-count">28</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -837,7 +912,7 @@ final void runWorker(Worker w) {
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -892,7 +967,7 @@ final void runWorker(Worker w) {
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#八种基本数据类型"><span class="nav-number">1.</span> <span class="nav-text">八种基本数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#常见概念"><span class="nav-number">1.1.</span> <span class="nav-text">常见概念</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#byte"><span class="nav-number">1.2.</span> <span class="nav-text">byte</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#整型"><span class="nav-number">1.3.</span> <span class="nav-text">整型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#浮点型"><span class="nav-number">1.4.</span> <span class="nav-text">浮点型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#boolean型"><span class="nav-number">1.5.</span> <span class="nav-text">boolean型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#char型"><span class="nav-number">1.6.</span> <span class="nav-text">char型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#一些概念"><span class="nav-number">1.7.</span> <span class="nav-text">一些概念</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java-IO整理"><span class="nav-number">2.</span> <span class="nav-text">java IO整理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#字节与字符的区别"><span class="nav-number">2.1.</span> <span class="nav-text">字节与字符的区别</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#字节流与字符流"><span class="nav-number">2.2.</span> <span class="nav-text">字节流与字符流</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java类的整理"><span class="nav-number">3.</span> <span class="nav-text">java类的整理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#java类的生命周期"><span class="nav-number">3.1.</span> <span class="nav-text">java类的生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#加载"><span class="nav-number">3.1.1.</span> <span class="nav-text">加载</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#连接"><span class="nav-number">3.1.2.</span> <span class="nav-text">连接</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#初始化"><span class="nav-number">3.1.3.</span> <span class="nav-text">初始化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#集合"><span class="nav-number">4.</span> <span class="nav-text">集合</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Map"><span class="nav-number">4.1.</span> <span class="nav-text">Map</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List"><span class="nav-number">4.2.</span> <span class="nav-text">List</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Thread"><span class="nav-number">5.</span> <span class="nav-text">Thread</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java-util-concurrent包下面常用类的原理"><span class="nav-number">6.</span> <span class="nav-text">java.util.concurrent包下面常用类的原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JDBC"><span class="nav-number">7.</span> <span class="nav-text">JDBC</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#jdbc中execute、executeQuery和executeUpdate的区别"><span class="nav-number">7.1.</span> <span class="nav-text">jdbc中execute、executeQuery和executeUpdate的区别</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#八种基本数据类型"><span class="nav-number">1.</span> <span class="nav-text">八种基本数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#常见概念"><span class="nav-number">1.1.</span> <span class="nav-text">常见概念</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#byte"><span class="nav-number">1.2.</span> <span class="nav-text">byte</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#整型"><span class="nav-number">1.3.</span> <span class="nav-text">整型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#浮点型"><span class="nav-number">1.4.</span> <span class="nav-text">浮点型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#boolean型"><span class="nav-number">1.5.</span> <span class="nav-text">boolean型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#char型"><span class="nav-number">1.6.</span> <span class="nav-text">char型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#一些概念"><span class="nav-number">1.7.</span> <span class="nav-text">一些概念</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java-IO整理"><span class="nav-number">2.</span> <span class="nav-text">java IO整理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#字节与字符的区别"><span class="nav-number">2.1.</span> <span class="nav-text">字节与字符的区别</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#字节流与字符流"><span class="nav-number">2.2.</span> <span class="nav-text">字节流与字符流</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java类的整理"><span class="nav-number">3.</span> <span class="nav-text">java类的整理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#java类的生命周期"><span class="nav-number">3.1.</span> <span class="nav-text">java类的生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#加载"><span class="nav-number">3.1.1.</span> <span class="nav-text">加载</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#连接"><span class="nav-number">3.1.2.</span> <span class="nav-text">连接</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#初始化"><span class="nav-number">3.1.3.</span> <span class="nav-text">初始化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java字节码"><span class="nav-number">4.</span> <span class="nav-text">java字节码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#编译和查看编译内容"><span class="nav-number">5.</span> <span class="nav-text">编译和查看编译内容</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ClassFile结构体"><span class="nav-number">6.</span> <span class="nav-text">ClassFile结构体</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#magic"><span class="nav-number">6.1.</span> <span class="nav-text">magic</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#minor-version、major-version"><span class="nav-number">6.2.</span> <span class="nav-text">minor_version、major_version</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#constant-pool"><span class="nav-number">6.3.</span> <span class="nav-text">constant_pool[]</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#access-flags"><span class="nav-number">6.4.</span> <span class="nav-text">access_flags</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java-util包源码分析"><span class="nav-number">7.</span> <span class="nav-text">java.util包源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Map"><span class="nav-number">7.1.</span> <span class="nav-text">Map</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#HashMap"><span class="nav-number">7.1.1.</span> <span class="nav-text">HashMap</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List"><span class="nav-number">7.2.</span> <span class="nav-text">List</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Thread"><span class="nav-number">8.</span> <span class="nav-text">Thread</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java-util-concurrent包下面常用类的原理"><span class="nav-number">9.</span> <span class="nav-text">java.util.concurrent包下面常用类的原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JDBC"><span class="nav-number">10.</span> <span class="nav-text">JDBC</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#jdbc中execute、executeQuery和executeUpdate的区别"><span class="nav-number">10.1.</span> <span class="nav-text">jdbc中execute、executeQuery和executeUpdate的区别</span></a></li></ol></li></ol></div>
             
 
           </div>
