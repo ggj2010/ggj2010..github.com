@@ -94,10 +94,15 @@
 <meta property="og:site_name" content="高广金博客">
 <meta property="og:description" content="好记性不如烂笔头。 日志级别动态调整   日志级别动态调整——小工具解决大问题     日志是每个项目必备的组件，这几年从开始工作接触的log4j到后来的logback，再到现在用的log4j2,日志文件 的查看从最开始的登录单台机器查看，到shell脚本一次性查看多台机器，再到后来ELK搜索搭建的可视化日志查询 系统。     日志使用不当对于高qps的服务来说会导致的线上严重的故障，所以统一化">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-12T06:03:27.000Z">
+<meta property="og:image" content="https://tech.meituan.com/img/dp_account_high_avaliable_road/availability.png">
+<meta property="og:image" content="https://tech.meituan.com/img/dp_account_high_avaliable_road/account_multi_alive_redis_before.png">
+<meta property="og:image" content="https://tech.meituan.com/img/dp_account_high_avaliable_road/account_sync_dirty_data.png">
+<meta property="og:image" content="https://tech.meituan.com/img/dp_account_high_avaliable_road/account_multi_alive_redis_after.png">
+<meta property="og:updated_time" content="2018-09-17T12:48:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="技术阅读笔记">
 <meta name="twitter:description" content="好记性不如烂笔头。 日志级别动态调整   日志级别动态调整——小工具解决大问题     日志是每个项目必备的组件，这几年从开始工作接触的log4j到后来的logback，再到现在用的log4j2,日志文件 的查看从最开始的登录单台机器查看，到shell脚本一次性查看多台机器，再到后来ELK搜索搭建的可视化日志查询 系统。     日志使用不当对于高qps的服务来说会导致的线上严重的故障，所以统一化">
+<meta name="twitter:image" content="https://tech.meituan.com/img/dp_account_high_avaliable_road/availability.png">
 
 
 
@@ -398,6 +403,28 @@ ctx.updateLoggers();
 另一方面也避免了Mysql中join的性能较低的问题。
 </code></pre><p>   4、水平分库分表</p>
 <pre><code>单表超千万就可以考虑分表了
+</code></pre><h4 id="大众点评账号业务高可用进阶之路"><a href="#大众点评账号业务高可用进阶之路" class="headerlink" title="大众点评账号业务高可用进阶之路"></a>大众点评账号业务高可用进阶之路</h4><p>   <a href="&quot;https://tech.meituan.com/dp_account_high_avaliable_road.html&quot;">大众点评账号业务高可用进阶之路</a> </p>
+<pre><code>衡量一个系统的可用性有两个指标:(也就是俗称2个9，3个9的来历)
+1. MTBF (Mean Time Between Failure) 即平均多长时间不出故障；
+2. MTTR (Mean Time To Recovery) 即出故障后的平均恢复时间。通过这两个指标可以计算出可用性，也就是我们大家比较熟悉的“几个9”。
+</code></pre><p>   <img src="https://tech.meituan.com/img/dp_account_high_avaliable_road/availability.png" alt=""></p>
+<h5 id="异地多活"><a href="#异地多活" class="headerlink" title="异地多活"></a>异地多活</h5><pre><code>数据库 账号读多写少的特性（读写比是350:1），采用了一主多从的数据库部署方案，优先解决读多活的问题 
+Redis不能使用一主多从，因为Redis主从同步机制会优先尝试增量同步，当增量同步不成功时，再去尝试全量同步，
+一旦专线发生抖动就会把主库拖垮，并进一步阻塞专线，形成“雪崩效应”。
+因此两地的Redis只能是双主模式，但是这种架构有一个问题，就是我们得自己去解决数据同步的问题，除了保证数据不丢，还要保证数据一致。
+</code></pre><h5 id="数据同步"><a href="#数据同步" class="headerlink" title="数据同步"></a>数据同步</h5><pre><code>1、相同key数据在kafka同一个partition里面，这样可以保证消费的时候有序
+2、如果两个相同的key，在两地并发写，会出现数据不一致的情况，所以需要设计一个版本号概念
+3、服务的缓存加载和更新
+   一般我们对数据库缓存的操作都是，先查缓存，如果缓存不存在再查库，然后再写缓存，
+    如果db数据有变化,先更新db,再删除缓存。
+</code></pre><p>   <img src="https://tech.meituan.com/img/dp_account_high_avaliable_road/account_multi_alive_redis_before.png" alt="">   </p>
+<pre><code>但是上图有一个极端的情况，如果两个线程同时操作，可能会导致脏数据
+</code></pre><p>   <img src="https://tech.meituan.com/img/dp_account_high_avaliable_road/account_sync_dirty_data.png" alt="">    </p>
+<pre><code>所以换成下图方式, 先查缓存，如果缓存不存在再查库，然后再写缓存(ADD),
+数据更新的时候监听数据库的binlog，然后解析binlog日志，再做set操作，这样就可以保证数据只会在一个地方赋值，
+同时也可以解耦缓存更新的逻辑
+</code></pre><p>   <img src="https://tech.meituan.com/img/dp_account_high_avaliable_road/account_multi_alive_redis_after.png" alt="">    </p>
+<pre><code>同时还需要一个定时任务去scan两地的数据做对比统计
 </code></pre><h4 id="如何高效的提问"><a href="#如何高效的提问" class="headerlink" title="如何高效的提问"></a>如何高效的提问</h4><p>   ![](<a href="http://p0.meituan.net/education/81e90fe7a3a31ee68a892e79830fb61b209197.png" target="_blank" rel="external">http://p0.meituan.net/education/81e90fe7a3a31ee68a892e79830fb61b209197.png</a></p>
 <p>)             </p>
 
@@ -591,7 +618,7 @@ ctx.updateLoggers();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#日志级别动态调整"><span class="nav-number">1.</span> <span class="nav-text">日志级别动态调整</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#mysql-性能容量评估"><span class="nav-number">2.</span> <span class="nav-text">mysql 性能容量评估</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#达达-高性能服务端优化之路"><span class="nav-number">3.</span> <span class="nav-text">达达-高性能服务端优化之路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何高效的提问"><span class="nav-number">4.</span> <span class="nav-text">如何高效的提问</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#日志级别动态调整"><span class="nav-number">1.</span> <span class="nav-text">日志级别动态调整</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#mysql-性能容量评估"><span class="nav-number">2.</span> <span class="nav-text">mysql 性能容量评估</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#达达-高性能服务端优化之路"><span class="nav-number">3.</span> <span class="nav-text">达达-高性能服务端优化之路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#大众点评账号业务高可用进阶之路"><span class="nav-number">4.</span> <span class="nav-text">大众点评账号业务高可用进阶之路</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#异地多活"><span class="nav-number">4.1.</span> <span class="nav-text">异地多活</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#数据同步"><span class="nav-number">4.2.</span> <span class="nav-text">数据同步</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何高效的提问"><span class="nav-number">5.</span> <span class="nav-text">如何高效的提问</span></a></li></ol></div>
             
 
           </div>
