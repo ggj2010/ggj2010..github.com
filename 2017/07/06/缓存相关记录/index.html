@@ -95,7 +95,7 @@
 <meta property="og:description" content="redis主从redis一主可以对应多个从节点，主节点可以读写，从节点只能查询 配置文件salve节点文件里面添加以下内容 slaveof &amp;lt;masterip&amp;gt; &amp;lt;masterport&amp;gt; //主节点的ip masterauth &amp;lt;master-password&amp;gt;   //主节点的密码 客户端实现对于写的操作需要路由到主节点redis数据源 对于读操作需要路由到从">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://p0.meituan.net/education/1f8745786a2934b3dea4fee5ef2bd764564463.png">
-<meta property="og:updated_time" content="2018-07-11T11:12:40.000Z">
+<meta property="og:updated_time" content="2018-09-23T08:18:14.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="缓存相关记录">
 <meta name="twitter:description" content="redis主从redis一主可以对应多个从节点，主节点可以读写，从节点只能查询 配置文件salve节点文件里面添加以下内容 slaveof &amp;lt;masterip&amp;gt; &amp;lt;masterport&amp;gt; //主节点的ip masterauth &amp;lt;master-password&amp;gt;   //主节点的密码 客户端实现对于写的操作需要路由到主节点redis数据源 对于读操作需要路由到从">
@@ -377,7 +377,8 @@ masterauth &lt;master-password&gt;   //主节点的密码
 </code></pre><h4 id="一致性"><a href="#一致性" class="headerlink" title="一致性"></a>一致性</h4><pre><code> 一般都是先修改DB然后再修改缓存，如果缓存系统突然挂了，就会导致db与缓存的数据不一致。
 如何解决：更新缓存系统的时候增加重试功能，比如更新个三四次，如果三四次还不成功那就往消息队列里面
 丢一条更新缓存的请求，异步的去更新缓存。
-</code></pre><h4 id="缓存雪崩"><a href="#缓存雪崩" class="headerlink" title="缓存雪崩"></a>缓存雪崩</h4><pre><code>如果缓存服务器不是高可用了，使用hystrix拦截
+</code></pre><h4 id="缓存雪崩"><a href="#缓存雪崩" class="headerlink" title="缓存雪崩"></a>缓存雪崩</h4><pre><code>当缓存服务器重启或者大量缓存集中在某一个时间段失效，
+如果缓存服务器不是高可用了，使用hystrix拦截。
 </code></pre><h3 id="memcache"><a href="#memcache" class="headerlink" title="memcache"></a>memcache</h3><pre><code>memcache是完全基于内存的，不能持久化存储，只能存储key value
 </code></pre><h4 id="缓存序列化与反序列化"><a href="#缓存序列化与反序列化" class="headerlink" title="缓存序列化与反序列化"></a>缓存序列化与反序列化</h4><h3 id="内存访问速度"><a href="#内存访问速度" class="headerlink" title="内存访问速度"></a>内存访问速度</h3><p>   <img src="http://p0.meituan.net/education/1f8745786a2934b3dea4fee5ef2bd764564463.png" alt=""></p>
 <table>
@@ -542,7 +543,7 @@ masterauth &lt;master-password&gt;   //主节点的密码
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

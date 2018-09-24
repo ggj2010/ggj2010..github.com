@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="美团点评," />
 
 
 
@@ -87,18 +87,19 @@
 
 
 
-<meta name="description" content="短链接服务短链接服务主要是加密和缩短原来链接，同时也可以统计短链接访问的一些情况。 生成思路： 1、将原链接存入表，获得long类型的id， 优化点:如果mysql不可用时候，可直接在redis获取自增的id, 然后调用方法获取到短链唯一字符串， 防止两种方式生产的短链冲突，在redis生产的短链字符串加上一个保留字符串（Z）,这个字符串 是调用Long.toString或者parseRadix都">
+<meta name="description" content="那些你以为很高大尚的组件其实也都是从无到有迭代出来了，就算没有造轮子的时间，也要有造轮子的💕。 短链接服务短链接服务主要是加密和缩短原来链接，同时也可以统计短链接访问的一些情况。 生成思路： 1、将原链接存入表，获得long类型的id， 优化点:如果mysql不可用时候，可直接在redis获取自增的id, 然后调用方法获取到短链唯一字符串， 防止两种方式生产的短链冲突，在redis生产的短链字符">
+<meta name="keywords" content="美团点评">
 <meta property="og:type" content="article">
 <meta property="og:title" content="公司常用组件记录">
 <meta property="og:url" content="http://ggj2010.github.io/2018/05/21/公司常用组件记录/index.html">
 <meta property="og:site_name" content="高广金博客">
-<meta property="og:description" content="短链接服务短链接服务主要是加密和缩短原来链接，同时也可以统计短链接访问的一些情况。 生成思路： 1、将原链接存入表，获得long类型的id， 优化点:如果mysql不可用时候，可直接在redis获取自增的id, 然后调用方法获取到短链唯一字符串， 防止两种方式生产的短链冲突，在redis生产的短链字符串加上一个保留字符串（Z）,这个字符串 是调用Long.toString或者parseRadix都">
+<meta property="og:description" content="那些你以为很高大尚的组件其实也都是从无到有迭代出来了，就算没有造轮子的时间，也要有造轮子的💕。 短链接服务短链接服务主要是加密和缩短原来链接，同时也可以统计短链接访问的一些情况。 生成思路： 1、将原链接存入表，获得long类型的id， 优化点:如果mysql不可用时候，可直接在redis获取自增的id, 然后调用方法获取到短链唯一字符串， 防止两种方式生产的短链冲突，在redis生产的短链字符">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://p0.meituan.net/education/f0cf8b3ae77b6b862caba4abb7c4a14a151878.png">
-<meta property="og:updated_time" content="2018-09-18T12:14:35.000Z">
+<meta property="og:updated_time" content="2018-09-24T00:09:14.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="公司常用组件记录">
-<meta name="twitter:description" content="短链接服务短链接服务主要是加密和缩短原来链接，同时也可以统计短链接访问的一些情况。 生成思路： 1、将原链接存入表，获得long类型的id， 优化点:如果mysql不可用时候，可直接在redis获取自增的id, 然后调用方法获取到短链唯一字符串， 防止两种方式生产的短链冲突，在redis生产的短链字符串加上一个保留字符串（Z）,这个字符串 是调用Long.toString或者parseRadix都">
+<meta name="twitter:description" content="那些你以为很高大尚的组件其实也都是从无到有迭代出来了，就算没有造轮子的时间，也要有造轮子的💕。 短链接服务短链接服务主要是加密和缩短原来链接，同时也可以统计短链接访问的一些情况。 生成思路： 1、将原链接存入表，获得long类型的id， 优化点:如果mysql不可用时候，可直接在redis获取自增的id, 然后调用方法获取到短链唯一字符串， 防止两种方式生产的短链冲突，在redis生产的短链字符">
 <meta name="twitter:image" content="http://p0.meituan.net/education/f0cf8b3ae77b6b862caba4abb7c4a14a151878.png">
 
 
@@ -354,13 +355,15 @@
       
 
       
-        <h4 id="短链接服务"><a href="#短链接服务" class="headerlink" title="短链接服务"></a>短链接服务</h4><pre><code>短链接服务主要是加密和缩短原来链接，同时也可以统计短链接访问的一些情况。
+        <pre><code>那些你以为很高大尚的组件其实也都是从无到有迭代出来了，就算没有造轮子的时间，也要有造轮子的💕。
+</code></pre><h4 id="短链接服务"><a href="#短链接服务" class="headerlink" title="短链接服务"></a>短链接服务</h4><pre><code>短链接服务主要是加密和缩短原来链接，同时也可以统计短链接访问的一些情况。
 生成思路：
 1、将原链接存入表，获得long类型的id，
 优化点:如果mysql不可用时候，可直接在redis获取自增的id, 然后调用方法获取到短链唯一字符串，
 防止两种方式生产的短链冲突，在redis生产的短链字符串加上一个保留字符串（Z）,这个字符串
 是调用Long.toString或者parseRadix都会带有的，等到mysql正常时候，再将缓存的数据回写
 到mysql里面保证落地数据一致。
+
 2、掉用方法Long.toString(shortLinkId, 36)获得短链唯一性字符串
 优化点，36进制可能不够用，试用一下的61进制
 private final static char[] digits = {&apos;0&apos;,&apos;1&apos;, &apos;2&apos;, &apos;3&apos;, &apos;4&apos;, &apos;5&apos;, &apos;6&apos;, &apos;7&apos;, &apos;8&apos;,
@@ -381,7 +384,7 @@ private final static char[] digits = {&apos;0&apos;,&apos;1&apos;, &apos;2&apos;
 3、根据shortLinkId更新原来表，将短链字符串回写表
 4、将短链字符串和原链接的对应关系写入缓存系统，redis或者tail
 查询思路：
-1、根据短链字符串先查询缓存，没有命中缓存再查询表，然后再更新缓存。
+1、根据短链字符串先查询缓存，没有命中缓存再查询表，然后再塞入缓存。
 </code></pre><h4 id="短信服务"><a href="#短信服务" class="headerlink" title="短信服务"></a>短信服务</h4><h5 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h5><pre><code>短信一般都会有模板的概念，模板可以有申请、修改、审核相关流程，模板控制了短信整体格式，方便后期统计和维护。
 模板都会有权重的概念，因为短信不是24小时发送的，如果大半夜给用户发短信就是SB了，所以需要设计权重。
 短信内容字数限制为64字，超过64字会自动分成多条发送。
@@ -396,12 +399,13 @@ private final static char[] digits = {&apos;0&apos;,&apos;1&apos;, &apos;2&apos;
 6、生成分布式unionId（可以根据SnowFlake算法）
 
 经历过以上6步骤，短信的对象算是构造完成了，但是短信模板有优先级，优先级高的肯定是要立即发送的，比如登录
-获取验证码这种，那么这种的一般是先将短信放到队列，然后再多线程消费队列去，再调用短信提供方接口，借着再更新
-数据库数据。
-如果想订单购买成功这种优先级比较低的，可以先将数据放到db里面，或者先放到kafka里面，然后消费kafka再放到db里面
-，然后再启用多个线程，去发送这些短信
+获取验证码这种，那么这种的一般是先将短信放到队列，然后再多线程消费队列去，再调用短信提供方接口，接着再将记录插入
+数据库数据。如果像订单购买成功这种优先级比较低的，可以先将数据放到db里面，或者先放到kafka里面，然后消费kafka再放到db里面
+，然后再启用多个线程，去发送这些短信。
 </code></pre><p>   <img src="http://p0.meituan.net/education/f0cf8b3ae77b6b862caba4abb7c4a14a151878.png" alt=""></p>
-
+<pre><code>对于放入db或者放入kafka，可以根据权重，比如设计一个随机数，考虑到可用性，比如放入db时候，如果这时候db不可用，就优先放入kafka。
+发消息的时候，需要考虑重复发送的问题，比如相同的手机号+内容，如果30秒内重复发送就丢弃发送请求
+</code></pre>
       
     </div>
 
@@ -421,6 +425,12 @@ private final static char[] digits = {&apos;0&apos;,&apos;1&apos;, &apos;2&apos;
 
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/美团点评/" rel="tag"># 美团点评</a>
+          
+        </div>
       
 
       
@@ -537,7 +547,7 @@ private final static char[] digits = {&apos;0&apos;,&apos;1&apos;, &apos;2&apos;
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
