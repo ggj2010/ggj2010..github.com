@@ -98,7 +98,7 @@
 <meta property="og:image" content="https://tech.meituan.com/img/dp_account_high_avaliable_road/account_multi_alive_redis_before.png">
 <meta property="og:image" content="https://tech.meituan.com/img/dp_account_high_avaliable_road/account_sync_dirty_data.png">
 <meta property="og:image" content="https://tech.meituan.com/img/dp_account_high_avaliable_road/account_multi_alive_redis_after.png">
-<meta property="og:updated_time" content="2018-09-17T12:48:01.000Z">
+<meta property="og:updated_time" content="2018-09-26T17:11:30.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="技术阅读笔记">
 <meta name="twitter:description" content="好记性不如烂笔头。 日志级别动态调整   日志级别动态调整——小工具解决大问题     日志是每个项目必备的组件，这几年从开始工作接触的log4j到后来的logback，再到现在用的log4j2,日志文件 的查看从最开始的登录单台机器查看，到shell脚本一次性查看多台机器，再到后来ELK搜索搭建的可视化日志查询 系统。     日志使用不当对于高qps的服务来说会导致的线上严重的故障，所以统一化">
@@ -397,13 +397,13 @@ ctx.updateLoggers();
    数据量
    冷热数据比
    数据分级存储 
-</code></pre><h4 id="达达-高性能服务端优化之路"><a href="#达达-高性能服务端优化之路" class="headerlink" title="达达-高性能服务端优化之路"></a>达达-高性能服务端优化之路</h4><p>   <a href="&quot;https://mp.weixin.qq.com/s?__biz=MzAwMzg1ODMwNw==&amp;mid=406041593&amp;idx=1&amp;sn=635c65f16cbe0cdbf0873b4090516661&amp;scene=38#wechat_redirect&quot;">达达京东到家技术公众号</a><br>   1、最初技术选型<br>       多应用，单库<br>   2、读写分离，主库和从库<br>   3、垂直分库，按照应用分成多个库</p>
+</code></pre><h4 id="达达-高性能服务端优化之路"><a href="#达达-高性能服务端优化之路" class="headerlink" title="达达-高性能服务端优化之路"></a>达达-高性能服务端优化之路</h4><p>   <a href="https://mp.weixin.qq.com/s?__biz=MzAwMzg1ODMwNw==&amp;mid=406041593&amp;idx=1&amp;sn=635c65f16cbe0cdbf0873b4090516661&amp;scene=38#wechat_redirect" target="_blank" rel="external">达达京东到家技术公众号</a><br>   1、最初技术选型<br>       多应用，单库<br>   2、读写分离，主库和从库<br>   3、垂直分库，按照应用分成多个库</p>
 <pre><code>垂直分库过程中的经验教训，使我们制定了SQL最佳实践，其中一条便是程序中禁用或少用join，
 而应该在程序中组装数据，让SQL更简单。一方面为以后进一步垂直拆分业务做准备，
 另一方面也避免了Mysql中join的性能较低的问题。
 </code></pre><p>   4、水平分库分表</p>
 <pre><code>单表超千万就可以考虑分表了
-</code></pre><h4 id="大众点评账号业务高可用进阶之路"><a href="#大众点评账号业务高可用进阶之路" class="headerlink" title="大众点评账号业务高可用进阶之路"></a>大众点评账号业务高可用进阶之路</h4><p>   <a href="&quot;https://tech.meituan.com/dp_account_high_avaliable_road.html&quot;">大众点评账号业务高可用进阶之路</a> </p>
+</code></pre><h4 id="大众点评账号业务高可用进阶之路"><a href="#大众点评账号业务高可用进阶之路" class="headerlink" title="大众点评账号业务高可用进阶之路"></a>大众点评账号业务高可用进阶之路</h4><p>   <a href="https://tech.meituan.com/dp_account_high_avaliable_road.html" target="_blank" rel="external">大众点评账号业务高可用进阶之路</a> </p>
 <pre><code>衡量一个系统的可用性有两个指标:(也就是俗称2个9，3个9的来历)
 1. MTBF (Mean Time Between Failure) 即平均多长时间不出故障；
 2. MTTR (Mean Time To Recovery) 即出故障后的平均恢复时间。通过这两个指标可以计算出可用性，也就是我们大家比较熟悉的“几个9”。

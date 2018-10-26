@@ -101,7 +101,7 @@
 <meta property="og:image" content="https://images2015.cnblogs.com/blog/498077/201608/498077-20160822172901526-169091807.png">
 <meta property="og:image" content="https://images2015.cnblogs.com/blog/498077/201608/498077-20160822172922917-1331181630.png">
 <meta property="og:image" content="https://images2015.cnblogs.com/blog/498077/201608/498077-20160822172943917-133540408.png">
-<meta property="og:updated_time" content="2018-09-21T11:41:19.000Z">
+<meta property="og:updated_time" content="2018-09-25T12:10:45.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="技术储备-长期记录">
 <meta name="twitter:description" content="最近几年总觉得脑子不够用，一会想学这个，一会想看哪个，一天可能一行代码也没写就这么度过了。 这个文章就当自己的学习记录吧，想到什么写什么，虽然有有道笔记，但是里面的记录的东西太乱了， 感觉就是个查问题的笔记库，有时间再整理下吧。 201702221.关于数据库的分库分表，主从技术落地。 201702231.以后面试要首先问涨薪体系！2.批处理数据的时候，要控制数据的数量，比如批量插入的时候，每次循">
@@ -463,9 +463,7 @@ q&amp;a surviror什么时候才会存放对象
 <li><p>java 性能监控常用命令</p>
 <ol>
 <li>jstack 查看线程<br>   jstack pid  需要注意dump文件里面的 deadlock和blocked<br>   jstack pid &gt;a.txt<br>   grep -n -E10 ‘deadlock’ a.txt </li>
-<li><p>jmap(查看内存)<br>  jmap -dump:format=b,file=/tmp/dump.dat 4813<br>  可以dump出java当前内存的情况，然后用工具MemoryAnalyzer或者HeapAnalyzer进行分析</p>
-<p>  jmap -histo <pid>: 打印当前java堆中各个对象的数量、大小<br>  jmap -histo:live 20881 | grep QueryPartnerImpl</pid></p>
-</li>
+<li>jmap(查看内存)<br>  jmap -dump:format=b,file=/tmp/dump.dat 4813<br>  可以dump出java当前内存的情况，然后用工具MemoryAnalyzer或者HeapAnalyzer进行分析<br>  jmap -heap<br>  jmap -histo <pid>: 打印当前java堆中各个对象的数量、大小<br>  jmap -histo:live 20881 | grep QueryPartnerImpl</pid></li>
 <li><p>jstat(性能分析)<br> jstat -gcutil 1756 1000<br> S0(from区)使用了41.74%；<br> S1(to区)使用了0；<br> E(Eden区)使用了54.35%；<br> O(Old，年老代)使用了62.41%；<br> P(Perment，永久代)使用了99.63%；<br> YGC(Young GC)了32次，<br> YGCT(Young GC Time)花销0.132秒；<br> FGC(Full GC)了1次，<br> FGCT(Full GC Time)花销0.102秒；<br> GCT(GC Time)总花销0.234秒。</p>
 <p> jstat -gc 1688 3000<br>  S0C：年轻代中第一个survivor（幸存区）的容量 (字节)<br>  S1C：年轻代中第二个survivor（幸存区）的容量 (字节)<br>  S0U：年轻代中第一个survivor（幸存区）目前已使用空间 (字节)<br>  S1U：年轻代中第二个survivor（幸存区）目前已使用空间 (字节)<br>  EC：年轻代中Eden（伊甸园）的容量 (字节)<br>  EU：年轻代中Eden（伊甸园）目前已使用空间 (字节)<br>  OC：Old代的容量 (字节)<br>  OU：Old代目前已使用空间 (字节)<br>  PC：Perm(持久代)的容量 (字节)<br>  PU：Perm(持久代)目前已使用空间 (字节)<br>  MC: 元空间(Metaspace) Metaspace capacity (kB),一般是方法区，不在虚拟机中，而是使用本地内存，<br>  jdk8移除了PermGen，取而代之的是MetaSpace<br>  CCSC: Compressed class space capacity (kB).</p>
 </li>

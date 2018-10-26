@@ -98,7 +98,7 @@
 <meta property="og:image" content="http://blog.codinglabs.org/uploads/pictures/theory-of-mysql-index/9.png">
 <meta property="og:image" content="http://blog.codinglabs.org/uploads/pictures/theory-of-mysql-index/10.png">
 <meta property="og:image" content="http://blog.codinglabs.org/uploads/pictures/theory-of-mysql-index/11.png">
-<meta property="og:updated_time" content="2018-08-29T11:07:48.000Z">
+<meta property="og:updated_time" content="2018-09-26T17:14:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysql数据库相关">
 <meta name="twitter:description" content="相关命令用到一个记一个吧~ 磁盘IO与预读磁盘读取数据靠的是机械运动，每次读取数据花费的时间可以分为寻道时间、旋转延迟、传输时间三个部分 寻道时间指的是磁臂移动到指定磁道所需要的时间，主流磁盘一般在5ms以下； 旋转延迟就是我们经常听说的磁盘转速，比如一个磁盘7200转，表示每分钟能转7200次，也就是说1秒钟能转120次，旋转延迟就是1/120/2 = 4.17ms； 传输时间指的是从磁盘读出或">
@@ -408,7 +408,9 @@ InnoDB的默认隔离级别RR实现了串行化级别的效果，而且保留了
 <h3 id="binlog"><a href="#binlog" class="headerlink" title="binlog"></a>binlog</h3><pre><code>binlog日志用于记录所有更新且提交了数据或者已经潜在更新提交了数据（例如，没有匹配任何行的一个DELETE）的所有语句。语句以“事件”的形式保存，它描述数据更改。
 binlog作用：1.恢复使能够最大可能地更新数据库，因为二进制日志包含备份后进行的所有更新。2.在主复制服务器上记录所有将发送给从服务器的语句。
 binlog一般用于主从同步。
-</code></pre><h3 id="MyISAM与innodb"><a href="#MyISAM与innodb" class="headerlink" title="MyISAM与innodb"></a>MyISAM与innodb</h3><pre><code>MyISAM是不支持事物的，innodb支持。
+</code></pre><h3 id="MyISAM与innodb"><a href="#MyISAM与innodb" class="headerlink" title="MyISAM与innodb"></a>MyISAM与innodb</h3><pre><code>5.5版本之前默认的存储引擎是myisam ,5.5版本开始MySQL默认存储引擎是innodb
+MyISAM锁的力度是表级别，索引结构是⾮聚簇索引；innodb是行级别，索引结构是聚簇索引
+MyISAM是不支持事物的，innodb支持。
 MyISAM 适合于一些需要大量查询的应用，但其对于有大量写操作并不是很好。
 甚至你只是需要update一个字段，整个表都会被锁起来
 如果一些初始化大量数据，不需要用到事物，可以先将表类型改成MyISAM插入，完成后
@@ -429,7 +431,7 @@ mysql空表默认的data size=16kb  inde size 0kb
 --查询单个表的存储大小
 select sum(DATA_LENGTH)+sum(INDEX_LENGTH) from information_schema.tables where table_schema=&apos;DPEducation&apos; AND table_name=&apos;DP_EduCardPromotionScanDetail&apos;; 
 单行记录长度为 data size/row=avg_row_length
-</code></pre><h3 id="表的空间估算"><a href="#表的空间估算" class="headerlink" title="表的空间估算"></a>表的空间估算</h3><p>   <a href="&quot;https://www.cnblogs.com/Aiapple/p/5697912.html&quot;">参考</a></p>
+</code></pre><h3 id="表的空间估算"><a href="#表的空间估算" class="headerlink" title="表的空间估算"></a>表的空间估算</h3><p>   <a href="https://www.cnblogs.com/Aiapple/p/5697912.html" target="_blank" rel="external">参考</a></p>
 <pre><code>数据库业务特点关键词
 OLTP/OLAP、并发请求、读写比例、数据量、冷热数据比、数据分级存储
 1、OLTP与OLAP 
@@ -493,7 +495,7 @@ F.刷新数据字典，并释放锁
 </code></pre><p>   2、查询到死锁表，再解锁</p>
 <pre><code>show OPEN TABLES where In_use &gt; 0;
 UNLOCK TABLES  
-</code></pre><h3 id="MySQL索引实现"><a href="#MySQL索引实现" class="headerlink" title="MySQL索引实现"></a>MySQL索引实现</h3><h4 id="MyISAM索引实现"><a href="#MyISAM索引实现" class="headerlink" title="MyISAM索引实现"></a>MyISAM索引实现</h4><pre><code>MyISAM引擎使用B+Tree作为索引结构，叶节点的data域存放的是数据记录的地址。下图是MyISAM索引的原理图 
+</code></pre><h3 id="MySQL索引实现"><a href="#MySQL索引实现" class="headerlink" title="MySQL索引实现"></a>MySQL索引实现</h3><h4 id="MyISAM索引实现"><a href="#MyISAM索引实现" class="headerlink" title="MyISAM索引实现"></a>MyISAM索引实现</h4><pre><code>MyISAM引擎使用B+Tree作为索引结构，叶节点的data域存放的是数据在物理磁盘上的指针。下图是MyISAM索引的原理图 
 </code></pre><p>   <img src="http://p0.meituan.net/education/d49d260fc1eb8f992df0401b70d70e3d34360.png" alt="">  </p>
 <pre><code>这里设表一共有三列，假设我们以Col1为主键，则图8是一个MyISAM表的主索引（Primary key）示意。
 可以看出MyISAM的索引文件仅仅保存数据记录的地址。在MyISAM中，主索引和辅助索引（Secondary key）在结构上没有任何区别，
