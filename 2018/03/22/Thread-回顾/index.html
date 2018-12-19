@@ -94,7 +94,7 @@
 <meta property="og:site_name" content="高广金博客">
 <meta property="og:description" content="操作系统相关概念CPUcpu主要是用来解释计算机指令以及处理计算机软件的中的数据 主频，单位是兆赫（MHz）或千兆赫（GHz），用来表示CPU的运算、处理数据的速度。通常，主频越高，CPU处理数据的速度就越快。 缓存，缓存大小也是CPU的重要指标之一，而且缓存的结构和大小对CPU速度的影响非常大。 cpu有L1 Cache和L2　Cache、L3　Cache 物理核物理核=cpu数(机子上装的cp">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-24T13:21:07.000Z">
+<meta property="og:updated_time" content="2018-12-10T03:55:28.460Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Thread 回顾">
 <meta name="twitter:description" content="操作系统相关概念CPUcpu主要是用来解释计算机指令以及处理计算机软件的中的数据 主频，单位是兆赫（MHz）或千兆赫（GHz），用来表示CPU的运算、处理数据的速度。通常，主频越高，CPU处理数据的速度就越快。 缓存，缓存大小也是CPU的重要指标之一，而且缓存的结构和大小对CPU速度的影响非常大。 cpu有L1 Cache和L2　Cache、L3　Cache 物理核物理核=cpu数(机子上装的cp">
@@ -627,8 +627,10 @@ put(anObject):把anObject加到BlockingQueue里,如果BlockQueue没有空间,则
 </code></pre><h4 id="SynchronousQueue"><a href="#SynchronousQueue" class="headerlink" title="SynchronousQueue"></a>SynchronousQueue</h4><pre><code>和ABQ类似，但是容量只有一个
 </code></pre><h4 id="ConcurrentLinkedQueue"><a href="#ConcurrentLinkedQueue" class="headerlink" title="ConcurrentLinkedQueue"></a>ConcurrentLinkedQueue</h4><pre><code>ConcurrentLinkedQueue是Queue的一个安全实现．Queue中元素按FIFO原则进行排序．采用CAS操作，
 来保证元素的一致性。  
-</code></pre><h3 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h3><h4 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h4><p>   如果想实现每个线程都有自己的局部变量副本，有两种方式，一种是直接加锁，还有一种就是每个线程分配一个变量副本，<br>   ThreadLocal就是使用这种方式。</p>
-<pre><code>public void set(T value) {
+</code></pre><h3 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h3><h4 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h4><pre><code>如果想实现每个线程都有自己的局部变量副本，有两种方式，一种是直接加锁，还有一种就是每个线程分配一个变量副本，
+ThreadLocal就是使用这种方式。
+
+public void set(T value) {
         Thread t = Thread.currentThread();
         ThreadLocalMap map = getMap(t);
         if (map != null)
@@ -688,11 +690,11 @@ Thread==&gt; ThreadLocal.ThreadLocalMap threadLocals = null;
             target.run();
         }
     }
-</code></pre><h3 id="Java内存模型"><a href="#Java内存模型" class="headerlink" title="Java内存模型"></a>Java内存模型</h3><p>   理解java内容模型才能了解线程安全</p>
-<pre><code>每一个运行在Java虚拟机里的线程都拥有自己的线程栈。这个线程栈包含了这个线程调用的方法当前执行点相关的信息。一个线程仅能访问自己的线程栈。一个线程创建的本地变量对其它线程不可见，仅自己可见。即使两个线程执行同样的代码，这两个线程任然在在自己的线程栈中的代码来创建本地变量。因此，每个线程拥有每个本地变量的独有版本。
-
+</code></pre><h3 id="Java内存模型"><a href="#Java内存模型" class="headerlink" title="Java内存模型"></a>Java内存模型</h3><pre><code>理解java内容模型才能了解线程安全
+每一个运行在Java虚拟机里的线程都拥有自己的线程栈。这个线程栈包含了这个线程调用的方法当前执行点相关的信息。
+一个线程仅能访问自己的线程栈。一个线程创建的本地变量对其它线程不可见，仅自己可见。
+即使两个线程执行同样的代码，这两个线程任然在在自己的线程栈中的代码来创建本地变量。因此，每个线程拥有每个本地变量的独有版本。
 所有原始类型的本地变量都存放在线程栈上，因此对其它线程不可见。一个线程可能向另一个线程传递一个原始类型变量的拷贝，但是它不能共享这个原始类型变量自身。
-
 堆上包含在Java程序中创建的所有对象，无论是哪一个对象创建的。这包括原始类型的对象版本。如果一个对象被创建然后赋值给一个局部变量，或者用来作为另一个对象的成员变量，这个对象任然是存放在堆上。
 </code></pre><h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p>   <a href="http://ifeve.com/%E4%BD%BF%E7%94%A8threadlocal%E4%B8%8D%E5%BD%93%E5%8F%AF%E8%83%BD%E4%BC%9A%E5%AF%BC%E8%87%B4%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2/" target="_blank" rel="external">使用threadlocal不当可能会导致内存泄露</a><br>   <a href="http://ifeve.com/java-concurrency-thread-directory/" target="_blank" rel="external">Java并发性和多线程介绍目录</a><br>   <a href="http://ifeve.com/volatile/" target="_blank" rel="external">http://ifeve.com/volatile/</a><br>   <a href="https://www.cnblogs.com/paddix/p/5367116.html" target="_blank" rel="external">https://www.cnblogs.com/paddix/p/5367116.html</a>           </p>
 
@@ -809,7 +811,7 @@ Thread==&gt; ThreadLocal.ThreadLocalMap threadLocals = null;
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-count">31</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -831,7 +833,7 @@ Thread==&gt; ThreadLocal.ThreadLocalMap threadLocals = null;
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

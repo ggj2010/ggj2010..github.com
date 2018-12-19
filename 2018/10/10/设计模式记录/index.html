@@ -1,0 +1,1678 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="设计模式," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="只有掌握设计模式，才能看懂开源框架代码 设计模式分类 创建型模式：  共五种：工厂方法模式、抽象工厂模式、单例模式、建造者模式、原型模式。  结构型模式：  共七种：适配器模式、装饰器模式、代理模式、外观模式、桥接模式、组合模式、享元模式。  行为型模式：  共十一种：策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、访问者模式、中介者模式、解释器模式。">
+<meta name="keywords" content="设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式记录">
+<meta property="og:url" content="http://ggj2010.github.io/2018/10/10/设计模式记录/index.html">
+<meta property="og:site_name" content="高广金博客">
+<meta property="og:description" content="只有掌握设计模式，才能看懂开源框架代码 设计模式分类 创建型模式：  共五种：工厂方法模式、抽象工厂模式、单例模式、建造者模式、原型模式。  结构型模式：  共七种：适配器模式、装饰器模式、代理模式、外观模式、桥接模式、组合模式、享元模式。  行为型模式：  共十一种：策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、访问者模式、中介者模式、解释器模式。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-10-26T09:24:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="设计模式记录">
+<meta name="twitter:description" content="只有掌握设计模式，才能看懂开源框架代码 设计模式分类 创建型模式：  共五种：工厂方法模式、抽象工厂模式、单例模式、建造者模式、原型模式。  结构型模式：  共七种：适配器模式、装饰器模式、代理模式、外观模式、桥接模式、组合模式、享元模式。  行为型模式：  共十一种：策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、访问者模式、中介者模式、解释器模式。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://ggj2010.github.io/2018/10/10/设计模式记录/"/>
+
+
+
+
+
+  <title> 设计模式记录 | 高广金博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">高广金博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-webmagic">
+          <a href="http://scedai.com/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            爬虫
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://ggj2010.github.io/2018/10/10/设计模式记录/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ggj2010">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="高广金博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                设计模式记录
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-10T18:18:37+08:00">
+                2018-10-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <pre><code>只有掌握设计模式，才能看懂开源框架代码
+</code></pre><h2 id="设计模式分类"><a href="#设计模式分类" class="headerlink" title="设计模式分类"></a>设计模式分类</h2><ul>
+<li>创建型模式：</li>
+</ul>
+<pre><code>共五种：工厂方法模式、抽象工厂模式、单例模式、建造者模式、原型模式。
+</code></pre><ul>
+<li>结构型模式：</li>
+</ul>
+<pre><code>共七种：适配器模式、装饰器模式、代理模式、外观模式、桥接模式、组合模式、享元模式。
+</code></pre><ul>
+<li>行为型模式：</li>
+</ul>
+<pre><code>共十一种：策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、访问者模式、中介者模式、解释器模式。   
+</code></pre><h2 id="设计模式相关规则"><a href="#设计模式相关规则" class="headerlink" title="设计模式相关规则"></a>设计模式相关规则</h2><pre><code>一、找出应用中可能会变化的部分，把他们独立出来，不要和那些不需要变化代码在一起。
+二、针对接口编程，而不是实现编程。
+三、[多用组合，少用  继承] 继承去复用不变化代码，接口去实现变化代码。
+四、为了交互对象之间松耦合而努力。
+五、开放关闭原则
+ 类应该对扩展开发，对修改关闭。在不修改代码情况下，对功能进行扩展。
+ 观察者模式就是，扩展主题功能，不需要向主题类里面添加代码只需要假如新的观察者。而装饰者模式就是完全遵守开关闭合选择。
+六、依赖倒置原则
+oo设计原则，要依赖抽象，不要依赖具体类。不仅仅是面向接口编程，不针对实现编程。不要让高层组件依赖底层组件。
+  （1）变量不可以持有具体类的引用，不要用new
+  （2）不要让类派生具体类
+  （3）不要覆盖基类中已有的方法
+七、最少知道原则
+减少对象之间交互，只和你的密友谈话。
+八、单一职责原则
+一个类应该只有一个引起变化的原因，每个类应该保持单一责任。
+内聚概念：衡量一个类或模块紧密达到单一的责任或目的。
+</code></pre><h2 id="23种设计模式"><a href="#23种设计模式" class="headerlink" title="23种设计模式"></a>23种设计模式</h2><h3 id="工厂模式-xxxFactory"><a href="#工厂模式-xxxFactory" class="headerlink" title="工厂模式(xxxFactory)"></a>工厂模式(xxxFactory)</h3><pre><code>使用工厂模式其实就是为了减少代码里面出现new关键字的次数，同时可以集中管理对象的创建，同时隐蔽对象创建的细节。
+打个比方如果项目代码里面有个类A被new了100多次，如果这个时候A类的构造方法需要加个参数，
+那就意味着这100多个使用到类A的地方都需要相对应的跟着修改。
+当然现在如果使用spring框架，很少会有自己new对象的场景，spring通过控制反转（ioc）和 依赖注入（di）
+将类与类直接的依赖关系交给容器去管理，当需要哪个类直接注入进来就可以。
+
+工厂模式可以抽象出来几个关键字抽象产品，具体产品，抽象工厂，具体工厂
+
+（1）简单工厂模式是由一个具体的类去创建其他类的实例，父类是相同的，父类是具体的。
+（2）工厂方法模式是有一个抽象的父类定义公共接口，子类负责生成具体的对象，这样做的目的是将类的实例化操作延迟到子类中完成。
+（3）抽象工厂模式提供一个创建一系列相关或相互依赖对象的接口，而无须指定他们具体的类。它针对的是有多个产品的等级结构。
+ 而工厂方法模式针对的是一个产品的等级结构，在只有一个产品族的情况下，抽象工厂模式实际上退化到工厂方法模式。
+</code></pre><h4 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h4><pre><code>public interface JDBC {
+    void connection();
+}
+
+public class MysqJDBC implements  JDBC{
+    @Override
+    public void connection() {
+        System.out.println(&quot;mysql connection&quot;);
+    }
+}
+
+public class OraclJDBC  implements  JDBC{
+    @Override
+    public void connection() {
+        System.out.println(&quot;OraclJDBC connection&quot;);
+    }
+}
+
+public class JDBCFactory {
+    //1
+    public static  JDBC getJDBC(String type){
+        if(type.equalsIgnoreCase(&quot;mysql&quot;))return new MysqJDBC();
+        if(type.equalsIgnoreCase(&quot;oracl&quot;))return new OraclJDBC();
+        return null;
+    }
+    //2
+    public static  JDBC getMsqlylJDBC(){
+         return new MysqJDBC();
+    }
+    //2
+    public static  JDBC getOraclJDBC(){
+         return new MysqJDBC();
+    }
+
+}
+
+public class SimpleFactoryTest {
+    public static void main(String[] args) {
+        JDBCFactory.getJDBC(&quot;mysql&quot;).connection();
+        JDBCFactory.getMsqlylJDBC().connection();
+    }
+}
+
+2相比1的写法好处在于不会因为传入错误的字符串导致没能获取到正常的对象。
+</code></pre><h4 id="工厂方法模式"><a href="#工厂方法模式" class="headerlink" title="工厂方法模式"></a>工厂方法模式</h4><pre><code>设计模式的规则是对扩展开放，对修改关闭。如果上面的例子这时候需要再增加一个sqlServer类型对象
+就需要修改JDBCFactory类，例如增加下面的步骤3这就违法了我们的设计模式开放关闭原则
+
+public class JDBCFactory {
+        //1
+        public static  JDBC getJDBC(String type){
+            if(type.equalsIgnoreCase(&quot;mysql&quot;))return new MysqJDBC();
+            if(type.equalsIgnoreCase(&quot;oracl&quot;))return new OraclJDBC();
+            return null;
+        }
+        //2
+        public static  JDBC getMsqlylJDBC(){
+             return new MysqJDBC();
+        }
+        //2
+        public static  JDBC getOraclJDBC(){
+             return new MysqJDBC();
+        }
+        //3
+        public static  JDBC getSqlServerJDBC(){
+             return new SqlServerJDBC();
+        }
+
+    }
+这时候就引入工厂方法模式，创建一个工厂接口，和多个工厂实现类，这个时候如果需要引入新对象，
+只用创建新的工厂实现类就可以,避免了在原来的接口上修改。
+工厂方法模式里不再只由一个工厂类决定那一个产品类应当被实例化,这个决定被交给抽象工厂的子类去做。
+
+public interface JDBCFactory {
+    JDBC create();
+}
+
+public class MysqlFactory implements JDBCFactory{
+    @Override
+    public JDBC create() {
+        return new MysqJDBC();
+    }
+}
+
+public class MysqlFactory implements JDBCFactory{
+    @Override
+    public JDBC create() {
+        return new MysqJDBC();
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        JDBCFactory factoryOne=new MysqlFactory();
+        factoryOne.create().connection();
+        JDBCFactory factoryTwo=new SqlServerFactory();
+        factoryTwo.create().connection();
+    }
+}
+</code></pre><h4 id="抽象工厂模式"><a href="#抽象工厂模式" class="headerlink" title="抽象工厂模式"></a>抽象工厂模式</h4><pre><code>当一个工厂需要生产多个产品的时候就需要用到抽象工厂模式。
+打个比方，我们对每个数据源都需要加想对应的监控功能，那么一个工厂
+就需创建对应的数据源对象，同时也要创建对应的监控类
+
+ public class MysqlFactory implements JDBCFactory{
+    @Override
+    public JDBC create() {
+        return new MysqJDBC();
+    }
+    //创建多个工厂    
+    @Override
+    public XXX createMonitor() {
+        return new XXX();
+    }
+ }
+</code></pre><h3 id="单例模式（xxxSingleton）"><a href="#单例模式（xxxSingleton）" class="headerlink" title="单例模式（xxxSingleton）"></a>单例模式（xxxSingleton）</h3><pre><code>单例模式作用在于在当前系统内存里面，只有唯一一个该类的实例。
+打个比方如果某个类的创建比较耗时，或者好资源，例如数据库连接池,线程池等等
+使用单例模式创建连接池，这样系统里面就只有一份连接池数据
+
+public class Singleton {
+    /**
+     * 私有化构造器
+     */
+    private Singleton(){};
+
+
+    /**
+     * 饿汉模式
+     */
+    private static Singleton singleton=new Singleton();
+    public static synchronized Singleton getSingleton(){
+        return  singleton;
+    }
+
+    /**
+     * 懒汉模式
+     */
+    private static Singleton singleton2;
+    public static synchronized  Singleton getSingleton2(){
+        if(singleton2==null){
+            singleton2=new Singleton();
+        }
+        return  singleton2;
+    }
+
+    /**
+     * douleCheck
+     */
+
+    private static volatile Singleton singleton3;
+    public static Singleton getSingleton3(){
+        if(singleton3==null){
+           synchronized (Singleton.class){
+               if(singleton3==null){
+                   //非原子操作,可能导致指令重新排序
+                   singleton3=new Singleton();
+               }
+           }
+        }
+        return  singleton3;
+    }
+
+    /**
+     * 匿名类
+     */
+    private static class SingletonHolder{
+       private static final   Singleton singleton=new Singleton();
+    }
+
+    public static Singleton getSingleton4(){
+        return  SingletonHolder.singleton;
+    }
+
+}
+</code></pre><h3 id="建造者模式（Builder）"><a href="#建造者模式（Builder）" class="headerlink" title="建造者模式（Builder）"></a>建造者模式（Builder）</h3><pre><code>将一系列的对象构建用builder来实现
+工厂类模式提供的是创建单个类的模式，而建造者模式则是将各种产品集中起来进行管理，用来创建复合对象
+下面的例子提供了两种build模式
+@Data
+public class People {
+    private Car car;
+    private Cat cat;
+    private Dog dog;
+    private int age;
+    private String Name;
+}
+
+public class PeopleBuilder&lt;T extends People&gt; {
+    private Car car;
+    private Cat cat;
+    private Dog dog;
+    private int age;
+    private String name;
+
+    public PeopleBuilder buyCar() {
+        this.car = new Car();
+        return this;
+    }
+
+
+    public PeopleBuilder getTwoCat() {
+        this.cat = new Cat();
+        return this;
+    }
+
+
+    public PeopleBuilder getOneDog() {
+        this.dog = new Dog();
+        return this;
+    }
+
+
+    public PeopleBuilder setAge(int age) {
+        this.age = age;
+        return this;
+    }
+
+
+    public PeopleBuilder setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public static PeopleBuilder&lt;People&gt; build() {
+        return new PeopleBuilder();
+    }
+
+    public T create() {
+        People people = new People();
+        people.setAge(age);
+        people.setCar(car);
+        people.setCat(cat);
+        people.setDog(dog);
+        people.setName(name);
+        return (T) people;
+    }
+}
+
+
+public class PeopleRquest {
+
+    public static class Builder {
+        private Car car;
+        private Cat cat;
+        private Dog dog;
+        private int age;
+        private String name;
+
+        public static Builder builder() {
+            return new Builder();
+        }
+
+        public Builder buyCar() {
+            this.car = new Car();
+            return this;
+        }
+
+
+        public Builder getTwoCat() {
+            this.cat = new Cat();
+            return this;
+        }
+
+
+        public Builder getOneDog() {
+            this.dog = new Dog();
+            return this;
+        }
+
+
+        public Builder setAge(int age) {
+            this.age = age;
+            return this;
+        }
+
+
+        public Builder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public People build() {
+            People people = new People();
+            people.setAge(age);
+            people.setCar(car);
+            people.setCat(cat);
+            people.setDog(dog);
+            people.setName(name);
+            return people;
+        }
+    }
+
+}
+
+
+public class Test {
+    public static void main(String[] args) {
+        PeopleBuilder.build().getOneDog().getTwoCat().buyCar().setAge(28).create();
+        PeopleRquest.Builder.builder().getOneDog().getTwoCat().buyCar().setAge(28).build();
+    }
+}
+</code></pre><h3 id="原型模式-Prototype"><a href="#原型模式-Prototype" class="headerlink" title="原型模式(Prototype)"></a>原型模式(Prototype)</h3><pre><code>其实就是Java的浅拷贝和深拷贝
+浅拷贝就是类的clone
+深拷贝就是实现Cloneable接口，重写clone类
+或者直接序列化
+
+public class LowCopy implements Cloneable{
+    private String name;
+    private People people;
+
+    public People getPeople() {
+        return people;
+    }
+
+    public void setPeople(People people) {
+        this.people = people;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
+    @Override
+    protected LowCopy clone() throws CloneNotSupportedException {
+        return (LowCopy)super.clone();
+    }
+}
+
+public class People implements Serializable {
+
+    private static final long serialVersionUID = -2929685135774849974L;
+
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+
+public class Prototype {
+    public static void main(String[] args) throws Exception {
+        People people=new People();
+        people.setName(&quot;gao&quot;);
+        ByteArrayOutputStream bao=new ByteArrayOutputStream();
+        ObjectOutputStream oos=new ObjectOutputStream(bao);
+        oos.writeObject(people);
+        ByteArrayInputStream bais=new ByteArrayInputStream(bao.toByteArray());
+        ObjectInputStream ois=new ObjectInputStream(bais);
+        People deepCopy= (People) ois.readObject();
+        System.out.println(people==deepCopy);
+
+        //浅拷贝不会拷贝对象里面的引用
+        LowCopy lowCopy=new LowCopy();
+        lowCopy.setName(&quot;gao&quot;);
+        lowCopy.setPeople(people);
+        LowCopy copy = lowCopy.clone();
+        System.out.println(lowCopy==copy);
+        System.out.println(lowCopy.getPeople()==copy.getPeople());
+    }
+}
+</code></pre><h3 id="适配器（Adapter）"><a href="#适配器（Adapter）" class="headerlink" title="适配器（Adapter）"></a>适配器（Adapter）</h3><pre><code>系统需要使用现有的类，但此类已经不符合系统的需要
+适配器模式是将某个类的接口转换成成用户所期待的接口，目的是消除由于接口不匹配所造成的类的兼容性问题
+适配器模式有分成类的适配器模式，对象的适配器模式，接口的适配器模式
+可以说Source的存在形式决定了适配器的名字。
+类适配器就是继承Source类，对象适配器就是持有Source类，接口适配器就是实现Source接口。
+</code></pre><h4 id="类的适配器模式"><a href="#类的适配器模式" class="headerlink" title="类的适配器模式"></a>类的适配器模式</h4><pre><code>例如下面的例子，我们是对Source类进行适配，我们需要继承Source类，同时实现ChargeTargetAable扩充
+Source类的功能。
+public class Source {
+    public void charege(){
+        System.out.println(&quot;直接充电&quot;);
+    }
+}
+
+public interface  ChargeTargetAable  {
+    void charege();
+}
+
+public class Adapter extends Source implements ChargeTargetAable{
+    @Override
+    public void charege() {
+        System.out.println(&quot;装饰加转化器&quot;);
+        super.charege();
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        Source source=new Source();
+        source.charege();
+        ChargeTargetAable adapter=new Adapter();
+        adapter.charege();
+    }
+}
+</code></pre><h4 id="对象的适配器模式"><a href="#对象的适配器模式" class="headerlink" title="对象的适配器模式"></a>对象的适配器模式</h4><pre><code>使用类的适配器必须要继承需要装饰的类，java是单继承的，如果适配器类需要继承其他类就得使用对象的适配器方式
+
+public class Adapter implements ChargeTargetAable {
+    private Source source;
+    public Adapter(Source source) {
+        this.source=source;
+    }
+    @Override
+    public void charege() {
+        System.out.println(&quot;装饰加转化器&quot;);
+        source.charege();
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        Source source=new Source();
+        ChargeTargetAable adapter=new Adapter(source);
+        adapter.charege();
+    }
+}
+</code></pre><h4 id="接口的适配器模式"><a href="#接口的适配器模式" class="headerlink" title="接口的适配器模式"></a>接口的适配器模式</h4><pre><code>有时候我们定义一个接口，接口中有很多抽象方法，我们实现改类时候，必须实现该类的所有方法，这时候就有点浪费
+因为我们不一定使用所有方法，这时候就需要接口的适配器模式，利用一个抽象类实现该接口，然后我们写一个类
+继承该抽象类，然后重写我们想要的方法就可以。
+
+例如Apache commons-pool2类的 ObjectPool接口，BaseObjectPool抽象类继承了ObjectPool 
+abstract class BaseObjectPool&lt;T&gt; implements ObjectPool
+
+public interface ChargeTargetAable {
+    void charegeSH();
+    void charege();
+    void charegeHK();
+    void charegeBJ();
+}
+
+public abstract class ChargeWrapper implements ChargeTargetAable {
+    @Override
+    public void charegeSH() {
+    }
+
+    @Override
+    public void charege() {
+        System.out.println(&quot;直接充电&quot;);
+    }
+
+    @Override
+    public void charegeHK() {
+    }
+
+    @Override
+    public void charegeBJ() {
+    }
+} 
+
+
+public class Adapter extends ChargeWrapper{
+    @Override
+    public void charege() {
+        System.out.println(&quot;装饰加转化器&quot;);
+        super.charege();
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        Adapter adapter=new Adapter();
+        adapter.charege();
+    }
+}
+</code></pre><h3 id="装饰模式（decorator）"><a href="#装饰模式（decorator）" class="headerlink" title="装饰模式（decorator）"></a>装饰模式（decorator）</h3><pre><code>装饰模式在某些场景和适配器模式类似，但是这两个是完全不同的概念，一个是扩展（静态扩展），一个是增强（动态扩展）。
+装饰模式就是给一个对象增加一些新的功能，而且是动态的，要求装饰对象和被装饰对象实现同一个接口，装饰对象持有被装饰对象的实例 
+可以随意的选择需要装饰几个类，最里面是需要被装饰的类
+装饰器模式是一种结构性模式，它作用是对对象已有功能进行增强，但是不改变原有对象结构。这避免了通过继承方式进行功能扩充导致的类体系臃肿。
+
+public abstract class SimpleImage {
+    SimpleImage simpleImage;
+    abstract void render();
+}
+
+public class ImageReaderHelper extends SimpleImage {
+    @Override
+    void render() {
+        System.out.println(&quot;开始处理图片&quot;);
+    }
+}
+
+public class ImgeDarwReader extends SimpleImage {
+
+    public ImgeDarwReader(SimpleImage ir) {
+        simpleImage = ir;
+    }
+
+    @Override
+    void render() {
+        simpleImage.render();
+        System.out.println(&quot;图片花线处理&quot;);
+    }
+
+}
+
+public class ImgScanerReader extends SimpleImage {
+
+    public ImgScanerReader(SimpleImage ir) {
+        simpleImage = ir;
+    }
+
+    @Override
+    void render() {
+        simpleImage.render();
+        System.out.println(&quot;图片扫描处理&quot;);
+    }
+
+}
+
+public class MainTest {
+    public static void main(String[] args) throws Exception {
+        ImgScanerReader isr = new ImgScanerReader(new ImgeDarwReader(new ImageReaderHelper()));
+        isr.render();
+    }
+}   
+</code></pre><h3 id="代理模式（proxy）"><a href="#代理模式（proxy）" class="headerlink" title="代理模式（proxy）"></a>代理模式（proxy）</h3><pre><code>在某些情况下，一个对象不适合或者不能直接引用另一个对象，而代理对象可以在客户端和目标对象之间起到中介的作用。
+打个比方，在我们使用一些开源框架client端时候，都会在原有client端包装一层代理类，
+防止因为client因为api升级导致方法不兼容，还有一种就是spring aop java的动态代理
+
+public interface Image {
+    void display();
+} 
+
+public class RealImage implements Image {
+    private String fileName;
+    public RealImage(String fileName){
+        this.fileName = fileName;
+    }
+    @Override
+    public void display() {
+        System.out.println(&quot;Displaying &quot; + fileName);
+    }
+}
+
+public class ProxyImag implements Image {
+    @Override
+    public void display() {
+        System.out.println(&quot;代理啊 &quot;);
+        new RealImage(&quot;real&quot;).display();
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        Image image=new ProxyImag();
+        image.display();
+    }
+}
+</code></pre><h4 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h4><pre><code>1、适配器模式的区别：适配器模式主要改变所考虑对象的接口（创建新的接口），而代理模式不能改变所代理类的接口。 
+2、装饰器模式的区别：装饰器模式为了增强功能，而代理模式是为了加以控制
+</code></pre><h3 id="外观模式-Facade"><a href="#外观模式-Facade" class="headerlink" title="外观模式(Facade)"></a>外观模式(Facade)</h3><pre><code>外观模式就是封装交互，简化调用，但是不符合开闭原则，如果要改东西很麻烦，
+因为每次改都是改facade类里面的逻辑。
+例如去医院体检，我们可能需要去眼科，外科，内科，口腔，抽血等地方排队体检，可能抽血的需要等10分钟，但是眼科只需要等1分钟，或者
+外科在1楼，眼科在三楼，这个时候如果有个接待员（门面），他能协调我们当前项目体检完后，下一个项目去哪个科室体检最快，是不是非常方便
+，我们不用关系排队时间和地点，他们会直接引领我们过去。
+例如AVA 的三层开发模式MVC，
+</code></pre><h3 id="桥接模式（Bridge）"><a href="#桥接模式（Bridge）" class="headerlink" title="桥接模式（Bridge）"></a>桥接模式（Bridge）</h3><pre><code>将抽象部分与实现部分分离，使它们都可以独立的变化。
+在有多种可能会变化的情况下，用继承会造成类爆炸问题，扩展起来不灵活。
+例如颜色（红、黄、蓝色）和形状（正方形、长方形、原型），颜色和形状组合那么会有3*3种情况，如果只是用java继承去实现
+那么可能会有9个类，这时候可以利用桥接模式，将继承转换成关联，这样就降低类之间耦合度，同时减少系统中类的数量。
+又例如mysql的数据连接DriverManager、 mysqlDriver 和 oracleDriver 都实现java.sql.Driver接口
+
+public interface Shape {
+    String getShape();
+}
+
+public class Square implements Shape{
+    @Override
+    public String getShape() {
+        return &quot;正方形&quot;;
+    }
+}
+
+public class Circle implements Shape{
+    @Override
+    public String getShape() {
+        return &quot;圆形&quot;;
+    }
+}
+
+public abstract class ColorBridge {
+     protected Shape shape;
+     public abstract void diplayColor();
+}
+
+public class BlueColor extends ColorBridge {
+    public BlueColor(Shape shape) {
+        this.shape=shape;
+    }
+    @Override
+    public void diplayColor() {
+        System.out.println(&quot;blue:&quot; + shape.getShape());
+    }
+}
+
+public class ReadColor extends ColorBridge {
+    public ReadColor(Shape shape) {
+        this.shape = shape;
+    }
+
+    @Override
+    public void diplayColor() {
+        System.out.println(&quot;red:&quot; + shape.getShape());
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        Shape cycle=new Circle();
+        Shape square=new Square();
+
+        ColorBridge red=new ReadColor(cycle);
+        ColorBridge blue=new BlueColor(cycle);
+        red.diplayColor();
+        blue.diplayColor();
+
+        //新增正方形 不需要新增类
+        ColorBridge red2=new ReadColor(square);
+        ColorBridge blue2=new BlueColor(square);
+        red2.diplayColor();
+        blue2.diplayColor();
+    }
+}
+</code></pre><h3 id="组合模式"><a href="#组合模式" class="headerlink" title="组合模式"></a>组合模式</h3><pre><code>是用于把一组相似的对象当作一个单一的对象。组合模式依据树形结构来组合对象，用来表示部分以及整体层次。
+例如我们常见的树状数据结构数据    
+</code></pre><h3 id="享元模式"><a href="#享元模式" class="headerlink" title="享元模式"></a>享元模式</h3><pre><code>主要用于减少创建对象的数量，以减少内存占用和提高性能。
+例如各种线程池，或者一些对象可以被复用就直接放在Map里面
+</code></pre><h3 id="策略模式（strategy）"><a href="#策略模式（strategy）" class="headerlink" title="策略模式（strategy）"></a>策略模式（strategy）</h3><pre><code>策略模式定义了一系列算法，并将每个算法封装起来，使他们可以相互替换，且算法的变化不会影响到使用算法的客户
+主要解决在有多种算法相似的情况下，使用 if...else 所带来的复杂和难以维护。
+需要设计一个接口，为一系列实现类提供统一的方法，多个实现类实现该接口，设计一个抽象类（可有可无，属于辅助类），提供辅助函数
+其实就是面向接口开发。
+</code></pre><h3 id="模板模式（template"><a href="#模板模式（template" class="headerlink" title="模板模式（template)"></a>模板模式（template)</h3><pre><code>一个抽象类公开定义了执行它的方法的方式/模板。它的子类可以按需要重写方法实现，但调用将以抽象类中定义的方式进行
+其实就是继承、重写。
+</code></pre><h3 id="观察者模式（Observer）"><a href="#观察者模式（Observer）" class="headerlink" title="观察者模式（Observer）"></a>观察者模式（Observer）</h3><pre><code>对象间的一种一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都得到通知并被自动更新。
+ 例如spring的ApplicationListener与ApplicationEvent 可以实现观察者模式，同时解耦代码 
+</code></pre><h3 id="迭代子模式-iterator"><a href="#迭代子模式-iterator" class="headerlink" title="迭代子模式(iterator)"></a>迭代子模式(iterator)</h3><pre><code>提供一种方法顺序访问一个聚合对象中各个元素, 而又无须暴露该对象的内部表示
+例如集合的迭代器 
+</code></pre><h3 id="责任链模式（chain）"><a href="#责任链模式（chain）" class="headerlink" title="责任链模式（chain）"></a>责任链模式（chain）</h3><pre><code>有多个对象，每个对象持有对下一个对象的引用，这样就会形成一条链，请求在这条链上传递，直到某一对象决定处理该请求
+例如spring的 的拦截器，javaWeb的Filter,dubbo的filter
+下面的例子是内置责任链模式，将所有引用存在ApplicationFilterChain里面，
+public interface Filter {
+    void doFilter(int age,FilterChain filterChain);
+}
+public class DefaultFilter implements Filter {
+    @Override
+    public void doFilter(int age, FilterChain filterChain) {
+        log.info(&quot;DefaultFilter=&gt;study&quot;);
+        if(age&gt;25) {
+            filterChain.chain(age);
+        }
+    }
+}
+public class BuyCarFilter implements Filter{
+    @Override
+    public void doFilter(int age, FilterChain filterChain) {
+        log.info(&quot;BuyCarFilter&quot;);
+        if(age&gt;=27) {
+            filterChain.chain(age);
+        }
+    }
+}
+public class MarryFilter implements Filter{
+    @Override
+    public void doFilter(int age, FilterChain filterChain) {
+        log.info(&quot;MarryFilter&quot;);
+        if(age&gt;=30) {
+            filterChain.chain(age);
+        }
+    }
+}
+public class BabyFilter implements Filter{
+    @Override
+    public void doFilter(int age, FilterChain filterChain) {
+        log.info(&quot;BabyFilter&quot;);
+        filterChain.chain(age);
+    }
+}
+
+public interface FilterChain {
+    void chain(int age);
+}
+
+public class ApplicationFilterChain implements FilterChain {
+    private static List&lt;Filter&gt; filterList = new ArrayList&lt;&gt;();
+    static {
+        filterList.add(new DefaultFilter());
+        filterList.add(new BuyCarFilter());
+        filterList.add(new MarryFilter());
+        filterList.add(new BabyFilter());
+    }
+    @Override
+    public void chain(int age) {
+        if (CollectionUtils.isNotEmpty(filterList)) {
+            Filter filter = getFilter();
+            filter.doFilter(age, this);
+        }else{
+            log.info(&quot;exit&quot;);
+        }
+    }
+
+    private Filter getFilter() {
+        Filter filter = filterList.get(0);
+        filterList.remove(0);
+        return filter;
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        FilterChain filterChain = new ApplicationFilterChain();
+        //filterChain.chain(20);
+        filterChain.chain(27);
+        //filterChain.chain(31);
+    }
+}
+
+外置责任链模式:关系放在最外面
+
+public abstract class AbstractFilter {
+    private AbstractFilter nextFilter;
+    protected int needAge;
+
+    public void setNextFilter(AbstractFilter nextFilter) {
+        this.nextFilter = nextFilter;
+    }
+
+    public void excute(int age) {
+        doFilter();
+        if (age &gt; needAge) {
+            nextFilter.excute(age);
+        }
+    }
+    public abstract void doFilter();
+}
+
+public class DefaultFilter extends AbstractFilter{
+
+    public DefaultFilter(int needAge) {
+        super.needAge=needAge;
+    }
+
+    @Override
+    public void doFilter() {
+        log.info(&quot;DefaultFilter&quot;);
+    }
+}
+
+public class BuyCarFilter extends AbstractFilter{
+
+    public BuyCarFilter(int needAge) {
+        super.needAge=needAge;
+    }
+    @Override
+    public void doFilter() {
+        log.info(&quot;BuyCarFilter&quot;);
+    }
+}
+
+@Slf4j
+public class MarryFilter extends AbstractFilter {
+    public MarryFilter(int needAge) {
+        super.needAge = needAge;
+    }
+
+    @Override
+    public void doFilter() {
+        log.info(&quot;MarryFilter&quot;);
+    }
+}
+
+public class MarryFilter extends AbstractFilter {
+    public MarryFilter(int needAge) {
+        super.needAge = needAge;
+    }
+
+    @Override
+    public void doFilter() {
+        log.info(&quot;MarryFilter&quot;);
+    }
+}
+
+
+public class Test {
+    public static void main(String[] args) {
+        AbstractFilter defaultFilter=new DefaultFilter(20);
+        AbstractFilter buyCarFilter=new BuyCarFilter(25);
+        AbstractFilter marryFilter=new MarryFilter(27);
+        AbstractFilter babyFilter=new BabyFilter(30);
+        defaultFilter.setNextFilter(buyCarFilter);
+        buyCarFilter.setNextFilter(marryFilter);
+        marryFilter.setNextFilter(babyFilter);
+
+        defaultFilter.excute(26);
+        //defaultFilter.excute(30);
+    }
+}
+</code></pre><h4 id="责任链模式与装饰者模式"><a href="#责任链模式与装饰者模式" class="headerlink" title="责任链模式与装饰者模式"></a>责任链模式与装饰者模式</h4><pre><code>责任链通常是有预定义的链条的；而装饰者更多的是根据实际情况自定义装饰、处理顺序的。
+</code></pre><h2 id="开源框架里面的用到的模式"><a href="#开源框架里面的用到的模式" class="headerlink" title="开源框架里面的用到的模式"></a>开源框架里面的用到的模式</h2><h3 id="spring"><a href="#spring" class="headerlink" title="spring"></a>spring</h3><h4 id="工厂方法模式-1"><a href="#工厂方法模式-1" class="headerlink" title="工厂方法模式"></a>工厂方法模式</h4><pre><code>BeanFactory模式创建bean
+</code></pre><h4 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h4><pre><code>如果bean的scope为singleton，那么都会放到singletonObjects的map里面
+Map&lt;String, Object&gt; singletonObjects = new ConcurrentHashMap&lt;String, Object&gt;
+</code></pre><h4 id="原型设计模"><a href="#原型设计模" class="headerlink" title="原型设计模"></a>原型设计模</h4><pre><code>如果bean的作用域是prototype ，那么每次创建都是一个新类 
+</code></pre><h4 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h4><pre><code>Spring中bean实例化策略，接口InstantiationStrategy是实例化策略接口类，
+它定义了三个实例化接口，然后SimpleInstantiationStrategy实现了该策略，它主要做一些简单的根据构造函数实例号bean的工作，
+然后CglibSubclassingInstantiationStrategy又继承了SimpleInstantiationStrategy新增了方法注入方式根据cglib生成代理类实例化方法
+另外AopProxy也是一个策略接口类，具体实现的策略为JdkDynamicAopProxy，CglibAopProxy，ObjenesisCglibAopProxy
+</code></pre><h4 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h4><pre><code>spring的MethodInterceptor的适配器
+AfterReturningAdvice和MethodBeforeAdvice没有实现MethodInterceptor接口。而Spring 
+Aop的方法拦截器却必须是实现了MethodInterceptor的，所以Spring提供了对应的适配器来适配这个问题
+分别是MethodBeforeAdviceAdapter和AfterReturningAdviceAdapter和ThrowsAdviceAdapter
+DefaultAdvisorAdapterRegistry类代码
+public MethodInterceptor[] getInterceptors(Advisor advisor) throws UnknownAdviceTypeException {
+    List&lt;MethodInterceptor&gt; interceptors = new ArrayList&lt;MethodInterceptor&gt;(3);
+
+    //从advistor中获取advice
+    Advice advice = advisor.getAdvice();
+
+    //如果实现了MethodInterceptor则直接加入，比如AspectJAroundAdvice，AspectJAfterAdvice
+    if (advice instanceof MethodInterceptor) {
+        interceptors.add((MethodInterceptor) advice);
+    }
+
+    //否者看是否有当前advice的适配器，首先检验是否支持，支持则返回对应的适配器
+    for (AdvisorAdapter adapter : this.adapters) {
+        if (adapter.supportsAdvice(advice)) {
+            //适配器获取interceptors
+            interceptors.add(adapter.getInterceptor(advisor));
+        }
+    }
+    if (interceptors.isEmpty()) {
+        throw new UnknownAdviceTypeException(advisor.getAdvice());
+    }
+    return interceptors.toArray(new MethodInterceptor[interceptors.size()]);
+}
+
+//代理类
+class MethodBeforeAdviceAdapter implements AdvisorAdapter, Serializable {
+
+    public boolean supportsAdvice(Advice advice) {
+        return (advice instanceof MethodBeforeAdvice);
+    }
+
+    public MethodInterceptor getInterceptor(Advisor advisor) {
+        MethodBeforeAdvice advice = (MethodBeforeAdvice) advisor.getAdvice();
+        return new MethodBeforeAdviceInterceptor(advice);
+    }
+
+}
+
+public class MethodBeforeAdviceInterceptor implements MethodInterceptor, Serializable {
+
+    private MethodBeforeAdvice advice;
+
+
+    /**
+     * Create a new MethodBeforeAdviceInterceptor for the given advice.
+     * @param advice the MethodBeforeAdvice to wrap
+     */
+    public MethodBeforeAdviceInterceptor(MethodBeforeAdvice advice) {
+        Assert.notNull(advice, &quot;Advice must not be null&quot;);
+        this.advice = advice;
+    }
+
+    public Object invoke(MethodInvocation mi) throws Throwable {
+        this.advice.before(mi.getMethod(), mi.getArguments(), mi.getThis() );
+        return mi.proceed();
+    }
+
+}
+例如：MethodBeforeAdviceInterceptor继承了MethodInterceptor作为了一个适配器内部委托请求给MethodBeforeAdvice
+</code></pre><h4 id="模板模式"><a href="#模板模式" class="headerlink" title="模板模式"></a>模板模式</h4><pre><code>例如JdbcTemplate,定义了一系列的模板方法，我们不用关心数据源的获取和关闭，直接调用即可。
+
+public &lt;T&gt; T execute(ConnectionCallback&lt;T&gt; action) throws DataAccessException {
+        Assert.notNull(action, &quot;Callback object must not be null&quot;);
+
+        Connection con = DataSourceUtils.getConnection(getDataSource());
+        try {
+            Connection conToUse = con;
+            if (this.nativeJdbcExtractor != null) {
+                // Extract native JDBC Connection, castable to OracleConnection or the like.
+                conToUse = this.nativeJdbcExtractor.getNativeConnection(con);
+            }
+            else {
+                // Create close-suppressing Connection proxy, also preparing returned Statements.
+                conToUse = createConnectionProxy(con);
+            }
+            return action.doInConnection(conToUse);
+        }
+        catch (SQLException ex) {
+            // Release Connection early, to avoid potential connection pool deadlock
+            // in the case when the exception translator hasn&apos;t been initialized yet.
+            DataSourceUtils.releaseConnection(con, getDataSource());
+            con = null;
+            throw getExceptionTranslator().translate(&quot;ConnectionCallback&quot;, getSql(action), ex);
+        }
+        finally {
+            DataSourceUtils.releaseConnection(con, getDataSource());
+        }
+    }
+</code></pre><h4 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h4><pre><code>spring里面的ApplicationListener与ApplicationEvent
+AbstractApplicationContext属于发布者，可以添加不同的listener,同时发布不同event类型的消息，
+listener属于订阅者，event属于订阅者的类型，订阅者只监听属于自己类型的消息
+我们可以自定义自己的envent类型只要继承ApplicationEvent就可以
+spring自定了好几个event 这些event都继承了ApplicationContextEvent，而
+ApplicationContextEvent都继承了ApplicationEvent
+1、ContextClosedEvent  对应 ContextCloserListener
+2、ContextRefreshedEvent  对应  ContextRefreshListener 
+    IOC刷新完成（也就是bean解析完成，创建完毕并且autowired完成）后的事件 这个经常用
+3、ContextStartedEvent
+4、ContextStoppedEvent
+</code></pre><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.runoob.com/design-pattern/design-pattern-tutorial.html" target="_blank" rel="external">设计模式</a><br><a href="https://www.jianshu.com/p/503b15f155c0" target="_blank" rel="external">常用开源框架中设计模式使用分析</a>    </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/27/gc相关记录/" rel="next" title="gc相关记录">
+                <i class="fa fa-chevron-left"></i> gc相关记录
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/24/每日总结/" rel="prev" title="每日总结">
+                每日总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg"
+               alt="ggj2010" />
+          <p class="site-author-name" itemprop="name">ggj2010</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ggj2010" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/ggjlvzjy" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#设计模式分类"><span class="nav-number">1.</span> <span class="nav-text">设计模式分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设计模式相关规则"><span class="nav-number">2.</span> <span class="nav-text">设计模式相关规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#23种设计模式"><span class="nav-number">3.</span> <span class="nav-text">23种设计模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#工厂模式-xxxFactory"><span class="nav-number">3.1.</span> <span class="nav-text">工厂模式(xxxFactory)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#简单工厂模式"><span class="nav-number">3.1.1.</span> <span class="nav-text">简单工厂模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#工厂方法模式"><span class="nav-number">3.1.2.</span> <span class="nav-text">工厂方法模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#抽象工厂模式"><span class="nav-number">3.1.3.</span> <span class="nav-text">抽象工厂模式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单例模式（xxxSingleton）"><span class="nav-number">3.2.</span> <span class="nav-text">单例模式（xxxSingleton）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#建造者模式（Builder）"><span class="nav-number">3.3.</span> <span class="nav-text">建造者模式（Builder）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原型模式-Prototype"><span class="nav-number">3.4.</span> <span class="nav-text">原型模式(Prototype)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#适配器（Adapter）"><span class="nav-number">3.5.</span> <span class="nav-text">适配器（Adapter）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#类的适配器模式"><span class="nav-number">3.5.1.</span> <span class="nav-text">类的适配器模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对象的适配器模式"><span class="nav-number">3.5.2.</span> <span class="nav-text">对象的适配器模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#接口的适配器模式"><span class="nav-number">3.5.3.</span> <span class="nav-text">接口的适配器模式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#装饰模式（decorator）"><span class="nav-number">3.6.</span> <span class="nav-text">装饰模式（decorator）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代理模式（proxy）"><span class="nav-number">3.7.</span> <span class="nav-text">代理模式（proxy）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#区别"><span class="nav-number">3.7.1.</span> <span class="nav-text">区别</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#外观模式-Facade"><span class="nav-number">3.8.</span> <span class="nav-text">外观模式(Facade)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#桥接模式（Bridge）"><span class="nav-number">3.9.</span> <span class="nav-text">桥接模式（Bridge）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#组合模式"><span class="nav-number">3.10.</span> <span class="nav-text">组合模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#享元模式"><span class="nav-number">3.11.</span> <span class="nav-text">享元模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#策略模式（strategy）"><span class="nav-number">3.12.</span> <span class="nav-text">策略模式（strategy）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模板模式（template"><span class="nav-number">3.13.</span> <span class="nav-text">模板模式（template)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#观察者模式（Observer）"><span class="nav-number">3.14.</span> <span class="nav-text">观察者模式（Observer）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#迭代子模式-iterator"><span class="nav-number">3.15.</span> <span class="nav-text">迭代子模式(iterator)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#责任链模式（chain）"><span class="nav-number">3.16.</span> <span class="nav-text">责任链模式（chain）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#责任链模式与装饰者模式"><span class="nav-number">3.16.1.</span> <span class="nav-text">责任链模式与装饰者模式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开源框架里面的用到的模式"><span class="nav-number">4.</span> <span class="nav-text">开源框架里面的用到的模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#spring"><span class="nav-number">4.1.</span> <span class="nav-text">spring</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#工厂方法模式-1"><span class="nav-number">4.1.1.</span> <span class="nav-text">工厂方法模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单例模式"><span class="nav-number">4.1.2.</span> <span class="nav-text">单例模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#原型设计模"><span class="nav-number">4.1.3.</span> <span class="nav-text">原型设计模</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#策略模式"><span class="nav-number">4.1.4.</span> <span class="nav-text">策略模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#适配器模式"><span class="nav-number">4.1.5.</span> <span class="nav-text">适配器模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模板模式"><span class="nav-number">4.1.6.</span> <span class="nav-text">模板模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#观察者模式"><span class="nav-number">4.1.7.</span> <span class="nav-text">观察者模式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ggj2010</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

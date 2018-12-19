@@ -94,7 +94,7 @@
 <meta property="og:site_name" content="高广金博客">
 <meta property="og:description" content="学校学的都还给老师了，╮(╯▽╰)╭哎 原码、反码、补码   首先计算机里面保存的数据都是由二进制组成0、1,既然有数据就有正负之分。 原码就是这些二进制的组合，首位为符号位，0表示正数，1表示负数。 例如1的4位二进制就是0001，-1的4位二进制就是1001 原码通俗点说就是给人看的，但是计算机需要对二进制进行运算啊，例如1+（-1）应该等于0， 如果用原码进行求和就是0001+1001=10">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-05T10:59:35.000Z">
+<meta property="og:updated_time" content="2018-10-18T04:07:18.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="计算机基础原理记录">
 <meta name="twitter:description" content="学校学的都还给老师了，╮(╯▽╰)╭哎 原码、反码、补码   首先计算机里面保存的数据都是由二进制组成0、1,既然有数据就有正负之分。 原码就是这些二进制的组合，首位为符号位，0表示正数，1表示负数。 例如1的4位二进制就是0001，-1的4位二进制就是1001 原码通俗点说就是给人看的，但是计算机需要对二进制进行运算啊，例如1+（-1）应该等于0， 如果用原码进行求和就是0001+1001=10">
@@ -365,8 +365,27 @@
   原码         反码    补码
 1+（-1）=》0001+1110=》0001+1111=10000，去掉最高位就是0000，解决了-0的问题。
 由此推导出计算机在运算中用的都会补码方式进行计算。
+</code></pre><h3 id="运算"><a href="#运算" class="headerlink" title="%运算"></a>%运算</h3><pre><code>通过取模操作可以获取某个数之间的随机数，例如 a%10 可以获取到0~9之间随机值    
 </code></pre><h3 id="amp-运算"><a href="#amp-运算" class="headerlink" title="&amp;运算"></a>&amp;运算</h3><pre><code>与运算 &amp;  规则 ：都为1时才为1
-</code></pre><h3 id="运算"><a href="#运算" class="headerlink" title="|运算"></a>|运算</h3><pre><code>有一个为1，则为1
+</code></pre><h3 id="运算-1"><a href="#运算-1" class="headerlink" title="|运算"></a>|运算</h3><pre><code>有一个为1，则为1
+</code></pre><h3 id="20180920-Java位运算的使用场景"><a href="#20180920-Java位运算的使用场景" class="headerlink" title="20180920-Java位运算的使用场景"></a>20180920-Java位运算的使用场景</h3><pre><code>1、乘法 a * (2^n) 等价于 a &lt;&lt; n
+    3*2=3&lt;&lt;1
+    3*4=3&lt;&lt;2
+2、除法  a / (2^n) 等价于 a&gt;&gt; n
+    8/2=8&gt;&gt;1
+    8/4=8&gt;&gt;2
+3、取模运算，采用位运算实现 a % (2^n) 等价于 a &amp; (2^n - 1) 
+    9%4=9&amp;3  
+首先位移运算肯定是高效的，jdk源码有大量使用
+    （1）机器都是使用补码，运算也是使用补码运算。 
+    （2）正数的原码补码反码都一样。 
+    （2）补码与原码相互转换，其运算过程是相同。
+带符号左位移运算符&lt;&lt; ,数值的补码全部往左移动X位: a&lt;&lt;1 等于a*2 ，左移n位就相当于乘以2的n次方
+例如1&lt;&lt;1 等于0001向左边位移一位，00010
+带符号右位移运算符&gt;&gt;  a&gt;&gt;1 等于a/2  ，右移n位就相当于除以2的n次方
+&amp;与运算，就是按位与运算，两个1才是1，否则都是0
+例如2&amp;1 等于0010和0001 与运算，结果就是0000。
+一般常用的就是某个数a&amp;1,那么结果要么是0要么是1。   
 </code></pre><h3 id="编译与解释"><a href="#编译与解释" class="headerlink" title="编译与解释"></a>编译与解释</h3><pre><code>java文件-&gt;编译-&gt;.class文件，编译成.class字节码,.class需要jvm解释，然后解释执行
    。Java很特殊，Java程序需要编译但是没有直接编译成机器语言，即二进制语言，而是编译成字节码（.class）再用解释方式
    执行。java程序编译以后的class属于中间代码，并不是可执行程序exe，不是二进制文件，
@@ -485,7 +504,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-count">31</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -507,7 +526,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -562,7 +581,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#原码、反码、补码"><span class="nav-number">1.</span> <span class="nav-text">原码、反码、补码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#amp-运算"><span class="nav-number">2.</span> <span class="nav-text">&运算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运算"><span class="nav-number">3.</span> <span class="nav-text">|运算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译与解释"><span class="nav-number">4.</span> <span class="nav-text">编译与解释</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#原码、反码、补码"><span class="nav-number">1.</span> <span class="nav-text">原码、反码、补码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运算"><span class="nav-number">2.</span> <span class="nav-text">%运算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#amp-运算"><span class="nav-number">3.</span> <span class="nav-text">&运算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运算-1"><span class="nav-number">4.</span> <span class="nav-text">|运算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180920-Java位运算的使用场景"><span class="nav-number">5.</span> <span class="nav-text">20180920-Java位运算的使用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译与解释"><span class="nav-number">6.</span> <span class="nav-text">编译与解释</span></a></li></ol></div>
             
 
           </div>

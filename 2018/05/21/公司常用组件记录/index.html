@@ -96,7 +96,7 @@
 <meta property="og:description" content="那些你以为很高大尚的组件其实也都是从无到有迭代出来了，就算没有造轮子的时间，也要有造轮子的💕。 短链接服务短链接服务主要是加密和缩短原来链接，同时也可以统计短链接访问的一些情况。 生成思路： 1、将原链接存入表，获得long类型的id， 优化点:如果mysql不可用时候，可直接在redis获取自增的id, 然后调用方法获取到短链唯一字符串， 防止两种方式生产的短链冲突，在redis生产的短链字符">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://p0.meituan.net/education/f0cf8b3ae77b6b862caba4abb7c4a14a151878.png">
-<meta property="og:updated_time" content="2018-09-24T00:22:45.000Z">
+<meta property="og:updated_time" content="2018-11-20T02:40:55.910Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="公司常用组件记录">
 <meta name="twitter:description" content="那些你以为很高大尚的组件其实也都是从无到有迭代出来了，就算没有造轮子的时间，也要有造轮子的💕。 短链接服务短链接服务主要是加密和缩短原来链接，同时也可以统计短链接访问的一些情况。 生成思路： 1、将原链接存入表，获得long类型的id， 优化点:如果mysql不可用时候，可直接在redis获取自增的id, 然后调用方法获取到短链唯一字符串， 防止两种方式生产的短链冲突，在redis生产的短链字符">
@@ -408,6 +408,33 @@ private final static char[] digits = {&apos;0&apos;,&apos;1&apos;, &apos;2&apos;
 </code></pre><h5 id="核心点"><a href="#核心点" class="headerlink" title="核心点"></a>核心点</h5><pre><code>核心功能就是，队列+线程
 缓存队列都是有大小的，如果队列满了需要怎么办，如果系统重启队列里面还有内容怎么办。
 如果多线程查询db里面待发送的短信，每个线程都有可能查到重复的内容，对于重复的需要怎么处理，这些都是需要待考虑的问题。
+</code></pre><h4 id="crane定时任务"><a href="#crane定时任务" class="headerlink" title="crane定时任务"></a>crane定时任务</h4><pre><code>定时任务一般分两种，一种是去中心化，一种是中心化。
+去中心化的话，每个客户端有能力执行任务，多个客户端只有master才有执行job的权力，可以通过ZK的选举
+功能实现Leader功能
+中心化的话就是，服务端会记录下任务情况，等到任务该执行的时候，再随机选择客户端去执行。
+去中心化和中心化各有优缺点，
+去中心化好处在于只是依赖ZK的选举，但是客户端必须要严格控制幂等，同时也要考虑如果一个任务被两台服务器同时执行的情况。
+中心化好处就是不依赖选举，但是依赖服务端去下发任务，如果任务很多的话会导致服务端非常臃肿，同时需要考虑服务端高可用的问题
+必须要支持分布式。
+</code></pre><h5 id="corn表达式记录"><a href="#corn表达式记录" class="headerlink" title="corn表达式记录"></a>corn表达式记录</h5><pre><code>字段：
+秒（Seconds） 分（Minutes）  小时（Hours） 日期（DayofMonth） 月份（Month） 星期（DayofWeek） 年(可选，留空)（Year）
+字符意义
+*：表示匹配该域的任意值，假如在Minutes域使用*, 即表示每分钟都会触发事件
+?：只能用在DayofMonth和DayofWeek两个域。它也匹配域的任意值，但实际不会。用的比较少
+-：表示范围。例如在Minutes域使用5-20，表示从5分到20分钟每分钟触发一次。用的也比较少
+/：表示起始时间开始触发，然后每隔固定时间触发一次。
+例如在Minutes域使用5/20,则意味着从5分钟开始，20分钟触发一次，而25，45等分别触发一次. 
+0 0/30 * * * ? ，则意味着每隔30分钟执行一次，从第0分钟开始，然后是30分钟 然后是60分钟
+常用表达式例子:
+每天中午12点触发 ：0 0 12 * * ？
+每天上午10:15触发  ：0 15 10 * * ？
+周一到周五每天上午10:15触发 ：0 15 10 ？ * MON-FRI
+朝九晚五工作时间内每半小时 ： 0 0/30 9-17 * * ? 
+朝九晚五工作时间内每半小时 ： 0 0/30 * * * ? 
+ 每一小时执行一次： 0 0 * * * ?     0 0 0/1 * * ? 
+</code></pre><h5 id="docker-job"><a href="#docker-job" class="headerlink" title="docker-job"></a>docker-job</h5><pre><code>有时候我们的任务执行频率不是特别高，比如每个6小时执行一次，对于这种任务，我们可以利用docker进行部署执行。
+当任务执行后docker机器销毁也不会占用机器 
+</code></pre><h5 id="进程内job"><a href="#进程内job" class="headerlink" title="进程内job"></a>进程内job</h5><pre><code>对于执行频率比较高的，比如每隔5分钟执行一次就适合在进程内进行部署     
 </code></pre>
       
     </div>
@@ -528,7 +555,7 @@ private final static char[] digits = {&apos;0&apos;,&apos;1&apos;, &apos;2&apos;
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-count">31</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -550,7 +577,7 @@ private final static char[] digits = {&apos;0&apos;,&apos;1&apos;, &apos;2&apos;
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -605,7 +632,7 @@ private final static char[] digits = {&apos;0&apos;,&apos;1&apos;, &apos;2&apos;
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#短链接服务"><span class="nav-number">1.</span> <span class="nav-text">短链接服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#短信服务"><span class="nav-number">2.</span> <span class="nav-text">短信服务</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#相关概念"><span class="nav-number">2.1.</span> <span class="nav-text">相关概念</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#插入短信"><span class="nav-number">2.2.</span> <span class="nav-text">插入短信</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#核心点"><span class="nav-number">2.3.</span> <span class="nav-text">核心点</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#短链接服务"><span class="nav-number">1.</span> <span class="nav-text">短链接服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#短信服务"><span class="nav-number">2.</span> <span class="nav-text">短信服务</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#相关概念"><span class="nav-number">2.1.</span> <span class="nav-text">相关概念</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#插入短信"><span class="nav-number">2.2.</span> <span class="nav-text">插入短信</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#核心点"><span class="nav-number">2.3.</span> <span class="nav-text">核心点</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#crane定时任务"><span class="nav-number">3.</span> <span class="nav-text">crane定时任务</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#corn表达式记录"><span class="nav-number">3.1.</span> <span class="nav-text">corn表达式记录</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#docker-job"><span class="nav-number">3.2.</span> <span class="nav-text">docker-job</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#进程内job"><span class="nav-number">3.3.</span> <span class="nav-text">进程内job</span></a></li></ol></li></ol></div>
             
 
           </div>
