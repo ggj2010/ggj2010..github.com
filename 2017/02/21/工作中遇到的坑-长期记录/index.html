@@ -95,7 +95,7 @@
 <meta property="og:site_name" content="高广金博客">
 <meta property="og:description" content="1、spring上传文件过大导致请求重复多次，无返回值页面假死项目里面需求遇到需要上传图片的功能，用了spring的CommonsMultipartResolver来处理。设置了maxUploadSize， 本地测试的时候，上传过大的文件，总是页面假死，异常也无法捕获，折腾半天，才知道这是tomcat版本的一个bug, apache-tomcat-7.0.70 会有这个bug，换成 apache-">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-29T02:30:37.460Z">
+<meta property="og:updated_time" content="2018-11-29T02:30:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="工作中遇到的坑-长期记录">
 <meta name="twitter:description" content="1、spring上传文件过大导致请求重复多次，无返回值页面假死项目里面需求遇到需要上传图片的功能，用了spring的CommonsMultipartResolver来处理。设置了maxUploadSize， 本地测试的时候，上传过大的文件，总是页面假死，异常也无法捕获，折腾半天，才知道这是tomcat版本的一个bug, apache-tomcat-7.0.70 会有这个bug，换成 apache-">
@@ -379,7 +379,7 @@
 本地测试的时候，上传过大的文件，总是页面假死，异常也无法捕获，折腾半天，才知道这是tomcat版本的一个bug,
 apache-tomcat-7.0.70 会有这个bug，换成 apache-tomcat-7.0.80 就好了。
 </code></pre><p>参考网址：<a href="&#39;https://bz.apache.org/bugzilla/show_bug.cgi?id=57438&#39;">https://bz.apache.org/bugzilla/show_bug.cgi?id=57438</a></p>
-<h4 id="2、aes加密javax-crypto-BadPaddingException-Given-final-block-not-properly-padded"><a href="#2、aes加密javax-crypto-BadPaddingException-Given-final-block-not-properly-padded" class="headerlink" title="2、aes加密javax.crypto.BadPaddingException: Given final block not properly padded"></a>2、aes加密javax.crypto.BadPaddingException: Given final block not properly padded</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">本地可能加解密正常，到linux服务器上面就解密异常,解决方法如下</div><div class="line">解密时候指定算法名称生成随机数</div><div class="line">SecureRandom random=SecureRandom.getInstance(&quot;SHA1PRNG&quot;);</div><div class="line">random.setSeed(key.getBytes());</div><div class="line"> kgen.init(keysize, random);</div></pre></td></tr></table></figure>
+<h4 id="2、aes加密javax-crypto-BadPaddingException-Given-final-block-not-properly-padded"><a href="#2、aes加密javax-crypto-BadPaddingException-Given-final-block-not-properly-padded" class="headerlink" title="2、aes加密javax.crypto.BadPaddingException: Given final block not properly padded"></a>2、aes加密javax.crypto.BadPaddingException: Given final block not properly padded</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">本地可能加解密正常，到linux服务器上面就解密异常,解决方法如下</span><br><span class="line">解密时候指定算法名称生成随机数</span><br><span class="line">SecureRandom random=SecureRandom.getInstance(&quot;SHA1PRNG&quot;);</span><br><span class="line">random.setSeed(key.getBytes());</span><br><span class="line"> kgen.init(keysize, random);</span><br></pre></td></tr></table></figure>
 <h4 id="3、httpclient超时时间设置过大，导致线上tomcat内存溢出"><a href="#3、httpclient超时时间设置过大，导致线上tomcat内存溢出" class="headerlink" title="3、httpclient超时时间设置过大，导致线上tomcat内存溢出"></a>3、httpclient超时时间设置过大，导致线上tomcat内存溢出</h4><pre><code>公司wap网站登陆的时候，会调钱包组的http接口，刚好早上他们的接口挂了，而我们的老代码里面设置的超时时间是30s,
 碰巧早上公司还有好几波秒杀和团购活动，一下子并发流量过来，导致系统有大量的httpclient对象没被回收，
 导致tomcat内存溢出，直接挂了！
