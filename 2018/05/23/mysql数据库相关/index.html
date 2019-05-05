@@ -98,7 +98,7 @@
 <meta property="og:image" content="http://blog.codinglabs.org/uploads/pictures/theory-of-mysql-index/9.png">
 <meta property="og:image" content="http://blog.codinglabs.org/uploads/pictures/theory-of-mysql-index/10.png">
 <meta property="og:image" content="http://blog.codinglabs.org/uploads/pictures/theory-of-mysql-index/11.png">
-<meta property="og:updated_time" content="2018-10-30T09:31:08.000Z">
+<meta property="og:updated_time" content="2019-03-13T07:58:41.336Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysql数据库相关">
 <meta name="twitter:description" content="相关命令用到一个记一个吧~ 磁盘IO与预读磁盘读取数据靠的是机械运动，每次读取数据花费的时间可以分为寻道时间、旋转延迟、传输时间三个部分 寻道时间指的是磁臂移动到指定磁道所需要的时间，主流磁盘一般在5ms以下； 旋转延迟就是我们经常听说的磁盘转速，比如一个磁盘7200转，表示每分钟能转7200次，也就是说1秒钟能转120次，旋转延迟就是1/120/2 = 4.17ms； 传输时间指的是从磁盘读出或">
@@ -369,11 +369,11 @@
 当计算机访问一个地址的数据的时候，与其相邻的数据也会很快被访问到
 </code></pre><h3 id="事物"><a href="#事物" class="headerlink" title="事物"></a>事物</h3><h4 id="ACID"><a href="#ACID" class="headerlink" title="ACID"></a>ACID</h4><pre><code>针对事务的所有行为都是围绕ACID来做的
 </code></pre><ul>
-<li>A(Atomicity)原子性     </li>
+<li>A(Atomicity)原子性</li>
 </ul>
 <pre><code>一个事务必须被视为一个不可分割的最小工作单元，整个事务中的所有操作要么全部提交成功，要么全部失败，对于一个事务来说，不可能只执行其中的一部分操作
 </code></pre><ul>
-<li>C(Consistency) 一致性 </li>
+<li>C(Consistency) 一致性</li>
 </ul>
 <pre><code>数据的一致，操作的一致，
 </code></pre><ul>
@@ -403,7 +403,7 @@ InnoDB的默认隔离级别RR实现了串行化级别的效果，而且保留了
 </ul>
 <pre><code>会出现幻读情况，mysql默认级别
 </code></pre><ul>
-<li>Serializable<h4 id="REDO-LOG"><a href="#REDO-LOG" class="headerlink" title="REDO LOG"></a>REDO LOG</h4> 为了满足事物的持久性，防止buffer pool数据丢失引入了redo log<br> redo log就是保存执行的SQL语句到一个指定的Log文件，当mysql执行数据恢复时，重新执行redo log记录的SQL操作即可<h4 id="UNDO-LOG"><a href="#UNDO-LOG" class="headerlink" title="UNDO LOG"></a>UNDO LOG</h4> 为了满足事物的一致性，引入了undo log,在操作任何数据之前，首先将数据备份到Undo Log，然后进行数据的修改。<br> 如果出现了错误或者用户执行了ROLLBACK语句，系统可以利用Undo Log中的备份将数据恢复到事务开始之前的状态。<br> 与redo log不同的是，磁盘上不存在单独的undo log文件，它存放在数据库内部的一个特殊段(segment)中，<br> 这称为undo段(undo segment)，undo段位于共享表空间内,<br> 记录undo log时候也会插入一条redo记录。<h4 id="事物时序"><a href="#事物时序" class="headerlink" title="事物时序"></a>事物时序</h4> 比如执行一个update操作，a原来的值为1 ，update table set a=3;<br> 1、开始事物<br> 2、记录undo log（记录undo log时候也会写入redo log的）<br> 3、记录redo log<br> 4、将redo log 写入磁盘<br> 5、提交事物<br> 6、binglog<br> 7、刷新磁盘<br> Undo + Redo事务的特点<br> 为了保证持久性，必须在事务提交前将Redo Log持久，<br>  数据不需要在事务提交前写入磁盘，而是缓存在内存中<h4 id="事物回滚"><a href="#事物回滚" class="headerlink" title="事物回滚"></a>事物回滚</h4>  事物回滚其实就是执行当前事物记录的undo日志。     <h4 id="数据恢复"><a href="#数据恢复" class="headerlink" title="数据恢复"></a>数据恢复</h4>  数据恢复其实就是对redo log进行重新执行，因为undo log 也会记录到redo log里面的，<br>  innodb对事物回滚时候的操作也会记录到redo log里面的，回滚操作本质上也是对数据进行修改，<br>  因此回滚时对数据的操作也会记录到Redo Log中。    </li>
+<li>Serializable<h4 id="REDO-LOG"><a href="#REDO-LOG" class="headerlink" title="REDO LOG"></a>REDO LOG</h4> 为了满足事物的持久性，防止buffer pool数据丢失引入了redo log<br> redo log就是保存执行的SQL语句到一个指定的Log文件，当mysql执行数据恢复时，重新执行redo log记录的SQL操作即可<h4 id="UNDO-LOG"><a href="#UNDO-LOG" class="headerlink" title="UNDO LOG"></a>UNDO LOG</h4> 为了满足事物的一致性，引入了undo log,在操作任何数据之前，首先将数据备份到Undo Log，然后进行数据的修改。<br> 如果出现了错误或者用户执行了ROLLBACK语句，系统可以利用Undo Log中的备份将数据恢复到事务开始之前的状态。<br> 与redo log不同的是，磁盘上不存在单独的undo log文件，它存放在数据库内部的一个特殊段(segment)中，<br> 这称为undo段(undo segment)，undo段位于共享表空间内,<br> 记录undo log时候也会插入一条redo记录。<h4 id="事物时序"><a href="#事物时序" class="headerlink" title="事物时序"></a>事物时序</h4> 比如执行一个update操作，a原来的值为1 ，update table set a=3;<br> 1、开始事物<br> 2、记录undo log（记录undo log时候也会写入redo log的）<br> 3、记录redo log<br> 4、将redo log 写入磁盘<br> 5、提交事物<br> 6、binglog<br> 7、刷新磁盘<br> Undo + Redo事务的特点<br> 为了保证持久性，必须在事务提交前将Redo Log持久，<br>  数据不需要在事务提交前写入磁盘，而是缓存在内存中<h4 id="事物回滚"><a href="#事物回滚" class="headerlink" title="事物回滚"></a>事物回滚</h4>  事物回滚其实就是执行当前事物记录的undo日志。<h4 id="数据恢复"><a href="#数据恢复" class="headerlink" title="数据恢复"></a>数据恢复</h4>  数据恢复其实就是对redo log进行重新执行，因为undo log 也会记录到redo log里面的，<br>  innodb对事物回滚时候的操作也会记录到redo log里面的，回滚操作本质上也是对数据进行修改，<br>  因此回滚时对数据的操作也会记录到Redo Log中。</li>
 </ul>
 <h3 id="binlog"><a href="#binlog" class="headerlink" title="binlog"></a>binlog</h3><pre><code>binlog日志用于记录所有更新且提交了数据或者已经潜在更新提交了数据（例如，没有匹配任何行的一个DELETE）的所有语句。语句以“事件”的形式保存，它描述数据更改。
 binlog作用：1.恢复使能够最大可能地更新数据库，因为二进制日志包含备份后进行的所有更新。2.在主复制服务器上记录所有将发送给从服务器的语句。
@@ -415,26 +415,26 @@ MyISAM 适合于一些需要大量查询的应用，但其对于有大量写操�
 甚至你只是需要update一个字段，整个表都会被锁起来
 如果一些初始化大量数据，不需要用到事物，可以先将表类型改成MyISAM插入，完成后
 再改成innodb类型 ALTER TABLE test ENGINE = InnoDB;
-</code></pre><h3 id="如何查看连接当前数据库连接数"><a href="#如何查看连接当前数据库连接数" class="headerlink" title="如何查看连接当前数据库连接数"></a>如何查看连接当前数据库连接数</h3><pre><code>show full processlist 
+</code></pre><h3 id="如何查看连接当前数据库连接数"><a href="#如何查看连接当前数据库连接数" class="headerlink" title="如何查看连接当前数据库连接数"></a>如何查看连接当前数据库连接数</h3><pre><code>show full processlist
 show variables like &apos;max_connections&apos;;(查可以看当前的最大连接数)
 max_connections 为mysql默认配置的连接数量，全局的限制连接数
 max_user_connections  这个就是单用户的连接数
-</code></pre><h3 id="查询数据库相关配置"><a href="#查询数据库相关配置" class="headerlink" title="查询数据库相关配置"></a>查询数据库相关配置</h3><pre><code>show variables 
+</code></pre><h3 id="查询数据库相关配置"><a href="#查询数据库相关配置" class="headerlink" title="查询数据库相关配置"></a>查询数据库相关配置</h3><pre><code>show variables
 SELECT VERSION(); mysql版本
 </code></pre><h3 id="获取数据库某个表自增id"><a href="#获取数据库某个表自增id" class="headerlink" title="获取数据库某个表自增id"></a>获取数据库某个表自增id</h3><pre><code>当有插入的sql执行后调用下面sql就可以获取到当前表的id
 SELECT LAST_INSERT_ID() from  table
 mybatis 就是利用这个特性获取到自增id的
 </code></pre><h3 id="表的存储空间大小"><a href="#表的存储空间大小" class="headerlink" title="表的存储空间大小"></a>表的存储空间大小</h3><pre><code>mysql创建的表默认的空间大小分数据存储的大小和索引的存储大小
 --查询当前数据的所有存储大小
-select concat(round(sum(DATA_LENGTH/1024/1024),2),&apos;M&apos;) from information_schema.tables where table_schema=&apos;DPEducation&apos; 
+select concat(round(sum(DATA_LENGTH/1024/1024),2),&apos;M&apos;) from information_schema.tables where table_schema=&apos;DPEducation&apos;
 mysql空表默认的data size=16kb  inde size 0kb
 --查询单个表的存储大小
-select sum(DATA_LENGTH)+sum(INDEX_LENGTH) from information_schema.tables where table_schema=&apos;DPEducation&apos; AND table_name=&apos;DP_EduCardPromotionScanDetail&apos;; 
+select sum(DATA_LENGTH)+sum(INDEX_LENGTH) from information_schema.tables where table_schema=&apos;DPEducation&apos; AND table_name=&apos;DP_EduCardPromotionScanDetail&apos;;
 单行记录长度为 data size/row=avg_row_length
 </code></pre><h3 id="表的空间估算"><a href="#表的空间估算" class="headerlink" title="表的空间估算"></a>表的空间估算</h3><p>   <a href="https://www.cnblogs.com/Aiapple/p/5697912.html" target="_blank" rel="external">参考</a></p>
 <pre><code>数据库业务特点关键词
 OLTP/OLAP、并发请求、读写比例、数据量、冷热数据比、数据分级存储
-1、OLTP与OLAP 
+1、OLTP与OLAP
 T=Transaction，面向广大用户，高并发，较短事务操作 互联网应用绝大部分属于OLTP
 OLTP看中服务器CPU,内存，写事务较多或内存不够则依赖磁盘IO
 A=Analytical，通常面向内部人员，大规模复杂查询，OLAP看中磁盘扫描的IO能力，部分依赖内存排序
@@ -448,9 +448,9 @@ A=Analytical，通常面向内部人员，大规模复杂查询，OLAP看中磁�
 </code></pre><h3 id="mysql千万表"><a href="#mysql千万表" class="headerlink" title="mysql千万表"></a>mysql千万表</h3><pre><code>DELIMITER ;;
 CREATE DEFINER=`mobile`@`%` PROCEDURE `test2`()
 begin
-declare v_cnt decimal (10)  default 0 ; 
-dd:loop            
-        insert  into `test` values         
+declare v_cnt decimal (10)  default 0 ;
+dd:loop
+        insert  into `test` values
         (null,&apos;11111111111&apos;),
         (null,&apos;11111111111&apos;),
         (null,&apos;11111111111&apos;),
@@ -460,12 +460,12 @@ dd:loop
         (null,&apos;11111111111&apos;),
         (null,&apos;11111111111&apos;),
         (null,&apos;11111111111&apos;),
-        (null,&apos;11111111111&apos;);                   
-        commit;                     
-        set v_cnt = v_cnt+10 ;                            
-            if  v_cnt = 10000000 then leave dd;                           
-            end if;          
-        end loop dd ; 
+        (null,&apos;11111111111&apos;);
+        commit;
+        set v_cnt = v_cnt+10 ;
+            if  v_cnt = 10000000 then leave dd;
+            end if;
+        end loop dd ;
 end;;
 DELIMITER ;
 //执行存储过程
@@ -482,7 +482,7 @@ B.复制原表物理结构
 C.修改表的物理结构
 D.把原表数据导入中间表中，数据同步完后，锁定中间表，并删除原表
 E.rename中间表为原表
-F.刷新数据字典，并释放锁 
+F.刷新数据字典，并释放锁
 
 对于大表的变更有以下几种方式：
 1、选择业务低峰期DDL
@@ -494,36 +494,36 @@ F.刷新数据字典，并释放锁
 <pre><code>show processlist;
 </code></pre><p>   2、查询到死锁表，再解锁</p>
 <pre><code>show OPEN TABLES where In_use &gt; 0;
-UNLOCK TABLES  
-</code></pre><h3 id="MySQL索引实现"><a href="#MySQL索引实现" class="headerlink" title="MySQL索引实现"></a>MySQL索引实现</h3><h4 id="MyISAM索引实现"><a href="#MyISAM索引实现" class="headerlink" title="MyISAM索引实现"></a>MyISAM索引实现</h4><pre><code>MyISAM引擎使用B+Tree作为索引结构，叶节点的data域存放的是数据在物理磁盘上的指针。下图是MyISAM索引的原理图 
-</code></pre><p>   <img src="http://p0.meituan.net/education/d49d260fc1eb8f992df0401b70d70e3d34360.png" alt="">  </p>
+UNLOCK TABLES
+</code></pre><h3 id="MySQL索引实现"><a href="#MySQL索引实现" class="headerlink" title="MySQL索引实现"></a>MySQL索引实现</h3><h4 id="MyISAM索引实现"><a href="#MyISAM索引实现" class="headerlink" title="MyISAM索引实现"></a>MyISAM索引实现</h4><pre><code>MyISAM引擎使用B+Tree作为索引结构，叶节点的data域存放的是数据在物理磁盘上的指针。下图是MyISAM索引的原理图
+</code></pre><p>   <img src="http://p0.meituan.net/education/d49d260fc1eb8f992df0401b70d70e3d34360.png" alt=""></p>
 <pre><code>这里设表一共有三列，假设我们以Col1为主键，则图8是一个MyISAM表的主索引（Primary key）示意。
 可以看出MyISAM的索引文件仅仅保存数据记录的地址。在MyISAM中，主索引和辅助索引（Secondary key）在结构上没有任何区别，
-只是主索引要求key是唯一的，而辅助索引的key可以重复。如果我们在Col2上建立一个辅助索引，则此索引的结构如下图所示：  
-</code></pre><p>   <img src="http://blog.codinglabs.org/uploads/pictures/theory-of-mysql-index/9.png" alt=""> </p>
+只是主索引要求key是唯一的，而辅助索引的key可以重复。如果我们在Col2上建立一个辅助索引，则此索引的结构如下图所示：
+</code></pre><p>   <img src="http://blog.codinglabs.org/uploads/pictures/theory-of-mysql-index/9.png" alt=""></p>
 <pre><code>同样也是一颗B+Tree，data域保存数据记录的地址。因此，MyISAM中索引检索的算法为首先按照B+Tree搜索算法搜索索引，
 如果指定的Key存在，则取出其data域的值，然后以data域的值为地址，读取相应数据记录。
-MyISAM的索引方式也叫做“非聚集”的，之所以这么称呼是为了与InnoDB的聚集索引区分。     
+MyISAM的索引方式也叫做“非聚集”的，之所以这么称呼是为了与InnoDB的聚集索引区分。
 </code></pre><h4 id="InnoDB索引实现"><a href="#InnoDB索引实现" class="headerlink" title="InnoDB索引实现"></a>InnoDB索引实现</h4><pre><code>虽然InnoDB也使用B+Tree作为索引结构，但具体实现方式却与MyISAM截然不同。
 第一个重大区别是InnoDB的数据文件本身就是索引文件。从上文知道，MyISAM索引文件和数据文件是分离的，
 索引文件仅保存数据记录的地址。而在InnoDB中，表数据文件本身就是按B+Tree组织的一个索引结构，
 这棵树的叶节点data域保存了完整的数据记录。这个索引的key是数据表的主键，因此InnoDB表数据文件本身就是主索引。
-</code></pre><p>  <img src="http://blog.codinglabs.org/uploads/pictures/theory-of-mysql-index/10.png" alt=""> </p>
+</code></pre><p>  <img src="http://blog.codinglabs.org/uploads/pictures/theory-of-mysql-index/10.png" alt=""></p>
 <pre><code>上图是InnoDB主索引（同时也是数据文件）的示意图，可以看到叶节点包含了完整的数据记录。这种索引叫做聚集索引。
 因为InnoDB的数据文件本身要按主键聚集，所以InnoDB要求表必须有主键（MyISAM可以没有），如果没有显式指定，
 则MySQL系统会自动选择一个可以唯一标识数据记录的列作为主键，如果不存在这种列，则MySQL自动为InnoDB表生成一个隐含字段作为主键，
 这个字段长度为6个字节，类型为长整形。
 
 第二个与MyISAM索引的不同是InnoDB的辅助索引data域存储相应记录主键的值而不是地址。
-换句话说，InnoDB的所有辅助索引都引用主键作为data域。例如，下图为定义在Col3上的一个辅助索引 
-</code></pre><p>   <img src="http://blog.codinglabs.org/uploads/pictures/theory-of-mysql-index/11.png" alt=""> </p>
-<pre><code>聚集索引这种实现方式使得按主键的搜索十分高效，但是辅助索引搜索需要检索两遍索引：首先检索辅助索引获得主键，然后用主键到主索引中检索获得记录。  
+换句话说，InnoDB的所有辅助索引都引用主键作为data域。例如，下图为定义在Col3上的一个辅助索引
+</code></pre><p>   <img src="http://blog.codinglabs.org/uploads/pictures/theory-of-mysql-index/11.png" alt=""></p>
+<pre><code>聚集索引这种实现方式使得按主键的搜索十分高效，但是辅助索引搜索需要检索两遍索引：首先检索辅助索引获得主键，然后用主键到主索引中检索获得记录。
 
 了解不同存储引擎的索引实现方式对于正确使用和优化索引都非常有帮助，
 例如知道了InnoDB的索引实现后，就很容易明白为什么不建议使用过长的字段作为主键，因为所有辅助索引都引用主索引，
 过长的主索引会令辅助索引变得过大。再例如，用非单调的字段作为主键在InnoDB中不是个好主意，
 因为InnoDB数据文件本身是一颗B+Tree，非单调的主键会造成在插入新记录时数据文件为了维持B+Tree的特性而频繁的分裂调整，
-十分低效，而使用自增字段作为主键则是一个很好的选择  
+十分低效，而使用自增字段作为主键则是一个很好的选择
 </code></pre><h4 id="索引类型和优化"><a href="#索引类型和优化" class="headerlink" title="索引类型和优化"></a>索引类型和优化</h4><h5 id="聚簇索引"><a href="#聚簇索引" class="headerlink" title="聚簇索引"></a>聚簇索引</h5><pre><code>主键会默认创建聚簇索引，且一张表只允许存在一个聚簇索引，聚簇索引的叶子节点就是数据节点，特点是存储数据的顺序和索引顺序一致。
 inodb的主键索引就是聚簇索引。
 </code></pre><h5 id="非聚簇索引"><a href="#非聚簇索引" class="headerlink" title="非聚簇索引"></a>非聚簇索引</h5><pre><code>叶子节点仍然是索引节点，只不过有指向对应数据块的指针,索引表中的顺序通常与实际的页码顺序是不一致。
@@ -531,11 +531,11 @@ MyISAM的索引方式“非聚集”索引
 </code></pre><h5 id="联合索引"><a href="#联合索引" class="headerlink" title="联合索引"></a>联合索引</h5><pre><code>多个字段建立的索引，组合索引的第一个字段必须出现在查询组句中，不然会导致索引失效
 比如组合索引create index index_a_b_c on table（a,b,c）
 如果是全列匹配 a,b,c或者c,b,a 都会被优化成abc顺序，匹配联合索引
-如果不是全列匹配，例如a|(a,b|b,a)| 都只会匹配到最左前缀索引 a 
+如果不是全列匹配，例如a|(a,b|b,a)| 都只会匹配到最左前缀索引 a
 如果不包含最左前缀的索引列，就会导致索引失效，例如 b,c或者c,b
 最左前缀就是最左的索引列优先，b,a都会被数据库引擎优化成ab这种顺序。
 </code></pre><h5 id="前缀索引-索引优化策略"><a href="#前缀索引-索引优化策略" class="headerlink" title="前缀索引(索引优化策略)"></a>前缀索引(索引优化策略)</h5><pre><code>    有一种与索引选择性有关的索引优化策略叫做前缀索引，就是用列的前缀代替整个列作为索引key，当前缀长度合适时，
-    可以做到既使得前缀索引的选择性接近全列索引，同时因为索引key变短而减少了索引文件的大小和维护开销 
+    可以做到既使得前缀索引的选择性接近全列索引，同时因为索引key变短而减少了索引文件的大小和维护开销
 
 利用如下SQL计算索引命中率：
 //从左开始截取字符串
@@ -551,20 +551,20 @@ ALTER TABLE `city` ADD INDEX `index_on_pinyinInitial` USING BTREE (pinyin_initia
 </code></pre><h6 id="全列匹配"><a href="#全列匹配" class="headerlink" title="全列匹配"></a>全列匹配</h6><pre><code>select * from table where a=? and b=? and c=?
 mySQL的查询优化器会自动调整where子句的条件顺序以使用适合的索引
 =和in可以乱序
-</code></pre><h6 id="最左前缀匹配"><a href="#最左前缀匹配" class="headerlink" title="最左前缀匹配"></a>最左前缀匹配</h6><pre><code>select * from table where a=? 
+</code></pre><h6 id="最左前缀匹配"><a href="#最左前缀匹配" class="headerlink" title="最左前缀匹配"></a>最左前缀匹配</h6><pre><code>select * from table where a=?
 select * from table where a=? and b=?
-当查询条件精确匹配索引的左边连续一个或几个列时,索引的第一列前缀         
-</code></pre><h6 id="查询条件用到了索引中列的精确匹配，但是中间某个条件未提"><a href="#查询条件用到了索引中列的精确匹配，但是中间某个条件未提" class="headerlink" title="查询条件用到了索引中列的精确匹配，但是中间某个条件未提"></a>查询条件用到了索引中列的精确匹配，但是中间某个条件未提</h6><pre><code>select * from table where a=? and c=? 
+当查询条件精确匹配索引的左边连续一个或几个列时,索引的第一列前缀
+</code></pre><h6 id="查询条件用到了索引中列的精确匹配，但是中间某个条件未提"><a href="#查询条件用到了索引中列的精确匹配，但是中间某个条件未提" class="headerlink" title="查询条件用到了索引中列的精确匹配，但是中间某个条件未提"></a>查询条件用到了索引中列的精确匹配，但是中间某个条件未提</h6><pre><code>select * from table where a=? and c=?
 根据最左前缀匹配原则，只会使用索引的第一列前缀
-</code></pre><h5 id="查询条件没有指定索引第一列。"><a href="#查询条件没有指定索引第一列。" class="headerlink" title="查询条件没有指定索引第一列。"></a>查询条件没有指定索引第一列。</h5><pre><code>select * from table where  c=?  
-索引失效   
+</code></pre><h5 id="查询条件没有指定索引第一列。"><a href="#查询条件没有指定索引第一列。" class="headerlink" title="查询条件没有指定索引第一列。"></a>查询条件没有指定索引第一列。</h5><pre><code>select * from table where  c=?
+索引失效
 </code></pre><h5 id="范围查询"><a href="#范围查询" class="headerlink" title="范围查询"></a>范围查询</h5><pre><code> mysql会一直向右匹配直到遇到范围查询(&gt;、&lt;、between、like)就停止匹配，
    select * from table where a = 1 and b = 2 and c &gt; 3 and d = 4
 范围列可以用到索引（必须是最左前缀），但是范围列后面的列无法用到索引。
 同时，索引最多用于一个范围列，因此如果查询条件中有两个范围列则无法全用到索引。
 如果建立(a,b,c,d)顺序的索引，d是用不到索引的。
 如果建立(a,b,d,c)的索引则都可以用到，a,b,d的顺序可以任意调整。
-因为sql where a=1 and b=2 and c&gt;3 and d=4会被优化成 where a=1 and b=2 and d=4 and c&gt;3  
+因为sql where a=1 and b=2 and c&gt;3 and d=4会被优化成 where a=1 and b=2 and d=4 and c&gt;3
 
 CREATE TABLE `tb_project_user` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -578,18 +578,18 @@ CREATE TABLE `tb_project_user` (
 会走两个type和user_id 索引
 explain select * from tb_project_user where  type=1 and user_id&gt;1 and project_id=1
 会走三个 type 、user_id、project_id、索引
-explain select * from tb_project_user where  type=1  and project_id&gt;1 and user_id=1 
+explain select * from tb_project_user where  type=1  and project_id&gt;1 and user_id=1
 </code></pre><h4 id="索引选择性"><a href="#索引选择性" class="headerlink" title="索引选择性"></a>索引选择性</h4><pre><code>索引文件本身要消耗存储空间，同时索引会加重插入、删除和修改记录时的负担，另外，MySQL在运行时也要消耗资源维护索引，因此索引并不是越多越好。
 一般两种情况下不建议建索引。
 1、数据量比较少，
 2、另一种不建议建索引的情况是索引的选择性较低。
-   所谓索引的选择性（Selectivity），是指不重复的索引值（也叫基数，Cardinality）与表记录数（#T）的比值 
-   SELECT count(DISTINCT(xx))/count(*) AS xx FROM table; 
+   所谓索引的选择性（Selectivity），是指不重复的索引值（也叫基数，Cardinality）与表记录数（#T）的比值
+   SELECT count(DISTINCT(xx))/count(*) AS xx FROM table;
 </code></pre><h4 id="建索引的几大原则"><a href="#建索引的几大原则" class="headerlink" title="建索引的几大原则"></a>建索引的几大原则</h4><pre><code>1.最左前缀匹配原则，非常重要的原则，mysql会一直向右匹配直到遇到范围查询(&gt;、&lt;、between、like)就停止匹配，比如a = 1 and b = 2 and c &gt; 3 and d = 4 如果建立(a,b,c,d)顺序的索引，d是用不到索引的，如果建立(a,b,d,c)的索引则都可以用到，a,b,d的顺序可以任意调整。
 2.=和in可以乱序，比如a = 1 and b = 2 and c = 3 建立(a,b,c)索引可以任意顺序，mysql的查询优化器会帮你优化成索引可以识别的形式
 3.尽量选择区分度高的列作为索引,区分度的公式是count(distinct col)/count(*)，表示字段不重复的比例，比例越大我们扫描的记录数越少，唯一键的区分度是1，而一些状态、性别字段可能在大数据面前区分度就是0，那可能有人会问，这个比例有什么经验值吗？使用场景不同，这个值也很难确定，一般需要join的字段我们都要求是0.1以上，即平均1条扫描10条记录
 4.索引列不能参与计算，保持列“干净”，比如from_unixtime(create_time) = ’2014-05-29’就不能使用到索引，原因很简单，b+树中存的都是数据表中的字段值，但进行检索时，需要把所有元素都应用函数才能比较，显然成本太大。所以语句应该写成create_time = unix_timestamp(’2014-05-29’);
-5.尽量的扩展索引，不要新建索引。比如表中已经有a的索引，现在要加(a,b)的索引，那么只需要修改原来的索引即可     
+5.尽量的扩展索引，不要新建索引。比如表中已经有a的索引，现在要加(a,b)的索引，那么只需要修改原来的索引即可
 </code></pre><h4 id="explain"><a href="#explain" class="headerlink" title="explain"></a>explain</h4><pre><code>rows是核心指标，绝大部分rows小的语句执行一定很快（有例外，下面会讲到）。所以优化语句基本上都是在优化rows。
 select_type：执行类型 simple为简单查询类型
 type: const 标示查询结果最多匹配一行，查询很快，从最好到最差的连接类型为
@@ -605,7 +605,10 @@ key_len的长度计算公式：
 varchr(10)变长字段且允许NULL    =  10 * ( character set：utf8=3,gbk=2,latin1=1)+1(NULL)+2(变长字段)
 varchr(10)变长字段且不允许NULL =  10 *( character set：utf8=3,gbk=2,latin1=1)+2(变长字段)
 char(10)固定字段且允许NULL        =  10 * ( character set：utf8=3,gbk=2,latin1=1)+1(NULL)
-char(10)固定字段且不允许NULL        =  10 * ( character set：utf8=3,gbk=2,latin1=1)       
+char(10)固定字段且不允许NULL        =  10 * ( character set：utf8=3,gbk=2,latin1=1)
+text  65,535 bytes  约 64k  如果换算成字符串的话 一个字符占用那个字节，那就是对应有64*1024/3=21845个字符串。
+LONGTEXT  4,294,967,295 bytes ~4GB
+所以以后设置不可变的文本的话最好是用长文本来存储！！
 </code></pre><h3 id="数据库连接池"><a href="#数据库连接池" class="headerlink" title="数据库连接池"></a>数据库连接池</h3><h4 id="连接池大小"><a href="#连接池大小" class="headerlink" title="连接池大小"></a>连接池大小</h4><pre><code>initialPoolSize=10、maxPoolSize=20、minPoolSize=10
 如果只是单体应用访问数据库，最大连接数可以设置大一点
 如果有N个应用访问同一个数据库，最大连接数就要控制。比较数据库的最大连接数是有限制的。
@@ -684,7 +687,7 @@ minEvictableIdleTimeMillis：配置一个连接在池中最小生存的时间，
 timeBetweenEvictionRunsMillis与minEvictableIdleTimeMillis搭配使用：
 timeBetweenEvictionRunsMillis毫秒秒检查一次连接池中空闲的连接,
 把空闲时间超过minEvictableIdleTimeMillis毫秒的连接断开,直到连接池中的连接数到minIdle为止
-</code></pre><h3 id="参考博客"><a href="#参考博客" class="headerlink" title="参考博客"></a>参考博客</h3><p>   1、<a href="https://tech.meituan.com/mysql_index.html" target="_blank" rel="external">MySQL索引原理及慢查询优化</a><br>   2、<a href="http://blog.codinglabs.org/articles/theory-of-mysql-index.html" target="_blank" rel="external">MySQL索引背后的数据结构及算法原理</a>            </p>
+</code></pre><h3 id="参考博客"><a href="#参考博客" class="headerlink" title="参考博客"></a>参考博客</h3><p>   1、<a href="https://tech.meituan.com/mysql_index.html" target="_blank" rel="external">MySQL索引原理及慢查询优化</a><br>   2、<a href="http://blog.codinglabs.org/articles/theory-of-mysql-index.html" target="_blank" rel="external">MySQL索引背后的数据结构及算法原理</a></p>
 
       
     </div>
@@ -799,7 +802,7 @@ timeBetweenEvictionRunsMillis毫秒秒检查一次连接池中空闲的连接,
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-count">33</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -899,7 +902,7 @@ timeBetweenEvictionRunsMillis毫秒秒检查一次连接池中空闲的连接,
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
