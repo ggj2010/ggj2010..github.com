@@ -278,6 +278,135 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://ggj2010.github.io/2018/07/13/系统故障定位/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ggj2010">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="高广金博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2018/07/13/系统故障定位/" itemprop="url">
+                  系统故障定位
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-13T15:03:46+08:00">
+                2018-07-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          公司有监控组件cat，系统的所有信息在cat上面都可以看到，用久了平常的一些命令就忘完了
+CPUtop命令
+Mem中的free不是当前系统可用的最大物理内存，当前可用的物理内存数应该为Mem:free+Mem:buffers+Swap:cached
+
+Load average 
+0.7 &lt; l
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/07/13/系统故障定位/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://ggj2010.github.io/2018/06/26/kafka相关记录/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1415,132 +1544,6 @@ bin/kafka-server-start.sh config/se
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://ggj2010.github.io/2017/07/18/工作中涉及到优化的总结/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ggj2010">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="高广金博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/07/18/工作中涉及到优化的总结/" itemprop="url">
-                  工作中涉及到优化的总结
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-18T12:37:50+08:00">
-                2017-07-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          面试的时候总有人问，你有优化或者重构那些东西，总是想不起来，好记性不如烂笔头啊！
-同步改成异步优化微信推送消息接口改成异步一开始设计微信推送接口，只是为了给内部员工用的，调用量不大，真个流程就是 调用接口的时候传用户的openid,然后调用微信官方的接口进行推送，整个操作都是同步的。
-后来其他组接入
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/07/18/工作中涉及到优化的总结/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1590,7 +1593,7 @@ bin/kafka-server-start.sh config/se
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-count">34</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
