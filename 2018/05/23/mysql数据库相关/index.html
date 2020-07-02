@@ -94,15 +94,17 @@
 <meta property="og:site_name" content="高广金博客">
 <meta property="og:description" content="相关命令用到一个记一个吧~ 磁盘IO与预读磁盘读取数据靠的是机械运动，每次读取数据花费的时间可以分为寻道时间、旋转延迟、传输时间三个部分 寻道时间指的是磁臂移动到指定磁道所需要的时间，主流磁盘一般在5ms以下； 旋转延迟就是我们经常听说的磁盘转速，比如一个磁盘7200转，表示每分钟能转7200次，也就是说1秒钟能转120次，旋转延迟就是1/120/2 = 4.17ms； 传输时间指的是从磁盘读出或">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://blog.haohtml.com/wp-content/uploads/2019/08/innodb-page-dir-1024x959.jpg">
 <meta property="og:image" content="http://p0.meituan.net/education/d49d260fc1eb8f992df0401b70d70e3d34360.png">
 <meta property="og:image" content="http://blog.codinglabs.org/uploads/pictures/theory-of-mysql-index/9.png">
 <meta property="og:image" content="http://blog.codinglabs.org/uploads/pictures/theory-of-mysql-index/10.png">
 <meta property="og:image" content="http://blog.codinglabs.org/uploads/pictures/theory-of-mysql-index/11.png">
-<meta property="og:updated_time" content="2019-05-06T12:52:54.079Z">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/13838784-7bbab4d36a1b60bd.png">
+<meta property="og:updated_time" content="2020-06-23T07:29:03.845Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysql数据库相关">
 <meta name="twitter:description" content="相关命令用到一个记一个吧~ 磁盘IO与预读磁盘读取数据靠的是机械运动，每次读取数据花费的时间可以分为寻道时间、旋转延迟、传输时间三个部分 寻道时间指的是磁臂移动到指定磁道所需要的时间，主流磁盘一般在5ms以下； 旋转延迟就是我们经常听说的磁盘转速，比如一个磁盘7200转，表示每分钟能转7200次，也就是说1秒钟能转120次，旋转延迟就是1/120/2 = 4.17ms； 传输时间指的是从磁盘读出或">
-<meta name="twitter:image" content="http://p0.meituan.net/education/d49d260fc1eb8f992df0401b70d70e3d34360.png">
+<meta name="twitter:image" content="https://blog.haohtml.com/wp-content/uploads/2019/08/innodb-page-dir-1024x959.jpg">
 
 
 
@@ -367,6 +369,48 @@
 考虑到磁盘IO是非常高昂的操作，计算机操作系统做了一些优化，当一次IO时，
 不光把当前磁盘地址的数据，而是把相邻的数据也都读取到内存缓冲区内，因为局部预读性原理告诉我们，
 当计算机访问一个地址的数据的时候，与其相邻的数据也会很快被访问到
+</code></pre><h3 id="mysql-page"><a href="#mysql-page" class="headerlink" title="mysql page"></a>mysql page</h3><h4 id="为什么需要引入page"><a href="#为什么需要引入page" class="headerlink" title="为什么需要引入page"></a>为什么需要引入page</h4><pre><code> 在操作系统的概念中，当我们往磁盘中取数据的时候，如果我们要取出来数据的大小是1kb，但操作系统不会只取1kb,
+ 而是一次性取4kb的数据，因为操作系统的一个页表项的大小是4kb,一个程序在访问了一条数据之后，
+ 在之后会有极大的可能再次访问这条数据和访问这条数据的相邻数据,所以为了减少磁盘的io次数，会取多余数据
+
+
+
+参考：https://blog.haohtml.com/archives/19232
+从InnoDB存储引擎的逻辑结构看，所有数据都被逻辑地存放在一个空间内，称为表空间(tablespace)，
+而表空间由段（sengment）、区（extent）、页（page）组成。 在一些文档中extend又称块（block）
+
+段（Segment）由一个或多个区组成
+当我们创建数据表、索引的时候，就会相应创建对应的段，比如创建一张表时会创建一个表段，创建一个索引时会创建一个索引段。
+
+区：
+在文件系统是一个连续分配的空间（在InnoDB中是连续的64个页，64*16KB=1MB）
+
+页：
+页是InnoDB存储引擎磁盘管理的最小单位，每个页默认16KB；InnoDB存储引擎从1.2.x版本开始，
+可以通过参数innodb_page_size将页的大小设置为4K、8K、16K。若设置完成，则所有表中页的大小都为innodb_page_size
+
+行：
+InnoDB存储引擎是按行进行存放的，每个页存放的行记录也是有硬性定义的，最多允许存放16KB/2-200，即7992行记录
+
+
+页结构整体上可以分为三大部分，分别为通用部分(文件头、文件尾)、存储记录空间、索引部分
+页的主要作用是存储记录，所以“最小和最大记录”和“用户记录”部分占了页结构的主要空间
+一个页内必须存储2行记录，否则就不是B+tree，而是链表了
+
+在页中，记录是以单向链表的形式进行存储的,单向链表特点插入和删除快，但是检索不好，所以
+在页目录中提供了二分查找法，用来提供记录的检索效率。这个过程就好比是给记录创建了一个目录：
+将所有的记录分成几个组，这些记录包括最小记录和最大记录，但不包括标记为“已删除”的记录
+
+页目录用来存储每组最后一条记录的地址偏移量，这些地址偏移量会按照先后顺序存储起来，
+每组的地址偏移量也被称之为槽（slot），每个槽相当于指针指向了不同组的最后一个记录
+</code></pre><p><img src="https://blog.haohtml.com/wp-content/uploads/2019/08/innodb-page-dir-1024x959.jpg" alt=""><br>    页目录存储的是槽，槽相当于分组记录的索引。我们通过槽查找记录，实际上就是在做二分查找<br>    举个例子，例如5个槽的编号分别为 0，1，2，3，4，想查找主键为9的用户记录，我们初始化查找的槽的下限编号，<br>    设置为 low=0，然后设置查找的槽的上限编号 high=4，然后采用二分查找法进行查找</p>
+<pre><code>首先找到槽的中间位置 p=(low+high)/2=(0+4)/2=2  这时我们取编号为 2 的槽对应的分组记录中最大的记录，
+取出关键字为 8。因为 9 大于 8，所以应该会在槽编号为 (p,high] 的范围进行查找
+
+接着重新计算中间位置 p’=(p+high)/2=(2+4)/2=3，我们查找编号为 3 的槽对应的分组记录中最大的记录，
+取出关键字为 12。因为 9 小于 12，所以应该在槽 3 中进行查找
+
+遍历槽 3 中的所有记录，找到关键字为 9 的记录，取出该条记录的信息即为我们想要查找的内容
 </code></pre><h3 id="事物"><a href="#事物" class="headerlink" title="事物"></a>事物</h3><h4 id="ACID"><a href="#ACID" class="headerlink" title="ACID"></a>ACID</h4><pre><code>针对事务的所有行为都是围绕ACID来做的
 </code></pre><ul>
 <li>A(Atomicity)原子性</li>
@@ -388,9 +432,19 @@
 数据库的隔离性.
     事务的隔离性是通过锁实现，而事务的原子性、一致性和持久性则是通过事务日志(UNDO+REDO)实现。
 事务的核心包括两个方面:锁和并发,MySQL默认的存储引擎是InnoDB，默认的隔离级别是RR，并且在RR的级别下，通过
-多版本并发控制（MVCC，Multiversion Concurrency Control），加上GAP LOCK解决了幻读问题(不考虑快照读的情况下)，
+多版本并发控制（MVCC，Multiversion Concurrency Control），乐观锁机制，加上GAP LOCK解决了幻读问题(不考虑快照读的情况下)，
 InnoDB的默认隔离级别RR实现了串行化级别的效果，而且保留了比较好的并发性能。
-</code></pre><h4 id="数据库事物隔离级别"><a href="#数据库事物隔离级别" class="headerlink" title="数据库事物隔离级别"></a>数据库事物隔离级别</h4><ul>
+mysql mvcc实现方式：
+1、数据引擎给每张表都加两个字段 create version和delete version
+插入时候：记录创建的版本号
+更新的时候：旧的那行记录为删除，并且删除版本号是当前事务版本号，再插入新的记录。
+删除时候：事务版本号作为删除版本号
+当我们做查询操作的时候，要符合以下条件才能被事物查询出来
+1、delete version&gt;当前版本号 也就是说删除操作是再当前事务启动之后做的zxc g
+2、create version&lt;=当前事物版本号
+</code></pre><h4 id="数据库事物隔离级别"><a href="#数据库事物隔离级别" class="headerlink" title="数据库事物隔离级别"></a>数据库事物隔离级别</h4><pre><code>命令：select @@global.tx_isolation;
+set global transaction isolation level repeatable read;
+</code></pre><ul>
 <li>Read uncommitted</li>
 </ul>
 <pre><code>会出现脏读、重复读、幻读情况
@@ -403,9 +457,31 @@ InnoDB的默认隔离级别RR实现了串行化级别的效果，而且保留了
 </ul>
 <pre><code>会出现幻读情况，mysql默认级别
 </code></pre><ul>
-<li>Serializable<h4 id="REDO-LOG"><a href="#REDO-LOG" class="headerlink" title="REDO LOG"></a>REDO LOG</h4> 为了满足事物的持久性，防止buffer pool数据丢失引入了redo log<br> redo log就是保存执行的SQL语句到一个指定的Log文件，当mysql执行数据恢复时，重新执行redo log记录的SQL操作即可<h4 id="UNDO-LOG"><a href="#UNDO-LOG" class="headerlink" title="UNDO LOG"></a>UNDO LOG</h4> 为了满足事物的一致性，引入了undo log,在操作任何数据之前，首先将数据备份到Undo Log，然后进行数据的修改。<br> 如果出现了错误或者用户执行了ROLLBACK语句，系统可以利用Undo Log中的备份将数据恢复到事务开始之前的状态。<br> 与redo log不同的是，磁盘上不存在单独的undo log文件，它存放在数据库内部的一个特殊段(segment)中，<br> 这称为undo段(undo segment)，undo段位于共享表空间内,<br> 记录undo log时候也会插入一条redo记录。<h4 id="事物时序"><a href="#事物时序" class="headerlink" title="事物时序"></a>事物时序</h4> 比如执行一个update操作，a原来的值为1 ，update table set a=3;<br> 1、开始事物<br> 2、记录undo log（记录undo log时候也会写入redo log的）<br> 3、记录redo log<br> 4、将redo log 写入磁盘<br> 5、提交事物<br> 6、binglog<br> 7、刷新磁盘<br> Undo + Redo事务的特点<br> 为了保证持久性，必须在事务提交前将Redo Log持久，<br>  数据不需要在事务提交前写入磁盘，而是缓存在内存中<h4 id="事物回滚"><a href="#事物回滚" class="headerlink" title="事物回滚"></a>事物回滚</h4>  事物回滚其实就是执行当前事物记录的undo日志。<h4 id="数据恢复"><a href="#数据恢复" class="headerlink" title="数据恢复"></a>数据恢复</h4>  数据恢复其实就是对redo log进行重新执行，因为undo log 也会记录到redo log里面的，<br>  innodb对事物回滚时候的操作也会记录到redo log里面的，回滚操作本质上也是对数据进行修改，<br>  因此回滚时对数据的操作也会记录到Redo Log中。</li>
+<li>Serializable</li>
 </ul>
-<h3 id="binlog"><a href="#binlog" class="headerlink" title="binlog"></a>binlog</h3><pre><code>binlog日志用于记录所有更新且提交了数据或者已经潜在更新提交了数据（例如，没有匹配任何行的一个DELETE）的所有语句。语句以“事件”的形式保存，它描述数据更改。
+<h4 id="REDO-LOG"><a href="#REDO-LOG" class="headerlink" title="REDO LOG"></a>REDO LOG</h4><pre><code>为了满足事物的持久性，防止buffer pool数据丢失引入了redo log
+redo log就是保存执行的SQL语句到一个指定的Log文件，当mysql执行数据恢复时，重新执行redo log记录的SQL操作即可
+</code></pre><h4 id="UNDO-LOG"><a href="#UNDO-LOG" class="headerlink" title="UNDO LOG"></a>UNDO LOG</h4><pre><code>为了满足事物的一致性，引入了undo log,在操作任何数据之前，首先将数据备份到Undo Log，然后进行数据的修改。
+如果出现了错误或者用户执行了ROLLBACK语句，系统可以利用Undo Log中的备份将数据恢复到事务开始之前的状态。
+与redo log不同的是，磁盘上不存在单独的undo log文件，它存放在数据库内部的一个特殊段(segment)中，
+这称为undo段(undo segment)，undo段位于共享表空间内,
+记录undo log时候也会插入一条redo记录。
+</code></pre><h4 id="事物时序"><a href="#事物时序" class="headerlink" title="事物时序"></a>事物时序</h4><pre><code>比如执行一个update操作，a原来的值为1 ，update table set a=3;
+1、开始事物
+2、记录undo log（记录undo log时候也会写入redo log的）
+3、记录redo log
+4、将redo log 写入磁盘
+5、提交事物
+6、binglog
+7、刷新磁盘
+Undo + Redo事务的特点
+为了保证持久性，必须在事务提交前将Redo Log持久，
+ 数据不需要在事务提交前写入磁盘，而是缓存在内存中
+</code></pre><h4 id="事物回滚"><a href="#事物回滚" class="headerlink" title="事物回滚"></a>事物回滚</h4><pre><code>事物回滚其实就是执行当前事物记录的undo日志。
+</code></pre><h4 id="数据恢复"><a href="#数据恢复" class="headerlink" title="数据恢复"></a>数据恢复</h4><pre><code>数据恢复其实就是对redo log进行重新执行，因为undo log 也会记录到redo log里面的，
+innodb对事物回滚时候的操作也会记录到redo log里面的，回滚操作本质上也是对数据进行修改，
+因此回滚时对数据的操作也会记录到Redo Log中。
+</code></pre><h3 id="binlog"><a href="#binlog" class="headerlink" title="binlog"></a>binlog</h3><pre><code>binlog日志用于记录所有更新且提交了数据或者已经潜在更新提交了数据（例如，没有匹配任何行的一个DELETE）的所有语句。语句以“事件”的形式保存，它描述数据更改。
 binlog作用：1.恢复使能够最大可能地更新数据库，因为二进制日志包含备份后进行的所有更新。2.在主复制服务器上记录所有将发送给从服务器的语句。
 binlog一般用于主从同步。
 </code></pre><h3 id="MyISAM与innodb"><a href="#MyISAM与innodb" class="headerlink" title="MyISAM与innodb"></a>MyISAM与innodb</h3><pre><code>5.5版本之前默认的存储引擎是myisam ,5.5版本开始MySQL默认存储引擎是innodb
@@ -495,17 +571,29 @@ F.刷新数据字典，并释放锁
 </code></pre><p>   2、查询到死锁表，再解锁</p>
 <pre><code>show OPEN TABLES where In_use &gt; 0;
 UNLOCK TABLES
-</code></pre><h4 id="锁的算法"><a href="#锁的算法" class="headerlink" title="锁的算法"></a>锁的算法</h4><pre><code>在 InnoDB 中实现了两个标准的行级锁，可以简单的看为两个读写锁：
+</code></pre><h4 id="锁的算法"><a href="#锁的算法" class="headerlink" title="锁的算法"></a>锁的算法</h4><pre><code>mysql innodb引擎支持事务，更新时采用的是行级锁。
+行级锁必须建立在索引的基础
+行级锁并不是直接锁记录，而是锁索引，如果一条SQL语句用到了主键索引，mysql会锁住主键索引；
+如果一条语句操作了非主键索引，mysql会先锁住非主键索引，再锁定主键索引。
+如果操作用到了主键索引会先在主键索引上加锁，然后在其他索引上加锁，否则加锁顺序相反。
+对于没有用索引的操作会采用表级锁
+
+在 InnoDB 中实现了两个标准的行级锁，可以简单的看为两个读写锁：
 锁与锁之间具有兼容性，兼容性是指事务 A 获得一个某行某种锁之后，事务 B 同样的在这个行上尝试获取某种锁
 ，如果能立即获取，则称兼容，反之叫冲突
 共享锁(Share Lock)又叫读锁，其他事务可以继续加共享锁，但是不能继续加排他锁。
 排他锁(Exclusive Lock)又叫写锁，一旦加了写锁之后，其他事务就不能加锁了
+
+Innodb对于行的查询都是采用Next-KEY Lock，
+但是当查询索引时含有唯一索引时，Innodb会对Next-KEY lock进行优化，降级为Record LOCK。仅锁住索引本身而非范围
 </code></pre><h5 id="记录锁-Record-Lock"><a href="#记录锁-Record-Lock" class="headerlink" title="记录锁(Record Lock)"></a>记录锁(Record Lock)</h5><pre><code>如果锁的是非主键索引，会在自己的索引上面加锁之后然后再去主键上面加锁锁住。
 如果没有表上没有索引(包括没有主键)，则会使用隐藏的主键索引进行加锁。
 如果要锁的列没有索引，则会进行全表记录加锁。
-</code></pre><h5 id="间隙锁-Gap-Lock"><a href="#间隙锁-Gap-Lock" class="headerlink" title="间隙锁(Gap Lock)"></a>间隙锁(Gap Lock)</h5><pre><code>锁间隙，不锁记录。锁间隙的意思就是锁定某一个范围，间隙锁又叫 gap lock，其不会阻塞其他的 gap lcok，但是会阻塞 插入间隙锁 ，这也是用来防止 幻读 的关键。
-</code></pre><h5 id="插入意向锁"><a href="#插入意向锁" class="headerlink" title="插入意向锁"></a>插入意向锁</h5><pre><code>插入意向锁是一种Gap Lock，在insert操作时产生。
- 插入意向锁之间互不排斥，所以即使多个事务在同一区间插入多条记录，只要记录本身（主键、唯一索引）不冲突，那么事务之间就不会出现冲突等待
+</code></pre><h5 id="间隙锁-Gap-Lock"><a href="#间隙锁-Gap-Lock" class="headerlink" title="间隙锁(Gap Lock)"></a>间隙锁(Gap Lock)</h5><pre><code>锁间隙，不锁记录。锁间隙的意思就是锁定某一个范围，间隙锁又叫 gap lock，
+其不会阻塞其他的gap lcok，但是会阻塞插入意向锁 ，这也是用来防止幻读的关键。RR级别
+</code></pre><h5 id="插入意向锁"><a href="#插入意向锁" class="headerlink" title="插入意向锁"></a>插入意向锁</h5><pre><code>插入意向锁是一种Gap Lock，在insert操作时产生。对于插入的记录会持有一个记录锁
+插入意向锁之间互不排斥，所以即使多个事务在同一区间插入多条记录，
+只要记录本身（主键、唯一索引）不冲突，那么事务之间就不会出现冲突等待
 </code></pre><h5 id="Next-key-Lock"><a href="#Next-key-Lock" class="headerlink" title="Next-key Lock"></a>Next-key Lock</h5><pre><code>这个锁本质是记录锁+ 间隙锁。
 在 RR 隔离级别下(InnoDB 默认)，InnoDB 对于行的扫描锁定都是使用此算法，但是如果查询扫描中有唯一索引会退化成只使用记录锁。
 </code></pre><h3 id="MySQL索引实现"><a href="#MySQL索引实现" class="headerlink" title="MySQL索引实现"></a>MySQL索引实现</h3><h4 id="MyISAM索引实现"><a href="#MyISAM索引实现" class="headerlink" title="MyISAM索引实现"></a>MyISAM索引实现</h4><pre><code>MyISAM引擎使用B+Tree作为索引结构，叶节点的data域存放的是数据在物理磁盘上的指针。下图是MyISAM索引的原理图
@@ -537,10 +625,38 @@ MyISAM的索引方式也叫做“非聚集”的，之所以这么称呼是为�
 过长的主索引会令辅助索引变得过大。再例如，用非单调的字段作为主键在InnoDB中不是个好主意，
 因为InnoDB数据文件本身是一颗B+Tree，非单调的主键会造成在插入新记录时数据文件为了维持B+Tree的特性而频繁的分裂调整，
 十分低效，而使用自增字段作为主键则是一个很好的选择
+</code></pre><h4 id="B-树是如何进行记录检索的"><a href="#B-树是如何进行记录检索的" class="headerlink" title="B+ 树是如何进行记录检索的"></a>B+ 树是如何进行记录检索的</h4><pre><code>页与页之间是双向链表关系
+</code></pre><p><img src="https://upload-images.jianshu.io/upload_images/13838784-7bbab4d36a1b60bd.png" alt=""></p>
+<pre><code>如果通过 B+ 树的索引查询行记录，首先是从 B+ 树的根开始，逐层检索，直到找到叶子节点，
+也就是找到对应的数据页为止，将数据页加载到内存中，页目录中的槽（slot）采用二分查找的方式先找到一个粗略的记录分组，
+然后再在分组中通过链表遍历的方式查找记录
+</code></pre><h4 id="计算3层索引树能容纳的数据量"><a href="#计算3层索引树能容纳的数据量" class="headerlink" title="计算3层索引树能容纳的数据量"></a>计算3层索引树能容纳的数据量</h4><pre><code>InnoDB存储引擎中页的大小为16KB
+
+首先两个假设：
+主键id，我们采用bigint，8字节
+一条数据大小1KB
+第一层：
+一个页16K，每一个索引键的大小8字节（bigint）+6字节（指针大小），因此第一层可存储16*1024/14=1170个索引键
+第二层
+第二层只存储索引键，能存储多少个索引键呢，因为第一层可以存储1170个索引键，每个都可以存1170 也就是可以存1170*1170=1368900 条索引
+如果第二蹭存储数据，那么可以存储1170*16kb/1kb=18720 一万多条数据
+第三层：
+1170*1170*16kb/1kb=21902400  3次IO就可以查询到2千多万左右的数据
 </code></pre><h4 id="索引类型和优化"><a href="#索引类型和优化" class="headerlink" title="索引类型和优化"></a>索引类型和优化</h4><h5 id="聚簇索引"><a href="#聚簇索引" class="headerlink" title="聚簇索引"></a>聚簇索引</h5><pre><code>主键会默认创建聚簇索引，且一张表只允许存在一个聚簇索引，聚簇索引的叶子节点就是数据节点，特点是存储数据的顺序和索引顺序一致。
 inodb的主键索引就是聚簇索引。
 </code></pre><h5 id="非聚簇索引"><a href="#非聚簇索引" class="headerlink" title="非聚簇索引"></a>非聚簇索引</h5><pre><code>叶子节点仍然是索引节点，只不过有指向对应数据块的指针,索引表中的顺序通常与实际的页码顺序是不一致。
 MyISAM的索引方式“非聚集”索引
+创建二级索引的代价，主要表现在维护代价、空间代价和回表代价三个方面
+
+最后是回表的代价。二级索引不保存原始数据，通过索引找到主键后需要再查询聚簇索引，才能得到我们要的数据。
+比如，使用SELECT*按照login_name字段查询用户，使用EXPLAIN查看执行计划：
+explain select * from user where login_name=&apos;devym&apos;
+1    SIMPLE    user    NULL    const    uidx_login_name    uidx_login_name    514    const    1    100.00    NULL
+
+explain select login_name from user where login_name=&apos;devym&apos;
+1    SIMPLE    user    NULL    const    uidx_login_name    uidx_login_name    514    const    1    100.00    Using index
+
+可以看到，Extra列多了一行Usingindex的提示，证明这次查询直接查的是二级索引，免去了回表。
 </code></pre><h5 id="联合索引"><a href="#联合索引" class="headerlink" title="联合索引"></a>联合索引</h5><pre><code>多个字段建立的索引，组合索引的第一个字段必须出现在查询组句中，不然会导致索引失效
 比如组合索引create index index_a_b_c on table（a,b,c）
 如果是全列匹配 a,b,c或者c,b,a 都会被优化成abc顺序，匹配联合索引
@@ -576,6 +692,7 @@ select * from table where a=? and b=?
 范围列可以用到索引（必须是最左前缀），但是范围列后面的列无法用到索引。
 同时，索引最多用于一个范围列，因此如果查询条件中有两个范围列则无法全用到索引。
 如果建立(a,b,c,d)顺序的索引，d是用不到索引的。
+
 如果建立(a,b,d,c)的索引则都可以用到，a,b,d的顺序可以任意调整。
 因为sql where a=1 and b=2 and c&gt;3 and d=4会被优化成 where a=1 and b=2 and d=4 and c&gt;3
 
@@ -598,9 +715,25 @@ explain select * from tb_project_user where  type=1  and project_id&gt;1 and use
 2、另一种不建议建索引的情况是索引的选择性较低。
    所谓索引的选择性（Selectivity），是指不重复的索引值（也叫基数，Cardinality）与表记录数（#T）的比值
    SELECT count(DISTINCT(xx))/count(*) AS xx FROM table;
+</code></pre><h4 id="数据库根据成本决定是否走索引"><a href="#数据库根据成本决定是否走索引" class="headerlink" title="数据库根据成本决定是否走索引"></a>数据库根据成本决定是否走索引</h4><pre><code>IO成本和CPU成本：
+IO成本，是从磁盘把数据加载到内存的成本。默认情况下，读取数据页的IO成本常数是1（也就是读取1个页成本是1）。
+CPU成本，是检测数据是否满足条件和排序等CPU操作的成本。默认情况下，检测记录的成本是0.2。
+
+MySQL选择索引，并不是按照WHERE条件中列的顺序进行的；
+即便列有索引，甚至有多个可能的索引方案，MySQL也可能不走索引
+
+其原因就是，MySQL并不是猜拳决定是否走索引的，而是根据成本来判断的。虽然表的统计信息不完全准确，但足够用于策略的判断了。
+不过，有时会因为统计信息的不准确或成本估算的问题，实际开销会和MySQL统计出来的差距较大，
+导致MySQL选择错误的索引或是直接选择走全表扫描，这个时候就需要人工干预，使用强制索引了。比如，像这样强制走name_score索引：
+
+  EXPLAIN SELECT * FROM person FORCE INDEX(name_score) WHERE NAME &gt;&apos;name84059&apos; AND create_time &gt;&apos;2020012405:00:00&apos;
+
+如果对EXPLAIN给出的执行计划有疑问的话， 你还可以利用optimizer_trace查看详细的执行计划做进一步分析
 </code></pre><h4 id="建索引的几大原则"><a href="#建索引的几大原则" class="headerlink" title="建索引的几大原则"></a>建索引的几大原则</h4><pre><code>1.最左前缀匹配原则，非常重要的原则，mysql会一直向右匹配直到遇到范围查询(&gt;、&lt;、between、like)就停止匹配，比如a = 1 and b = 2 and c &gt; 3 and d = 4 如果建立(a,b,c,d)顺序的索引，d是用不到索引的，如果建立(a,b,d,c)的索引则都可以用到，a,b,d的顺序可以任意调整。
 2.=和in可以乱序，比如a = 1 and b = 2 and c = 3 建立(a,b,c)索引可以任意顺序，mysql的查询优化器会帮你优化成索引可以识别的形式
-3.尽量选择区分度高的列作为索引,区分度的公式是count(distinct col)/count(*)，表示字段不重复的比例，比例越大我们扫描的记录数越少，唯一键的区分度是1，而一些状态、性别字段可能在大数据面前区分度就是0，那可能有人会问，这个比例有什么经验值吗？使用场景不同，这个值也很难确定，一般需要join的字段我们都要求是0.1以上，即平均1条扫描10条记录
+3.尽量选择区分度高的列作为索引,区分度的公式是count(distinct col)/count(*)，表示字段不重复的比例，比例越大我们扫描的记录数越少，
+唯一键的区分度是1，而一些状态、性别字段可能在大数据面前区分度就是0，那可能有人会问，这个比例有什么经验值吗？使用场景不同，这个值也很难确定，
+一般需要join的字段我们都要求是0.1以上，即平均1条扫描10条记录
 4.索引列不能参与计算，保持列“干净”，比如from_unixtime(create_time) = ’2014-05-29’就不能使用到索引，原因很简单，b+树中存的都是数据表中的字段值，但进行检索时，需要把所有元素都应用函数才能比较，显然成本太大。所以语句应该写成create_time = unix_timestamp(’2014-05-29’);
 5.尽量的扩展索引，不要新建索引。比如表中已经有a的索引，现在要加(a,b)的索引，那么只需要修改原来的索引即可
 </code></pre><h4 id="explain"><a href="#explain" class="headerlink" title="explain"></a>explain</h4><pre><code>rows是核心指标，绝大部分rows小的语句执行一定很快（有例外，下面会讲到）。所以优化语句基本上都是在优化rows。
@@ -700,7 +833,7 @@ minEvictableIdleTimeMillis：配置一个连接在池中最小生存的时间，
 timeBetweenEvictionRunsMillis与minEvictableIdleTimeMillis搭配使用：
 timeBetweenEvictionRunsMillis毫秒秒检查一次连接池中空闲的连接,
 把空闲时间超过minEvictableIdleTimeMillis毫秒的连接断开,直到连接池中的连接数到minIdle为止
-</code></pre><h3 id="参考博客"><a href="#参考博客" class="headerlink" title="参考博客"></a>参考博客</h3><p>   1、<a href="https://tech.meituan.com/mysql_index.html" target="_blank" rel="external">MySQL索引原理及慢查询优化</a><br>   2、<a href="http://blog.codinglabs.org/articles/theory-of-mysql-index.html" target="_blank" rel="external">MySQL索引背后的数据结构及算法原理</a></p>
+</code></pre><h3 id="参考博客"><a href="#参考博客" class="headerlink" title="参考博客"></a>参考博客</h3><p>   1、<a href="https://tech.meituan.com/mysql_index.html" target="_blank" rel="external">MySQL索引原理及慢查询优化</a><br>   2、<a href="http://blog.codinglabs.org/articles/theory-of-mysql-index.html" target="_blank" rel="external">MySQL索引背后的数据结构及算法原理</a><br>   3、<a href="https://www.jianshu.com/p/88a089d70fbf" target="_blank" rel="external">“MySQL中B+Tree索引原理”</a></p>
 
       
     </div>
@@ -815,7 +948,7 @@ timeBetweenEvictionRunsMillis毫秒秒检查一次连接池中空闲的连接,
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">39</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -892,7 +1025,7 @@ timeBetweenEvictionRunsMillis毫秒秒检查一次连接池中空闲的连接,
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#磁盘IO与预读"><span class="nav-number">1.</span> <span class="nav-text">磁盘IO与预读</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事物"><span class="nav-number">2.</span> <span class="nav-text">事物</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ACID"><span class="nav-number">2.1.</span> <span class="nav-text">ACID</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事务实现的原理"><span class="nav-number">2.2.</span> <span class="nav-text">事务实现的原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据库事物隔离级别"><span class="nav-number">2.3.</span> <span class="nav-text">数据库事物隔离级别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#REDO-LOG"><span class="nav-number">2.4.</span> <span class="nav-text">REDO LOG</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UNDO-LOG"><span class="nav-number">2.5.</span> <span class="nav-text">UNDO LOG</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事物时序"><span class="nav-number">2.6.</span> <span class="nav-text">事物时序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事物回滚"><span class="nav-number">2.7.</span> <span class="nav-text">事物回滚</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据恢复"><span class="nav-number">2.8.</span> <span class="nav-text">数据恢复</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#binlog"><span class="nav-number">3.</span> <span class="nav-text">binlog</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MyISAM与innodb"><span class="nav-number">4.</span> <span class="nav-text">MyISAM与innodb</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何查看连接当前数据库连接数"><span class="nav-number">5.</span> <span class="nav-text">如何查看连接当前数据库连接数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询数据库相关配置"><span class="nav-number">6.</span> <span class="nav-text">查询数据库相关配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取数据库某个表自增id"><span class="nav-number">7.</span> <span class="nav-text">获取数据库某个表自增id</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#表的存储空间大小"><span class="nav-number">8.</span> <span class="nav-text">表的存储空间大小</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#表的空间估算"><span class="nav-number">9.</span> <span class="nav-text">表的空间估算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql千万表"><span class="nav-number">10.</span> <span class="nav-text">mysql千万表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库主从延迟"><span class="nav-number">11.</span> <span class="nav-text">数据库主从延迟</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql-大表DDL操作锁表"><span class="nav-number">12.</span> <span class="nav-text">mysql 大表DDL操作锁表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql-解锁"><span class="nav-number">13.</span> <span class="nav-text">mysql 解锁</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#锁的算法"><span class="nav-number">13.1.</span> <span class="nav-text">锁的算法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#记录锁-Record-Lock"><span class="nav-number">13.1.1.</span> <span class="nav-text">记录锁(Record Lock)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#间隙锁-Gap-Lock"><span class="nav-number">13.1.2.</span> <span class="nav-text">间隙锁(Gap Lock)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#插入意向锁"><span class="nav-number">13.1.3.</span> <span class="nav-text">插入意向锁</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Next-key-Lock"><span class="nav-number">13.1.4.</span> <span class="nav-text">Next-key Lock</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL索引实现"><span class="nav-number">14.</span> <span class="nav-text">MySQL索引实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#MyISAM索引实现"><span class="nav-number">14.1.</span> <span class="nav-text">MyISAM索引实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#InnoDB索引实现"><span class="nav-number">14.2.</span> <span class="nav-text">InnoDB索引实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#索引类型和优化"><span class="nav-number">14.3.</span> <span class="nav-text">索引类型和优化</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#聚簇索引"><span class="nav-number">14.3.1.</span> <span class="nav-text">聚簇索引</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#非聚簇索引"><span class="nav-number">14.3.2.</span> <span class="nav-text">非聚簇索引</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#联合索引"><span class="nav-number">14.3.3.</span> <span class="nav-text">联合索引</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#前缀索引-索引优化策略"><span class="nav-number">14.3.4.</span> <span class="nav-text">前缀索引(索引优化策略)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#最左前缀原理与相关优化"><span class="nav-number">14.3.5.</span> <span class="nav-text">最左前缀原理与相关优化</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#全列匹配"><span class="nav-number">14.3.5.1.</span> <span class="nav-text">全列匹配</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#最左前缀匹配"><span class="nav-number">14.3.5.2.</span> <span class="nav-text">最左前缀匹配</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#查询条件用到了索引中列的精确匹配，但是中间某个条件未提"><span class="nav-number">14.3.5.3.</span> <span class="nav-text">查询条件用到了索引中列的精确匹配，但是中间某个条件未提</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#查询条件没有指定索引第一列。"><span class="nav-number">14.3.6.</span> <span class="nav-text">查询条件没有指定索引第一列。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#范围查询"><span class="nav-number">14.3.7.</span> <span class="nav-text">范围查询</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#索引选择性"><span class="nav-number">14.4.</span> <span class="nav-text">索引选择性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#建索引的几大原则"><span class="nav-number">14.5.</span> <span class="nav-text">建索引的几大原则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#explain"><span class="nav-number">14.6.</span> <span class="nav-text">explain</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库连接池"><span class="nav-number">15.</span> <span class="nav-text">数据库连接池</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#连接池大小"><span class="nav-number">15.1.</span> <span class="nav-text">连接池大小</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#连接池的大小设置"><span class="nav-number">15.2.</span> <span class="nav-text">连接池的大小设置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#连接池常见参数"><span class="nav-number">15.3.</span> <span class="nav-text">连接池常见参数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考博客"><span class="nav-number">16.</span> <span class="nav-text">参考博客</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#磁盘IO与预读"><span class="nav-number">1.</span> <span class="nav-text">磁盘IO与预读</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql-page"><span class="nav-number">2.</span> <span class="nav-text">mysql page</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#为什么需要引入page"><span class="nav-number">2.1.</span> <span class="nav-text">为什么需要引入page</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事物"><span class="nav-number">3.</span> <span class="nav-text">事物</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ACID"><span class="nav-number">3.1.</span> <span class="nav-text">ACID</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事务实现的原理"><span class="nav-number">3.2.</span> <span class="nav-text">事务实现的原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据库事物隔离级别"><span class="nav-number">3.3.</span> <span class="nav-text">数据库事物隔离级别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#REDO-LOG"><span class="nav-number">3.4.</span> <span class="nav-text">REDO LOG</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UNDO-LOG"><span class="nav-number">3.5.</span> <span class="nav-text">UNDO LOG</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事物时序"><span class="nav-number">3.6.</span> <span class="nav-text">事物时序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事物回滚"><span class="nav-number">3.7.</span> <span class="nav-text">事物回滚</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据恢复"><span class="nav-number">3.8.</span> <span class="nav-text">数据恢复</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#binlog"><span class="nav-number">4.</span> <span class="nav-text">binlog</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MyISAM与innodb"><span class="nav-number">5.</span> <span class="nav-text">MyISAM与innodb</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何查看连接当前数据库连接数"><span class="nav-number">6.</span> <span class="nav-text">如何查看连接当前数据库连接数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询数据库相关配置"><span class="nav-number">7.</span> <span class="nav-text">查询数据库相关配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取数据库某个表自增id"><span class="nav-number">8.</span> <span class="nav-text">获取数据库某个表自增id</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#表的存储空间大小"><span class="nav-number">9.</span> <span class="nav-text">表的存储空间大小</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#表的空间估算"><span class="nav-number">10.</span> <span class="nav-text">表的空间估算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql千万表"><span class="nav-number">11.</span> <span class="nav-text">mysql千万表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库主从延迟"><span class="nav-number">12.</span> <span class="nav-text">数据库主从延迟</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql-大表DDL操作锁表"><span class="nav-number">13.</span> <span class="nav-text">mysql 大表DDL操作锁表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql-解锁"><span class="nav-number">14.</span> <span class="nav-text">mysql 解锁</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#锁的算法"><span class="nav-number">14.1.</span> <span class="nav-text">锁的算法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#记录锁-Record-Lock"><span class="nav-number">14.1.1.</span> <span class="nav-text">记录锁(Record Lock)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#间隙锁-Gap-Lock"><span class="nav-number">14.1.2.</span> <span class="nav-text">间隙锁(Gap Lock)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#插入意向锁"><span class="nav-number">14.1.3.</span> <span class="nav-text">插入意向锁</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Next-key-Lock"><span class="nav-number">14.1.4.</span> <span class="nav-text">Next-key Lock</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL索引实现"><span class="nav-number">15.</span> <span class="nav-text">MySQL索引实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#MyISAM索引实现"><span class="nav-number">15.1.</span> <span class="nav-text">MyISAM索引实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#InnoDB索引实现"><span class="nav-number">15.2.</span> <span class="nav-text">InnoDB索引实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#B-树是如何进行记录检索的"><span class="nav-number">15.3.</span> <span class="nav-text">B+ 树是如何进行记录检索的</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#计算3层索引树能容纳的数据量"><span class="nav-number">15.4.</span> <span class="nav-text">计算3层索引树能容纳的数据量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#索引类型和优化"><span class="nav-number">15.5.</span> <span class="nav-text">索引类型和优化</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#聚簇索引"><span class="nav-number">15.5.1.</span> <span class="nav-text">聚簇索引</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#非聚簇索引"><span class="nav-number">15.5.2.</span> <span class="nav-text">非聚簇索引</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#联合索引"><span class="nav-number">15.5.3.</span> <span class="nav-text">联合索引</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#前缀索引-索引优化策略"><span class="nav-number">15.5.4.</span> <span class="nav-text">前缀索引(索引优化策略)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#最左前缀原理与相关优化"><span class="nav-number">15.5.5.</span> <span class="nav-text">最左前缀原理与相关优化</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#全列匹配"><span class="nav-number">15.5.5.1.</span> <span class="nav-text">全列匹配</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#最左前缀匹配"><span class="nav-number">15.5.5.2.</span> <span class="nav-text">最左前缀匹配</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#查询条件用到了索引中列的精确匹配，但是中间某个条件未提"><span class="nav-number">15.5.5.3.</span> <span class="nav-text">查询条件用到了索引中列的精确匹配，但是中间某个条件未提</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#查询条件没有指定索引第一列。"><span class="nav-number">15.5.6.</span> <span class="nav-text">查询条件没有指定索引第一列。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#范围查询"><span class="nav-number">15.5.7.</span> <span class="nav-text">范围查询</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#索引选择性"><span class="nav-number">15.6.</span> <span class="nav-text">索引选择性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据库根据成本决定是否走索引"><span class="nav-number">15.7.</span> <span class="nav-text">数据库根据成本决定是否走索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#建索引的几大原则"><span class="nav-number">15.8.</span> <span class="nav-text">建索引的几大原则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#explain"><span class="nav-number">15.9.</span> <span class="nav-text">explain</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库连接池"><span class="nav-number">16.</span> <span class="nav-text">数据库连接池</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#连接池大小"><span class="nav-number">16.1.</span> <span class="nav-text">连接池大小</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#连接池的大小设置"><span class="nav-number">16.2.</span> <span class="nav-text">连接池的大小设置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#连接池常见参数"><span class="nav-number">16.3.</span> <span class="nav-text">连接池常见参数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考博客"><span class="nav-number">17.</span> <span class="nav-text">参考博客</span></a></li></ol></div>
             
 
           </div>
@@ -915,7 +1048,7 @@ timeBetweenEvictionRunsMillis毫秒秒检查一次连接池中空闲的连接,
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

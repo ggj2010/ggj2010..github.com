@@ -96,7 +96,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://ocg3iebmc.bkt.clouddn.com/20160918105655_12.jpg">
 <meta property="og:image" content="http://ocg3iebmc.bkt.clouddn.com/011042300165927.png">
-<meta property="og:updated_time" content="2018-10-18T09:56:41.000Z">
+<meta property="og:updated_time" content="2020-05-17T11:29:11.818Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java基础原理记录">
 <meta name="twitter:description" content="八种基本数据类型常见概念1byte=8b(bit)，1KB=1024B，1MB=1024KB，1GB=1024MB 为什么1个字节为8位二进制勒？标准来自于IBM system/360，导致后来的硬件都是按照这个标签设计的 在UTF-8下中文占3个字节，在GBK下面中文占2字节， 英文在utf-8和gbk下面都是占一个字节 bytebyte的取值范围为-128~127（-2的7次方到2的7次方-1">
@@ -359,6 +359,7 @@
 为什么1个字节为8位二进制勒？标准来自于IBM system/360，导致后来的硬件都是按照这个标签设计的
 在UTF-8下中文占3个字节，在GBK下面中文占2字节， 英文在utf-8和gbk下面都是占一个字节
 </code></pre><h5 id="byte"><a href="#byte" class="headerlink" title="byte"></a>byte</h5><pre><code>byte的取值范围为-128~127（-2的7次方到2的7次方-1），byte也就是俗称的1个字节
+byte[] intArrya=new byte[1024*1024]; 占用1M 堆内存
 </code></pre><h5 id="整型"><a href="#整型" class="headerlink" title="整型"></a>整型</h5><pre><code>java可以表示整数类型的有short(短整型)、int（整型）、long（长整型）
 </code></pre><ul>
 <li>short</li>
@@ -369,23 +370,27 @@
 </ul>
 <pre><code>int的取值范围为-2147483648~2147483647，占用4个字节（-2的31次方到2的31次方-1）
 为何32位最大的正整数不是4294967295而是2147483647？
-因为左起第一位做符号保留，0 正数，1.负数 
+因为左起第一位做符号保留，0 正数，1.负数
+
+1int = 4 byte
+int[] intArrya=new int[1024*1024]; 占用4M 堆内存
 </code></pre><ul>
-<li>long </li>
+<li>long</li>
 </ul>
 <pre><code>long的取值范围为（-9223372036854774808~9223372036854774807），占用8个字节（-2的63次方到2的63次方-1）
-</code></pre><h5 id="浮点型"><a href="#浮点型" class="headerlink" title="浮点型"></a>浮点型</h5><pre><code>float和double是表示浮点型的数据类型，他们之间的区别在于他们的精确度不同 
+long[] intArryay=new long[1024*1024]; 占用8M 堆内存
+</code></pre><h5 id="浮点型"><a href="#浮点型" class="headerlink" title="浮点型"></a>浮点型</h5><pre><code>float和double是表示浮点型的数据类型，他们之间的区别在于他们的精确度不同
 </code></pre><ul>
-<li>float </li>
+<li>float</li>
 </ul>
-<pre><code>占用4个字节，需要用f表示 
+<pre><code>占用4个字节，需要用f表示
 </code></pre><ul>
 <li>double</li>
 </ul>
 <pre><code>占用8个字节 double型比float型存储范围更大，精度更高，
-</code></pre><h5 id="boolean型"><a href="#boolean型" class="headerlink" title="boolean型"></a>boolean型</h5><pre><code>这个类型只有两个值，true和false
+</code></pre><h5 id="boolean型"><a href="#boolean型" class="headerlink" title="boolean型"></a>boolean型</h5><pre><code>这个类型只有两个值，true和false 占用一个字节，false=0 true=1
 </code></pre><h5 id="char型"><a href="#char型" class="headerlink" title="char型"></a>char型</h5><pre><code>用于存放字符的数据类型，占用2个字节，因为没有符号位，所以是(0000 0000 0000 0000 ~ 1111 1111 1111 1111 1111 1111 (65535))，
-采用unicode编码，它的前128字节编码与ASCII兼容 
+采用unicode编码，它的前128字节编码与ASCII兼容
 字符的存储范围在\u0000~\uFFFF，在定义字符型的数据时候要注意加&apos; &apos;，比如 &apos;1&apos;表示字符&apos;1&apos;而不是数值1，
 char+char，char+int——类型均提升为int
 </code></pre><h5 id="一些概念"><a href="#一些概念" class="headerlink" title="一些概念"></a>一些概念</h5><pre><code>转换规则：
@@ -398,7 +403,7 @@ char+char，char+int——类型均提升为int
      在GBK编码，一个英文字符等于一个字节，一个汉字占两个字节
 </code></pre><h5 id="字节流与字符流"><a href="#字节流与字符流" class="headerlink" title="字节流与字符流"></a>字节流与字符流</h5><pre><code>字节流在输出的时候直接操作文件本身。
 字符流在输出的时候会使用缓冲区，最直观的就是如果我们在写文件的时候，如果使用字符流，不flush或者close（），内容
-是不会写到文件里面的，而字节流输出时候是实时的。            
+是不会写到文件里面的，而字节流输出时候是实时的。
 </code></pre><h4 id="java类的整理"><a href="#java类的整理" class="headerlink" title="java类的整理"></a>java类的整理</h4><h5 id="java类的生命周期"><a href="#java类的生命周期" class="headerlink" title="java类的生命周期"></a>java类的生命周期</h5><pre><code>当我们编写一个xx.java文件时候,会被编译成XX.class的文件，俗称字节码文件也就是Java程序对应的16进制格式的文件，只有字节码才能在Java虚拟机中运行。
 java类的生命周期就是指一个class文件从加载到卸载的全过程。
 java类的完整的生命周期会经历加载、连接、初始化、使用、和卸载五个阶段，当然也有在加载或者连接之后没有被初始化就直接被使用的情况
@@ -418,7 +423,7 @@ ClassLoader.load()底层是调用Classloder. loadClass(String name, boolean reso
 
      public Driver() throws SQLException {
 
-     } 
+     }
      static {
          try {
              DriverManager.registerDriver(new Driver());
@@ -426,48 +431,53 @@ ClassLoader.load()底层是调用Classloder. loadClass(String name, boolean reso
              throw new RuntimeException(&quot;Can\&apos;t register driver!&quot;);
          }
      }
- } 
+ }
 </code></pre><p>   class、Class、Object的关系</p>
 <pre><code>class是个关键字，一般用与修饰类
 Class是个特殊的类，一般用与反射，用来获取类的字段，属性，构造器，方法等等
 Object是一个特殊的类，所有的类都继承该类，包括Class也继承Object
+
+类名.class, class.forName(), getClass()三者区别
+Class.forName()在运行时加载；
+Class.class和getClass()是在编译器加载，即.class是静态加载，.getClass()是动态加载。
+，.getClass()只有对象对实例方法才有，类的Class类实例是通过.class获得的
 </code></pre><h6 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h6><pre><code>连接包括（验证-&gt;准备-&gt;解析）三个部分
 验证：包括件格式验证，是否以魔数开头，主版本是否在当前虚拟机处理范围内等
 准备：为类变量分配内存，并设置类变量初始值。（static修饰的变量）例如给int赋值0
 解析：类和接口的解析、字段解析、类方法解析、接口方法解析
 </code></pre><h6 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h6><pre><code>如果一个类被直接引用，就会触发初始化，间接引用除外，例如调用类的静态方法
-</code></pre><p>   类的实例化与初始化</p>
-<pre><code>一个类如果想实例化，那么JVM首先会检查相关类型是否已经加载并初始，如果没有，则JVM立即进行加载并调用类构造器完成类的初始化。
-在类初始化过程中或初始化完毕后，根据具体情况才会去对类进行实例化
-</code></pre><p>   那些情况会触发类的初始化</p>
-<pre><code>1、遇到new，getstatic等字节码指令。
+</code></pre><p>   类的实例化与初始化<br>      一个类如果想实例化，那么JVM首先会检查相关类型是否已经加载并初始，如果没有，则JVM立即进行加载并调用类构造器完成类的初始化。<br>      在类初始化过程中或初始化完毕后，根据具体情况才会去对类进行实例化</p>
+<p>   那些情况会触发类的初始化</p>
+<pre><code>1、遇到new，getstatic pubstatic invokestatic等字节码指令。
+读取或者设置一个类的静态字段（如果静态字段被final修饰，就不会初始化，
+因为已经在编译期间将结果放入常量池，变量必须要是基本类型或者字符串）
 2、利用reflect方法对类进行反射调用以上几种凡是。
 3、当初始化一个类，如果父类没初始化，首先初始化父类。
 4、虚拟机启动时候，需要指定一个要执行的类，也就是main方法。
 </code></pre><h4 id="java字节码"><a href="#java字节码" class="headerlink" title="java字节码"></a>java字节码</h4><h4 id="编译和查看编译内容"><a href="#编译和查看编译内容" class="headerlink" title="编译和查看编译内容"></a>编译和查看编译内容</h4><pre><code>编译：javac Test.java
 查看.calss文件 javap -verbose  Test
- 或者 vi Test.class 然后输入%!xxd将文件转成16进制 
-</code></pre><h4 id="ClassFile结构体"><a href="#ClassFile结构体" class="headerlink" title="ClassFile结构体"></a>ClassFile结构体</h4><pre><code>ClassFile { 
-    u4 magic; 
-    u2 minor_version; 
-    u2 major_version; 
-    u2 constant_pool_count; 
-    cp_info constant_pool[constant_pool_count-1]; 
-    u2 access_flags; 
-    u2 this_class; 
-    u2 super_class; 
-    u2 interfaces_count; 
-    u2 interfaces[interfaces_count]; 
-    u2 fields_count; 
-    field_info fields[fields_count]; 
-    u2 methods_count; 
-    method_info methods[methods_count]; 
-    u2 attributes_count; 
-    attribute_info attributes[attributes_count]; 
+ 或者 vi Test.class 然后输入%!xxd将文件转成16进制
+</code></pre><h4 id="ClassFile结构体"><a href="#ClassFile结构体" class="headerlink" title="ClassFile结构体"></a>ClassFile结构体</h4><pre><code>ClassFile {
+    u4 magic;
+    u2 minor_version;
+    u2 major_version;
+    u2 constant_pool_count;
+    cp_info constant_pool[constant_pool_count-1];
+    u2 access_flags;
+    u2 this_class;
+    u2 super_class;
+    u2 interfaces_count;
+    u2 interfaces[interfaces_count];
+    u2 fields_count;
+    field_info fields[fields_count];
+    u2 methods_count;
+    method_info methods[methods_count];
+    u2 attributes_count;
+    attribute_info attributes[attributes_count];
 }
 </code></pre><h5 id="magic"><a href="#magic" class="headerlink" title="magic"></a>magic</h5><pre><code>为了方便虚拟机识别一个文件是否是class类型的文件，SUN公司规定每个class文件都必须以一个word(四个字节)作为开始，
 这个数字就是魔数。魔数是由四个字节的无符号数组成的，而class文件的名字还挺好听的的，其魔数就是0xCAFEBABE
-</code></pre><h5 id="minor-version、major-version"><a href="#minor-version、major-version" class="headerlink" title="minor_version、major_version"></a>minor_version、major_version</h5><pre><code>其实就是Class文件的副、主版本    
+</code></pre><h5 id="minor-version、major-version"><a href="#minor-version、major-version" class="headerlink" title="minor_version、major_version"></a>minor_version、major_version</h5><pre><code>其实就是Class文件的副、主版本
 </code></pre><h5 id="constant-pool"><a href="#constant-pool" class="headerlink" title="constant_pool[]"></a>constant_pool[]</h5><pre><code>常量池，constant_pool是一种表结构，它包含Class文件结构及其子结构中引用的所有字符串常量、类或接口名、字段名和其它常量。
 常量池中的每一项都具备相同的格式特征——第一个字节作为类型标记用于识别该项是哪种类型的常量，称为“tag byte”。
 常量池的索引范围是1至constant_pool_count−1
@@ -499,7 +509,17 @@ System.out.println(g == d);//true
 
 String s3=&quot;hello&quot; ;String s4=&quot;hello&quot;;
 System.out.println(s3 == s4);//true 直接从常量池里面拿数据
-</code></pre><h4 id="java-util包源码分析"><a href="#java-util包源码分析" class="headerlink" title="java.util包源码分析"></a>java.util包源码分析</h4><h5 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h5><h6 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h6><ul>
+</code></pre><h4 id="java-util包源码分析"><a href="#java-util包源码分析" class="headerlink" title="java.util包源码分析"></a>java.util包源码分析</h4><h5 id="Collection"><a href="#Collection" class="headerlink" title="Collection"></a>Collection</h5><h6 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a>ArrayList</h6><pre><code>* 原理概括
+    基于数组，没有扩容因子 当数组满了就扩容为1.5倍
+    数组的特性就是查找是O(1),删除和新增都是O(N)
+    当数组数据量比较大时候，扩容比较费时间
+</code></pre><h6 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h6><pre><code>* 原理概括
+   链表的特性就是随机读麻烦，删除与插入方便，只需要移动链表指针
+   LinkedList基于双向链表，定义了first与last两个特殊节点，
+   添加时候直接last添加，删除时候直接first删除
+   指定位置插入与查找，可以当前index是否大于链表长度一半，
+   决定从first还是last循环，提高查询效率
+</code></pre><h5 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h5><h6 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h6><ul>
 <li>源码注释</li>
 </ul>
 <pre><code>hashMap实现Map接口，允许key或者value为空（一般key为null的value放在链表数组第一位）
@@ -518,9 +538,10 @@ synchronized (mutex){...}同步代码块锁
 
 如果我们在迭代器里面修改增加或者减小manp的值会抛出ConcurrentModificationException
 </code></pre><ul>
-<li>原理概括    </li>
+<li>原理概括</li>
 </ul>
 <pre><code>HashMap实际上是一个“链表散列”的数据结构，即数组+链表,Entry[] table+entry链表
+
 JDK1.8中，HashMap采用数组+链表+红黑树实现，当链表长度超过阈值（8）时，将链表转换为红黑树，这样大大减少了查找时间。
 </code></pre><p>   <img src="http://ocg3iebmc.bkt.clouddn.com/20160918105655_12.jpg" alt=""></p>
 <pre><code>hashMap的容量是2的倍数，这样会让key散列的更均匀
@@ -528,10 +549,22 @@ static int indexFor(int h, int length) {
         // assert Integer.bitCount(length) == 1 : &quot;length must be a non-zero power of 2&quot;;
         return h &amp; (length-1);
 }
+ &amp; 与运算只有两个位都是1，结果才是1，
+如果1的个数越多，那么出现1的次数才最多，那么hash 散列的就更均匀
+比如4的二进制是0100
+3的二进制是   4-1=3= 0101
+0001 0010 0011 0101
+1&amp;4，2&amp;4，3&amp;4，4&amp;4 结果值区间范围在{0 、4}
+1&amp;3，2&amp;3，3&amp;3，4&amp;3 结果值区间范围在{0 、1、2、3}
+可以明显看出来如果length如果是2的倍数，则indexFor散列的就跟均匀一点
+
+如果hashmap不扩容会导致什么？
+那就退化成了链表，这样查询效率就非常低，因为hash冲突是固定的
+hashmap 假设在极端低情况下如果不出现hash冲突，其实就演变成数组，查询效率极高。
 </code></pre><ul>
 <li><p>非线程安全地方</p>
 <ul>
-<li>并发put导致相同hash值可能丢失 </li>
+<li>并发put导致相同hash值可能丢失</li>
 </ul>
 <p>如果多个线程同时put，并且对应的key的hash都一样，如果并发同时执行到createEntry方法<br>同时获取到头结点的table[bucketIndex]值e，这时候同时对e进行操作会丢失最新执行更新线程的value</p>
 <p>void createEntry(int hash, K key, V value, int bucketIndex) {</p>
@@ -542,7 +575,7 @@ table[bucketIndex] = new Entry&lt;&gt;(hash, key, value, e);
 size++;
 </code></pre><p>}</p>
 <ul>
-<li>当hashMap在扩容时候多线程环境下面会导致死循环 </li>
+<li>当hashMap在扩容时候多线程环境下面会导致死循环</li>
 </ul>
 </li>
 </ul>
@@ -670,6 +703,7 @@ WeakHashMap中的key都存在强引用，那么WeakHashMap就会退化成HashMap
 get操作的高效之处在于整个get过程不需要加锁，除非读到的值是空的才会加锁重读，
 我们知道HashTable容器的get方法是需要加锁的，那么ConcurrentHashMap的get操作是如何做到不加锁的呢？
 原因是它的get方法里将要使用的共享变量都定义成volatile，
+
 如用于统计当前Segement大小的count字段和用于存储值的HashEntry的value。定义成volatile的变量，
 能够在线程之间保持可见性，能够被多线程同时读，并且保证不会读到过期的值，
 但是只能被单线程写（有一种情况可以被多线程写，就是写入的值不依赖于原值），
@@ -680,6 +714,9 @@ get操作的高效之处在于整个get过程不需要加锁，除非读到的�
 </li>
 </ul>
 </li>
+</ul>
+<pre><code>JDK1.8的实现已经抛弃了Segment分段锁机制，利用CAS+Synchronized来保证并发更新的安全。数据结构采用：数组+链表+红黑树。
+</code></pre><ul>
 <li><p>CopyOnWriteArrayList</p>
 <ul>
 <li><p>原理：写加Reentrant锁，读不加锁</p>
@@ -700,6 +737,9 @@ get操作的高效之处在于整个get过程不需要加锁，除非读到的�
 </li>
 <li><p>ReentrantLock</p>
 <ul>
+<li><p>原理</p>
+<pre><code>ReentrantLock是基于AQS实现的，AbstractQueuedSynchronizer基础又是CAS
+</code></pre></li>
 <li><p>分为ReentrantReadWriteLock与ReentrantLock</p>
 <pre><code>需要手动去关闭锁，锁的类型有ReentrantLock（可重入锁），ReentrantReadWriteLock 读写锁
 lock()、tryLock()、lock.newCondition()、tryLock(long time, TimeUnit unit)
@@ -720,7 +760,7 @@ condition.signal();condition.await();和wait()和notify()一个意思，不过co
 </li>
 </ul>
 </li>
-<li><p>AtomicInteger</p>
+<li><p>Atomic**</p>
 <ul>
 <li><p>原理</p>
 <pre><code>首先使用了volatile 保证了内存可见性。
@@ -728,9 +768,15 @@ condition.signal();condition.await();和wait()和notify()一个意思，不过co
 其中CAS算法的原理就是里面包含三个值：内存值A  预估值V  更新值 B
 当且仅当 V == A 时，V = B; 否则，不会执行任何操作。
 Unsafe是CAS的核心类
+cas会出现ABA问题
+ABA问题是指在CAS操作时，其他线程将变量值A改为了B，但是又被改回了A，
+等到本线程使用期望值A与当前变量进行比较时，发现变量A没有变，
+于是CAS就将A值进行了交换操作，但是实际上该值已经被其他线程改变过，这与乐观锁的设计思想不符合
 </code></pre></li>
 </ul>
 </li>
+</ul>
+<ul>
 <li><p>volatile</p>
 <pre><code>被volatile修饰的变量，具备可见性和禁止指令排序。
 通过Java的内存模型可知，线程执行的时候，分为工作内存和主内存，操作变量的时候
@@ -916,7 +962,7 @@ final void runWorker(Worker w) {
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">39</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -993,7 +1039,7 @@ final void runWorker(Worker w) {
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#八种基本数据类型"><span class="nav-number">1.</span> <span class="nav-text">八种基本数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#常见概念"><span class="nav-number">1.1.</span> <span class="nav-text">常见概念</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#byte"><span class="nav-number">1.2.</span> <span class="nav-text">byte</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#整型"><span class="nav-number">1.3.</span> <span class="nav-text">整型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#浮点型"><span class="nav-number">1.4.</span> <span class="nav-text">浮点型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#boolean型"><span class="nav-number">1.5.</span> <span class="nav-text">boolean型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#char型"><span class="nav-number">1.6.</span> <span class="nav-text">char型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#一些概念"><span class="nav-number">1.7.</span> <span class="nav-text">一些概念</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java-IO整理"><span class="nav-number">2.</span> <span class="nav-text">java IO整理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#字节与字符的区别"><span class="nav-number">2.1.</span> <span class="nav-text">字节与字符的区别</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#字节流与字符流"><span class="nav-number">2.2.</span> <span class="nav-text">字节流与字符流</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java类的整理"><span class="nav-number">3.</span> <span class="nav-text">java类的整理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#java类的生命周期"><span class="nav-number">3.1.</span> <span class="nav-text">java类的生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#加载"><span class="nav-number">3.1.1.</span> <span class="nav-text">加载</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#连接"><span class="nav-number">3.1.2.</span> <span class="nav-text">连接</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#初始化"><span class="nav-number">3.1.3.</span> <span class="nav-text">初始化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java字节码"><span class="nav-number">4.</span> <span class="nav-text">java字节码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#编译和查看编译内容"><span class="nav-number">5.</span> <span class="nav-text">编译和查看编译内容</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ClassFile结构体"><span class="nav-number">6.</span> <span class="nav-text">ClassFile结构体</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#magic"><span class="nav-number">6.1.</span> <span class="nav-text">magic</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#minor-version、major-version"><span class="nav-number">6.2.</span> <span class="nav-text">minor_version、major_version</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#constant-pool"><span class="nav-number">6.3.</span> <span class="nav-text">constant_pool[]</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#access-flags"><span class="nav-number">6.4.</span> <span class="nav-text">access_flags</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#String"><span class="nav-number">7.</span> <span class="nav-text">String</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java-util包源码分析"><span class="nav-number">8.</span> <span class="nav-text">java.util包源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Map"><span class="nav-number">8.1.</span> <span class="nav-text">Map</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#HashMap"><span class="nav-number">8.1.1.</span> <span class="nav-text">HashMap</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List"><span class="nav-number">8.2.</span> <span class="nav-text">List</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Thread"><span class="nav-number">9.</span> <span class="nav-text">Thread</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java-util-concurrent包下面常用类的原理"><span class="nav-number">10.</span> <span class="nav-text">java.util.concurrent包下面常用类的原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JDBC"><span class="nav-number">11.</span> <span class="nav-text">JDBC</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#jdbc中execute、executeQuery和executeUpdate的区别"><span class="nav-number">11.1.</span> <span class="nav-text">jdbc中execute、executeQuery和executeUpdate的区别</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#八种基本数据类型"><span class="nav-number">1.</span> <span class="nav-text">八种基本数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#常见概念"><span class="nav-number">1.1.</span> <span class="nav-text">常见概念</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#byte"><span class="nav-number">1.2.</span> <span class="nav-text">byte</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#整型"><span class="nav-number">1.3.</span> <span class="nav-text">整型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#浮点型"><span class="nav-number">1.4.</span> <span class="nav-text">浮点型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#boolean型"><span class="nav-number">1.5.</span> <span class="nav-text">boolean型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#char型"><span class="nav-number">1.6.</span> <span class="nav-text">char型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#一些概念"><span class="nav-number">1.7.</span> <span class="nav-text">一些概念</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java-IO整理"><span class="nav-number">2.</span> <span class="nav-text">java IO整理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#字节与字符的区别"><span class="nav-number">2.1.</span> <span class="nav-text">字节与字符的区别</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#字节流与字符流"><span class="nav-number">2.2.</span> <span class="nav-text">字节流与字符流</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java类的整理"><span class="nav-number">3.</span> <span class="nav-text">java类的整理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#java类的生命周期"><span class="nav-number">3.1.</span> <span class="nav-text">java类的生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#加载"><span class="nav-number">3.1.1.</span> <span class="nav-text">加载</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#连接"><span class="nav-number">3.1.2.</span> <span class="nav-text">连接</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#初始化"><span class="nav-number">3.1.3.</span> <span class="nav-text">初始化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java字节码"><span class="nav-number">4.</span> <span class="nav-text">java字节码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#编译和查看编译内容"><span class="nav-number">5.</span> <span class="nav-text">编译和查看编译内容</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ClassFile结构体"><span class="nav-number">6.</span> <span class="nav-text">ClassFile结构体</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#magic"><span class="nav-number">6.1.</span> <span class="nav-text">magic</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#minor-version、major-version"><span class="nav-number">6.2.</span> <span class="nav-text">minor_version、major_version</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#constant-pool"><span class="nav-number">6.3.</span> <span class="nav-text">constant_pool[]</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#access-flags"><span class="nav-number">6.4.</span> <span class="nav-text">access_flags</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#String"><span class="nav-number">7.</span> <span class="nav-text">String</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java-util包源码分析"><span class="nav-number">8.</span> <span class="nav-text">java.util包源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Collection"><span class="nav-number">8.1.</span> <span class="nav-text">Collection</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#ArrayList"><span class="nav-number">8.1.1.</span> <span class="nav-text">ArrayList</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#LinkedList"><span class="nav-number">8.1.2.</span> <span class="nav-text">LinkedList</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Map"><span class="nav-number">8.2.</span> <span class="nav-text">Map</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#HashMap"><span class="nav-number">8.2.1.</span> <span class="nav-text">HashMap</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List"><span class="nav-number">8.3.</span> <span class="nav-text">List</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Thread"><span class="nav-number">9.</span> <span class="nav-text">Thread</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java-util-concurrent包下面常用类的原理"><span class="nav-number">10.</span> <span class="nav-text">java.util.concurrent包下面常用类的原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JDBC"><span class="nav-number">11.</span> <span class="nav-text">JDBC</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#jdbc中execute、executeQuery和executeUpdate的区别"><span class="nav-number">11.1.</span> <span class="nav-text">jdbc中execute、executeQuery和executeUpdate的区别</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -1016,7 +1062,7 @@ final void runWorker(Worker w) {
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

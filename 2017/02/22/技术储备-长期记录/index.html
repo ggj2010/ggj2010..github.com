@@ -101,7 +101,9 @@
 <meta property="og:image" content="https://images2015.cnblogs.com/blog/498077/201608/498077-20160822172901526-169091807.png">
 <meta property="og:image" content="https://images2015.cnblogs.com/blog/498077/201608/498077-20160822172922917-1331181630.png">
 <meta property="og:image" content="https://images2015.cnblogs.com/blog/498077/201608/498077-20160822172943917-133540408.png">
-<meta property="og:updated_time" content="2019-05-07T11:01:31.860Z">
+<meta property="og:image" content="http://ggj2010.github.io/2017/02/22/技术储备-长期记录/3D">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-57092397ff9d7a69d359856ef19e769d_1440w.jpg">
+<meta property="og:updated_time" content="2020-07-02T11:17:53.936Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="技术储备-长期记录">
 <meta name="twitter:description" content="最近几年总觉得脑子不够用，一会想学这个，一会想看哪个，一天可能一行代码也没写就这么度过了。 这个文章就当自己的学习记录吧，想到什么写什么，虽然有有道笔记，但是里面的记录的东西太乱了， 感觉就是个查问题的笔记库，有时间再整理下吧。。。 201702221.关于数据库的分库分表，主从技术落地。 201702231.以后面试要首先问涨薪体系！2.批处理数据的时候，要控制数据的数量，比如批量插入的时候，每">
@@ -604,7 +606,7 @@ Redis会定期做aof重写，压缩aof文件日志大小
 </code></pre><p>   三、Snapshot和AOF的对比</p>
 <pre><code>snapshot 如果在保存前服务器down了，那么在上次snapshot之后修改的数据会丢失。
 而AOF是记录所有的写操作，在数据完整性来说，AOF比snapshot要好
-aof一般是比rdb文件较大，恢复时间较长，因为要重新执行所有的写操作
+aof一般是比rdb文件较大(所有写命令)，恢复时间较长，因为要重新执行所有的写操作
 所以如果你可以容忍数据丢失的话，可以使用snapshot方式，
 而且也是比AOF要节省资源，否则的话就使用AOF方式，
 或者同时使用2种方式（重启的时候会优先使用AOF）。
@@ -620,8 +622,10 @@ src/redis-cli -a gaoguangjin shutdown
 <li>redis hgetAll 有性能问题，不能一次性存储大量数据。</li>
 <li>redis pipeline原理</li>
 </ol>
-<pre><code>一开始觉得redis transation 与redis的pipeline类似，都是把所有命令打包后，再一起发给服务端，其实这种理解是错误的。
-一般情况下redis是request-&gt;response request-&gt;response request-&gt;response 这种阻塞是请求流程，当如果有批量的操作的时候
+<pre><code>一开始觉得redis transation 与redis的pipeline类似，都是把所有命令打包后，
+再一起发给服务端，其实这种理解是错误的。
+一般情况下redis是request-&gt;response request-&gt;response request-&gt;response
+这种阻塞是请求流程，当如果有批量的操作的时候
 这种请求模式会有性能瓶颈的。
 pipeline模式不用等待请求结果，一直发送命令，最后一次性获取。
 transtaion模式是一次性发，一次性取，保证操作一致性。
@@ -630,8 +634,10 @@ transtaion模式是一次性发，一次性取，保证操作一致性。
 </code></pre><ol>
 <li>redis transtaion</li>
 </ol>
-<pre><code>redis的事物被提交，事物中的所有操作会顺序执行，且事物执行期间，其他client的操作会被阻塞，这样可以保证所有命令可以被执行
-但redis的事物也是个伪事物，如果执行过程中某个命令有错误，只是不执行这个命令，其他命令还是会按顺序执行。
+<pre><code>redis的事物被提交，事物中的所有操作会顺序执行，且事物执行期间，其他client的操作会被阻塞，
+这样可以保证所有命令可以被执行
+但redis的事物也是个伪事物，如果执行过程中某个命令有错误，只是不执行这个命令，
+其他命令还是会按顺序执行。
 </code></pre><ol>
 <li>HyperLogLog</li>
 </ol>
@@ -658,7 +664,8 @@ PFMERGE  databases RDBMS nosql 可以将两个集合数据合并
 用keys会导致线程阻塞一段时间
 可以使用 scan 0 match key* count 1
 </code></pre><p>  9.redis如何实现延时队列</p>
-<pre><code>使用sortedset，拿时间戳作为score，消息内容作为key调用zadd来生产消息，消费者用zrangebyscore指令获取N秒之前的数据轮询进行处理。
+<pre><code>使用sortedset，拿时间戳作为score，消息内容作为key调用zadd来生产消息，
+消费者用zrangebyscore指令获取N秒之前的数据轮询进行处理。
 </code></pre><h3 id="20170310"><a href="#20170310" class="headerlink" title="20170310"></a>20170310</h3><ol>
 <li><p>nginx安装ssl模块</p>
 <pre><code>nginx -V 可以查看原来编译时都带了哪些参数
@@ -686,17 +693,27 @@ cp ./objs/nginx /app/nginx/sbin/
 </li>
 </ol>
 <h3 id="20170313"><a href="#20170313" class="headerlink" title="20170313"></a>20170313</h3><ol>
-<li><p>instanceof 与 isinstanceof()</p>
+<li><p>instanceof 与 isInstance()</p>
 <pre><code>instanceof 是一个操作符（类似new， ==等)
  if (ins instanceof String) {
       //logic
   }
-isInstance是Class类的一个方法:
-if (String.class.isInstance(ins)){
-}
 </code></pre></li>
 </ol>
-<h3 id="20170314-浅拷贝和深拷贝"><a href="#20170314-浅拷贝和深拷贝" class="headerlink" title="20170314-浅拷贝和深拷贝"></a>20170314-浅拷贝和深拷贝</h3><pre><code>浅拷贝是指拷贝对象时仅拷贝对象本身（包括对象中的基本变量），而不拷贝对象包含的引用指向的对象。
+<pre><code>isInstance是Class类的一个方法:
+
+特别地，当该 Class 对象表示一个已声明的类时，若指定的 Object 参数是所表示类（或其任一子类）的一个实例，
+如果此 Class 对象表示一个数组类，且通过身份转换或扩展引用转换，指定的 Object 参数能转换为一个数组类的对象
+如果此 Class 对象表示一个接口，且指定 Object 参数的类或任一超类实现了此接口
+if (String.class.isInstance(ins)){
+}
+
+//比较类型
+对obj.instanceof(class)，在编译时编译器需要知道类的具体类型
+
+//反射检查类实现某个接口
+对class.isInstance(obj)，编译器在运行时才进行类型检查，故可用于反射，泛型中
+</code></pre><h3 id="20170314-浅拷贝和深拷贝"><a href="#20170314-浅拷贝和深拷贝" class="headerlink" title="20170314-浅拷贝和深拷贝"></a>20170314-浅拷贝和深拷贝</h3><pre><code>浅拷贝是指拷贝对象时仅拷贝对象本身（包括对象中的基本变量），而不拷贝对象包含的引用指向的对象。
 深拷贝不仅拷贝对象本身，而且拷贝对象包含的引用指向的所有对象。
 举例来说更加清楚：
 对象A1中包含对B1的引用，B1中包含对C1的引用。
@@ -1023,11 +1040,15 @@ A再提交事物，B再重新读取该字段，发现值变成了500，这就会
 幻读情况：虽然数据库事物级别设置成重复读，但是如果会出现幻读的情况 比如A事物执行select * from table,返回了
 5条数据，这时候另外一个操作往这个表里面添加一条数据，再次执行select * from table,发现返回了6条数据，这就是
 幻读的情况！
-</code></pre><h4 id="死锁情况"><a href="#死锁情况" class="headerlink" title="死锁情况"></a>死锁情况</h4><pre><code>不同表相同记录行锁冲突(事务A和事务B操作两张表，但出现循环等待锁情况)
-相同表相同记录行 (之前遇到两个job在执行数据批量更新时，jobA处理的的id列表为[1,2,3,4]，而job处理的id列表为[8,9,10,4,2]，这样就造成了死锁。)
-不同索引锁冲突(事务A在执行时，除了在二级索引加锁外，还会在聚簇索引上加锁，在聚簇索引上加锁的顺序是[1,4,2,3,5]，而事务B执行时，只在聚簇索引上加锁，加锁顺序是[1,2,3,4,5]，这样就造成了死锁的可能性。)
+</code></pre><h4 id="死锁情况"><a href="#死锁情况" class="headerlink" title="死锁情况"></a>死锁情况</h4><pre><code>1、不同表相同记录行锁冲突(事务A和事务B操作两张表，但出现循环等待锁情况)
+
+2、相同表相同记录行 (比如两个job在执行数据批量更新时，jobA处理的的id列表为[1,2,3,4]，
+而job处理的id列表为[8,9,10,4,2]，例如2这条记录两边都出现这样就造成了死锁。)
+3、不同索引锁冲突(事务A在执行时，除了在二级索引加锁外，还会在聚簇索引上加锁，
+在聚簇索引上加锁的顺序是[1,4,2,3,5]，而事务B执行时，只在聚簇索引上加锁，加锁顺序是[1,2,3,4,5]，这样就造成了死锁的可能性。)
 比如 update table where id&gt;1 和 update table where id=2  会导致死锁
-gap锁冲突
+
+4、gap锁冲突
 </code></pre><h4 id="spring事物传播特性"><a href="#spring事物传播特性" class="headerlink" title="spring事物传播特性"></a>spring事物传播特性</h4><pre><code>PROPAGATION_REQUIRED ：用的最多的，如果当前方法没有事物那就先建立一个事物，如果有，那就加入到这个事物。
 PROPAGATION_SUPPORTS ：支持当前事务，如果当前没有事务，就以非事务方式执行。
 PROPAGATION_MANDATORY 使用当前的事务，如果当前没有事务，就抛出异常。
@@ -1039,7 +1060,7 @@ PROPAGATION_NESTED 如果当前存在事务，则在嵌套事务内执行。如�
 都是在代理类目录生成一个**$**.class带有$的代理编译后的类，调用的时候就是调用这个代理类
 spring aop使用的有jdk和cglib，jdk创建代理对象的时间比cglib短，但是代理方法的执行时间比cglib慢
 如果spring里面用到的对象单例模式的比较多，就建议使用cglib模式，虽然启动时间会长点，但是提高程序效率
-dubbo里面使用较多的就是avassist代理，因为有时候不需要代理整个类，只用代理某个方法
+dubbo里面使用较多的就是javassist代理，因为有时候不需要代理整个类，只用代理某个方法
 </code></pre><h4 id="jdk动态代理"><a href="#jdk动态代理" class="headerlink" title="jdk动态代理"></a>jdk动态代理</h4><pre><code>针对接口进行代理的，不可以对普通类进行代理
 核心代码：
 InterfaceInvocationHandler implements InvocationHandler{
@@ -1089,8 +1110,11 @@ YGC、YGT：年轻代GC次数和GC耗时
 FGC、FGCT：Full GC次数和Full GC耗时
 GCT：GC总耗时
 </code></pre><h3 id="20170705-java对象的强、软、弱、虚引用"><a href="#20170705-java对象的强、软、弱、虚引用" class="headerlink" title="20170705-java对象的强、软、弱、虚引用"></a>20170705-java对象的强、软、弱、虚引用</h3><pre><code>强引用：垃圾回收期不会主动去回收，哪怕Java虚拟机报OutOfMemoryError
-软引用：当Java堆内存不够的时候，才会进行回收
-弱引用：比软引用更容易被回收，当垃圾回收期线程执行的时候，不管当前堆内存是否够，都会回收
+软引用：当Java堆内存不够的时候，才会进行回收 （没有任何强引用关联），例如缓存系统
+弱引用：比软引用更容易被回收，当垃圾回收期线程执行的时候，不管当前堆内存是否够，都会回收（没有任何强引用关联）
+
+
+在垃圾回收时，如果这个对象只被关联（没有任何强引用关联），那么这个对象就会被回收
 不过，由于垃圾回收器是一个优先级很低的线程，因此不一定会很快发现那些只具有弱引用的对象。
 </code></pre><h4 id="ThreadLocal原理与内存泄露"><a href="#ThreadLocal原理与内存泄露" class="headerlink" title="ThreadLocal原理与内存泄露"></a>ThreadLocal原理与内存泄露</h4><pre><code>    ThreadLocal为每一个线程创建的单独变量副本，底层是有ThreadLocal.ThreadLocalMap去维护的，每一个
 线程都有一个独立的ThreadLocalMap，ThreadLocal实例就是map对应的key。
@@ -1159,11 +1183,56 @@ JAVA的泛型只是一个语法糖，实际上在运行时还是有类型转换�
 </code></pre><h3 id="20170711-linux常用命令复习"><a href="#20170711-linux常用命令复习" class="headerlink" title="20170711-linux常用命令复习"></a>20170711-linux常用命令复习</h3><h4 id="文件权限"><a href="#文件权限" class="headerlink" title="文件权限"></a>文件权限</h4><pre><code>例如 777 rwx rwx rwx
 从左至右，1-3位数字代表文件所有者的权限，4-6位数字代表同组用户的权限，7-9数字代表其他用户的权限。
 r=4，w=2，x=1
-</code></pre><h3 id="20170712-QPS"><a href="#20170712-QPS" class="headerlink" title="20170712-QPS"></a>20170712-QPS</h3><pre><code>qps类似于tps，是可以反映系统吞吐量的重要指标。
-QPS（TPS）= 并发数/平均响应时间    或者   并发数 = QPS*平均响应时间。
-qps是和并发数有关的，相同qps的如果并发数越大，证明系统性能越好。
-当别人说系统qps的时候先问下是在多大并发下的指标
-</code></pre><h3 id="20170713-TCP-IP相关"><a href="#20170713-TCP-IP相关" class="headerlink" title="20170713-TCP/IP相关"></a>20170713-TCP/IP相关</h3><h4 id="HTTPS"><a href="#HTTPS" class="headerlink" title="HTTPS"></a>HTTPS</h4><pre><code>https使用对称加密+非对称加密+CA(赛门铁克CA)认证 三个技术合并到一起，才保证数据传输的安全。
+ls -lrt /usr/bin/java 查看路径
+</code></pre><h3 id="20170712-QPS和TPS"><a href="#20170712-QPS和TPS" class="headerlink" title="20170712-QPS和TPS"></a>20170712-QPS和TPS</h3><pre><code>qps:是一台服务器每秒能够相应的查询次数
+单机QPS的上限是多少呢？
+说到单机，你必须明确指出硬性指标，CPU、内存、硬盘、带宽等
+TPS:一个事务是指一个客户机向服务器发送请求然后服务器做出反应的过程(一个tps里面可能包含多个tps)
+
+2C 4G机器单机一般1000QPS。
+8C 8G机器单机可承受7000QPS。
+
+并发估算法：
+C：并发
+n：压测时间段内所有的请求数
+L：平均响应时间
+T：压测总时长
+C = nL / T
+这里注意：L（平均响应时间）≠ T（总时长）/ n（总请求）
+
+例如 100个请求，每个耗时1s，压测阶段总共耗费10s
+那么并发数 10=100*1s/10s
+
+qps计算公式：
+公式1： qps=并发数/平均响应时间
+公式2： qps=请求总数/总时长
+ C = nL / T  推导出 公式1=等于公式2
+并发 = 请求总数*平均响应时间 / 总时长
+=》并发 / 平均响应时间 = 请求总数 / 总时长
+=》公式1 = 公式2
+
+实际压测时，两个公式还是会有些微差别，这就是因为我们本来预想并发应该=工具线程数
+但是压测过程中，实际并发发生了变化，实际并发确实稍低于工具线程数
+1、在单接口压测时，我们用“请求总数/总时长”得到吞吐量；
+   然后再用“吞吐量/平均响应时间”得到实际并发，此举可用来观察系统实际承受的并发
+
+qps是需要压测才可以评估出来，例如在指定时间，不同线程数，压测接口，根据公式2就可以推算出来
+http接口可以用jmeter直接去测试
+rpc接口可以用JMH性能测试
+
+
+参考：https://www.xmeter.net/wordpress/?p=152
+</code></pre><h3 id="20170712-系统容量预估方法"><a href="#20170712-系统容量预估方法" class="headerlink" title="20170712-系统容量预估方法"></a>20170712-系统容量预估方法</h3><pre><code>pv计算带宽：带宽和并发数量有关
+
+【步骤一：评估总访问量】 -&gt; 询问业务、产品、运营
+【步骤二：评估平均访问量QPS】-&gt; 除以时间，一天算4w秒
+【步骤三：评估高峰QPS】 -&gt; 根据业务曲线图来,获取高峰qps
+【步骤四：评估系统、单机极限QPS】 -&gt; 压测很重要 获取单机最高qps
+【步骤五：根据线上冗余度回答两个问题】 -&gt; 估计冗余度与线上冗余度差值
+
+  原理：每天80%的访问集中在20%的时间里，这20%时间叫做峰值时间
+</code></pre><p>　　　　公式：( 总PV数 <em> 80% ) / ( 每天秒数 </em> 20% ) = 峰值时间每秒请求数(QPS)<br>　　　　机器：峰值时间每秒QPS / 单台机器的QPS   = 需要的机器<br>　　　　例子：每天300w PV 的在单台机器上，这台机器需要多少QPS？<br>　　　　　　　( 3000000 <em> 0.8 ) / (86400 </em> 0.2 ) = 139 (QPS)<br>　　　　例子：如果一台机器的QPS是58，需要几台机器来支持？<br>　　　　　　　139 / 58 = 3</p>
+<h3 id="20170713-TCP-IP相关"><a href="#20170713-TCP-IP相关" class="headerlink" title="20170713-TCP/IP相关"></a>20170713-TCP/IP相关</h3><h4 id="HTTPS"><a href="#HTTPS" class="headerlink" title="HTTPS"></a>HTTPS</h4><pre><code>https使用对称加密+非对称加密+CA(赛门铁克CA)认证 三个技术合并到一起，才保证数据传输的安全。
 首先使用RSA算法生产一对秘钥 K1和K2，K1是公钥，k2是秘钥，K1加密后的数据必须要K2才可以解密。
 服务端发送K1到目的地，然后目的地在生成一个用来对称加密传输的秘钥K3,然后再用k1就加密k3
 再传输给服务端，服务端再用k2去解密得到秘钥k3,这样双方就可以进行aes对称加密算法进行传输
@@ -1184,15 +1253,14 @@ qps是和并发数有关的，相同qps的如果并发数越大，证明系统�
 传输层：tcp与udp协议
 网络层：
 链路层：硬件部分如 网卡、光纤
-</code></pre><h4 id="TCP数据段格式"><a href="#TCP数据段格式" class="headerlink" title="TCP数据段格式"></a>TCP数据段格式</h4><pre><code> 顺序号字段：Seq序号，用来标识从TCP源端向目的端发送的字节流，发起方发送数据时对此进行标记。　　
- 确认号字段：只有ACK标志为1时，确认号字段才有效。　
- SYN：发起一个连接
- ACK：确认序号有效
- FIN:释放一个连接
- 需要注意的是：
-（A）不要将确认序号Ack与标志位中的ACK搞混了。
-（B）确认方Ack=发起方Req+1，两端配对。
-</code></pre><h4 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h4><pre><code>    第一次握手：client端将标志位syn置为1，随机产生一个序号seq=j,然后将该数据包发送给
+</code></pre><h4 id="TCP数据段格式"><a href="#TCP数据段格式" class="headerlink" title="TCP数据段格式"></a>TCP数据段格式</h4><pre><code>顺序号字段：Seq序号，用来标识从TCP源端向目的端发送的字节流，发起方发送数据时对此进行标记。　　
+确认号字段：只有ACK标志为1时，确认号字段才有效。　
+SYN：发起一个连接
+ACK：确认序号有效
+FIN:释放一个连接
+需要注意的是：
+</code></pre><p>   （A）不要将确认序号ACK与标志位中的ack搞混了。<br>   （B）确认方Ack=发起方seq+1，两端配对。</p>
+<h4 id="tcp三次握手"><a href="#tcp三次握手" class="headerlink" title="tcp三次握手"></a>tcp三次握手</h4><pre><code>    第一次握手：client端将标志位syn置为1，随机产生一个序号seq=j,然后将该数据包发送给
 server端，client进入syn_sent状态，等待server确认。
      第二次握手：server端收到数据包后，通过标志位syn=1知道client端要请求建立连接，server
 端将标志位SYN和ACK都置为1，ack=j+1（确认序号）,随机产生一个seq=K,并将该数据包发给client以确认请求，
@@ -1206,11 +1274,12 @@ ack=K+1，并将该数据包发给server，server检查ack是否为K+1,ACK是否
 第三次挥手：server发送一个FIN,用来关闭server到client的数据传输，server进入last_ack状态
 第四次挥手：client收到FIN，client进入TIME_WAIT状态，接着发送一个ACK给server 确认序号为收到序号+1，
 server进入closed状态，完成四次挥手。
-为什么建立连接是三次握手，而关闭连接却是四次挥手呢
-服务端在LISTEN状态下，收到建立连接请求的SYN报文后，把ACK和SYN放在一个报文里发送给客户端。而关闭连接时，当收到对方的FIN报文时，
-仅仅表示对方不再发送数据了但是还能接收数据，己方也未必全部数据都发送给对方了，所以己方可以立即close，
-也可以发送一些数据给对方后，再发送FIN报文给对方来表示同意现在关闭连接，因此，己方ACK和FIN一般都会分开发送。
-通俗说就是挥手的时候是server端先发送ACK 然后再发送FIN
+</code></pre><h4 id="为什么建立连接是三次握手，而关闭连接却是四次挥手呢"><a href="#为什么建立连接是三次握手，而关闭连接却是四次挥手呢" class="headerlink" title="为什么建立连接是三次握手，而关闭连接却是四次挥手呢"></a>为什么建立连接是三次握手，而关闭连接却是四次挥手呢</h4><pre><code>首先三次握手是为了确保客户端和服务端都能收到彼此的数据包，而挥手要四次是因为
+服务端在LISTEN状态下，收到建立连接请求的SYN报文后，把ACK和SYN放在一个报文里发送给客户端。
+而关闭连接时，客户端和服务端都有&quot;发送&quot;与&quot;接收&quot;都功能。
+当收到对方的FIN报文时，仅仅表示对方不再发送数据了但是还能接收数据，己方也未必全部数据都发送给对方了，
+所以己方可以立即close，也可以发送一些数据给对方后，再发送FIN报文给对方来表示同意现在关闭连接，
+因此，己方ACK和FIN一般都会分开发送。通俗说就是挥手的时候是server端先发送ACK 然后再发送FIN
 </code></pre><h4 id="syn攻击"><a href="#syn攻击" class="headerlink" title="syn攻击"></a>syn攻击</h4><pre><code>    在三次握手过程中，Server发送SYN-ACK之后，收到Client的ACK之前的TCP连接称为半连接（half-open connect），此时Server处于SYN_RCVD状态，
 当收到ACK后，Server转入ESTABLISHED状态。SYN攻击就是Client在短时间内伪造大量不存在的IP地址，并向Server不断地发送SYN包，
 Server回复确认包，并等待Client的确认，由于源地址是不存在的，因此，Server需要不断重发直至超时，
@@ -1381,18 +1450,32 @@ varchr(10)变长字段且允许NULL    =  10 * ( character set：utf8=3,gbk=2,la
 varchr(10)变长字段且不允许NULL =  10 *( character set：utf8=3,gbk=2,latin1=1)+2(变长字段)
 char(10)固定字段且允许NULL        =  10 * ( character set：utf8=3,gbk=2,latin1=1)+1(NULL)
 char(10)固定字段且不允许NULL        =  10 * ( character set：utf8=3,gbk=2,latin1=1)
-</code></pre><h3 id="20170715-springmvc相关"><a href="#20170715-springmvc相关" class="headerlink" title="20170715-springmvc相关"></a>20170715-springmvc相关</h3><h4 id="bean的生命周期"><a href="#bean的生命周期" class="headerlink" title="bean的生命周期"></a>bean的生命周期</h4><pre><code>1、如果其他类实现了BeanFactoryPostProcessor，那就先调用postProcessBeanFactory（）
+</code></pre><h3 id="20170715-springmvc相关"><a href="#20170715-springmvc相关" class="headerlink" title="20170715-springmvc相关"></a>20170715-springmvc相关</h3><h4 id="相关接口"><a href="#相关接口" class="headerlink" title="相关接口"></a>相关接口</h4><pre><code>BeanFactoryAware, 一般用于设置BeanFactory
+BeanNameAware,  一般用于设置bean name
+InitializingBean, 加载完之后调用afterPropertiesSet（）
+DisposableBean, 销毁之后调用destroy-method方法
+ApplicationContextAware , 一般用于设置bean ApplicationContext
+BeanFactoryPostProcessor ，
+是针对于beanFactory的扩展点，即spring会在beanFactory初始化之后，
+beanDefinition都已经loaded，但是bean还未创建前进行调用，可以修改，增加beanDefinition
+BeanPostProcessor:
+是针对bean的扩展点，即spring会在bean初始化前后 调用方法对bean进行处理
+所有bean，在初始化之前调用postProcessBeforeInitialization，之后用postProcessAfterInitialization
+如果一个类实现类BeanFactoryPostProcessor 那么该类初始化的时候是不会出现在postProcessBeforeInitialization
+和postProcessAfterInitialization bean里面。
+</code></pre><h4 id="bean的加载顺序"><a href="#bean的加载顺序" class="headerlink" title="bean的加载顺序"></a>bean的加载顺序</h4><pre><code>1、
 BeanFactoryPostProcessor是在spring容器加载了bean的定义文件之后，在bean实例化之前执行的
 实现该接口，可以在spring的bean创建之前，修改bean的定义属性。
+
 如果是当前类实现了BeanFactoryPostProcessor，那么会在afterPropertiesSet之后被调用
-2、然后调用对象的构造方法，实例化
-3、如果类实现了BeanNameAware 则调用setBeanName()
-4、如果类实现了BeanPostProcessor 则调用postProcessBeforeInitialization
-5、如果累实现了InitializingBean 则调用afterPropertiesSet（）
-7、如果指定了init方法也会调用
+1、然后调用对象的构造方法，实例化
+2、如果类实现了BeanNameAware 则调用setBeanName()
+3、如果类实现了BeanPostProcessor 则调用postProcessBeforeInitialization
+4、如果类实现了InitializingBean 则调用afterPropertiesSet（）
+5、如果指定了init方法也会调用
 6、如果类实现了BeanPostProcessor 则调用postProcessAfterInitialization（）
-9、如果bean实现了ApplicationContextAware，则可以把上下文环境传过去。
-9、如果累实现了DisposableBean 执行 destroy方法
+7、如果bean实现了ApplicationContextAware，则可以把上下文环境传过去。
+8、如果累实现了DisposableBean 执行 destroy方法
 
 如果我们在bean加载之后扩展这个bean，就可以通过BeanFactoryPostProcessor实现
 通过postProcessBeforeInitialization和postProcessAfterInitialization
@@ -1450,7 +1533,7 @@ Map&lt;Date, EduGoodHourStockDTO&gt; map = new TreeMap&lt;Date, EduGoodHourStock
          public TreeValue(int score) {
              this.score = score;
          }
-
+        //如果保持这个顺序就返回-1，交换顺序就返回1，什么都不做就返回0
          public int compareTo(TreeValue o) {
              //从小到大
              if (this.score&gt;o.score  )
@@ -1488,6 +1571,7 @@ Map&lt;Date, EduGoodHourStockDTO&gt; map = new TreeMap&lt;Date, EduGoodHourStock
  }
 
  默认是从小到大
+ 如果保持这个顺序就返回-1，交换顺序就返回1，什么都不做就返回0
 </code></pre><h3 id="20170924-static修饰符"><a href="#20170924-static修饰符" class="headerlink" title="20170924-static修饰符"></a>20170924-static修饰符</h3><pre><code>static修饰的对象或者变量都是全局共享的，一个类中，一个static变量只会有一个内存空间，虽然有多个类实例，
 但这些类实例中的这个static变量会共享同一个内存空间。
 static的变量是在类装载的时候就会被初始化，即，只要类被装载，不管是否使用了static变量，都会被初始化
@@ -1794,11 +1878,12 @@ a()&amp;&amp;b()&amp;&amp;c() 表示a()方法为true,才会执行b(),如果a()�
 a()||b()||() 表示a()方法为true,就不会执行后面的，如果为false才会执行后面的
 </code></pre><h3 id="20180928-BeanUtils-copyProperties浅拷贝"><a href="#20180928-BeanUtils-copyProperties浅拷贝" class="headerlink" title="20180928 BeanUtils.copyProperties浅拷贝"></a>20180928 BeanUtils.copyProperties浅拷贝</h3><pre><code>spring提供的bean对象拷贝是浅拷贝，如果对象里面有引用或者集合对象是不会被拷贝的。
 可以自己重新clone()或者利用jdk的ByteArrayOutputStream和ByteArrayInputStream 序列化对象
-</code></pre><h3 id="20181018-hashcode冲突解决方法"><a href="#20181018-hashcode冲突解决方法" class="headerlink" title="20181018 hashcode冲突解决方法"></a>20181018 hashcode冲突解决方法</h3><pre><code>1、链表方法
+</code></pre><h3 id="20181018-hash冲突解决方法"><a href="#20181018-hash冲突解决方法" class="headerlink" title="20181018 hash冲突解决方法"></a>20181018 hash冲突解决方法</h3><pre><code>1、链表方法
   创建一个链表数组，数组中每一格就是一个链表。若遇到哈希冲突，则将冲突的值加到链表中即可,例如HashMap
 2、线性探测
    根据key的得到hashValue,若不冲突，则直接填入数组,若冲突，则使 hashValue++ ，也就是往后找，
    直到找到第一个 data[hashValue] 为空的情况,则填入。若到了尾部可循环到前面
+   ThreadLocalMap就是这样实现的
  private static void add(String str,String value) {
         int ix= str.hashCode()&amp;size;
         System.out.println(str+&quot;:hashcode:&quot;+ix);
@@ -1842,6 +1927,314 @@ sass: software as a service
 </code></pre><h3 id="20190507-线程自动扩展策略"><a href="#20190507-线程自动扩展策略" class="headerlink" title="20190507-线程自动扩展策略"></a>20190507-线程自动扩展策略</h3><pre><code>1、根据队列的长度进行扩展，如果核心线程数一开始不等于最大线程数，可以自动扩展核心线程数到最大线程数。
 2、根据队列使用率进行扩展
 3、动态修改线程数核心参数和最大线程数
+</code></pre><h3 id="20190508-单点登陆"><a href="#20190508-单点登陆" class="headerlink" title="20190508-单点登陆"></a>20190508-单点登陆</h3><pre><code>sso分为认证和登陆两个过程
+认证（用户名，密码）得到一个authorizationCode
+登录（accessToken，authorizationCode） 得到第一个登录凭据（ticket）（存在sso系统的cookie下面 应用系统也会写一份）
+检查登录态（accessToken，ticket）  得到用户的用户名（loginName）
+登出（accessToken，ticket） 得到登出用户的用户名（loginName）
+</code></pre><h3 id="20190519-延迟队列"><a href="#20190519-延迟队列" class="headerlink" title="20190519-延迟队列"></a>20190519-延迟队列</h3><pre><code>定时器轮询遍历数据库记录
+优点：不依赖其他技术，开发简单
+缺点：当某一刻需要执行的数据量比较大，会影响性能，而且频繁轮训数据库也是不必要的开销
+JDK的DelayQueue
+优点：进程内的
+缺点：单机的、每次消费的时候还需要单独启线程
+JDK ScheduledExecutorService
+
+时间轮（netty）
+
+利用quartz等定时任务
+
+Redis的ZSet实现
+
+rabbitMq实现延时队列
+解决延迟队列有很多种方法。选择哪个解决方案也需要根据不同的数据量、实时性要求、
+已有架构和组件等因素进行判断和取舍。对于比较简单的系统，可以使用数据库轮训的方式。
+数据量稍大，实时性稍高一点的系统可以使用JDK延迟队列（也许需要解决程序挂了，内存中未处理任务丢失的情况）。
+如果需要分布式横向扩展的话推荐使用Redis的方案。但是对于系统中已有RabbitMQ，那RabbitMQ会是一个更好的方案。
+参考：https://www.jianshu.com/p/a8c1458998aa
+</code></pre><h3 id="20190902-公众号"><a href="#20190902-公众号" class="headerlink" title="20190902-公众号"></a>20190902-公众号</h3><pre><code>ulimit -u 可以查看和设置系统的最大并发进程数
+</code></pre><h3 id="20190904-Javassist、ASM"><a href="#20190904-Javassist、ASM" class="headerlink" title="20190904-Javassist、ASM"></a>20190904-Javassist、ASM</h3><pre><code>ASM 是一个 Java 字节码操控框架。它能够以二进制形式修改已有类或者动态生成类。
+ASM 可以直接产生二进制 class 文件，也可以在类被加载入 Java 虚拟机之前动态改变类行为。
+ASM 从类文件中读入信息后，能够改变类行为，分析类信息，甚至能够根据用户要求生成新类
+
+Javassist是一个开源的分析、编辑和创建Java字节码的类库。
+javassist是jboss的一个子项目，其主要的优点，在于简单，而且快速。
+直接使用java编码的形式，而不需要了解虚拟机指令，就能动态改变类的结构，或者动态生成类
+</code></pre><h3 id="20190905-高并发减少锁竞争方式"><a href="#20190905-高并发减少锁竞争方式" class="headerlink" title="20190905-高并发减少锁竞争方式"></a>20190905-高并发减少锁竞争方式</h3><pre><code>1、减少锁的持有时间，换句话说就是不需要锁的操作从同步代码块移走
+ public synchronized void lockObject(String name) {
+        for (int i = 0; i &lt; 10; i++) log.info(&quot;name:&quot; + name);
+            log.info(&quot;synchronized void lockObject:&quot; + name);
+         for (int i = 0; i &lt; 10; i++) log.info(&quot;out name:&quot; + name);
+  }
+  优化为：
+ public void lockObject(String name) {
+        for (int i = 0; i &lt; 10; i++) log.info(&quot;name:&quot; + name);
+        synchronized (this) {
+            log.info(&quot;synchronized void lockObject:&quot; + name);
+            for (int i = 0; i &lt; 10; i++) log.info(&quot;out name:&quot; + name);
+        }
+    }
+2、减少锁的粒度，比如原本是基于类的锁，可以扩大为基于多个对象的锁，
+举个例子：
+ private final ArrayList fruits = new ArrayList();
+ public synchronized void addFruit(int index, String fruit) {
+         fruits.add(index, fruit);
+ }
+ 优化
+ public void addFruit(int index, String fruit) {
+         synchronized(fruits) fruits.add(index, fruit);
+     }
+ 3、读写锁分离
+</code></pre><h3 id="20190917-模版word-生成方案"><a href="#20190917-模版word-生成方案" class="headerlink" title="20190917-模版word 生成方案"></a>20190917-模版word 生成方案</h3><p>   模版word生成可以用xml模版和mht模版，如果word里面有富文本那就必须要用mht模版，<br>   生成模版的时候不能用wps，得用原生的word，样式的化需要注意将”sytle=” “style=3D”替换下<br>   还有就是”=”是特殊字符，如果要展示就需要替换成”==””<br>   mht图片格式需要注意以下几个细节<br>   1、 <o:file href="2、<#if" imgpartlist??&&="" (imgpartlist?size="">0)&gt;<br>         &lt;#list imgPartList as img&gt;<br>     ——=_NextPart_01D56BB9.7917EAB0<br>     Content-Location: file:///C:/D1A954B2/word2.fld/${img.resId}<br>     Content-Transfer-Encoding: base64<br>     Content-Type: ${img.type}<br>      ${img.binary}<br>         &lt;/#list&gt;<br>     &lt;/#if&gt;<br>   3、<img src="3D"word2.fld/rId${resource.imgProperty.id}"" 4、图片样式="" width最宽设置成415="" height最大就600="" <v:shape="" id="3D"_x56fe__x7247__x0020_1"" o:spid="3D"_x0000_i1025"" type="3D"#_x0000_t75"" style="3D'width:${resource.imgProperty.width}pt;" height:${resource.imgproperty.height}pt;visibility:visible;mso-wrap-style:square'=""></o:file></p>
+<h3 id="20190923-jmh-BenchMark压测"><a href="#20190923-jmh-BenchMark压测" class="headerlink" title="20190923-jmh BenchMark压测"></a>20190923-jmh BenchMark压测</h3><pre><code>方法级别的压测可以使用jmh,jmh提供预热功能，还有各个纬度的压测指标
+再也不用自己手写循环代码
+</code></pre><h3 id="20190926-一些不常用当方法"><a href="#20190926-一些不常用当方法" class="headerlink" title="20190926-一些不常用当方法"></a>20190926-一些不常用当方法</h3><pre><code>//如果map里面存在这个值 就不覆盖，直接返回以前当值。
+map.putIfAbsent(key, value)
+//blist去除alist 里面存在的元素
+List&lt;QuestionOptionResult.Node&gt; hiddenQuestionTypeList
+hiddenQuestionTypeList.forEach(hiddenQuestionType -&gt; {
+  questionTypeNodeList.removeIf(type -&gt; type.getCode().equals(hiddenQuestionType.getCode()));
+ });
+</code></pre><h3 id="20190929-mac-端口占用"><a href="#20190929-mac-端口占用" class="headerlink" title="20190929- mac 端口占用"></a>20190929- mac 端口占用</h3><pre><code>sudo lsof -i :9000
+mac 下载东西
+curl -o apache-zookeeper-3.5.6.tar.gz https://mirrors.tuna.tsinghua.edu.cn/apache/zookeeper/zookeeper-3.5.6/apache-zookeeper-3.5.6.tar.gz
+</code></pre><h3 id="20191104-static代码块方法没有执行"><a href="#20191104-static代码块方法没有执行" class="headerlink" title="20191104-static代码块方法没有执行"></a>20191104-static代码块方法没有执行</h3><pre><code>static块是在类初始化时候被调用的，不是类加载时候调用的
+如果一个静态变量(基本类型或者字符串)被final修饰，且不是在static块里面对变量赋值，那么变量在编译期间就把结果放入了常量池
+所以在类名调用的变量时候，是不会初始化类的
+
+//不会调用static块方法
+public final static String FINAL_STATIC_NAME = &quot;father&quot;;
+    static {
+        System.out.println(&quot;这是【父类】静态代码块&quot;);
+}
+//虽然被final修饰，但是在static里面赋值 是会调用static对
+public final static String FINAL_STATIC_NAME ;
+    static {
+        FINAL_STATIC_NAME=&quot;father&quot;;
+        System.out.println(&quot;这是【父类】静态代码块&quot;);
+    }
+</code></pre><h3 id="20191209-Java程序运行过程"><a href="#20191209-Java程序运行过程" class="headerlink" title="20191209-Java程序运行过程"></a>20191209-Java程序运行过程</h3><pre><code>看到专栏里面有个总结挺有意思的记录下
+一句话概述了方法区，堆、栈、计数器的各自特性
+方法区主要存放从磁盘加载进来的类字节码，而在程序运行过程中创建的类实例则存放在堆里。
+程序运行的时候，实际上是以线程为单位运行的，当 JVM 进入启动类的 main 方法的时候，就会为应用程序创建一个主线程
+，main 方法里的代码就会被这个主线程执行，每个线程有自己的 Java 栈，栈里存放着方法运行期的局部变量。
+而当前线程执行到哪一行字节码指令，这个信息则被存放在程序计数寄存器
+一个典型的 Java 程序运行过程
+
+通过 Java 命令启动 JVM，JVM 的类加载器根据 Java 命令的参数到指定的路径加载.class 类文件，
+类文件被加载到内存后，存放在专门的方法区。然后 JVM 创建一个主线程执行这个类文件的 main 方法，
+mian 方法的输入参数和方法内定义的变量被压入 Java 栈。如果在方法内创建了一个对象实例，
+这个对象实例信息将会被存放到堆里，而对象实例的引用，也就是对象实例在堆中的地址信息则会被记录在栈里。
+堆中记录的对象实例信息主要是成员变量信息，因为类方法内的可执行代码存放在方法区，而方法内的局部变量存放在线程的栈里。
+</code></pre><h3 id="20191210-linux软连接"><a href="#20191210-linux软连接" class="headerlink" title="20191210-linux软连接"></a>20191210-linux软连接</h3><pre><code>ln -s /usr/local/Cellar/python/3.7.3/Frameworks/Python.framework/Versions/3.7/bin/* /usr/local/bin/
+</code></pre><h3 id="20191211-引用传值"><a href="#20191211-引用传值" class="headerlink" title="20191211-引用传值"></a>20191211-引用传值</h3><pre><code>引用”也就是指向真实内容的地址值，在方法调用时，实参的地址通过方法调用被传递给相应的形参，
+在方法体内，形参和实参指向同一个内存地址，对形参的操作会影响的真实内容
+  引用传递的是对象的副本
+  如果对象被重新创建或赋值为null，即new会重新指向其他对象，不影响其原对象的值
+   @Setter
+   @Getter
+   private Parent p;
+
+   public static void main(String[] args) {
+       Parent parent=new Parent();
+       Test test=new Test();
+       test.setP(parent);
+       parent=null;//不指向任何对象
+       //但是test 还是持有test对象的引用
+       System.out.println(parent+&quot;:&quot; + test.getP());
+   }
+
+   null:com.ggj.java.reflect.Parent@7291c18f
+</code></pre><h3 id="20191214-for-update导致死锁问题"><a href="#20191214-for-update导致死锁问题" class="headerlink" title="20191214-for update导致死锁问题"></a>20191214-for update导致死锁问题</h3><p>  <a href="https://www.cnblogs.com/micrari/p/8029710.html" target="_blank" rel="external">参考</a></p>
+<pre><code>使用for update时候 where后面条件一定要用带索引的键，才可以锁行，不然就会锁住整个表
+for update 在使用索引的键到情况下，如果查询到记录 就加row 锁 如果查询不到就不加锁
+mysql在RR事物隔离级别时候 如果for update查询不到记录 会加上gap锁
+错误日志：
+###EXCEPTION:org.springframework.dao.DeadlockLoserDataAccessException:
+### Error updating database.  Cause: com.mysql.cj.jdbc.exceptions.MySQLTransactionRollbackException:
+ Deadlock found when trying to get lock; try restarting transaction
+ 伪sql：
+ selet *  from teacher_profile where teacher_id =#{teacherId} and type=#{type} for update
+ //......
+ insert ***
+</code></pre><p>假设表里面不存在记录为 a,b</p>
+<table>
+<thead>
+<tr>
+<th>session1</th>
+<th style="text-align:center">session2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>begin</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align:center">begin</td>
+</tr>
+<tr>
+<td>select* from table where  name=a for update</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align:center">select* from table where  name=b  for update</td>
+</tr>
+<tr>
+<td>insert into table name values a</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td>锁等待中</td>
+<td style="text-align:center">insert into table name values b</td>
+</tr>
+<tr>
+<td>锁等待解除</td>
+<td style="text-align:center">死锁 session2的事物回滚</td>
+</tr>
+</tbody>
+</table>
+<pre><code>两个session同时通过select for update 如果没有查询到记录可能获取到相同到gap锁，
+这时候进行插入的时候，session 1 插入意向锁后等待session2释放gap锁
+session2也插入意向锁 等待session1到释放gap锁
+这时候就形成死锁，mysql检测到后，innodb会强制关闭其中一个事物
+</code></pre><h3 id="20191217-项目工程骨架"><a href="#20191217-项目工程骨架" class="headerlink" title="20191217-项目工程骨架"></a>20191217-项目工程骨架</h3><pre><code>xxx-api: 对外提供http服务，也就是常说的controller层
+xxx-task: 定时任务（当任务数量比较多 需要抽出去单独服务）
+xxx-core/xxx-service: 业务逻辑层
+xxx-repository: 数据层 db/redis/等
+xxx-integration：对接第三方接入层（http/rpc）
+xxx-contract: 对外提供rpc接口和dto层
+xxx-domain: 数据库层Javabean
+xxx-common: 公共服务层（可以抽出去 公共维护）
+</code></pre><h3 id="20191226-springcloud-链路追踪"><a href="#20191226-springcloud-链路追踪" class="headerlink" title="20191226-springcloud 链路追踪"></a>20191226-springcloud 链路追踪</h3><pre><code>其实就是用zipkin收集日志信息
+利用Spring Cloud Sleuth可以快速搭建一个链路追踪框架
+</code></pre><h2 id="2020"><a href="#2020" class="headerlink" title="2020"></a>2020</h2><h3 id="20200101-队列和栈区别"><a href="#20200101-队列和栈区别" class="headerlink" title="20200101-队列和栈区别"></a>20200101-队列和栈区别</h3><pre><code>队列 ：先进先出FIFO(First Input First Output)
+ 新元素（等待进入队列的元素）总是被插入到链表的尾部，
+ 而读取的时候总是从链表的头部开始读取。
+栈 ：先进后出 FILO(First In Last Out)
+    入栈：它是把新元素放到栈顶元素的上面，使之成为新的栈顶元素
+    出栈：它是把栈顶元素删除掉，使其相邻的元素成为新的栈顶元素
+栈就是一个桶，后放进去的先拿出来，它下面本来有的东西要等它出来之后才能出来。（后进先出）
+队列只能在队头做删除操作,在队尾做插入操作.而栈只能在栈顶做插入和删除操作。（先进先出）
+</code></pre><h3 id="20200116-lock使用锁没有释放"><a href="#20200116-lock使用锁没有释放" class="headerlink" title="20200116- lock使用锁没有释放"></a>20200116- lock使用锁没有释放</h3><pre><code>用jmh写rpc压测的时候，进程一直执行没有结束
+看了下代码里面有类似这样的结构
+lock.lock();
+//double check
+if (clientConnectMap.containsKey(className)) {
+    return clientConnectMap.get(className).getChannelFuture();
+}
+try {
+catch (Exception e) {
+    log.error(&quot;init netty client error&quot;, e);
+    throw e;
+} finally {
+    lock.unlock();
+}
+获取缓存那步提前return了导致锁没有关
+</code></pre><h3 id="202001167-uml规则"><a href="#202001167-uml规则" class="headerlink" title="202001167-uml规则"></a>202001167-uml规则</h3><pre><code>继承。带三角箭头的实线，箭头指向父类
+实现。带三角箭头的虚线，箭头指向接口
+关联成员变量。带普通箭头的实心线，指向被拥有者
+依赖。带箭头的虚线，指向被使用者
+</code></pre><h3 id="20200224-object-null"><a href="#20200224-object-null" class="headerlink" title="20200224- object=null"></a>20200224- object=null</h3><pre><code>一个对象可以有多个引用,感觉这种基础问题还会搞忘记有点傻了。
+Object a = new Object();
+Object b = a;
+Object c = b;
+只创建了一个对象，而它的引用有三个
+当 a=null的时候，只是a指向堆内存堆引用没了，但bc 还有引用
+</code></pre><h3 id="20200313-队列一些不常用等方法"><a href="#20200313-队列一些不常用等方法" class="headerlink" title="20200313-队列一些不常用等方法"></a>20200313-队列一些不常用等方法</h3><pre><code>poll 移除,并返问队列头部的元素
+peek 返回队列头部的元素
+push 添加数据
+
+blockquene:
+put 与 take 会block
+offer和poll 不会block
+</code></pre><h3 id="20200405-java日志框架历史"><a href="#20200405-java日志框架历史" class="headerlink" title="20200405-java日志框架历史"></a>20200405-java日志框架历史</h3><pre><code>参考：https://zhuanlan.zhihu.com/p/24272450
+</code></pre><p>   <img src="https://pic2.zhimg.com/80/v2-57092397ff9d7a69d359856ef19e769d_1440w.jpg" alt=""></p>
+<pre><code>一句话总结：
+JUL(Java Util Log), JCL(Commons Logging), Log4j, SLF4J, Logback，Log4j2
+JCL与SLF4J是提供logapi，JUL与Log4j、Logback、Log4j2都可以通过对应都jar包实现互转
+Java Util Log
+    jdk自带的log,使用不是特别广泛
+Log4j 1.x
+    性能比较差
+Commons Logging
+    JCL 是一个Log Facade，只提供 Log API，不提供实现。
+    早期jcl就相当于sl4j，有 Adapter来使用 Log4j或者JUL作为Log Implementation
+slf4j
+    SLF4J(The Simple Logging Facade for Java)和 Logback 也是Gülcü 创立的项目，
+    其创立主要是为了提供更高性能的实现。其中，SLF4j 是类似于JCL 的Log Facade，
+    Logback 是类似于Log4j 的 Log Implementation
+    为什么有了JCL还要重复造个轮子sl4j了
+    因为sl4jz作者觉得JCL的API设计得不好，容易让使用者写出性能有问题的代码
+    例如：logger.debug(&quot;start process request, url:&quot; + url);
+    一般生产环境 log 级别都会设到 info 或者以上，那这条 log 是不会被输出的。
+    然而不管会不会输出，这其中都会做一个字符串连接操作，然后生产一个新的字符串。
+    如果这条语句在循环或者被调用很多次的函数中，就会多做很多无用的字符串连接，影响性能
+    所以 JCL 的最佳实践推荐这么写：
+    if (logger.isDebugEnabled()) {
+        logger.debug(&quot;start process request, url:&quot; + url);
+    }
+    然而开发者常常忽略这个问题或是觉得麻烦而不愿意这么写。所以SLF4J提供了新的API，方便开发者使用:
+    logger.debug(&quot;start process request, url:{}&quot;, url);
+
+Log4j2
+    Log4j2也做了Facade/Implementation分离的设计，分成了log4j-api和log4j-core
+    计上很大程度上模仿了 SLF4J/Logback，性能上也获得了很大的提升
+</code></pre><h4 id="log优化"><a href="#log优化" class="headerlink" title="log优化"></a>log优化</h4><pre><code>具体的日志实现依赖应该设置为optional和使用runtime scope
+设为optional，依赖不会传递，这样如果你是个lib项目，然后别的项目使用了你这个lib，
+不会被引入不想要的Log Implementation 依赖；
+Scope设置为runtime，是为了防止开发人员在项目中直接使用Log Implementation中的类，
+而不适用Log Facade中的类。
+
+避免为不会输出的log付出代价：
+避免以下这种写法：
+logger.debug(&quot;start process request, url: &quot; + url);
+logger.debug(&quot;receive request: {}&quot;, toJson(request));
+
+使用：
+logger.debug(&quot;start process request, url:{}&quot;, url); // SLF4J/LOG4J2
+logger.debug(&quot;receive request: {}&quot;, () -&gt; toJson(request)); // LOG4J2
+logger.debug(() -&gt; &quot;receive request: &quot; + toJson(request));
+</code></pre><h4 id="20200417-正则表达式"><a href="#20200417-正则表达式" class="headerlink" title="20200417-正则表达式"></a>20200417-正则表达式</h4><pre><code>\   转义符号
+^  匹配行首
+$ 匹配行尾
+{n} 匹配确定的n次
+{n,} 至少匹配n次
+{n,m} 最少匹配n次且最多匹配m次
+* 匹配任意次 {0,}
++ 匹配前面的子表达式一次或多次(&gt;=1次） {1,}
+? 匹配零次或者1次 &lt;=1   {0,1}
+x|y 匹配x或者y
+[xyz] 配所包含的任意一个字符
+[^xyz] 负值字符集合。匹配未包含的任意字符。例如，“[^abc]”可以匹配“plain”中的“plin”任一字符。
+[a-z] 字符范围。匹配指定范围内的任意字符。例如，“[a-z]”可以匹配“a”到“z”范围内的任意小写字母字符。
+(pattern) 匹配pattern并获取这一匹配
+\d  \\d匹配一个数字字符。等价于[0-9]
+\W 匹配任何非单词字符。等价于“[^A-Za-z0-9_]”
+\w 匹配包括下划线的任何单词字符。类似但不等价于“[A-Za-z0-9_]”，这里的&quot;单词&quot;字符使用Unicode字符集
+</code></pre><h4 id="20200418-返回值多次排序"><a href="#20200418-返回值多次排序" class="headerlink" title="20200418-返回值多次排序"></a>20200418-返回值多次排序</h4><pre><code>第一个参与排序的放到最后面
+resultList.stream().sorted((o1, o2) -&gt; o1.getSortClassName().compareTo(o2.getSortClassName())).
+sorted((o1, o2) -&gt; o1.getGradeNum().compareTo(o2.getGradeNum())).collect(Collectors.toList())
+</code></pre><h4 id="05-12-mysql索引失效"><a href="#05-12-mysql索引失效" class="headerlink" title="05-12-mysql索引失效"></a>05-12-mysql索引失效</h4><pre><code>相关表索引（department_id、employee_id）都加过
+select
+  *
+from
+  teacher,
+  employee_department
+where
+  teacher.employee_id = employee_department.employee_id
+  and employee_department.department_id in(4883111)
+ -- and teacher.is_delete = 0
+
+ 如果加了 and teacher.is_delete = 0这行 ，expalin看执行效率时候会teacher表会ALL 全表扫描
+ 如果不加 and teacher.is_delete = 0这行，expalin teacher表会走索引
+ 最后定位下其实和这个and后面条件无多大关系
+ mysql分析时候觉得数据的比例已经超过了使用索引的比例（比如对象数据：所有数据&gt;20%），所以放弃了索引来检索
+</code></pre><h4 id="05-21-redis-可以命名"><a href="#05-21-redis-可以命名" class="headerlink" title="05-21 redis 可以命名"></a>05-21 redis 可以命名</h4><pre><code>可以用user:getName , user:getSchool 这样在客户端可以基于名称聚合
+</code></pre><h4 id="java-util-concurrent"><a href="#java-util-concurrent" class="headerlink" title="java.util.concurrent"></a>java.util.concurrent</h4><pre><code>J.U.C都是建立在CAS基础上之上的,包括ReetrantLock的AbstractQueuedSynchronizer,基础又是CAS
+</code></pre><h4 id="weekhashmap"><a href="#weekhashmap" class="headerlink" title="weekhashmap"></a>weekhashmap</h4><pre><code>WeakHashMap的Key虽然是弱引用，但是其Value却持有Key中对象的强引用，Value被Entry引用，Entry被WeakHashMap引用，最终导致Key无法回收
 </code></pre>
       
     </div>
@@ -1962,7 +2355,7 @@ sass: software as a service
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">39</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2039,7 +2432,7 @@ sass: software as a service
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#20170222"><span class="nav-number">1.</span> <span class="nav-text">20170222</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170223"><span class="nav-number">2.</span> <span class="nav-text">20170223</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170224"><span class="nav-number">3.</span> <span class="nav-text">20170224</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170227"><span class="nav-number">4.</span> <span class="nav-text">20170227</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170228"><span class="nav-number">5.</span> <span class="nav-text">20170228</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170301"><span class="nav-number">6.</span> <span class="nav-text">20170301</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170302"><span class="nav-number">7.</span> <span class="nav-text">20170302</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170306"><span class="nav-number">8.</span> <span class="nav-text">20170306</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170308"><span class="nav-number">9.</span> <span class="nav-text">20170308</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170309-redis回顾"><span class="nav-number">10.</span> <span class="nav-text">20170309-redis回顾</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170310"><span class="nav-number">11.</span> <span class="nav-text">20170310</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170313"><span class="nav-number">12.</span> <span class="nav-text">20170313</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170314-浅拷贝和深拷贝"><span class="nav-number">13.</span> <span class="nav-text">20170314-浅拷贝和深拷贝</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170317-java-spi机制"><span class="nav-number">14.</span> <span class="nav-text">20170317-java spi机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170323"><span class="nav-number">15.</span> <span class="nav-text">20170323</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170327"><span class="nav-number">16.</span> <span class="nav-text">20170327</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170330"><span class="nav-number">17.</span> <span class="nav-text">20170330</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170412"><span class="nav-number">18.</span> <span class="nav-text">20170412</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170418"><span class="nav-number">19.</span> <span class="nav-text">20170418</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170425"><span class="nav-number">20.</span> <span class="nav-text">20170425</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170510-hs-err-pid-log"><span class="nav-number">21.</span> <span class="nav-text">20170510-hs_err_pid.log</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170512-高可用消息推送平台"><span class="nav-number">22.</span> <span class="nav-text">20170512-高可用消息推送平台</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170605-mybatis动态参数"><span class="nav-number">23.</span> <span class="nav-text">20170605-mybatis动态参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170614-表添加索引"><span class="nav-number">24.</span> <span class="nav-text">20170614-表添加索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170615-equal和hashcode"><span class="nav-number">25.</span> <span class="nav-text">20170615-equal和hashcode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170615-replace空指针"><span class="nav-number">26.</span> <span class="nav-text">20170615-replace空指针</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170619-为什么HashMap里面的数组size必须是2的次幂？"><span class="nav-number">27.</span> <span class="nav-text">20170619-为什么HashMap里面的数组size必须是2的次幂？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170620-http协议复习"><span class="nav-number">28.</span> <span class="nav-text">20170620-http协议复习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170621-深入java虚拟机复习"><span class="nav-number">29.</span> <span class="nav-text">20170621-深入java虚拟机复习</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#java虚拟机运行时数据区域"><span class="nav-number">29.1.</span> <span class="nav-text">java虚拟机运行时数据区域</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java垃圾回收知识点"><span class="nav-number">29.2.</span> <span class="nav-text">java垃圾回收知识点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#虚拟机类加载机制"><span class="nav-number">29.3.</span> <span class="nav-text">虚拟机类加载机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#早期编译器优化"><span class="nav-number">29.4.</span> <span class="nav-text">早期编译器优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java内存模型"><span class="nav-number">29.5.</span> <span class="nav-text">java内存模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#并发编程三个概念"><span class="nav-number">29.6.</span> <span class="nav-text">并发编程三个概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#指令重排序"><span class="nav-number">29.7.</span> <span class="nav-text">指令重排序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#happens-before原则（先行发生原则"><span class="nav-number">29.8.</span> <span class="nav-text">happens-before原则（先行发生原则)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170622-transient关键字"><span class="nav-number">30.</span> <span class="nav-text">20170622-transient关键字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170622-数据库复习"><span class="nav-number">31.</span> <span class="nav-text">20170622-数据库复习</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#事物隔离级别"><span class="nav-number">31.1.</span> <span class="nav-text">事物隔离级别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#死锁情况"><span class="nav-number">31.2.</span> <span class="nav-text">死锁情况</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#spring事物传播特性"><span class="nav-number">31.3.</span> <span class="nav-text">spring事物传播特性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170622-动态代理"><span class="nav-number">32.</span> <span class="nav-text">20170622-动态代理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#jdk动态代理"><span class="nav-number">32.1.</span> <span class="nav-text">jdk动态代理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cglib"><span class="nav-number">32.2.</span> <span class="nav-text">cglib</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JAVAASSIST字节码"><span class="nav-number">32.3.</span> <span class="nav-text">JAVAASSIST字节码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170703-for-each原理和java迭代注意"><span class="nav-number">33.</span> <span class="nav-text">20170703-for each原理和java迭代注意</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">33.1.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#注意"><span class="nav-number">33.2.</span> <span class="nav-text">注意</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#for-each对象"><span class="nav-number">33.3.</span> <span class="nav-text">for each对象</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170704-linux线程gc查询"><span class="nav-number">34.</span> <span class="nav-text">20170704-linux线程gc查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170705-java对象的强、软、弱、虚引用"><span class="nav-number">35.</span> <span class="nav-text">20170705-java对象的强、软、弱、虚引用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ThreadLocal原理与内存泄露"><span class="nav-number">35.1.</span> <span class="nav-text">ThreadLocal原理与内存泄露</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170706-设计模式回顾"><span class="nav-number">36.</span> <span class="nav-text">20170706-设计模式回顾</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#单例模式"><span class="nav-number">36.1.</span> <span class="nav-text">单例模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#工厂模式"><span class="nav-number">36.2.</span> <span class="nav-text">工厂模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#装饰模式"><span class="nav-number">36.3.</span> <span class="nav-text">装饰模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#代理模式"><span class="nav-number">36.4.</span> <span class="nav-text">代理模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#命令模式"><span class="nav-number">36.5.</span> <span class="nav-text">命令模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#策略模式"><span class="nav-number">36.6.</span> <span class="nav-text">策略模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#迭代模式"><span class="nav-number">36.7.</span> <span class="nav-text">迭代模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#观察者模式"><span class="nav-number">36.8.</span> <span class="nav-text">观察者模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#适配器模式"><span class="nav-number">36.9.</span> <span class="nav-text">适配器模式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170707-通过Java字节码去看原理"><span class="nav-number">37.</span> <span class="nav-text">20170707-通过Java字节码去看原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#i-与-i的原理"><span class="nav-number">37.1.</span> <span class="nav-text">i++与++i的原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#for-each的处理"><span class="nav-number">37.2.</span> <span class="nav-text">for each的处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#装箱与拆箱"><span class="nav-number">37.3.</span> <span class="nav-text">装箱与拆箱</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#泛型"><span class="nav-number">37.4.</span> <span class="nav-text">泛型</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170711-linux常用命令复习"><span class="nav-number">38.</span> <span class="nav-text">20170711-linux常用命令复习</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#文件权限"><span class="nav-number">38.1.</span> <span class="nav-text">文件权限</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170712-QPS"><span class="nav-number">39.</span> <span class="nav-text">20170712-QPS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170713-TCP-IP相关"><span class="nav-number">40.</span> <span class="nav-text">20170713-TCP/IP相关</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTPS"><span class="nav-number">40.1.</span> <span class="nav-text">HTTPS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#http状态码"><span class="nav-number">40.2.</span> <span class="nav-text">http状态码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OSI七层模型"><span class="nav-number">40.3.</span> <span class="nav-text">OSI七层模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP-IP四层模型"><span class="nav-number">40.4.</span> <span class="nav-text">TCP/IP四层模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP数据段格式"><span class="nav-number">40.5.</span> <span class="nav-text">TCP数据段格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#三次握手"><span class="nav-number">40.6.</span> <span class="nav-text">三次握手</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#四次挥手"><span class="nav-number">40.7.</span> <span class="nav-text">四次挥手</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#syn攻击"><span class="nav-number">40.8.</span> <span class="nav-text">syn攻击</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#与http相关协议"><span class="nav-number">40.9.</span> <span class="nav-text">与http相关协议</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#time-wait与close-wait"><span class="nav-number">40.10.</span> <span class="nav-text">time_wait与close_wait</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#time-wait"><span class="nav-number">40.10.1.</span> <span class="nav-text">time_wait</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#close-wait"><span class="nav-number">40.10.2.</span> <span class="nav-text">close_wait</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tcp粘包、拆包"><span class="nav-number">40.11.</span> <span class="nav-text">tcp粘包、拆包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何提高单机短连接QPS"><span class="nav-number">40.12.</span> <span class="nav-text">如何提高单机短连接QPS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#etc-sysctl-conf"><span class="nav-number">40.13.</span> <span class="nav-text">/etc/sysctl.conf</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170714-mysql相关"><span class="nav-number">41.</span> <span class="nav-text">20170714-mysql相关</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#优化"><span class="nav-number">41.1.</span> <span class="nav-text">优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#索引失效"><span class="nav-number">41.2.</span> <span class="nav-text">索引失效</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#10条SQL技巧"><span class="nav-number">41.3.</span> <span class="nav-text">10条SQL技巧</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#索引"><span class="nav-number">41.4.</span> <span class="nav-text">索引</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#聚簇索引"><span class="nav-number">41.4.1.</span> <span class="nav-text">聚簇索引</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#非聚簇索引"><span class="nav-number">41.4.2.</span> <span class="nav-text">非聚簇索引</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#联合索引"><span class="nav-number">41.4.3.</span> <span class="nav-text">联合索引</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#左前缀索引"><span class="nav-number">41.4.4.</span> <span class="nav-text">左前缀索引</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#explain参数分析"><span class="nav-number">41.4.5.</span> <span class="nav-text">explain参数分析</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170715-springmvc相关"><span class="nav-number">42.</span> <span class="nav-text">20170715-springmvc相关</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#bean的生命周期"><span class="nav-number">42.1.</span> <span class="nav-text">bean的生命周期</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#url请求流程"><span class="nav-number">42.2.</span> <span class="nav-text">url请求流程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170717-接口幂等性"><span class="nav-number">43.</span> <span class="nav-text">20170717-接口幂等性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#接口幂等场景"><span class="nav-number">43.1.</span> <span class="nav-text">接口幂等场景</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170718-线程池大小如何设置"><span class="nav-number">44.</span> <span class="nav-text">20170718-线程池大小如何设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170731-mysql删除"><span class="nav-number">45.</span> <span class="nav-text">20170731-mysql删除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170802-window删除大量文件和文件"><span class="nav-number">46.</span> <span class="nav-text">20170802-window删除大量文件和文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170829-findbugs插件提示的优化代码"><span class="nav-number">47.</span> <span class="nav-text">20170829-findbugs插件提示的优化代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170918-Comparable与Comparator"><span class="nav-number">48.</span> <span class="nav-text">20170918-Comparable与Comparator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170924-static修饰符"><span class="nav-number">49.</span> <span class="nav-text">20170924-static修饰符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170925-Exception与RuntimeException"><span class="nav-number">50.</span> <span class="nav-text">20170925-Exception与RuntimeException</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170928-公司同事guva分享记录"><span class="nav-number">51.</span> <span class="nav-text">20170928-公司同事guva分享记录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20171012-包装类比较"><span class="nav-number">52.</span> <span class="nav-text">20171012-包装类比较</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20171018-String-replace注意"><span class="nav-number">53.</span> <span class="nav-text">20171018-String.replace注意</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20171024-map-putIfAbsent-key-value"><span class="nav-number">54.</span> <span class="nav-text">20171024-map.putIfAbsent(key,value)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20171106-URLEncoder-encode（）与decode"><span class="nav-number">55.</span> <span class="nav-text">20171106- URLEncoder.encode（）与decode()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20171122-utf-8与gbk"><span class="nav-number">56.</span> <span class="nav-text">20171122- utf-8与gbk</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180119-maven依赖原则"><span class="nav-number">57.</span> <span class="nav-text">20180119-maven依赖原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180122-简单的linux脚本"><span class="nav-number">58.</span> <span class="nav-text">20180122-简单的linux脚本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180208-mysql-utf8-unicode-ci、utf8-general-ci的区别"><span class="nav-number">59.</span> <span class="nav-text">20180208-mysql utf8_unicode_ci、utf8_general_ci的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180306-mysql-unique与primary"><span class="nav-number">60.</span> <span class="nav-text">20180306- mysql unique与primary</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180307-mysql-longText与text类型"><span class="nav-number">61.</span> <span class="nav-text">20180307- mysql longText与text类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180308-less倒序"><span class="nav-number">62.</span> <span class="nav-text">20180308- less倒序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180313-字符串以逗号隔开"><span class="nav-number">63.</span> <span class="nav-text">20180313-字符串以逗号隔开</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180402-mysql-bit"><span class="nav-number">64.</span> <span class="nav-text">20180402-mysql bit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180412-不停机数据迁移与分表"><span class="nav-number">65.</span> <span class="nav-text">20180412- 不停机数据迁移与分表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180417-Resource与-Autowired等常用注解"><span class="nav-number">66.</span> <span class="nav-text">20180417- @Resource与@Autowired等常用注解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180421-Java泛型中E、T、K、V等的含义"><span class="nav-number">67.</span> <span class="nav-text">20180421- Java泛型中E、T、K、V等的含义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180502-BigDecimal注意事项"><span class="nav-number">68.</span> <span class="nav-text">20180502- BigDecimal注意事项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180509-jvm异常退出hook线程"><span class="nav-number">69.</span> <span class="nav-text">20180509- jvm异常退出hook线程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180523-java位移运算与与运算"><span class="nav-number">70.</span> <span class="nav-text">20180523- java位移运算与与运算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180524-spring事物-Transactional"><span class="nav-number">71.</span> <span class="nav-text">20180524- spring事物@Transactional</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180524-spring-Transactional注解被加载初始化顺序"><span class="nav-number">72.</span> <span class="nav-text">20180524- spring @Transactional注解被加载初始化顺序</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1"><span class="nav-number">72.1.</span> <span class="nav-text">1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2"><span class="nav-number">72.2.</span> <span class="nav-text">2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3"><span class="nav-number">72.3.</span> <span class="nav-text">3</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4"><span class="nav-number">72.4.</span> <span class="nav-text">4</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5"><span class="nav-number">72.5.</span> <span class="nav-text">5</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6"><span class="nav-number">72.6.</span> <span class="nav-text">6</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180525-git回滚代码"><span class="nav-number">73.</span> <span class="nav-text">20180525-git回滚代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180529-Arrays-asList-xx"><span class="nav-number">74.</span> <span class="nav-text">20180529- Arrays.asList(xx)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180628-避免mybatis-SUM求和返回null"><span class="nav-number">75.</span> <span class="nav-text">20180628- 避免mybatis SUM求和返回null</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180712-mysql对于null的处理"><span class="nav-number">76.</span> <span class="nav-text">20180712- mysql对于null的处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180815-mybatis批量插入时候自增主键"><span class="nav-number">77.</span> <span class="nav-text">20180815-mybatis批量插入时候自增主键</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180905-mysql支持emoj"><span class="nav-number">78.</span> <span class="nav-text">20180905-mysql支持emoj</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180906-一致性hash"><span class="nav-number">79.</span> <span class="nav-text">20180906-一致性hash</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#一致性Hash算法"><span class="nav-number">79.1.</span> <span class="nav-text">一致性Hash算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一致性Hash算法优化"><span class="nav-number">79.2.</span> <span class="nav-text">一致性Hash算法优化</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180911-集合求并结果集"><span class="nav-number">80.</span> <span class="nav-text">20180911-集合求并结果集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180920-Java位运算的使用场景"><span class="nav-number">81.</span> <span class="nav-text">20180920-Java位运算的使用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180921-网络ping命令"><span class="nav-number">82.</span> <span class="nav-text">20180921-网络ping命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180927-amp-amp-与"><span class="nav-number">83.</span> <span class="nav-text">20180927-&&与||</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180928-BeanUtils-copyProperties浅拷贝"><span class="nav-number">84.</span> <span class="nav-text">20180928 BeanUtils.copyProperties浅拷贝</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20181018-hashcode冲突解决方法"><span class="nav-number">85.</span> <span class="nav-text">20181018 hashcode冲突解决方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20181026-spring自定义添加bean"><span class="nav-number">86.</span> <span class="nav-text">20181026-spring自定义添加bean</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2019"><span class="nav-number"></span> <span class="nav-text">2019</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#20190122-数据统计"><span class="nav-number">1.</span> <span class="nav-text">20190122-数据统计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20190325-linux-脚本"><span class="nav-number">2.</span> <span class="nav-text">20190325-linux 脚本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20190506-iaas-pass-sass"><span class="nav-number">3.</span> <span class="nav-text">20190506-iaas pass sass</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20190507-线程自动扩展策略"><span class="nav-number">4.</span> <span class="nav-text">20190507-线程自动扩展策略</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#20170222"><span class="nav-number">1.</span> <span class="nav-text">20170222</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170223"><span class="nav-number">2.</span> <span class="nav-text">20170223</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170224"><span class="nav-number">3.</span> <span class="nav-text">20170224</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170227"><span class="nav-number">4.</span> <span class="nav-text">20170227</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170228"><span class="nav-number">5.</span> <span class="nav-text">20170228</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170301"><span class="nav-number">6.</span> <span class="nav-text">20170301</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170302"><span class="nav-number">7.</span> <span class="nav-text">20170302</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170306"><span class="nav-number">8.</span> <span class="nav-text">20170306</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170308"><span class="nav-number">9.</span> <span class="nav-text">20170308</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170309-redis回顾"><span class="nav-number">10.</span> <span class="nav-text">20170309-redis回顾</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170310"><span class="nav-number">11.</span> <span class="nav-text">20170310</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170313"><span class="nav-number">12.</span> <span class="nav-text">20170313</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170314-浅拷贝和深拷贝"><span class="nav-number">13.</span> <span class="nav-text">20170314-浅拷贝和深拷贝</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170317-java-spi机制"><span class="nav-number">14.</span> <span class="nav-text">20170317-java spi机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170323"><span class="nav-number">15.</span> <span class="nav-text">20170323</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170327"><span class="nav-number">16.</span> <span class="nav-text">20170327</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170330"><span class="nav-number">17.</span> <span class="nav-text">20170330</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170412"><span class="nav-number">18.</span> <span class="nav-text">20170412</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170418"><span class="nav-number">19.</span> <span class="nav-text">20170418</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170425"><span class="nav-number">20.</span> <span class="nav-text">20170425</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170510-hs-err-pid-log"><span class="nav-number">21.</span> <span class="nav-text">20170510-hs_err_pid.log</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170512-高可用消息推送平台"><span class="nav-number">22.</span> <span class="nav-text">20170512-高可用消息推送平台</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170605-mybatis动态参数"><span class="nav-number">23.</span> <span class="nav-text">20170605-mybatis动态参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170614-表添加索引"><span class="nav-number">24.</span> <span class="nav-text">20170614-表添加索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170615-equal和hashcode"><span class="nav-number">25.</span> <span class="nav-text">20170615-equal和hashcode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170615-replace空指针"><span class="nav-number">26.</span> <span class="nav-text">20170615-replace空指针</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170619-为什么HashMap里面的数组size必须是2的次幂？"><span class="nav-number">27.</span> <span class="nav-text">20170619-为什么HashMap里面的数组size必须是2的次幂？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170620-http协议复习"><span class="nav-number">28.</span> <span class="nav-text">20170620-http协议复习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170621-深入java虚拟机复习"><span class="nav-number">29.</span> <span class="nav-text">20170621-深入java虚拟机复习</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#java虚拟机运行时数据区域"><span class="nav-number">29.1.</span> <span class="nav-text">java虚拟机运行时数据区域</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java垃圾回收知识点"><span class="nav-number">29.2.</span> <span class="nav-text">java垃圾回收知识点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#虚拟机类加载机制"><span class="nav-number">29.3.</span> <span class="nav-text">虚拟机类加载机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#早期编译器优化"><span class="nav-number">29.4.</span> <span class="nav-text">早期编译器优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java内存模型"><span class="nav-number">29.5.</span> <span class="nav-text">java内存模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#并发编程三个概念"><span class="nav-number">29.6.</span> <span class="nav-text">并发编程三个概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#指令重排序"><span class="nav-number">29.7.</span> <span class="nav-text">指令重排序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#happens-before原则（先行发生原则"><span class="nav-number">29.8.</span> <span class="nav-text">happens-before原则（先行发生原则)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170622-transient关键字"><span class="nav-number">30.</span> <span class="nav-text">20170622-transient关键字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170622-数据库复习"><span class="nav-number">31.</span> <span class="nav-text">20170622-数据库复习</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#事物隔离级别"><span class="nav-number">31.1.</span> <span class="nav-text">事物隔离级别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#死锁情况"><span class="nav-number">31.2.</span> <span class="nav-text">死锁情况</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#spring事物传播特性"><span class="nav-number">31.3.</span> <span class="nav-text">spring事物传播特性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170622-动态代理"><span class="nav-number">32.</span> <span class="nav-text">20170622-动态代理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#jdk动态代理"><span class="nav-number">32.1.</span> <span class="nav-text">jdk动态代理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cglib"><span class="nav-number">32.2.</span> <span class="nav-text">cglib</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JAVAASSIST字节码"><span class="nav-number">32.3.</span> <span class="nav-text">JAVAASSIST字节码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170703-for-each原理和java迭代注意"><span class="nav-number">33.</span> <span class="nav-text">20170703-for each原理和java迭代注意</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">33.1.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#注意"><span class="nav-number">33.2.</span> <span class="nav-text">注意</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#for-each对象"><span class="nav-number">33.3.</span> <span class="nav-text">for each对象</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170704-linux线程gc查询"><span class="nav-number">34.</span> <span class="nav-text">20170704-linux线程gc查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170705-java对象的强、软、弱、虚引用"><span class="nav-number">35.</span> <span class="nav-text">20170705-java对象的强、软、弱、虚引用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ThreadLocal原理与内存泄露"><span class="nav-number">35.1.</span> <span class="nav-text">ThreadLocal原理与内存泄露</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170706-设计模式回顾"><span class="nav-number">36.</span> <span class="nav-text">20170706-设计模式回顾</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#单例模式"><span class="nav-number">36.1.</span> <span class="nav-text">单例模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#工厂模式"><span class="nav-number">36.2.</span> <span class="nav-text">工厂模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#装饰模式"><span class="nav-number">36.3.</span> <span class="nav-text">装饰模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#代理模式"><span class="nav-number">36.4.</span> <span class="nav-text">代理模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#命令模式"><span class="nav-number">36.5.</span> <span class="nav-text">命令模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#策略模式"><span class="nav-number">36.6.</span> <span class="nav-text">策略模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#迭代模式"><span class="nav-number">36.7.</span> <span class="nav-text">迭代模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#观察者模式"><span class="nav-number">36.8.</span> <span class="nav-text">观察者模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#适配器模式"><span class="nav-number">36.9.</span> <span class="nav-text">适配器模式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170707-通过Java字节码去看原理"><span class="nav-number">37.</span> <span class="nav-text">20170707-通过Java字节码去看原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#i-与-i的原理"><span class="nav-number">37.1.</span> <span class="nav-text">i++与++i的原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#for-each的处理"><span class="nav-number">37.2.</span> <span class="nav-text">for each的处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#装箱与拆箱"><span class="nav-number">37.3.</span> <span class="nav-text">装箱与拆箱</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#泛型"><span class="nav-number">37.4.</span> <span class="nav-text">泛型</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170711-linux常用命令复习"><span class="nav-number">38.</span> <span class="nav-text">20170711-linux常用命令复习</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#文件权限"><span class="nav-number">38.1.</span> <span class="nav-text">文件权限</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170712-QPS和TPS"><span class="nav-number">39.</span> <span class="nav-text">20170712-QPS和TPS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170712-系统容量预估方法"><span class="nav-number">40.</span> <span class="nav-text">20170712-系统容量预估方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170713-TCP-IP相关"><span class="nav-number">41.</span> <span class="nav-text">20170713-TCP/IP相关</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTPS"><span class="nav-number">41.1.</span> <span class="nav-text">HTTPS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#http状态码"><span class="nav-number">41.2.</span> <span class="nav-text">http状态码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OSI七层模型"><span class="nav-number">41.3.</span> <span class="nav-text">OSI七层模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP-IP四层模型"><span class="nav-number">41.4.</span> <span class="nav-text">TCP/IP四层模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP数据段格式"><span class="nav-number">41.5.</span> <span class="nav-text">TCP数据段格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tcp三次握手"><span class="nav-number">41.6.</span> <span class="nav-text">tcp三次握手</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#四次挥手"><span class="nav-number">41.7.</span> <span class="nav-text">四次挥手</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#为什么建立连接是三次握手，而关闭连接却是四次挥手呢"><span class="nav-number">41.8.</span> <span class="nav-text">为什么建立连接是三次握手，而关闭连接却是四次挥手呢</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#syn攻击"><span class="nav-number">41.9.</span> <span class="nav-text">syn攻击</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#与http相关协议"><span class="nav-number">41.10.</span> <span class="nav-text">与http相关协议</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#time-wait与close-wait"><span class="nav-number">41.11.</span> <span class="nav-text">time_wait与close_wait</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#time-wait"><span class="nav-number">41.11.1.</span> <span class="nav-text">time_wait</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#close-wait"><span class="nav-number">41.11.2.</span> <span class="nav-text">close_wait</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tcp粘包、拆包"><span class="nav-number">41.12.</span> <span class="nav-text">tcp粘包、拆包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何提高单机短连接QPS"><span class="nav-number">41.13.</span> <span class="nav-text">如何提高单机短连接QPS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#etc-sysctl-conf"><span class="nav-number">41.14.</span> <span class="nav-text">/etc/sysctl.conf</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170714-mysql相关"><span class="nav-number">42.</span> <span class="nav-text">20170714-mysql相关</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#优化"><span class="nav-number">42.1.</span> <span class="nav-text">优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#索引失效"><span class="nav-number">42.2.</span> <span class="nav-text">索引失效</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#10条SQL技巧"><span class="nav-number">42.3.</span> <span class="nav-text">10条SQL技巧</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#索引"><span class="nav-number">42.4.</span> <span class="nav-text">索引</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#聚簇索引"><span class="nav-number">42.4.1.</span> <span class="nav-text">聚簇索引</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#非聚簇索引"><span class="nav-number">42.4.2.</span> <span class="nav-text">非聚簇索引</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#联合索引"><span class="nav-number">42.4.3.</span> <span class="nav-text">联合索引</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#左前缀索引"><span class="nav-number">42.4.4.</span> <span class="nav-text">左前缀索引</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#explain参数分析"><span class="nav-number">42.4.5.</span> <span class="nav-text">explain参数分析</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170715-springmvc相关"><span class="nav-number">43.</span> <span class="nav-text">20170715-springmvc相关</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#相关接口"><span class="nav-number">43.1.</span> <span class="nav-text">相关接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bean的加载顺序"><span class="nav-number">43.2.</span> <span class="nav-text">bean的加载顺序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#url请求流程"><span class="nav-number">43.3.</span> <span class="nav-text">url请求流程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170717-接口幂等性"><span class="nav-number">44.</span> <span class="nav-text">20170717-接口幂等性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#接口幂等场景"><span class="nav-number">44.1.</span> <span class="nav-text">接口幂等场景</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170718-线程池大小如何设置"><span class="nav-number">45.</span> <span class="nav-text">20170718-线程池大小如何设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170731-mysql删除"><span class="nav-number">46.</span> <span class="nav-text">20170731-mysql删除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170802-window删除大量文件和文件"><span class="nav-number">47.</span> <span class="nav-text">20170802-window删除大量文件和文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170829-findbugs插件提示的优化代码"><span class="nav-number">48.</span> <span class="nav-text">20170829-findbugs插件提示的优化代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170918-Comparable与Comparator"><span class="nav-number">49.</span> <span class="nav-text">20170918-Comparable与Comparator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170924-static修饰符"><span class="nav-number">50.</span> <span class="nav-text">20170924-static修饰符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170925-Exception与RuntimeException"><span class="nav-number">51.</span> <span class="nav-text">20170925-Exception与RuntimeException</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20170928-公司同事guva分享记录"><span class="nav-number">52.</span> <span class="nav-text">20170928-公司同事guva分享记录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20171012-包装类比较"><span class="nav-number">53.</span> <span class="nav-text">20171012-包装类比较</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20171018-String-replace注意"><span class="nav-number">54.</span> <span class="nav-text">20171018-String.replace注意</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20171024-map-putIfAbsent-key-value"><span class="nav-number">55.</span> <span class="nav-text">20171024-map.putIfAbsent(key,value)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20171106-URLEncoder-encode（）与decode"><span class="nav-number">56.</span> <span class="nav-text">20171106- URLEncoder.encode（）与decode()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20171122-utf-8与gbk"><span class="nav-number">57.</span> <span class="nav-text">20171122- utf-8与gbk</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180119-maven依赖原则"><span class="nav-number">58.</span> <span class="nav-text">20180119-maven依赖原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180122-简单的linux脚本"><span class="nav-number">59.</span> <span class="nav-text">20180122-简单的linux脚本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180208-mysql-utf8-unicode-ci、utf8-general-ci的区别"><span class="nav-number">60.</span> <span class="nav-text">20180208-mysql utf8_unicode_ci、utf8_general_ci的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180306-mysql-unique与primary"><span class="nav-number">61.</span> <span class="nav-text">20180306- mysql unique与primary</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180307-mysql-longText与text类型"><span class="nav-number">62.</span> <span class="nav-text">20180307- mysql longText与text类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180308-less倒序"><span class="nav-number">63.</span> <span class="nav-text">20180308- less倒序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180313-字符串以逗号隔开"><span class="nav-number">64.</span> <span class="nav-text">20180313-字符串以逗号隔开</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180402-mysql-bit"><span class="nav-number">65.</span> <span class="nav-text">20180402-mysql bit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180412-不停机数据迁移与分表"><span class="nav-number">66.</span> <span class="nav-text">20180412- 不停机数据迁移与分表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180417-Resource与-Autowired等常用注解"><span class="nav-number">67.</span> <span class="nav-text">20180417- @Resource与@Autowired等常用注解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180421-Java泛型中E、T、K、V等的含义"><span class="nav-number">68.</span> <span class="nav-text">20180421- Java泛型中E、T、K、V等的含义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180502-BigDecimal注意事项"><span class="nav-number">69.</span> <span class="nav-text">20180502- BigDecimal注意事项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180509-jvm异常退出hook线程"><span class="nav-number">70.</span> <span class="nav-text">20180509- jvm异常退出hook线程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180523-java位移运算与与运算"><span class="nav-number">71.</span> <span class="nav-text">20180523- java位移运算与与运算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180524-spring事物-Transactional"><span class="nav-number">72.</span> <span class="nav-text">20180524- spring事物@Transactional</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180524-spring-Transactional注解被加载初始化顺序"><span class="nav-number">73.</span> <span class="nav-text">20180524- spring @Transactional注解被加载初始化顺序</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1"><span class="nav-number">73.1.</span> <span class="nav-text">1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2"><span class="nav-number">73.2.</span> <span class="nav-text">2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3"><span class="nav-number">73.3.</span> <span class="nav-text">3</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4"><span class="nav-number">73.4.</span> <span class="nav-text">4</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5"><span class="nav-number">73.5.</span> <span class="nav-text">5</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6"><span class="nav-number">73.6.</span> <span class="nav-text">6</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180525-git回滚代码"><span class="nav-number">74.</span> <span class="nav-text">20180525-git回滚代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180529-Arrays-asList-xx"><span class="nav-number">75.</span> <span class="nav-text">20180529- Arrays.asList(xx)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180628-避免mybatis-SUM求和返回null"><span class="nav-number">76.</span> <span class="nav-text">20180628- 避免mybatis SUM求和返回null</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180712-mysql对于null的处理"><span class="nav-number">77.</span> <span class="nav-text">20180712- mysql对于null的处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180815-mybatis批量插入时候自增主键"><span class="nav-number">78.</span> <span class="nav-text">20180815-mybatis批量插入时候自增主键</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180905-mysql支持emoj"><span class="nav-number">79.</span> <span class="nav-text">20180905-mysql支持emoj</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180906-一致性hash"><span class="nav-number">80.</span> <span class="nav-text">20180906-一致性hash</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#一致性Hash算法"><span class="nav-number">80.1.</span> <span class="nav-text">一致性Hash算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一致性Hash算法优化"><span class="nav-number">80.2.</span> <span class="nav-text">一致性Hash算法优化</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180911-集合求并结果集"><span class="nav-number">81.</span> <span class="nav-text">20180911-集合求并结果集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180920-Java位运算的使用场景"><span class="nav-number">82.</span> <span class="nav-text">20180920-Java位运算的使用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180921-网络ping命令"><span class="nav-number">83.</span> <span class="nav-text">20180921-网络ping命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180927-amp-amp-与"><span class="nav-number">84.</span> <span class="nav-text">20180927-&&与||</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20180928-BeanUtils-copyProperties浅拷贝"><span class="nav-number">85.</span> <span class="nav-text">20180928 BeanUtils.copyProperties浅拷贝</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20181018-hash冲突解决方法"><span class="nav-number">86.</span> <span class="nav-text">20181018 hash冲突解决方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20181026-spring自定义添加bean"><span class="nav-number">87.</span> <span class="nav-text">20181026-spring自定义添加bean</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2019"><span class="nav-number"></span> <span class="nav-text">2019</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#20190122-数据统计"><span class="nav-number">1.</span> <span class="nav-text">20190122-数据统计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20190325-linux-脚本"><span class="nav-number">2.</span> <span class="nav-text">20190325-linux 脚本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20190506-iaas-pass-sass"><span class="nav-number">3.</span> <span class="nav-text">20190506-iaas pass sass</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20190507-线程自动扩展策略"><span class="nav-number">4.</span> <span class="nav-text">20190507-线程自动扩展策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20190508-单点登陆"><span class="nav-number">5.</span> <span class="nav-text">20190508-单点登陆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20190519-延迟队列"><span class="nav-number">6.</span> <span class="nav-text">20190519-延迟队列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20190902-公众号"><span class="nav-number">7.</span> <span class="nav-text">20190902-公众号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20190904-Javassist、ASM"><span class="nav-number">8.</span> <span class="nav-text">20190904-Javassist、ASM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20190905-高并发减少锁竞争方式"><span class="nav-number">9.</span> <span class="nav-text">20190905-高并发减少锁竞争方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20190917-模版word-生成方案"><span class="nav-number">10.</span> <span class="nav-text">20190917-模版word 生成方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20190923-jmh-BenchMark压测"><span class="nav-number">11.</span> <span class="nav-text">20190923-jmh BenchMark压测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20190926-一些不常用当方法"><span class="nav-number">12.</span> <span class="nav-text">20190926-一些不常用当方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20190929-mac-端口占用"><span class="nav-number">13.</span> <span class="nav-text">20190929- mac 端口占用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20191104-static代码块方法没有执行"><span class="nav-number">14.</span> <span class="nav-text">20191104-static代码块方法没有执行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20191209-Java程序运行过程"><span class="nav-number">15.</span> <span class="nav-text">20191209-Java程序运行过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20191210-linux软连接"><span class="nav-number">16.</span> <span class="nav-text">20191210-linux软连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20191211-引用传值"><span class="nav-number">17.</span> <span class="nav-text">20191211-引用传值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20191214-for-update导致死锁问题"><span class="nav-number">18.</span> <span class="nav-text">20191214-for update导致死锁问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20191217-项目工程骨架"><span class="nav-number">19.</span> <span class="nav-text">20191217-项目工程骨架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20191226-springcloud-链路追踪"><span class="nav-number">20.</span> <span class="nav-text">20191226-springcloud 链路追踪</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2020"><span class="nav-number"></span> <span class="nav-text">2020</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#20200101-队列和栈区别"><span class="nav-number">1.</span> <span class="nav-text">20200101-队列和栈区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20200116-lock使用锁没有释放"><span class="nav-number">2.</span> <span class="nav-text">20200116- lock使用锁没有释放</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#202001167-uml规则"><span class="nav-number">3.</span> <span class="nav-text">202001167-uml规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20200224-object-null"><span class="nav-number">4.</span> <span class="nav-text">20200224- object=null</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20200313-队列一些不常用等方法"><span class="nav-number">5.</span> <span class="nav-text">20200313-队列一些不常用等方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20200405-java日志框架历史"><span class="nav-number">6.</span> <span class="nav-text">20200405-java日志框架历史</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#log优化"><span class="nav-number">6.1.</span> <span class="nav-text">log优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#20200417-正则表达式"><span class="nav-number">6.2.</span> <span class="nav-text">20200417-正则表达式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#20200418-返回值多次排序"><span class="nav-number">6.3.</span> <span class="nav-text">20200418-返回值多次排序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#05-12-mysql索引失效"><span class="nav-number">6.4.</span> <span class="nav-text">05-12-mysql索引失效</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#05-21-redis-可以命名"><span class="nav-number">6.5.</span> <span class="nav-text">05-21 redis 可以命名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java-util-concurrent"><span class="nav-number">6.6.</span> <span class="nav-text">java.util.concurrent</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#weekhashmap"><span class="nav-number">6.7.</span> <span class="nav-text">weekhashmap</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -2062,7 +2455,7 @@ sass: software as a service
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

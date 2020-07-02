@@ -87,17 +87,17 @@
 
 
 
-<meta name="description" content="用lamad写了几天业务代码，发现方便不少。 List的一些玩法假设TestBean有以下属性 private int id ; private int age; private String name; 获取List里面到某些属性转化成新的ListList&amp;lt;TestBean&amp;gt; list = Arrays.asList(new TestBean(1,18, &amp;quot;ggj&amp;quot">
+<meta name="description" content="用lamad写了几天业务代码，发现方便不少。 map可以理解成是对对象里面部分属性的提取或者加工转化  filter：过滤某些数据 collect：是输出指定的集合类型，比如 collect(Collectors.toMap(TestBean::getId,  Function.identity())) collect(Collectors.groupingBy(TestBean::getName">
 <meta property="og:type" content="article">
 <meta property="og:title" content="java8 lamad表达式一些用法">
 <meta property="og:url" content="http://ggj2010.github.io/2019/01/22/java8-lamad表达式一些用法/index.html">
 <meta property="og:site_name" content="高广金博客">
-<meta property="og:description" content="用lamad写了几天业务代码，发现方便不少。 List的一些玩法假设TestBean有以下属性 private int id ; private int age; private String name; 获取List里面到某些属性转化成新的ListList&amp;lt;TestBean&amp;gt; list = Arrays.asList(new TestBean(1,18, &amp;quot;ggj&amp;quot">
+<meta property="og:description" content="用lamad写了几天业务代码，发现方便不少。 map可以理解成是对对象里面部分属性的提取或者加工转化  filter：过滤某些数据 collect：是输出指定的集合类型，比如 collect(Collectors.toMap(TestBean::getId,  Function.identity())) collect(Collectors.groupingBy(TestBean::getName">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-22T08:55:46.069Z">
+<meta property="og:updated_time" content="2020-06-29T11:24:05.300Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java8 lamad表达式一些用法">
-<meta name="twitter:description" content="用lamad写了几天业务代码，发现方便不少。 List的一些玩法假设TestBean有以下属性 private int id ; private int age; private String name; 获取List里面到某些属性转化成新的ListList&amp;lt;TestBean&amp;gt; list = Arrays.asList(new TestBean(1,18, &amp;quot;ggj&amp;quot">
+<meta name="twitter:description" content="用lamad写了几天业务代码，发现方便不少。 map可以理解成是对对象里面部分属性的提取或者加工转化  filter：过滤某些数据 collect：是输出指定的集合类型，比如 collect(Collectors.toMap(TestBean::getId,  Function.identity())) collect(Collectors.groupingBy(TestBean::getName">
 
 
 
@@ -353,6 +353,12 @@
 
       
         <pre><code>用lamad写了几天业务代码，发现方便不少。
+map可以理解成是对对象里面部分属性的提取或者加工转化
+
+filter：过滤某些数据
+collect：是输出指定的集合类型，比如
+collect(Collectors.toMap(TestBean::getId,  Function.identity()))
+collect(Collectors.groupingBy(TestBean::getName));
 </code></pre><h4 id="List的一些玩法"><a href="#List的一些玩法" class="headerlink" title="List的一些玩法"></a>List<testbean>的一些玩法</testbean></h4><pre><code>假设TestBean有以下属性
 private int id ;
 private int age;
@@ -365,6 +371,28 @@ List&lt;Integer&gt; integerList = stringList.stream().map(s -&gt; Integer.parseI
 </code></pre><h5 id="根据条件过滤List"><a href="#根据条件过滤List" class="headerlink" title="根据条件过滤List"></a>根据条件过滤List<testbean></testbean></h5><pre><code>比如获取年龄大于18的集合
 List&lt;TestBean&gt; list = Arrays.asList(new TestBean(1,18, &quot;ggj&quot;), new TestBean(2,18, &quot;ggj&quot;), new TestBean(3,19, &quot;ggj3&quot;));
 List&lt;TestBean&gt; filterList = list.stream().filter(testBean -&gt; testBean.getAge() &gt; 18).collect(Collectors.toList());
+
+  List&lt;GradeBo&gt; filterStatusGradeList = gradeList.getData().stream().filter(gradeBo -&gt; filterByGradeStatus(gradeBo, request.getClassStatusList())
+  ).collect(Collectors.toList());
+
+  private boolean filterByGradeStatus(GradeBo gradeBo, List&lt;Integer&gt; classStatusList) {
+          for (Integer classStatus : classStatusList) {
+              switch (ClassStatusEnum.valueOf(classStatus)) {
+                  case DEAFAULT:
+                      return true;
+                  //未入学
+                  case NOT_ENROL:
+                      return gradeBo.getGradeNumber().equals(0);
+                  //入学
+                  case ENROL:
+                      return gradeBo.getGradeNumber() &gt; 0 || gradeBo.getGradeNumber() &lt; 100;
+                  //毕业
+                  case GRADUATE:
+                      return gradeBo.getGradeNumber().equals(100);
+              }
+          }
+          return false;
+      }
 </code></pre><h5 id="List-里面某些数据聚合相加"><a href="#List-里面某些数据聚合相加" class="headerlink" title="List 里面某些数据聚合相加"></a>List<testbean> 里面某些数据聚合相加</testbean></h5><pre><code>相同名字的数据聚合，同时年龄相加
 List&lt;TestBean&gt; list = Arrays.asList(new TestBean(1,18, &quot;ggj&quot;), new TestBean(2,18, &quot;ggj&quot;), new TestBean(3,19, &quot;ggj3&quot;));
 Map&lt;String, Integer&gt; map = list.stream().collect(Collectors.groupingBy(TestBean::getName, Collectors.summingInt(TestBean::getAge)));
@@ -385,7 +413,54 @@ Map&lt;Integer, TestBean&gt; map3 = list.stream().collect(Collectors.toMap(TestB
 Map&lt;Integer, TestBean&gt; map4 = list.stream().collect(Collectors.toMap(TestBean::getId,  Function.identity()));
 </code></pre><h5 id="List处理里面对数据"><a href="#List处理里面对数据" class="headerlink" title="List处理里面对数据"></a>List<testbean>处理里面对数据</testbean></h5><pre><code>比如对现有list里面对年龄都加1
 List&lt;TestBean&gt; list = Arrays.asList(new TestBean(1,18, &quot;ggj&quot;), new TestBean(2,18, &quot;ggj&quot;), new TestBean(3,19, &quot;ggj3&quot;));
-List&lt;Integer&gt; addAgeList = list.stream().map(s -&gt; s.getAge() + 1).collect(Collectors.toList());
+List&lt;Integer&gt; addAgeList = list.stream().filter(testBean -&gt; testBean.getAge() &gt; 18).map(s -&gt; s.getAge() + 1).collect(Collectors.toList());
+
+对map里面存在对ke 数据处理
+List&lt;QueryRefCountResult&gt; queryRefCountResults = response.getResult();
+            Map&lt;String, QueryRefCountResult&gt; map = queryRefCountResults.stream().collect(Collectors.toMap(QueryRefCountResult::getResourceId, Function.identity()));
+            results.stream()
+                    .filter(paperListResult -&gt; map.containsKey(String.valueOf(paperListResult.getId())))
+                    .forEach(paperListResult -&gt; paperListResult.setPackageReferenceNum( Integer.valueOf(map.get(String.valueOf(paperListResult.getId())).getCount())));
+        }
+</code></pre><h4 id="两个list-比较去除相同元素"><a href="#两个list-比较去除相同元素" class="headerlink" title="两个list 比较去除相同元素"></a>两个list 比较去除相同元素</h4><pre><code>List&lt;QuestionOptionResult.Node&gt; hiddenQuestionTypeList
+   hiddenQuestionTypeList.forEach(hiddenQuestionType -&gt; {
+     questionTypeNodeList.removeIf(type -&gt; type.getCode().equals(hiddenQuestionType.getCode()));
+    });
+</code></pre><h4 id="list自定义排序"><a href="#list自定义排序" class="headerlink" title="list自定义排序"></a>list自定义排序</h4><pre><code>list=list.stream().sorted((v1,v2)-&gt;Long.compare(v1.getAge(),v2.getAge())).collect(Collectors.toList());
+</code></pre><h4 id="IntStream、DoubleStream和LongStream"><a href="#IntStream、DoubleStream和LongStream" class="headerlink" title="IntStream、DoubleStream和LongStream"></a>IntStream、DoubleStream和LongStream</h4><pre><code>0到9顺序循环
+IntStream.range(0, 10).forEach(s -&gt; System.out.println(&quot;range&quot; + s));
+0到10 并行循环
+IntStream.rangeClosed(1, 10).parallel().forEach(i -&gt; {System.out.println(&quot;rangeClosed 并行&quot; + i); });
+
+ List&lt;String&gt; itemList = IntStream.range(0, 10).mapToObj(i -&gt; &quot;item&quot; + ThreadLocalRandom.current().nextInt(10)).collect(Collectors.toList());
+        List&lt;Integer&gt; itemList2 = IntStream.range(0, 10).map(i -&gt; i + ThreadLocalRandom.current().nextInt(10)).boxed().collect(Collectors.toList());
+
+//随机创建一个数组，然后转换成List&lt;Item&gt;
+private static List&lt;Item&gt; createCart() {
+      return IntStream.rangeClosed(1, 3)
+              .mapToObj(i -&gt; &quot;item&quot; + ThreadLocalRandom.current().nextInt(items.size()))
+              .map(name -&gt; items.get(name)).collect(Collectors.toList());
+}
+</code></pre><h4 id="map-list-一些用法"><a href="#map-list-一些用法" class="headerlink" title="map list 一些用法"></a>map list 一些用法</h4><pre><code>Map&lt;String, List&lt;String&gt;&gt; map = new HashMap&lt;&gt;();
+List&lt;String&gt; list;
+
+// 一般这样写
+list = map.get(&quot;list-1&quot;);
+if (list == null) {
+    list = new LinkedList&lt;&gt;();
+    map.put(&quot;list-1&quot;, list);
+}
+list.add(&quot;one&quot;);
+
+// 使用 computeIfAbsent 可以这样写
+list = map.computeIfAbsent(&quot;list-1&quot;, k -&gt; new ArrayList&lt;&gt;()).add(&quot;one&quot;);
+
+//例如
+ConcurrentHashMap&lt;String, List&lt;UserDTO&gt;&gt; autoCompleteIndex = new ConcurrentHashMap&lt;&gt;();
+        autoCompleteIndex.computeIfAbsent(&quot;a&quot;, s -&gt; new ArrayList&lt;&gt;())
+                .add(new UserDTO(&quot;d&quot;));
+        autoCompleteIndex.computeIfAbsent(&quot;a&quot;, s -&gt; new ArrayList&lt;&gt;())
+                .add(new UserDTO(&quot;c&quot;));
 </code></pre>
       
     </div>
@@ -426,8 +501,8 @@ List&lt;Integer&gt; addAgeList = list.stream().map(s -&gt; s.getAge() + 1).colle
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/03/04/极客专栏-总结/" rel="prev" title="极客专栏-总结">
-                极客专栏-总结 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/03/04/极客专栏与公众号-总结/" rel="prev" title="极客专栏与公众号-总结">
+                极客专栏与公众号-总结 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -500,7 +575,7 @@ List&lt;Integer&gt; addAgeList = list.stream().map(s -&gt; s.getAge() + 1).colle
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">39</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -577,7 +652,7 @@ List&lt;Integer&gt; addAgeList = list.stream().map(s -&gt; s.getAge() + 1).colle
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#List的一些玩法"><span class="nav-number">1.</span> <span class="nav-text">List的一些玩法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#获取List里面到某些属性转化成新的List"><span class="nav-number">1.1.</span> <span class="nav-text">获取List里面到某些属性转化成新的List</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List-转化成List"><span class="nav-number">1.2.</span> <span class="nav-text">List 转化成List</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#根据条件过滤List"><span class="nav-number">1.3.</span> <span class="nav-text">根据条件过滤List</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List-里面某些数据聚合相加"><span class="nav-number">1.4.</span> <span class="nav-text">List 里面某些数据聚合相加</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List-去重复"><span class="nav-number">1.5.</span> <span class="nav-text">List 去重复</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List-转Map"><span class="nav-number">1.6.</span> <span class="nav-text">List 转Map></span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List-转Map-1"><span class="nav-number">1.7.</span> <span class="nav-text">List 转Map</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List处理里面对数据"><span class="nav-number">1.8.</span> <span class="nav-text">List处理里面对数据</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#List的一些玩法"><span class="nav-number">1.</span> <span class="nav-text">List的一些玩法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#获取List里面到某些属性转化成新的List"><span class="nav-number">1.1.</span> <span class="nav-text">获取List里面到某些属性转化成新的List</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List-转化成List"><span class="nav-number">1.2.</span> <span class="nav-text">List 转化成List</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#根据条件过滤List"><span class="nav-number">1.3.</span> <span class="nav-text">根据条件过滤List</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List-里面某些数据聚合相加"><span class="nav-number">1.4.</span> <span class="nav-text">List 里面某些数据聚合相加</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List-去重复"><span class="nav-number">1.5.</span> <span class="nav-text">List 去重复</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List-转Map"><span class="nav-number">1.6.</span> <span class="nav-text">List 转Map></span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List-转Map-1"><span class="nav-number">1.7.</span> <span class="nav-text">List 转Map</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List处理里面对数据"><span class="nav-number">1.8.</span> <span class="nav-text">List处理里面对数据</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#两个list-比较去除相同元素"><span class="nav-number">2.</span> <span class="nav-text">两个list 比较去除相同元素</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#list自定义排序"><span class="nav-number">3.</span> <span class="nav-text">list自定义排序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#IntStream、DoubleStream和LongStream"><span class="nav-number">4.</span> <span class="nav-text">IntStream、DoubleStream和LongStream</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#map-list-一些用法"><span class="nav-number">5.</span> <span class="nav-text">map list 一些用法</span></a></li></ol></div>
             
 
           </div>
@@ -600,7 +675,7 @@ List&lt;Integer&gt; addAgeList = list.stream().map(s -&gt; s.getAge() + 1).colle
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

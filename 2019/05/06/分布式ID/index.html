@@ -94,7 +94,7 @@
 <meta property="og:site_name" content="高广金博客">
 <meta property="og:description" content="分布式ID需求全局唯一性：不能出现重复的ID号，既然是唯一标识，这是最基本的要求。 趋势递增：在MySQL InnoDB引擎中使用的是聚集索引，由于多数RDBMS使用B-tree的数据结构来存储索引数据，在主键的选择上面我们应该尽量使用有序的主键保证写入性能。 单调递增：保证下一个ID一定大于上一个ID，例如事务版本号、IM增量消息、排序等特殊需求。 信息安全：如果ID是连续的，恶意用户的扒取工作">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-06T08:12:48.035Z">
+<meta property="og:updated_time" content="2020-07-01T13:03:17.925Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="分布式ID">
 <meta name="twitter:description" content="分布式ID需求全局唯一性：不能出现重复的ID号，既然是唯一标识，这是最基本的要求。 趋势递增：在MySQL InnoDB引擎中使用的是聚集索引，由于多数RDBMS使用B-tree的数据结构来存储索引数据，在主键的选择上面我们应该尽量使用有序的主键保证写入性能。 单调递增：保证下一个ID一定大于上一个ID，例如事务版本号、IM增量消息、排序等特殊需求。 信息安全：如果ID是连续的，恶意用户的扒取工作">
@@ -401,11 +401,30 @@ public synchronized long nextId() {
 由于强依赖时钟，对时间的要求比较敏感，在机器工作时NTP同步也会造成秒级别的回退，建议可以直接关闭NTP同步。
 要么在时钟回拨的时候直接不提供服务直接返回ERROR_CODE，等时钟追上即可。或者做一层重试，然后上报报警系统，更或者是发现有时钟回拨之后自动摘除本身节点并报警
 2、生成唯一标示较长
+
+
+机器ID生产策略，可以利用redis 启动的时候设置唯一的ID，机器停机的时候再删除，这样就支持机器横向扩展了
+for (int i = 1; i &lt;= maxMachineId; i++) {
+            if (!jedis.exists(UNIQ_MACHINE_KEY + i)) {
+                jedis.set(UNIQ_MACHINE_KEY + i, i + &quot;&quot;);
+                machineId = i;
+                log.info(&quot;add :{}&quot;, machineId);
+                break;
+            }
+        }
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                jedis.del(UNIQ_MACHINE_KEY + machineId);
+                log.info(&quot;del :{}&quot;, machineId);
+            }
+        });
 </code></pre><h3 id="数据库自增长"><a href="#数据库自增长" class="headerlink" title="数据库自增长"></a>数据库自增长</h3><pre><code>优点：
 1、非常简单，利用现有数据库系统的功能实现，成本小，有DBA专业维护。
 2、ID号单调自增，可以实现一些对ID有特殊要求的业务。
 缺点：
-1、强依赖DB，当DB异常时整个系统不可用，属于致命问题。配置主从复制可以尽可能的增加可用性，但是数据一致性在特殊情况下难以保证。主从切换时的不一致可能会导致重复发号。
+1、强依赖DB，当DB异常时整个系统不可用，属于致命问题。配置主从复制可以尽可能的增加可用性，但是数据一致性在特殊情况下难以保证。
+主从切换时的不一致可能会导致重复发号。
 2、ID发号性能瓶颈限制在单台MySQL的读写性能。
 </code></pre><h3 id="Leaf-segment"><a href="#Leaf-segment" class="headerlink" title="Leaf-segment"></a>Leaf-segment</h3><pre><code>在使用数据库的方案上，做了如下改变
 1、原方案每次获取ID都得读写一次数据库，造成数据库压力大。改为利用proxy server批量获取，每次获取一个segment(step决定大小)号段的值。用完之后再去数据库获取新的号段，可以大大的减轻数据库的压力
@@ -438,12 +457,12 @@ Commit
 1、容灾性高：Leaf服务内部有号段缓存，即使DB宕机，短时间内Leaf仍能正常对外提供服务。
 缺点：
 1、TP999数据波动大，当号段使用完之后还是会hang在更新数据库的I/O上，tg999数据会出现偶尔的尖刺
-双buffer优化
-DB取号段的过程能够做到无阻塞，不需要在DB取号段的时候阻塞请求线程，
+</code></pre><h4 id="双buffer优化"><a href="#双buffer优化" class="headerlink" title="双buffer优化"></a>双buffer优化</h4><pre><code>DB取号段的过程能够做到无阻塞，不需要在DB取号段的时候阻塞请求线程，
 即当号段消费到某个点时就异步的把下一个号段加载到内存中。而不需要等到号段用尽的时候才去更新号段。
 这样做就可以很大程度上的降低系统的TP999指标
 采用双buffer的方式，Leaf服务内部有两个号段缓存区segment。当前号段已下发10%时，如果下一个号段未更新，则另启一个更新线程去更新下一个号段。
 当前号段全部下发完后，如果下个号段准备好了则切换到下个号段为当前segment接着下发，循环往复
+</code></pre><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><pre><code>https://tech.meituan.com/2017/04/21/mt-leaf.html
 </code></pre>
       
     </div>
@@ -474,8 +493,8 @@ DB取号段的过程能够做到无阻塞，不需要在DB取号段的时候阻�
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/03/04/极客专栏-总结/" rel="next" title="极客专栏-总结">
-                <i class="fa fa-chevron-left"></i> 极客专栏-总结
+              <a href="/2019/03/04/极客专栏与公众号-总结/" rel="next" title="极客专栏与公众号-总结">
+                <i class="fa fa-chevron-left"></i> 极客专栏与公众号-总结
               </a>
             
           </div>
@@ -483,6 +502,10 @@ DB取号段的过程能够做到无阻塞，不需要在DB取号段的时候阻�
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/04/elasticsearch记录/" rel="prev" title="elasticsearch记录">
+                elasticsearch记录 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -554,7 +577,7 @@ DB取号段的过程能够做到无阻塞，不需要在DB取号段的时候阻�
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">39</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -631,7 +654,7 @@ DB取号段的过程能够做到无阻塞，不需要在DB取号段的时候阻�
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#分布式ID需求"><span class="nav-number">1.</span> <span class="nav-text">分布式ID需求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UUID"><span class="nav-number">2.</span> <span class="nav-text">UUID</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#snowflake算法"><span class="nav-number">3.</span> <span class="nav-text">snowflake算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库自增长"><span class="nav-number">4.</span> <span class="nav-text">数据库自增长</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Leaf-segment"><span class="nav-number">5.</span> <span class="nav-text">Leaf-segment</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#分布式ID需求"><span class="nav-number">1.</span> <span class="nav-text">分布式ID需求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UUID"><span class="nav-number">2.</span> <span class="nav-text">UUID</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#snowflake算法"><span class="nav-number">3.</span> <span class="nav-text">snowflake算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库自增长"><span class="nav-number">4.</span> <span class="nav-text">数据库自增长</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Leaf-segment"><span class="nav-number">5.</span> <span class="nav-text">Leaf-segment</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#双buffer优化"><span class="nav-number">5.1.</span> <span class="nav-text">双buffer优化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number"></span> <span class="nav-text">参考</span></a></div>
             
 
           </div>
@@ -654,7 +677,7 @@ DB取号段的过程能够做到无阻塞，不需要在DB取号段的时候阻�
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

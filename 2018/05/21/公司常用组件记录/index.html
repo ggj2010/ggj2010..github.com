@@ -96,7 +96,7 @@
 <meta property="og:description" content="那些你以为很高大尚的组件其实也都是从无到有迭代出来了，就算没有造轮子的时间，也要有造轮子的💕。 短链接服务短链接服务主要是加密和缩短原来链接，同时也可以统计短链接访问的一些情况。 生成思路： 1、将原链接存入表，获得long类型的id， 优化点:如果mysql不可用时候，可直接在redis获取自增的id, 然后调用方法获取到短链唯一字符串， 防止两种方式生产的短链冲突，在redis生产的短链字符">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://p0.meituan.net/education/f0cf8b3ae77b6b862caba4abb7c4a14a151878.png">
-<meta property="og:updated_time" content="2019-05-07T10:40:30.654Z">
+<meta property="og:updated_time" content="2020-07-02T03:51:50.607Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="公司常用组件记录">
 <meta name="twitter:description" content="那些你以为很高大尚的组件其实也都是从无到有迭代出来了，就算没有造轮子的时间，也要有造轮子的💕。 短链接服务短链接服务主要是加密和缩短原来链接，同时也可以统计短链接访问的一些情况。 生成思路： 1、将原链接存入表，获得long类型的id， 优化点:如果mysql不可用时候，可直接在redis获取自增的id, 然后调用方法获取到短链唯一字符串， 防止两种方式生产的短链冲突，在redis生产的短链字符">
@@ -365,12 +365,13 @@
 到mysql里面保证落地数据一致。
 
 2、掉用方法Long.toString(shortLinkId, 36)获得短链唯一性字符串
-优化点，36进制可能不够用，试用一下的61进制
+优化点，如果是36进制，7位置长度的话 36^6=78亿左右数据，最多可以存这么多条数据，可以试用一下的61进制
 private final static char[] digits = {&apos;0&apos;,&apos;1&apos;, &apos;2&apos;, &apos;3&apos;, &apos;4&apos;, &apos;5&apos;, &apos;6&apos;, &apos;7&apos;, &apos;8&apos;,
                      &apos;9&apos;, &apos;a&apos;, &apos;b&apos;, &apos;c&apos;, &apos;d&apos;, &apos;e&apos;, &apos;f&apos;, &apos;g&apos;, &apos;h&apos;, &apos;i&apos;, &apos;j&apos;, &apos;k&apos;, &apos;l&apos;,
                      &apos;m&apos;, &apos;n&apos;, &apos;o&apos;, &apos;p&apos;, &apos;q&apos;, &apos;r&apos;, &apos;s&apos;, &apos;t&apos;, &apos;u&apos;, &apos;v&apos;, &apos;w&apos;, &apos;x&apos;, &apos;y&apos;,
                      &apos;z&apos;, &apos;A&apos;, &apos;B&apos;, &apos;C&apos;, &apos;D&apos;, &apos;E&apos;, &apos;F&apos;, &apos;G&apos;, &apos;H&apos;, &apos;I&apos;, &apos;J&apos;, &apos;K&apos;, &apos;L&apos;,
                      &apos;M&apos;, &apos;N&apos;, &apos;O&apos;, &apos;P&apos;, &apos;Q&apos;, &apos;R&apos;, &apos;S&apos;, &apos;T&apos;, &apos;U&apos;, &apos;V&apos;, &apos;W&apos;, &apos;X&apos;, &apos;Y&apos;};
+    //求余数求商 10进制转61进制
     public static String parseRadix(long origin){
             char[] buf = new char[61];
             int charPos = 60;
@@ -385,7 +386,8 @@ private final static char[] digits = {&apos;0&apos;,&apos;1&apos;, &apos;2&apos;
 4、将短链字符串和原链接的对应关系写入缓存系统，redis或者tail
 查询思路：
 1、根据短链字符串先查询缓存，没有命中缓存再查询表，然后再塞入缓存。
-</code></pre><h4 id="短信服务"><a href="#短信服务" class="headerlink" title="短信服务"></a>短信服务</h4><h5 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h5><pre><code>短信一般都会有模板的概念，模板可以有申请、修改、审核相关流程，模板控制了短信整体格式，方便后期统计和维护。
+</code></pre><h4 id="统一电话加密服务"><a href="#统一电话加密服务" class="headerlink" title="统一电话加密服务"></a>统一电话加密服务</h4><h5 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h5><pre><code>对系统存储的等敏感信息进行脱敏，防止从技术人员内部造成的敏感信息泄漏问题
+</code></pre><h4 id="系统"><a href="#系统" class="headerlink" title="系统"></a>系统</h4><h4 id="短信服务"><a href="#短信服务" class="headerlink" title="短信服务"></a>短信服务</h4><h5 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h5><pre><code>短信一般都会有模板的概念，模板可以有申请、修改、审核相关流程，模板控制了短信整体格式，方便后期统计和维护。
 模板都会有权重的概念，因为短信不是24小时发送的，如果大半夜给用户发短信就是SB了，所以需要设计权重。
 短信内容字数限制为64字，超过64字会自动分成多条发送。
 短信又分为功能短信和营销短信：
@@ -555,7 +557,7 @@ private final static char[] digits = {&apos;0&apos;,&apos;1&apos;, &apos;2&apos;
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">39</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -632,7 +634,7 @@ private final static char[] digits = {&apos;0&apos;,&apos;1&apos;, &apos;2&apos;
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#短链接服务"><span class="nav-number">1.</span> <span class="nav-text">短链接服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#短信服务"><span class="nav-number">2.</span> <span class="nav-text">短信服务</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#相关概念"><span class="nav-number">2.1.</span> <span class="nav-text">相关概念</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#插入短信"><span class="nav-number">2.2.</span> <span class="nav-text">插入短信</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#核心点"><span class="nav-number">2.3.</span> <span class="nav-text">核心点</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#crane定时任务"><span class="nav-number">3.</span> <span class="nav-text">crane定时任务</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#corn表达式记录"><span class="nav-number">3.1.</span> <span class="nav-text">corn表达式记录</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#docker-job"><span class="nav-number">3.2.</span> <span class="nav-text">docker-job</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#进程内job"><span class="nav-number">3.3.</span> <span class="nav-text">进程内job</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#短链接服务"><span class="nav-number">1.</span> <span class="nav-text">短链接服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#统一电话加密服务"><span class="nav-number">2.</span> <span class="nav-text">统一电话加密服务</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#背景"><span class="nav-number">2.1.</span> <span class="nav-text">背景</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#系统"><span class="nav-number">3.</span> <span class="nav-text">系统</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#短信服务"><span class="nav-number">4.</span> <span class="nav-text">短信服务</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#相关概念"><span class="nav-number">4.1.</span> <span class="nav-text">相关概念</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#插入短信"><span class="nav-number">4.2.</span> <span class="nav-text">插入短信</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#核心点"><span class="nav-number">4.3.</span> <span class="nav-text">核心点</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#crane定时任务"><span class="nav-number">5.</span> <span class="nav-text">crane定时任务</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#corn表达式记录"><span class="nav-number">5.1.</span> <span class="nav-text">corn表达式记录</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#docker-job"><span class="nav-number">5.2.</span> <span class="nav-text">docker-job</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#进程内job"><span class="nav-number">5.3.</span> <span class="nav-text">进程内job</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -655,7 +657,7 @@ private final static char[] digits = {&apos;0&apos;,&apos;1&apos;, &apos;2&apos;
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

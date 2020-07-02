@@ -87,20 +87,20 @@
 
 
 
-<meta name="description" content="公司有监控组件cat，系统的所有信息在cat上面都可以看到，用久了平常的一些命令就忘完了 CPUtop命令 Mem中的free不是当前系统可用的最大物理内存，当前可用的物理内存数应该为Mem:free+Mem:buffers+Swap:cached  Load average  0.7 &amp;lt; load &amp;lt; 1: 此时是不错的状态，如果进来更多的汽车，你的马路仍然可以应付。 load =">
+<meta name="description" content="公司有监控组件cat，系统的所有信息在cat上面都可以看到，用久了平常的一些命令就忘完了 CPUjava应用cpu过高常见原因 1、死循环(线程一直不退出，所以占用cpu资源) 2、数据库慢查询（某个线程慢查询，一直占用cpu）、死锁 3、图片处理，切图操作  top命令 Mem中的free不是当前系统可用的最大物理内存，当前可用的物理内存数应该为Mem:free+Mem:buffers+Swap">
 <meta property="og:type" content="article">
 <meta property="og:title" content="系统故障定位">
 <meta property="og:url" content="http://ggj2010.github.io/2018/07/13/系统故障定位/index.html">
 <meta property="og:site_name" content="高广金博客">
-<meta property="og:description" content="公司有监控组件cat，系统的所有信息在cat上面都可以看到，用久了平常的一些命令就忘完了 CPUtop命令 Mem中的free不是当前系统可用的最大物理内存，当前可用的物理内存数应该为Mem:free+Mem:buffers+Swap:cached  Load average  0.7 &amp;lt; load &amp;lt; 1: 此时是不错的状态，如果进来更多的汽车，你的马路仍然可以应付。 load =">
+<meta property="og:description" content="公司有监控组件cat，系统的所有信息在cat上面都可以看到，用久了平常的一些命令就忘完了 CPUjava应用cpu过高常见原因 1、死循环(线程一直不退出，所以占用cpu资源) 2、数据库慢查询（某个线程慢查询，一直占用cpu）、死锁 3、图片处理，切图操作  top命令 Mem中的free不是当前系统可用的最大物理内存，当前可用的物理内存数应该为Mem:free+Mem:buffers+Swap">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://p1.meituan.net/education/b2d62d5fe2b9cdb8f121ae3b408fd230296973.png">
 <meta property="og:image" content="http://p1.meituan.net/education/b2d62d5fe2b9cdb8f121ae3b408fd230296973.png">
 <meta property="og:image" content="http://p1.meituan.net/education/6bea9123af69fe4f6fa418b5c0e57155243894.png">
-<meta property="og:updated_time" content="2018-09-17T11:04:23.000Z">
+<meta property="og:updated_time" content="2019-12-05T02:32:56.244Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="系统故障定位">
-<meta name="twitter:description" content="公司有监控组件cat，系统的所有信息在cat上面都可以看到，用久了平常的一些命令就忘完了 CPUtop命令 Mem中的free不是当前系统可用的最大物理内存，当前可用的物理内存数应该为Mem:free+Mem:buffers+Swap:cached  Load average  0.7 &amp;lt; load &amp;lt; 1: 此时是不错的状态，如果进来更多的汽车，你的马路仍然可以应付。 load =">
+<meta name="twitter:description" content="公司有监控组件cat，系统的所有信息在cat上面都可以看到，用久了平常的一些命令就忘完了 CPUjava应用cpu过高常见原因 1、死循环(线程一直不退出，所以占用cpu资源) 2、数据库慢查询（某个线程慢查询，一直占用cpu）、死锁 3、图片处理，切图操作  top命令 Mem中的free不是当前系统可用的最大物理内存，当前可用的物理内存数应该为Mem:free+Mem:buffers+Swap">
 <meta name="twitter:image" content="http://p1.meituan.net/education/b2d62d5fe2b9cdb8f121ae3b408fd230296973.png">
 
 
@@ -357,10 +357,15 @@
 
       
         <pre><code>公司有监控组件cat，系统的所有信息在cat上面都可以看到，用久了平常的一些命令就忘完了
-</code></pre><h3 id="CPU"><a href="#CPU" class="headerlink" title="CPU"></a>CPU</h3><pre><code>top命令
+</code></pre><h3 id="CPU"><a href="#CPU" class="headerlink" title="CPU"></a>CPU</h3><pre><code>java应用cpu过高常见原因
+1、死循环(线程一直不退出，所以占用cpu资源)
+2、数据库慢查询（某个线程慢查询，一直占用cpu）、死锁
+3、图片处理，切图操作
+
+top命令
 Mem中的free不是当前系统可用的最大物理内存，当前可用的物理内存数应该为Mem:free+Mem:buffers+Swap:cached
 
-Load average 
+Load average
 0.7 &lt; load &lt; 1: 此时是不错的状态，如果进来更多的汽车，你的马路仍然可以应付。
 load = 1: 你的马路即将拥堵，而且没有更多的资源额外的任务，赶紧看看发生了什么吧。
 load &gt; 5: 非常严重拥堵，我们的马路非常繁忙，每辆车都无法很快的运行
@@ -372,7 +377,7 @@ sy:sys_cpu,运 内核及内核调 所占的cpu时间百分，如果这个占比�
 ni:nice_cpu,修改过优先级的进程所占的cpu时间百分比，一般删log,压缩文件等io占CPU较多的进程推荐nice
 id:idle_cpu,空闲cpu占比,越高代表cpu越闲
 wa:wait_cpu,io等待所占的cpu时间 ,可能是硬盘,也可能是网络较慢
-
+si:软件中断
 
 mem_total 总物理内存
 mem_used 被进程占
@@ -381,30 +386,61 @@ mem_buffers:(数据块)缓冲区,硬盘块层面,准备刷新到硬盘上的数�
 mem_cached:(文件)缓存区, 文件系统层面 ,从硬盘读取文件以备后面备使用
 mem_swap:(内存页)缓存区,内存管理层面,物理内存不足时，用硬盘来模拟内存，一般占用量大后会导致性能急剧下降
 
-查询最耗CPU时的线程
+ 查询最耗CPU时的线程
  ps -mp pid -o THREAD,tid,time
- jstack 28155 &gt; test.txt 将当期pid的栈信息打印到text.txt里面
+ top -Hp pid
+
+ jstack 28155 &gt; test.txt 将当前java进程pid的栈信息打印到text.txt里面
+ 获取耗时大线程堆栈信息上下文
  grep `printf &quot;%x\n&quot; 28159` test.txt -A 30
+ grep -n30 -E `printf &quot;%x\n&quot; 28159` a.txt
 </code></pre><h3 id="物理内存"><a href="#物理内存" class="headerlink" title="物理内存"></a>物理内存</h3><pre><code>查看系统当前可用内容
-free -m     
+free -m
 </code></pre><h3 id="硬盘内存"><a href="#硬盘内存" class="headerlink" title="硬盘内存"></a>硬盘内存</h3><pre><code>查看系统磁盘剩余空间
 df -h
 du -h  --max-depth=1 /path：可以查看目录的大小，并控制子目录级别，找占用磁盘空间的文件是特别有用
 如果日志不定时删除，会将硬盘空间写慢。
 </code></pre><h3 id="gc"><a href="#gc" class="headerlink" title="gc"></a>gc</h3><pre><code>dump出当前内存信息或者 启动时加入参数XX:+HeapDumpOnOutOfMemoryError, 在OOM触发时会自动dump日志
-jmap -dump:format=b,file=/tmp/dump.dat 4813 
+jmap -dump:format=b,file=/tmp/dump.dat 4813
 来统计所有存活对象的个数
 jmap -histo:live 20545 &gt;&gt;a.txt
 打印出当前堆每个分区是使用详情，定位触发fullgc原因时特别有用，类似top的效果
 jmap -heap pid
 java当前gc信息
-jstat -gcutil 1756 1000    
+jstat -gcutil 1756 1000
 
 
 jps -lv:加上lv可以列出启动类和启动参数，方便区别应用
 jinfo pid:可以打印出进程生效的环境变量和参数的值
 </code></pre><h3 id="日志命令"><a href="#日志命令" class="headerlink" title="日志命令"></a>日志命令</h3><pre><code>grep -n -E 100
- less  xx.log, shift+g移动到最后一行,ctrl+b往前 
+ less  xx.log, shift+g移动到最后一行,ctrl+b往前
+</code></pre><h2 id="FlameGraph火焰图"><a href="#FlameGraph火焰图" class="headerlink" title="FlameGraph火焰图"></a>FlameGraph火焰图</h2><pre><code>y 轴表示调用栈，每一层都是一个函数。调用栈越深，火焰就越高，顶部就是正在执行的函数，下方都是它的父函数。
+x 轴表示抽样数，如果一个函数在 x 轴占据的宽度越宽，就表示它被抽到的次数多，即执行的时间长。
+注意，x 轴不代表时间，而是所有的调用栈合并后，按字母顺序排列的。
+火焰图就是看顶层的哪个函数占据的宽度最大。只要有&quot;平顶&quot;（plateaus），就表示该函数可能存在性能问题。
+
+# 参考 http://www.brendangregg.com/FlameGraphs/cpuflamegraphs.html#Java
+
+apt install linux-tools-generic
+apt install linux-tools-common
+
+export FLAMEGRAPH_DIR=/usr/java/code/FlameGraph
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+
+git clone  https://github.com/jrudolph/perf-map-agent
+cd perf-map-agent
+cmake .
+make
+bin/create-links-in /usr/bin
+
+git clone https://github.com/brendangregg/FlameGraph.git
+
+ps -ef|grep -v grep| grep &apos;webmagic&apos;| awk &apos;{print $2}&apos; 获取到java 进程pid
+perf-java-flames 19693
+sz /usr/java/code/FlameGraph/flamegraph-19693.svg
+
+参考：https://yq.aliyun.com/articles/710911
+https://ichrisking.github.io/2018/03/08/FlameGraph/
 </code></pre><h3 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h3><h4 id="系统响应变慢"><a href="#系统响应变慢" class="headerlink" title="系统响应变慢"></a>系统响应变慢</h4><h5 id="故障症状"><a href="#故障症状" class="headerlink" title="故障症状"></a>故障症状</h5><pre><code>系统登录页面都无法完全加载，客户端访问数据库也是响应特别慢，反正就是系统突然变得好慢
 </code></pre><h5 id="定位过程"><a href="#定位过程" class="headerlink" title="定位过程"></a>定位过程</h5><pre><code>ssh登录到系统之后，top看了下系统的load和内存使用状态都正常，
 这时候想看下项目的日志，发现一堆超时，然后看了下Nginx的日志，一堆日志狂刷。
@@ -417,12 +453,12 @@ nginx日志格式：
                      &apos;&quot;$http_accept_language&quot; &quot;$http_user_agent&quot; &apos;;
 随便抓取某行日志：
     139.199.30.109 - - [16/Sep/2018:06:01:52 +0800]
-    fwf[-] tip[-] 
+    fwf[-] tip[-]
     127.0.0.1:81 0.004 0.004
    kyfw.12306.cn GET /otn/leftTicket/queryA
   &quot;302&quot; 0 &quot;https://kyfw.12306.cn/otn/leftTicket/init&quot;
-   &quot;zh-CN,zh;q=0.8&quot; 
-   &quot;Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36&quot;   
+   &quot;zh-CN,zh;q=0.8&quot;
+   &quot;Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36&quot;
     然后根据关键字统计总爬虫数：
     cat host.access.log |grep &apos;kyfw.12306.cn&apos; -c
     总共有2477947 接近250万请求。
@@ -449,18 +485,18 @@ nginx日志格式：
     rates：分别表示过去 2s 10s 40s 的平均流量
 </code></pre><p>  <img src="http://p1.meituan.net/education/b2d62d5fe2b9cdb8f121ae3b408fd230296973.png" alt=""></p>
 <pre><code>也就是说我们的流量活活被爬虫打满了，导致其他正常请求无法及时响应。
-</code></pre><h5 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h5><pre><code> 根据特定场景，ngingx禁用user_agent和path 
+</code></pre><h5 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h5><pre><code> 根据特定场景，ngingx禁用user_agent和path
 可以根据日志查询
-tail -n 1000 /usr/local/nginx/logs/access.log | awk -F\&quot; &apos;{A[$(NF-1)]++}END{for(k in A)print A[k],k}&apos; | sort -n 
+tail -n 1000 /usr/local/nginx/logs/access.log | awk -F\&quot; &apos;{A[$(NF-1)]++}END{for(k in A)print A[k],k}&apos; | sort -n
 得到重复度最高的关键字
 &quot;Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36&quot;
 
 Nginx的Location可以有以下几个匹配：
-1. =   严格匹配这个查询。如果找到，停止搜索。 
+1. =   严格匹配这个查询。如果找到，停止搜索。
 2. ^~ 匹配路径的前缀，如果找到，停止搜索。
-3. ~   为区分大小写的正则匹配   
+3. ~   为区分大小写的正则匹配
 4. ~* 为不区分大小写匹配
-5.!~和!~*分别为区分大小写不匹配及不区分大小写不匹配   
+5.!~和!~*分别为区分大小写不匹配及不区分大小写不匹配
 
 #拦截agent
     if ($http_user_agent ~ &quot;^Mozilla/5\.0 \(Windows NT 6\.3; WOW64\) AppleWebKit/537\.36 \(KHTML, like Gecko\) Chrome/46\.0\.2490\.80 Safari/537\.36$&quot;) {
@@ -471,20 +507,20 @@ location ~ /otn/leftTicket/ {
     deny all;
     }
 
-/usr/local/nginx/sbin/nginx -s reload 
+/usr/local/nginx/sbin/nginx -s reload
 
 拦截之后的日志：
 82.61.143.135 - - [17/Sep/2018:18:43:12 +0800] fwf[-] tip[-] - - 0.000 kyfw.12306.cn GET /otn/leftTicket/queryA?leftTicketDTO
-.train_date=2018-09-22&amp;leftTicketDTO.from_station=GZQ&amp;leftTicketDTO.to_station=WCN&amp;purpose_codes=ADULT HTTP/1.1 &quot;403&quot; 570 
+.train_date=2018-09-22&amp;leftTicketDTO.from_station=GZQ&amp;leftTicketDTO.to_station=WCN&amp;purpose_codes=ADULT HTTP/1.1 &quot;403&quot; 570
 &quot;https://kyfw.12306.cn/otn/leftTicket/queryA?leftTicketDTO.train_date=2018-09-22&amp;leftTicketDTO.from_station=GZQ&amp;leftTicketDTO
-.to_station=WCN&amp;purpose_codes=ADULT&quot; &quot;zh-CN,zh;q=0.8&quot; &quot;Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like 
-Gecko) Chrome/46.0.2490.80 Safari/537.36&quot;  
+.to_station=WCN&amp;purpose_codes=ADULT&quot; &quot;zh-CN,zh;q=0.8&quot; &quot;Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like
+Gecko) Chrome/46.0.2490.80 Safari/537.36&quot;
 
 可以看到响应变成了403
 还是有日志狂刷，虽然带宽流量下来了，看了下日志，爬虫的机器ip就在几个网段，所以是必要加入黑名单才可以
 #单个ip
-iptables -I INPUT -s 81.241.219.171 -j DROP 
- #封IP段ip 
+iptables -I INPUT -s 81.241.219.171 -j DROP
+ #封IP段ip
  iptables -I INPUT -s 106.12.1.0/16 -j DROP
 </code></pre><h5 id="优化前后带宽对比"><a href="#优化前后带宽对比" class="headerlink" title="优化前后带宽对比"></a>优化前后带宽对比</h5><p> <img src="http://p1.meituan.net/education/b2d62d5fe2b9cdb8f121ae3b408fd230296973.png" alt=""><br><img src="http://p1.meituan.net/education/6bea9123af69fe4f6fa418b5c0e57155243894.png" alt=""></p>
 
@@ -601,7 +637,7 @@ iptables -I INPUT -s 81.241.219.171 -j DROP
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">39</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -678,7 +714,7 @@ iptables -I INPUT -s 81.241.219.171 -j DROP
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU"><span class="nav-number">1.</span> <span class="nav-text">CPU</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#物理内存"><span class="nav-number">2.</span> <span class="nav-text">物理内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#硬盘内存"><span class="nav-number">3.</span> <span class="nav-text">硬盘内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gc"><span class="nav-number">4.</span> <span class="nav-text">gc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#日志命令"><span class="nav-number">5.</span> <span class="nav-text">日志命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#案例"><span class="nav-number">6.</span> <span class="nav-text">案例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#系统响应变慢"><span class="nav-number">6.1.</span> <span class="nav-text">系统响应变慢</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#故障症状"><span class="nav-number">6.1.1.</span> <span class="nav-text">故障症状</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#定位过程"><span class="nav-number">6.1.2.</span> <span class="nav-text">定位过程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#解决方法"><span class="nav-number">6.1.3.</span> <span class="nav-text">解决方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#优化前后带宽对比"><span class="nav-number">6.1.4.</span> <span class="nav-text">优化前后带宽对比</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU"><span class="nav-number">1.</span> <span class="nav-text">CPU</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#物理内存"><span class="nav-number">2.</span> <span class="nav-text">物理内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#硬盘内存"><span class="nav-number">3.</span> <span class="nav-text">硬盘内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gc"><span class="nav-number">4.</span> <span class="nav-text">gc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#日志命令"><span class="nav-number">5.</span> <span class="nav-text">日志命令</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FlameGraph火焰图"><span class="nav-number"></span> <span class="nav-text">FlameGraph火焰图</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#案例"><span class="nav-number">1.</span> <span class="nav-text">案例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#系统响应变慢"><span class="nav-number">1.1.</span> <span class="nav-text">系统响应变慢</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#故障症状"><span class="nav-number">1.1.1.</span> <span class="nav-text">故障症状</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#定位过程"><span class="nav-number">1.1.2.</span> <span class="nav-text">定位过程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#解决方法"><span class="nav-number">1.1.3.</span> <span class="nav-text">解决方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#优化前后带宽对比"><span class="nav-number">1.1.4.</span> <span class="nav-text">优化前后带宽对比</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
@@ -701,7 +737,7 @@ iptables -I INPUT -s 81.241.219.171 -j DROP
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

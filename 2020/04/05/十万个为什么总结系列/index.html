@@ -1,0 +1,888 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="为什么要用微服务(Microservices)先介绍架构背景，再介绍各自的利弊 早期的应用架构是单体架构、再到soa的架构、再到现在的微服务和service mesh 单体架构的特点： 优点：便于开发、测试与部署 缺点： 复杂性高：项目随着时间会越来臃肿，代码越来越复杂，难以被修改和重构，同时团队内的人员职责不清晰。 交付效率低：构建和部署耗时长，难以定位问题，开发效率低，改动一个问题都需要全量回">
+<meta property="og:type" content="article">
+<meta property="og:title" content="十万个为什么总结系列">
+<meta property="og:url" content="http://ggj2010.github.io/2020/04/05/十万个为什么总结系列/index.html">
+<meta property="og:site_name" content="高广金博客">
+<meta property="og:description" content="为什么要用微服务(Microservices)先介绍架构背景，再介绍各自的利弊 早期的应用架构是单体架构、再到soa的架构、再到现在的微服务和service mesh 单体架构的特点： 优点：便于开发、测试与部署 缺点： 复杂性高：项目随着时间会越来臃肿，代码越来越复杂，难以被修改和重构，同时团队内的人员职责不清晰。 交付效率低：构建和部署耗时长，难以定位问题，开发效率低，改动一个问题都需要全量回">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-06-17T08:16:06.056Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="十万个为什么总结系列">
+<meta name="twitter:description" content="为什么要用微服务(Microservices)先介绍架构背景，再介绍各自的利弊 早期的应用架构是单体架构、再到soa的架构、再到现在的微服务和service mesh 单体架构的特点： 优点：便于开发、测试与部署 缺点： 复杂性高：项目随着时间会越来臃肿，代码越来越复杂，难以被修改和重构，同时团队内的人员职责不清晰。 交付效率低：构建和部署耗时长，难以定位问题，开发效率低，改动一个问题都需要全量回">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://ggj2010.github.io/2020/04/05/十万个为什么总结系列/"/>
+
+
+
+
+
+  <title> 十万个为什么总结系列 | 高广金博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">高广金博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-webmagic">
+          <a href="http://scedai.com/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            爬虫
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://ggj2010.github.io/2020/04/05/十万个为什么总结系列/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ggj2010">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="高广金博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                十万个为什么总结系列
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-05T23:45:00+08:00">
+                2020-04-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="为什么要用微服务-Microservices"><a href="#为什么要用微服务-Microservices" class="headerlink" title="为什么要用微服务(Microservices)"></a>为什么要用微服务(Microservices)</h2><pre><code>先介绍架构背景，再介绍各自的利弊
+早期的应用架构是单体架构、再到soa的架构、再到现在的微服务和service mesh
+单体架构的特点：
+优点：便于开发、测试与部署
+缺点：
+复杂性高：项目随着时间会越来臃肿，代码越来越复杂，难以被修改和重构，同时团队内的人员职责不清晰。
+交付效率低：构建和部署耗时长，难以定位问题，开发效率低，改动一个问题都需要全量回归测试
+伸缩性(scalable)差：只能按整体横向扩展，无法分模块垂直扩展
+可靠性差：一个bug有可能引起整个应用的崩溃 由于所有模块都是部署在一个实例中，
+一个bug会引起整个应用的崩溃，比如一个不重要的模块的内存泄露就将会导致所有应用实例一个个crash掉
+
+微服务：将单体应用拆分为多个高内聚低耦合的小型服务，每个小服务运行在独立进程，
+由不同的团队开发和维护，服务间采用轻量级通信机制，独立自动部署，可以采用不同的语言及存储
+优点：易于开发与维护、独立部署、伸缩性强、与组织结构相匹配
+缺点：
+1、服务的拆分和定义是一项挑战
+2、服务数量增加，管理复杂性增加
+3、数据一致性（分布式事务问题）
+4、多服务运维难度，随着服务的增加，运维的压力也在增大
+5、服务间通讯成本
+6、问题定位链路增加，日志聚合，全链路监控
+</code></pre><h3 id="微服务如何拆分"><a href="#微服务如何拆分" class="headerlink" title="微服务如何拆分"></a>微服务如何拆分</h3><pre><code>微服务拆分原则：领域模型、限定上下文、组织架构、康威定律
+1、基于业务逻辑（DDD领域设计）
+2、服务拆分要迎合业务的需要
+3、基于稳定性，考虑软件发布频率 2/8原则（系统里面80%的功能是稳定的）
+4、基于可靠性（对可靠性要求比较高的核心模块归在一起，对可靠性要求不高的非核心模块归在一块）
+5、基于高性能（把对性能要求较高的模块独立成一个服务，对性能要求不高的放在一起）
+6、拆分后的维护成本要低于拆分前（这里的维护成本包括：人力、物力、时间）
+7、拆分不仅仅是架构的调整，组织结构上也要做响应的适应性优化（确保拆分后的服务由相对独立的团队负责维护）
+</code></pre><h2 id="什么是康威定律"><a href="#什么是康威定律" class="headerlink" title="什么是康威定律"></a>什么是康威定律</h2><pre><code>第一定律 组织沟通方式会通过系统设计表达出来。
+第二定律 时间再多一件事情也不可能做的完美，但总有时间做完一件事情。
+第三定律 线型系统和线型组织架构间有潜在的异质同态特性。
+第四定律 大的系统组织总是比小系统更倾向于分解。
+</code></pre><h3 id="第一定律"><a href="#第一定律" class="headerlink" title="第一定律"></a>第一定律</h3><pre><code>随着人员的增加沟通成本呈指数增长的规律：沟通成本 = n(n-1)/2。
+这也是为什么互联网公司都追求小团队的原因之一。
+沟通的问题会带来系统设计的问题，进而影响整个系统的开发效率和最终产品结果
+</code></pre><h3 id="第二定律"><a href="#第二定律" class="headerlink" title="第二定律"></a>第二定律</h3><pre><code>人手永远是不够的，事情永远是做不完的，但可以一件一件来。
+这不就是软件行业中“敏捷开发”模式所解决的问题吗。
+面对这样的状况，敏捷开发可以做到不断迭代、持续交付、快速验证和反馈，并持续改进。
+</code></pre><h3 id="第三定律"><a href="#第三定律" class="headerlink" title="第三定律"></a>第三定律</h3><pre><code>第一定律的具体应用
+如果公司的组织架构是这样的：
+团队是分布式，每个团队都包含产品、研发、测试、运维等角色。
+而此时系统是单块的，项目沟通和协调的成本是巨大的，弄不好还会打起来。
+
+如果将单块的系统拆分成微服务，每个团队负责自己的部分，对外提供对应的接口即可，互不干扰。
+系统效率将得到提升。这与软件设计中的高内聚、低耦合是相通的
+</code></pre><h3 id="第四定律"><a href="#第四定律" class="headerlink" title="第四定律"></a>第四定律</h3><pre><code>系统越复杂，越需要增加人手，人手越多，沟通成本也呈指数增长。
+分而治之便是大多数公司选择的解决方案。分不同的层级，分不同的小团队，让团队内部完成自治理，然后统一对外沟通
+</code></pre><h2 id="为什么要用敏捷式开发"><a href="#为什么要用敏捷式开发" class="headerlink" title="为什么要用敏捷式开发"></a>为什么要用敏捷式开发</h2><pre><code>敏捷开发(Agile Development)是一种以人为核心、迭代、循序渐进的开发方法
+传统的瀑布模式强调里程碑，重视文档，强调分工，避免变化，凡事喜欢规划和做计划，但是代价就是拖沓笨重，反应迟钝。
+敏捷模式重迭代、轻文档、拥抱编号
+互联网产品无法一步到位，追求的是快，如果用传统的瀑布模式，根本无法快速响应需求
+scrum三大角色：产品负责人、scrum master（流程管理员）、 scrum team开发团队
+Scrum流程: 产品列表-&gt;最小产品-&gt;周迭代-&gt;发布
+
+开发团队根据列表，做工作量的预估和安排；
+有了产品需求列表，我们需要通过计划会来从中挑选出一个故事作为本次迭代完成的最小目标，
+这个目标的时间周期是1~4个星期，然后把这个故事进行细化，形成一个最小产品需求。比如该故事是登陆的功能故事，
+那么登陆的需求就要进行完整的细化工作；
+开发成员根据故事再细化成更小的任务（细到每个任务的工作量在2天内能完成）
+
+瀑布敏捷是有边界的，我觉得团队在整体学习开发模式优劣后，需要对二者的边界有一个清晰的认识，并在整个团队上下都要达成一致的共识，
+否则后果可能会很严重
+</code></pre><h2 id="为什么要用DDD"><a href="#为什么要用DDD" class="headerlink" title="为什么要用DDD"></a>为什么要用DDD</h2><pre><code>首先介绍现状，然后介绍ddd好处
+早期系统可能比较简单，普通的CRUD就可以满足，随着系统对不断迭代，业务逻辑变得越来越复杂,系统也变得越来越冗余
+模块之间彼此耦合，修改一个功能，可能导致其他模块出现问题。
+ddd是用来针对大型复杂系统的领域建模与分析方法,实现高内聚、低耦合，同时方便后续微服务拆分
+
+假设我们有个用户管理系统，有用户模块，机构模块，身份模块 我们按照mvc模式开发
+1、我们看下随着业务迭代，UserService代码是如何变的复杂的。
+用户模块支持用户的crud，早期的功能可能比较简单，可能就是创建一个用户，db增加一条用户记录
+UserService
+public void createUser(User user){
+  userDao.save(user);
+}
+
+V1:创建用户需要绑定身份，
+
+public void createUser(User user){
+      userDao.save(user);
+      identityService.save(identy)
+}
+
+V2:创建用户需要绑定角色，
+public void createUser(User user){
+      userDao.save(user);
+      identityService.save(identy)；
+      rolseService.save(identy)；
+}
+
+V3:创建用户需要打标签
+public void createUser(User user){
+      userDao.save(user);
+      identityService.save(identy)；
+      rolseService.save(identy)；
+}
+
+2、模块冗余，相互耦合
+ 还是以刚刚创建用户为例子,创建用户需要绑定机构
+ UserService
+ public void createUser(User user){
+      userDao.save(user);
+      departmentService.save(userDepartment)
+ }
+
+ 删除机构需要删除人员
+ DepartmentService
+ public void deleteDepartment(Department department){
+   departmentDao.delete(department);
+   UserService.delete(userDepartment)
+ }
+
+ 我们可以看到用户模块service与机构模块service形成依赖
+</code></pre><h3 id="面向对象与基于数据库领域模型设计"><a href="#面向对象与基于数据库领域模型设计" class="headerlink" title="面向对象与基于数据库领域模型设计"></a>面向对象与基于数据库领域模型设计</h3><pre><code>我们目前的绝大数开发都是基于数据库模型开发的，而不是面向对象，假设我们的机器内存
+无限大，不需要持久化数据，也就是不依赖数据库，这个时候我们会怎么设计软件。
+面向对象有封装、继承、多态，而数据库模型是不知道这些的
+
+引用
+例如我们创建一个部门，一个部门可以挂多个用户，一个用户可以对应多个部门
+数据库：实现多对多的关系是用第三张表来实现，这个领域模型业务同学其实看不懂
+
+继承：
+例如用户可以有学生、老师，他们都属于用户的子类
+数据库：我们会成学生表与老师表，当我们要获取任意一个对象信息时候都需要查询数据库两次
+数据库无法实现面向对象中的继承关系
+
+
+类的复杂关系实现：
+例如我们创建一个部门，一个部门可以挂多个用户，一个用户只能有一个部门
+面向对象：我是一个部门，我下面有很多用户
+数据库：用户表会增加一个部门ID外键 就变成我是一个用户，我属于那个部门
+</code></pre><h3 id="ddd一些总结"><a href="#ddd一些总结" class="headerlink" title="ddd一些总结"></a>ddd一些总结</h3><pre><code>聚合根：通过唯一标示关联其他聚合、聚合内数据强一致性，聚合外数据最终一致性
+通过应用层实现跨聚合的服务调用
+在严格分层架构模式下，不允许服务的跨层调用，每个服务只能调用它的下一层服务。
+服务从下到上依次为：实体方法、领域服务和应用服务
+dto-do do-po
+
+我们分析微服务内应该有哪些服务？服务的分层？应用服务由哪些服务组合和编排完成？领域服务包括哪些实体和实体方法？哪个实体
+是聚合根？实体有哪些属性和方法？哪些对象应该设计为值对象等。
+
+领域服务通过对多个实体和实体方法进行组合，完成核心业务逻辑。你可以认为领域服务是位于实体方法之上和应用服务之下的一层业务逻辑
+
+由于值对象只做整体替换、不可修改的特性，在值对象中基本不会有修改或新增的方法。
+</code></pre><h3 id="为什么多线程会不完全"><a href="#为什么多线程会不完全" class="headerlink" title="为什么多线程会不完全"></a>为什么多线程会不完全</h3><pre><code>1、先说cpu高速缓存（效率）
+计算机程序在运行的时候，每条指令都在cpu中执行的，执行过程中会涉及到数据的读写，多线程共享的变量是存储在主内存，读写主内存的
+数据没有CPU指令中执行指令的速度快，如果任何操作都要和主内存交互，会影响效率，所以才会有CPU高速缓存（本地内存），CPU高速缓存为
+某个CPU独有，只与在该CPU运行的线程有关
+
+2、再说java的内存模型（缓存一致性）
+
+   java内存模型中规定，所有变量都存储在主内存中，每个线程还有自己都工作内存 ，工作内存保存了被线程使用到到变量到主内存副本拷贝，
+   对变量对操作都是在工作内存中进行，而不是直接操作主内存（为了效率对设计）
+   因为每个线程都有一个私有的本地内存，这样会导致一个变量在多个线程之间出现数据不一致性问题。
+
+    同时也会导致共享变量竞争的问题。
+    java线程-&gt;工作内存-》（save和load操作）-》主内存
+    java线程-&gt;工作内存-》（save和load操作）-》主内存
+    java线程-&gt;工作内存-》（save和load操作）-》主内存
+    java线程-&gt;工作内存-》（save和load操作）-》主内存
+
+    java内存操作指令：
+    lock/unlock/read/write 主内存
+    load/user/assign/store 工作内存
+    read and load 从主存赋值变量到工作内存
+    user and assign 执行代码和改变共享变量（可能出现多次）
+    store and write  写到工作内存，同时拷贝到主内存
+
+3、再说如何保证线程安全三原则：
+原子性：一个操作要么全部执行，并且执行过程中不被打断，要么不执行。synchronized和java.util.concurrent包中的锁都能够保证操作的原子性
+      synchronized和Lock能够保证任一时刻只有一个线程执行该代码块，那么自然就不存在原子性问题了，从而保证了原子性
+可见性：多个线程对变量操作之后，别的线程可以立即感知到。
+      volatile,synchronized和Lock也能够保证可见性
+有序性：在Java内存模型中，允许编译器和处理器对指令进行重排序，但是重排序过程不会影响到单线程程序的执行，却会影响到多线程并发执行的正确性。
+    防止指令重排序,它只会对不存在数据依赖性的指令进行重排序，编译器和处理器在重排序时，会遵守数据依赖性，编译器和处理器不会改变存在数据依赖关系的
+    两个操作的执行顺序，synchronized和Lock来保证有序性，volatile禁止重排序
+    volatile关键字通过提供“内存屏障”的方式来防止指令被重排序，为了实现volatile的内存语义，编译器在生成字节码时，
+    会在指令序列中插入内存屏障来禁止特定类型的处理器重排序。
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/26/个人代码库速查/" rel="next" title="个人代码库速查">
+                <i class="fa fa-chevron-left"></i> 个人代码库速查
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg"
+               alt="ggj2010" />
+          <p class="site-author-name" itemprop="name">ggj2010</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ggj2010" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/ggjlvzjy" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要用微服务-Microservices"><span class="nav-number">1.</span> <span class="nav-text">为什么要用微服务(Microservices)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#微服务如何拆分"><span class="nav-number">1.1.</span> <span class="nav-text">微服务如何拆分</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是康威定律"><span class="nav-number">2.</span> <span class="nav-text">什么是康威定律</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一定律"><span class="nav-number">2.1.</span> <span class="nav-text">第一定律</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二定律"><span class="nav-number">2.2.</span> <span class="nav-text">第二定律</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三定律"><span class="nav-number">2.3.</span> <span class="nav-text">第三定律</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第四定律"><span class="nav-number">2.4.</span> <span class="nav-text">第四定律</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要用敏捷式开发"><span class="nav-number">3.</span> <span class="nav-text">为什么要用敏捷式开发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要用DDD"><span class="nav-number">4.</span> <span class="nav-text">为什么要用DDD</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#面向对象与基于数据库领域模型设计"><span class="nav-number">4.1.</span> <span class="nav-text">面向对象与基于数据库领域模型设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ddd一些总结"><span class="nav-number">4.2.</span> <span class="nav-text">ddd一些总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么多线程会不完全"><span class="nav-number">4.3.</span> <span class="nav-text">为什么多线程会不完全</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ggj2010</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

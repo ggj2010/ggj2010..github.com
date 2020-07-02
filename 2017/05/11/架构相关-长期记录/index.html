@@ -95,7 +95,7 @@
 <meta property="og:site_name" content="高广金博客">
 <meta property="og:description" content="架构相关知识记录,遇到什么记什么 异地多活之多机房架构为了保证关键业务系统的高可用，一般都要支持异地多活  单机房的缺点 服务不能保证高可能用 用户响应延迟，有可能广州的用户访问确实北京的服务器   多机房的好处 服务高可用（数据容灾和业务容灾） 提供系统访问速度，让服务离用户最近   多机房的缺点  如何保证数据一致性问题     CAP理论，Consistency(一致性),Availabil">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-05-11T09:08:37.000Z">
+<meta property="og:updated_time" content="2020-03-14T07:50:18.331Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="架构相关-长期记录">
 <meta name="twitter:description" content="架构相关知识记录,遇到什么记什么 异地多活之多机房架构为了保证关键业务系统的高可用，一般都要支持异地多活  单机房的缺点 服务不能保证高可能用 用户响应延迟，有可能广州的用户访问确实北京的服务器   多机房的好处 服务高可用（数据容灾和业务容灾） 提供系统访问速度，让服务离用户最近   多机房的缺点  如何保证数据一致性问题     CAP理论，Consistency(一致性),Availabil">
@@ -418,6 +418,46 @@ CAP三选二原则，CA适用于支付、交易、票务等强一致性的行业
 </ul>
 </li>
 </ul>
+<h3 id="架构概念"><a href="#架构概念" class="headerlink" title="架构概念"></a>架构概念</h3><h4 id="内聚和耦合"><a href="#内聚和耦合" class="headerlink" title="内聚和耦合"></a>内聚和耦合</h4><pre><code>内聚：是指模块内部之间的关系，例如功能内聚 就是指某个功能需要聚合在一起
+耦合：是指模块与模块之间的复杂程度
+
+我们在设计代码模块时候需要遵循高内聚低耦合这种设计思想
+</code></pre><h4 id="C4模型"><a href="#C4模型" class="headerlink" title="C4模型"></a>C4模型</h4><pre><code>c4模型使用4种不同的粒度来记录软件架构
+https://insights.thoughtworks.cn/c4-model/
+</code></pre><h5 id="系统上下文图"><a href="#系统上下文图" class="headerlink" title="系统上下文图"></a>系统上下文图</h5><pre><code>这是最高粒度的图，没有什么细节，主要描述是应用程序的上下文
+</code></pre><h5 id="容器图"><a href="#容器图" class="headerlink" title="容器图"></a>容器图</h5><pre><code>应用程序的容器，主要包括：应用程序、api、数据库等
+</code></pre><h5 id="组件图"><a href="#组件图" class="headerlink" title="组件图"></a>组件图</h5><pre><code>组件图显示的是一个容器内的组件，比如有哪些模块
+</code></pre><h5 id="代码图"><a href="#代码图" class="headerlink" title="代码图"></a>代码图</h5><pre><code>最细粒度的图，旨在描述组件内部的代码结构。对于这个级别，我们使用具有类级别人工制品的UML图
+</code></pre><h4 id="BFF-Backend-for-Frontend-和网关Gateway"><a href="#BFF-Backend-for-Frontend-和网关Gateway" class="headerlink" title="BFF(Backend for Frontend)和网关Gateway"></a>BFF(Backend for Frontend)和网关Gateway</h4><pre><code>https://www.cnblogs.com/dadadechengzi/p/9373069.html
+bff俗称为为前端而开发的后端，为什么需要有bff这一层？
+app -&gt; 服务A
+       服务B
+
+app -&gt; bff --&gt;服务A
+           --&gt;服务B
+如果没有bff层
+1、app和后端服务耦合，任何一边的变化都可能对另外一边造成影响
+2、app要考虑对后端服务对选址问题
+3、app端需要做好多聚合裁剪和适配逻辑
+BFF可以认为是一种适配服务，将后端的微服务进行适配（主要包括聚合裁剪和格式适配等逻辑），
+向无线端设备暴露友好和统一的API，方便无线设备接入访问后端服务
+
+为什么需要有网关gateWay
+随着app业务扩展，单个bff肯定无法满足团队需求
+app -&gt; bff1 --&gt;服务A
+    -&gt; bff2 --&gt;服务A
+如果扩充成多个bff 可以解决这个问题，但是每个bff 都要做一些跨横切面逻辑，例如身份认证，限流，日志监控等，
+每个bff都冗余同样逻辑的话，后期如果升级某个切面逻辑所有bff都需要变更，这是我们不希望看到的
+所以引入gateWay
+app -&gt; gateway-&gt;bff1--&gt;服务A
+              -&gt;bff2--&gt;服务A
+网关（一般由独立框架团队负责运维）专注跨横切面(Cross-Cutting Concerns)的功能，包括：
+1、路由，将来自无线设备的请求路由到后端的某个微服务BFF集群。
+2、认证，对涉及敏感数据的API访问进行集中认证鉴权。
+3、监控，对API调用进行性能监控。
+4、限流熔断，当出现流量洪峰，或者后端BFF/微服务出现延迟或故障，网关能够主动进行限流熔断，保护后端服务，并保持前端用户体验可以接受。
+5、安全防爬，收集访问日志，通过后台分析出恶意行为，并阻断恶意请求。
+</code></pre><h2 id="创业公司架构选型"><a href="#创业公司架构选型" class="headerlink" title="创业公司架构选型"></a>创业公司架构选型</h2><p>   <a href="https://www.cnblogs.com/dadadechengzi/p/9478061.html" target="_blank" rel="external">https://www.cnblogs.com/dadadechengzi/p/9478061.html</a><br>   <a href="https://blog.csdn.net/j3T9Z7H/article/details/102791337" target="_blank" rel="external">https://blog.csdn.net/j3T9Z7H/article/details/102791337</a></p>
 
       
     </div>
@@ -538,7 +578,7 @@ CAP三选二原则，CA适用于支付、交易、票务等强一致性的行业
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">39</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -615,7 +655,7 @@ CAP三选二原则，CA适用于支付、交易、票务等强一致性的行业
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#异地多活之多机房架构"><span class="nav-number">1.</span> <span class="nav-text">异地多活之多机房架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#架构之荔枝荔枝FM"><span class="nav-number">2.</span> <span class="nav-text">架构之荔枝荔枝FM</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#异地多活之多机房架构"><span class="nav-number">1.</span> <span class="nav-text">异地多活之多机房架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#架构之荔枝荔枝FM"><span class="nav-number">2.</span> <span class="nav-text">架构之荔枝荔枝FM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#架构概念"><span class="nav-number">3.</span> <span class="nav-text">架构概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#内聚和耦合"><span class="nav-number">3.1.</span> <span class="nav-text">内聚和耦合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#C4模型"><span class="nav-number">3.2.</span> <span class="nav-text">C4模型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#系统上下文图"><span class="nav-number">3.2.1.</span> <span class="nav-text">系统上下文图</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#容器图"><span class="nav-number">3.2.2.</span> <span class="nav-text">容器图</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#组件图"><span class="nav-number">3.2.3.</span> <span class="nav-text">组件图</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#代码图"><span class="nav-number">3.2.4.</span> <span class="nav-text">代码图</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BFF-Backend-for-Frontend-和网关Gateway"><span class="nav-number">3.3.</span> <span class="nav-text">BFF(Backend for Frontend)和网关Gateway</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创业公司架构选型"><span class="nav-number"></span> <span class="nav-text">创业公司架构选型</span></a></div>
             
 
           </div>
@@ -638,7 +678,7 @@ CAP三选二原则，CA适用于支付、交易、票务等强一致性的行业
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

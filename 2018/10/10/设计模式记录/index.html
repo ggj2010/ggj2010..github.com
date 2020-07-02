@@ -87,18 +87,18 @@
 
 
 
-<meta name="description" content="只有掌握设计模式，才能看懂开源框架代码 设计模式分类 创建型模式：  共五种：工厂方法模式、抽象工厂模式、单例模式、建造者模式、原型模式。  结构型模式：  共七种：适配器模式、装饰器模式、代理模式、外观模式、桥接模式、组合模式、享元模式。  行为型模式：  共十一种：策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、访问者模式、中介者模式、解释器模式。">
+<meta name="description" content="只有掌握设计模式，才能看懂开源框架代码 代码谁都会写，但是优秀的代码肯定不是 设计模式分类 创建型模式：  共五种：工厂方法模式、抽象工厂模式、单例模式、建造者模式、原型模式。  结构型模式：  共七种：适配器模式、装饰器模式、代理模式、外观模式、桥接模式、组合模式、享元模式。  行为型模式：  共十一种：策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、">
 <meta name="keywords" content="设计模式">
 <meta property="og:type" content="article">
 <meta property="og:title" content="设计模式记录">
 <meta property="og:url" content="http://ggj2010.github.io/2018/10/10/设计模式记录/index.html">
 <meta property="og:site_name" content="高广金博客">
-<meta property="og:description" content="只有掌握设计模式，才能看懂开源框架代码 设计模式分类 创建型模式：  共五种：工厂方法模式、抽象工厂模式、单例模式、建造者模式、原型模式。  结构型模式：  共七种：适配器模式、装饰器模式、代理模式、外观模式、桥接模式、组合模式、享元模式。  行为型模式：  共十一种：策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、访问者模式、中介者模式、解释器模式。">
+<meta property="og:description" content="只有掌握设计模式，才能看懂开源框架代码 代码谁都会写，但是优秀的代码肯定不是 设计模式分类 创建型模式：  共五种：工厂方法模式、抽象工厂模式、单例模式、建造者模式、原型模式。  结构型模式：  共七种：适配器模式、装饰器模式、代理模式、外观模式、桥接模式、组合模式、享元模式。  行为型模式：  共十一种：策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-10-26T09:24:28.000Z">
+<meta property="og:updated_time" content="2020-03-29T15:56:54.154Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="设计模式记录">
-<meta name="twitter:description" content="只有掌握设计模式，才能看懂开源框架代码 设计模式分类 创建型模式：  共五种：工厂方法模式、抽象工厂模式、单例模式、建造者模式、原型模式。  结构型模式：  共七种：适配器模式、装饰器模式、代理模式、外观模式、桥接模式、组合模式、享元模式。  行为型模式：  共十一种：策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、访问者模式、中介者模式、解释器模式。">
+<meta name="twitter:description" content="只有掌握设计模式，才能看懂开源框架代码 代码谁都会写，但是优秀的代码肯定不是 设计模式分类 创建型模式：  共五种：工厂方法模式、抽象工厂模式、单例模式、建造者模式、原型模式。  结构型模式：  共七种：适配器模式、装饰器模式、代理模式、外观模式、桥接模式、组合模式、享元模式。  行为型模式：  共十一种：策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、">
 
 
 
@@ -354,6 +354,7 @@
 
       
         <pre><code>只有掌握设计模式，才能看懂开源框架代码
+代码谁都会写，但是优秀的代码肯定不是
 </code></pre><h2 id="设计模式分类"><a href="#设计模式分类" class="headerlink" title="设计模式分类"></a>设计模式分类</h2><ul>
 <li>创建型模式：</li>
 </ul>
@@ -365,24 +366,34 @@
 </code></pre><ul>
 <li>行为型模式：</li>
 </ul>
-<pre><code>共十一种：策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、访问者模式、中介者模式、解释器模式。   
+<pre><code>共十一种：策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、访问者模式、中介者模式、解释器模式。
 </code></pre><h2 id="设计模式相关规则"><a href="#设计模式相关规则" class="headerlink" title="设计模式相关规则"></a>设计模式相关规则</h2><pre><code>一、找出应用中可能会变化的部分，把他们独立出来，不要和那些不需要变化代码在一起。
 二、针对接口编程，而不是实现编程。
-三、[多用组合，少用  继承] 继承去复用不变化代码，接口去实现变化代码。
+三、[多用组合，少用继承] 继承去复用不变化代码，接口去实现变化代码。
 四、为了交互对象之间松耦合而努力。
 五、开放关闭原则
  类应该对扩展开发，对修改关闭。在不修改代码情况下，对功能进行扩展。
- 观察者模式就是，扩展主题功能，不需要向主题类里面添加代码只需要假如新的观察者。而装饰者模式就是完全遵守开关闭合选择。
+ 观察者模式就是，扩展主题功能，不需要向主题类里面添加代码只需要假如新的观察者。
+ 而装饰者模式就是完全遵守开关闭合选择。
+ 策略模式也可以实现开闭原则
+ 开闭原则的关键是抽象，当一个模块依赖的是抽象接口的时候，就可以对抽象接口进行扩展，这样就可以不改变现有的代码逻辑
 六、依赖倒置原则
 oo设计原则，要依赖抽象，不要依赖具体类。不仅仅是面向接口编程，不针对实现编程。不要让高层组件依赖底层组件。
   （1）变量不可以持有具体类的引用，不要用new
   （2）不要让类派生具体类
   （3）不要覆盖基类中已有的方法
-七、最少知道原则
+七、最少知道原则（迪米特法则）
 减少对象之间交互，只和你的密友谈话。
 八、单一职责原则
 一个类应该只有一个引起变化的原因，每个类应该保持单一责任。
 内聚概念：衡量一个类或模块紧密达到单一的责任或目的。
+</code></pre><h2 id="设计建议"><a href="#设计建议" class="headerlink" title="设计建议"></a>设计建议</h2><h3 id="KISS-Keep-It-Simple-Stupid"><a href="#KISS-Keep-It-Simple-Stupid" class="headerlink" title="KISS(Keep It Simple Stupid)"></a>KISS(Keep It Simple Stupid)</h3><pre><code>越简单 出现问题的概率就越少，例如单个方法或者单个类控制代码行数
+</code></pre><h3 id="YAGNI"><a href="#YAGNI" class="headerlink" title="YAGNI"></a>YAGNI</h3><pre><code>不用的功能没有必要添加，不要过度设计，例如不用的接口就不用实现
+</code></pre><h3 id="DIY"><a href="#DIY" class="headerlink" title="DIY"></a>DIY</h3><pre><code>不要重复设计
+</code></pre><h3 id="避免过早优化"><a href="#避免过早优化" class="headerlink" title="避免过早优化"></a>避免过早优化</h3><pre><code>过早优化会导致代码复杂性
+</code></pre><h3 id="Law-of-Demeter"><a href="#Law-of-Demeter" class="headerlink" title="Law of Demeter"></a>Law of Demeter</h3><pre><code>迪米特法则（Law of Demeter）又叫作最少知识原则
+降低类之间的耦合，由于每个类都减少了不必要的依赖，因此的确可以降低耦合关
+所以说写代码的时候不要乱写依赖关系。
 </code></pre><h2 id="23种设计模式"><a href="#23种设计模式" class="headerlink" title="23种设计模式"></a>23种设计模式</h2><h3 id="工厂模式-xxxFactory"><a href="#工厂模式-xxxFactory" class="headerlink" title="工厂模式(xxxFactory)"></a>工厂模式(xxxFactory)</h3><pre><code>使用工厂模式其实就是为了减少代码里面出现new关键字的次数，同时可以集中管理对象的创建，同时隐蔽对象创建的细节。
 打个比方如果项目代码里面有个类A被new了100多次，如果这个时候A类的构造方法需要加个参数，
 那就意味着这100多个使用到类A的地方都需要相对应的跟着修改。
@@ -478,10 +489,10 @@ public class MysqlFactory implements JDBCFactory{
     }
 }
 
-public class MysqlFactory implements JDBCFactory{
+public class SqlServerFactory implements JDBCFactory{
     @Override
     public JDBC create() {
-        return new MysqJDBC();
+        return new  SqlServerJDBC();
     }
 }
 
@@ -502,7 +513,7 @@ public class Test {
     public JDBC create() {
         return new MysqJDBC();
     }
-    //创建多个工厂    
+    //创建多个工厂
     @Override
     public XXX createMonitor() {
         return new XXX();
@@ -819,7 +830,7 @@ public class Test {
 因为我们不一定使用所有方法，这时候就需要接口的适配器模式，利用一个抽象类实现该接口，然后我们写一个类
 继承该抽象类，然后重写我们想要的方法就可以。
 
-例如Apache commons-pool2类的 ObjectPool接口，BaseObjectPool抽象类继承了ObjectPool 
+例如Apache commons-pool2类的 ObjectPool接口，BaseObjectPool抽象类继承了ObjectPool
 abstract class BaseObjectPool&lt;T&gt; implements ObjectPool
 
 public interface ChargeTargetAable {
@@ -846,7 +857,7 @@ public abstract class ChargeWrapper implements ChargeTargetAable {
     @Override
     public void charegeBJ() {
     }
-} 
+}
 
 
 public class Adapter extends ChargeWrapper{
@@ -864,7 +875,7 @@ public class Test {
     }
 }
 </code></pre><h3 id="装饰模式（decorator）"><a href="#装饰模式（decorator）" class="headerlink" title="装饰模式（decorator）"></a>装饰模式（decorator）</h3><pre><code>装饰模式在某些场景和适配器模式类似，但是这两个是完全不同的概念，一个是扩展（静态扩展），一个是增强（动态扩展）。
-装饰模式就是给一个对象增加一些新的功能，而且是动态的，要求装饰对象和被装饰对象实现同一个接口，装饰对象持有被装饰对象的实例 
+装饰模式就是给一个对象增加一些新的功能，而且是动态的，要求装饰对象和被装饰对象实现同一个接口，装饰对象持有被装饰对象的实例
 可以随意的选择需要装饰几个类，最里面是需要被装饰的类
 装饰器模式是一种结构性模式，它作用是对对象已有功能进行增强，但是不改变原有对象结构。这避免了通过继承方式进行功能扩充导致的类体系臃肿。
 
@@ -913,14 +924,14 @@ public class MainTest {
         ImgScanerReader isr = new ImgScanerReader(new ImgeDarwReader(new ImageReaderHelper()));
         isr.render();
     }
-}   
+}
 </code></pre><h3 id="代理模式（proxy）"><a href="#代理模式（proxy）" class="headerlink" title="代理模式（proxy）"></a>代理模式（proxy）</h3><pre><code>在某些情况下，一个对象不适合或者不能直接引用另一个对象，而代理对象可以在客户端和目标对象之间起到中介的作用。
 打个比方，在我们使用一些开源框架client端时候，都会在原有client端包装一层代理类，
 防止因为client因为api升级导致方法不兼容，还有一种就是spring aop java的动态代理
 
 public interface Image {
     void display();
-} 
+}
 
 public class RealImage implements Image {
     private String fileName;
@@ -947,14 +958,14 @@ public class Test {
         image.display();
     }
 }
-</code></pre><h4 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h4><pre><code>1、适配器模式的区别：适配器模式主要改变所考虑对象的接口（创建新的接口），而代理模式不能改变所代理类的接口。 
+</code></pre><h4 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h4><pre><code>1、适配器模式的区别：适配器模式主要改变所考虑对象的接口（创建新的接口），而代理模式不能改变所代理类的接口。
 2、装饰器模式的区别：装饰器模式为了增强功能，而代理模式是为了加以控制
 </code></pre><h3 id="外观模式-Facade"><a href="#外观模式-Facade" class="headerlink" title="外观模式(Facade)"></a>外观模式(Facade)</h3><pre><code>外观模式就是封装交互，简化调用，但是不符合开闭原则，如果要改东西很麻烦，
 因为每次改都是改facade类里面的逻辑。
 例如去医院体检，我们可能需要去眼科，外科，内科，口腔，抽血等地方排队体检，可能抽血的需要等10分钟，但是眼科只需要等1分钟，或者
 外科在1楼，眼科在三楼，这个时候如果有个接待员（门面），他能协调我们当前项目体检完后，下一个项目去哪个科室体检最快，是不是非常方便
 ，我们不用关系排队时间和地点，他们会直接引领我们过去。
-例如AVA 的三层开发模式MVC，
+例如JAVA 的三层开发模式MVC，
 </code></pre><h3 id="桥接模式（Bridge）"><a href="#桥接模式（Bridge）" class="headerlink" title="桥接模式（Bridge）"></a>桥接模式（Bridge）</h3><pre><code>将抽象部分与实现部分分离，使它们都可以独立的变化。
 在有多种可能会变化的情况下，用继承会造成类爆炸问题，扩展起来不灵活。
 例如颜色（红、黄、蓝色）和形状（正方形、长方形、原型），颜色和形状组合那么会有3*3种情况，如果只是用java继承去实现
@@ -1023,19 +1034,69 @@ public class Test {
     }
 }
 </code></pre><h3 id="组合模式"><a href="#组合模式" class="headerlink" title="组合模式"></a>组合模式</h3><pre><code>是用于把一组相似的对象当作一个单一的对象。组合模式依据树形结构来组合对象，用来表示部分以及整体层次。
-例如我们常见的树状数据结构数据    
+例如我们常见的树状数据结构数据
 </code></pre><h3 id="享元模式"><a href="#享元模式" class="headerlink" title="享元模式"></a>享元模式</h3><pre><code>主要用于减少创建对象的数量，以减少内存占用和提高性能。
 例如各种线程池，或者一些对象可以被复用就直接放在Map里面
-</code></pre><h3 id="策略模式（strategy）"><a href="#策略模式（strategy）" class="headerlink" title="策略模式（strategy）"></a>策略模式（strategy）</h3><pre><code>策略模式定义了一系列算法，并将每个算法封装起来，使他们可以相互替换，且算法的变化不会影响到使用算法的客户
+</code></pre><h3 id="策略模式（strategy）"><a href="#策略模式（strategy）" class="headerlink" title="策略模式（strategy）"></a>策略模式（strategy）</h3><pre><code>https://www.runoob.com/design-pattern/strategy-pattern.html
+策略模式定义了一系列算法，并将每个算法封装起来，使他们可以相互替换，且算法的变化不会影响到使用算法的客户
 主要解决在有多种算法相似的情况下，使用 if...else 所带来的复杂和难以维护。
-需要设计一个接口，为一系列实现类提供统一的方法，多个实现类实现该接口，设计一个抽象类（可有可无，属于辅助类），提供辅助函数
+（可以用表驱动法，如果用spring 可以先定义好 (key,springbean)）
+需要设计一个接口，为一系列实现类提供统一的方法，多个实现类实现该接口，
+设计一个抽象类（可有可无，属于辅助类），提供辅助函数，然后依赖该接口
 其实就是面向接口开发。
+
+public interface Strategy {
+   public int doOperation(int num1, int num2);
+}
+
+
+public class OperationAdd implements Strategy{
+   @Override
+   public int doOperation(int num1, int num2) {
+      return num1 + num2;
+   }
+}
+
+public class OperationSubstract implements Strategy{
+   @Override
+   public int doOperation(int num1, int num2) {
+      return num1 - num2;
+   }
+}
+
+public class Context {
+   private Strategy strategy;
+
+   public Context(Strategy strategy){
+      this.strategy = strategy;
+   }
+
+   public int executeStrategy(int num1, int num2){
+      return strategy.doOperation(num1, num2);
+   }
+}
+
+
+public class StrategyPatternDemo {
+   public static void main(String[] args) {
+      Context context = new Context(new OperationAdd());
+      System.out.println(&quot;10 + 5 = &quot; + context.executeStrategy(10, 5));
+
+      context = new Context(new OperationSubstract());
+      System.out.println(&quot;10 - 5 = &quot; + context.executeStrategy(10, 5));
+
+      context = new Context(new OperationMultiply());
+      System.out.println(&quot;10 * 5 = &quot; + context.executeStrategy(10, 5));
+   }
+}
+
+和适配器有点类似，都是引入依赖类。
 </code></pre><h3 id="模板模式（template"><a href="#模板模式（template" class="headerlink" title="模板模式（template)"></a>模板模式（template)</h3><pre><code>一个抽象类公开定义了执行它的方法的方式/模板。它的子类可以按需要重写方法实现，但调用将以抽象类中定义的方式进行
 其实就是继承、重写。
 </code></pre><h3 id="观察者模式（Observer）"><a href="#观察者模式（Observer）" class="headerlink" title="观察者模式（Observer）"></a>观察者模式（Observer）</h3><pre><code>对象间的一种一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都得到通知并被自动更新。
- 例如spring的ApplicationListener与ApplicationEvent 可以实现观察者模式，同时解耦代码 
+ 例如spring的ApplicationListener与ApplicationEvent 可以实现观察者模式，同时解耦代码
 </code></pre><h3 id="迭代子模式-iterator"><a href="#迭代子模式-iterator" class="headerlink" title="迭代子模式(iterator)"></a>迭代子模式(iterator)</h3><pre><code>提供一种方法顺序访问一个聚合对象中各个元素, 而又无须暴露该对象的内部表示
-例如集合的迭代器 
+例如集合的迭代器
 </code></pre><h3 id="责任链模式（chain）"><a href="#责任链模式（chain）" class="headerlink" title="责任链模式（chain）"></a>责任链模式（chain）</h3><pre><code>有多个对象，每个对象持有对下一个对象的引用，这样就会形成一条链，请求在这条链上传递，直到某一对象决定处理该请求
 例如spring的 的拦截器，javaWeb的Filter,dubbo的filter
 下面的例子是内置责任链模式，将所有引用存在ApplicationFilterChain里面，
@@ -1080,26 +1141,27 @@ public class BabyFilter implements Filter{
 public interface FilterChain {
     void chain(int age);
 }
-
+//FilterChain 里面维护了所有 Filter执行顺序
 public class ApplicationFilterChain implements FilterChain {
-    private static List&lt;Filter&gt; filterList = new ArrayList&lt;&gt;();
-    static {
-        filterList.add(new DefaultFilter());
-        filterList.add(new BuyCarFilter());
-        filterList.add(new MarryFilter());
+    private  List&lt;Filter&gt; filterList = new ArrayList&lt;&gt;();
+
+    public ApplicationFilterChain(){
+       filterList.add(new DefaultFilter());
+      filterList.add(new BuyCarFilter());
+       filterList.add(new MarryFilter());
         filterList.add(new BabyFilter());
     }
     @Override
     public void chain(int age) {
         if (CollectionUtils.isNotEmpty(filterList)) {
-            Filter filter = getFilter();
+            Filter filter = getNextFilter();
             filter.doFilter(age, this);
         }else{
             log.info(&quot;exit&quot;);
         }
     }
 
-    private Filter getFilter() {
+    private Filter getNextFilter() {
         Filter filter = filterList.get(0);
         filterList.remove(0);
         return filter;
@@ -1196,16 +1258,17 @@ public class Test {
     }
 }
 </code></pre><h4 id="责任链模式与装饰者模式"><a href="#责任链模式与装饰者模式" class="headerlink" title="责任链模式与装饰者模式"></a>责任链模式与装饰者模式</h4><pre><code>责任链通常是有预定义的链条的；而装饰者更多的是根据实际情况自定义装饰、处理顺序的。
+个人理解装饰者起到对是增强的概念。
 </code></pre><h2 id="开源框架里面的用到的模式"><a href="#开源框架里面的用到的模式" class="headerlink" title="开源框架里面的用到的模式"></a>开源框架里面的用到的模式</h2><h3 id="spring"><a href="#spring" class="headerlink" title="spring"></a>spring</h3><h4 id="工厂方法模式-1"><a href="#工厂方法模式-1" class="headerlink" title="工厂方法模式"></a>工厂方法模式</h4><pre><code>BeanFactory模式创建bean
 </code></pre><h4 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h4><pre><code>如果bean的scope为singleton，那么都会放到singletonObjects的map里面
 Map&lt;String, Object&gt; singletonObjects = new ConcurrentHashMap&lt;String, Object&gt;
-</code></pre><h4 id="原型设计模"><a href="#原型设计模" class="headerlink" title="原型设计模"></a>原型设计模</h4><pre><code>如果bean的作用域是prototype ，那么每次创建都是一个新类 
+</code></pre><h4 id="原型设计模"><a href="#原型设计模" class="headerlink" title="原型设计模"></a>原型设计模</h4><pre><code>如果bean的作用域是prototype ，那么每次创建都是一个新类
 </code></pre><h4 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h4><pre><code>Spring中bean实例化策略，接口InstantiationStrategy是实例化策略接口类，
 它定义了三个实例化接口，然后SimpleInstantiationStrategy实现了该策略，它主要做一些简单的根据构造函数实例号bean的工作，
 然后CglibSubclassingInstantiationStrategy又继承了SimpleInstantiationStrategy新增了方法注入方式根据cglib生成代理类实例化方法
 另外AopProxy也是一个策略接口类，具体实现的策略为JdkDynamicAopProxy，CglibAopProxy，ObjenesisCglibAopProxy
 </code></pre><h4 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h4><pre><code>spring的MethodInterceptor的适配器
-AfterReturningAdvice和MethodBeforeAdvice没有实现MethodInterceptor接口。而Spring 
+AfterReturningAdvice和MethodBeforeAdvice没有实现MethodInterceptor接口。而Spring
 Aop的方法拦截器却必须是实现了MethodInterceptor的，所以Spring提供了对应的适配器来适配这个问题
 分别是MethodBeforeAdviceAdapter和AfterReturningAdviceAdapter和ThrowsAdviceAdapter
 DefaultAdvisorAdapterRegistry类代码
@@ -1304,11 +1367,11 @@ listener属于订阅者，event属于订阅者的类型，订阅者只监听属�
 spring自定了好几个event 这些event都继承了ApplicationContextEvent，而
 ApplicationContextEvent都继承了ApplicationEvent
 1、ContextClosedEvent  对应 ContextCloserListener
-2、ContextRefreshedEvent  对应  ContextRefreshListener 
+2、ContextRefreshedEvent  对应  ContextRefreshListener
     IOC刷新完成（也就是bean解析完成，创建完毕并且autowired完成）后的事件 这个经常用
 3、ContextStartedEvent
 4、ContextStoppedEvent
-</code></pre><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.runoob.com/design-pattern/design-pattern-tutorial.html" target="_blank" rel="external">设计模式</a><br><a href="https://www.jianshu.com/p/503b15f155c0" target="_blank" rel="external">常用开源框架中设计模式使用分析</a>    </p>
+</code></pre><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.runoob.com/design-pattern/design-pattern-tutorial.html" target="_blank" rel="external">设计模式</a><br><a href="https://www.jianshu.com/p/503b15f155c0" target="_blank" rel="external">常用开源框架中设计模式使用分析</a></p>
 
       
     </div>
@@ -1429,7 +1492,7 @@ ApplicationContextEvent都继承了ApplicationEvent
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">39</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1506,7 +1569,7 @@ ApplicationContextEvent都继承了ApplicationEvent
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#设计模式分类"><span class="nav-number">1.</span> <span class="nav-text">设计模式分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设计模式相关规则"><span class="nav-number">2.</span> <span class="nav-text">设计模式相关规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#23种设计模式"><span class="nav-number">3.</span> <span class="nav-text">23种设计模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#工厂模式-xxxFactory"><span class="nav-number">3.1.</span> <span class="nav-text">工厂模式(xxxFactory)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#简单工厂模式"><span class="nav-number">3.1.1.</span> <span class="nav-text">简单工厂模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#工厂方法模式"><span class="nav-number">3.1.2.</span> <span class="nav-text">工厂方法模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#抽象工厂模式"><span class="nav-number">3.1.3.</span> <span class="nav-text">抽象工厂模式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单例模式（xxxSingleton）"><span class="nav-number">3.2.</span> <span class="nav-text">单例模式（xxxSingleton）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#建造者模式（Builder）"><span class="nav-number">3.3.</span> <span class="nav-text">建造者模式（Builder）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原型模式-Prototype"><span class="nav-number">3.4.</span> <span class="nav-text">原型模式(Prototype)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#适配器（Adapter）"><span class="nav-number">3.5.</span> <span class="nav-text">适配器（Adapter）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#类的适配器模式"><span class="nav-number">3.5.1.</span> <span class="nav-text">类的适配器模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对象的适配器模式"><span class="nav-number">3.5.2.</span> <span class="nav-text">对象的适配器模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#接口的适配器模式"><span class="nav-number">3.5.3.</span> <span class="nav-text">接口的适配器模式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#装饰模式（decorator）"><span class="nav-number">3.6.</span> <span class="nav-text">装饰模式（decorator）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代理模式（proxy）"><span class="nav-number">3.7.</span> <span class="nav-text">代理模式（proxy）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#区别"><span class="nav-number">3.7.1.</span> <span class="nav-text">区别</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#外观模式-Facade"><span class="nav-number">3.8.</span> <span class="nav-text">外观模式(Facade)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#桥接模式（Bridge）"><span class="nav-number">3.9.</span> <span class="nav-text">桥接模式（Bridge）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#组合模式"><span class="nav-number">3.10.</span> <span class="nav-text">组合模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#享元模式"><span class="nav-number">3.11.</span> <span class="nav-text">享元模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#策略模式（strategy）"><span class="nav-number">3.12.</span> <span class="nav-text">策略模式（strategy）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模板模式（template"><span class="nav-number">3.13.</span> <span class="nav-text">模板模式（template)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#观察者模式（Observer）"><span class="nav-number">3.14.</span> <span class="nav-text">观察者模式（Observer）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#迭代子模式-iterator"><span class="nav-number">3.15.</span> <span class="nav-text">迭代子模式(iterator)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#责任链模式（chain）"><span class="nav-number">3.16.</span> <span class="nav-text">责任链模式（chain）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#责任链模式与装饰者模式"><span class="nav-number">3.16.1.</span> <span class="nav-text">责任链模式与装饰者模式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开源框架里面的用到的模式"><span class="nav-number">4.</span> <span class="nav-text">开源框架里面的用到的模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#spring"><span class="nav-number">4.1.</span> <span class="nav-text">spring</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#工厂方法模式-1"><span class="nav-number">4.1.1.</span> <span class="nav-text">工厂方法模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单例模式"><span class="nav-number">4.1.2.</span> <span class="nav-text">单例模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#原型设计模"><span class="nav-number">4.1.3.</span> <span class="nav-text">原型设计模</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#策略模式"><span class="nav-number">4.1.4.</span> <span class="nav-text">策略模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#适配器模式"><span class="nav-number">4.1.5.</span> <span class="nav-text">适配器模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模板模式"><span class="nav-number">4.1.6.</span> <span class="nav-text">模板模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#观察者模式"><span class="nav-number">4.1.7.</span> <span class="nav-text">观察者模式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#设计模式分类"><span class="nav-number">1.</span> <span class="nav-text">设计模式分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设计模式相关规则"><span class="nav-number">2.</span> <span class="nav-text">设计模式相关规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设计建议"><span class="nav-number">3.</span> <span class="nav-text">设计建议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#KISS-Keep-It-Simple-Stupid"><span class="nav-number">3.1.</span> <span class="nav-text">KISS(Keep It Simple Stupid)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#YAGNI"><span class="nav-number">3.2.</span> <span class="nav-text">YAGNI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DIY"><span class="nav-number">3.3.</span> <span class="nav-text">DIY</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#避免过早优化"><span class="nav-number">3.4.</span> <span class="nav-text">避免过早优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Law-of-Demeter"><span class="nav-number">3.5.</span> <span class="nav-text">Law of Demeter</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#23种设计模式"><span class="nav-number">4.</span> <span class="nav-text">23种设计模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#工厂模式-xxxFactory"><span class="nav-number">4.1.</span> <span class="nav-text">工厂模式(xxxFactory)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#简单工厂模式"><span class="nav-number">4.1.1.</span> <span class="nav-text">简单工厂模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#工厂方法模式"><span class="nav-number">4.1.2.</span> <span class="nav-text">工厂方法模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#抽象工厂模式"><span class="nav-number">4.1.3.</span> <span class="nav-text">抽象工厂模式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单例模式（xxxSingleton）"><span class="nav-number">4.2.</span> <span class="nav-text">单例模式（xxxSingleton）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#建造者模式（Builder）"><span class="nav-number">4.3.</span> <span class="nav-text">建造者模式（Builder）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原型模式-Prototype"><span class="nav-number">4.4.</span> <span class="nav-text">原型模式(Prototype)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#适配器（Adapter）"><span class="nav-number">4.5.</span> <span class="nav-text">适配器（Adapter）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#类的适配器模式"><span class="nav-number">4.5.1.</span> <span class="nav-text">类的适配器模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对象的适配器模式"><span class="nav-number">4.5.2.</span> <span class="nav-text">对象的适配器模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#接口的适配器模式"><span class="nav-number">4.5.3.</span> <span class="nav-text">接口的适配器模式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#装饰模式（decorator）"><span class="nav-number">4.6.</span> <span class="nav-text">装饰模式（decorator）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代理模式（proxy）"><span class="nav-number">4.7.</span> <span class="nav-text">代理模式（proxy）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#区别"><span class="nav-number">4.7.1.</span> <span class="nav-text">区别</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#外观模式-Facade"><span class="nav-number">4.8.</span> <span class="nav-text">外观模式(Facade)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#桥接模式（Bridge）"><span class="nav-number">4.9.</span> <span class="nav-text">桥接模式（Bridge）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#组合模式"><span class="nav-number">4.10.</span> <span class="nav-text">组合模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#享元模式"><span class="nav-number">4.11.</span> <span class="nav-text">享元模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#策略模式（strategy）"><span class="nav-number">4.12.</span> <span class="nav-text">策略模式（strategy）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模板模式（template"><span class="nav-number">4.13.</span> <span class="nav-text">模板模式（template)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#观察者模式（Observer）"><span class="nav-number">4.14.</span> <span class="nav-text">观察者模式（Observer）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#迭代子模式-iterator"><span class="nav-number">4.15.</span> <span class="nav-text">迭代子模式(iterator)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#责任链模式（chain）"><span class="nav-number">4.16.</span> <span class="nav-text">责任链模式（chain）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#责任链模式与装饰者模式"><span class="nav-number">4.16.1.</span> <span class="nav-text">责任链模式与装饰者模式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开源框架里面的用到的模式"><span class="nav-number">5.</span> <span class="nav-text">开源框架里面的用到的模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#spring"><span class="nav-number">5.1.</span> <span class="nav-text">spring</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#工厂方法模式-1"><span class="nav-number">5.1.1.</span> <span class="nav-text">工厂方法模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单例模式"><span class="nav-number">5.1.2.</span> <span class="nav-text">单例模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#原型设计模"><span class="nav-number">5.1.3.</span> <span class="nav-text">原型设计模</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#策略模式"><span class="nav-number">5.1.4.</span> <span class="nav-text">策略模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#适配器模式"><span class="nav-number">5.1.5.</span> <span class="nav-text">适配器模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模板模式"><span class="nav-number">5.1.6.</span> <span class="nav-text">模板模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#观察者模式"><span class="nav-number">5.1.7.</span> <span class="nav-text">观察者模式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>
@@ -1529,7 +1592,7 @@ ApplicationContextEvent都继承了ApplicationEvent
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

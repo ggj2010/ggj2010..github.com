@@ -87,18 +87,18 @@
 
 
 
-<meta name="description" content="redis主从redis一主可以对应多个从节点，主节点可以读写，从节点只能查询 配置文件salve节点文件里面添加以下内容 slaveof &amp;lt;masterip&amp;gt; &amp;lt;masterport&amp;gt; //主节点的ip masterauth &amp;lt;master-password&amp;gt;   //主节点的密码 客户端实现对于写的操作需要路由到主节点redis数据源 对于读操作需要路由到从">
+<meta name="description" content="概念缓存乱用1、缓存大对象 2、缓存不常用的 3、缓存频繁更新的 4、没有及时的更新或者删除再缓存中已经过期或者失效的数据 缓存穿透、并发、失效、一致性穿透    一般缓存数据流程都是先查缓存系统，如果缓存系统不存在，再查db，然后异步更新缓存系统，正常的这样流程是没有 任何风险的，可当黑客攻击的时候，会模拟一个不存在的缓存KEY，导致缓存无法命中直接查询DB。 防止缓存穿透首先要过滤缓存key,">
 <meta property="og:type" content="article">
 <meta property="og:title" content="缓存相关记录">
 <meta property="og:url" content="http://ggj2010.github.io/2017/07/06/缓存相关记录/index.html">
 <meta property="og:site_name" content="高广金博客">
-<meta property="og:description" content="redis主从redis一主可以对应多个从节点，主节点可以读写，从节点只能查询 配置文件salve节点文件里面添加以下内容 slaveof &amp;lt;masterip&amp;gt; &amp;lt;masterport&amp;gt; //主节点的ip masterauth &amp;lt;master-password&amp;gt;   //主节点的密码 客户端实现对于写的操作需要路由到主节点redis数据源 对于读操作需要路由到从">
+<meta property="og:description" content="概念缓存乱用1、缓存大对象 2、缓存不常用的 3、缓存频繁更新的 4、没有及时的更新或者删除再缓存中已经过期或者失效的数据 缓存穿透、并发、失效、一致性穿透    一般缓存数据流程都是先查缓存系统，如果缓存系统不存在，再查db，然后异步更新缓存系统，正常的这样流程是没有 任何风险的，可当黑客攻击的时候，会模拟一个不存在的缓存KEY，导致缓存无法命中直接查询DB。 防止缓存穿透首先要过滤缓存key,">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://p0.meituan.net/education/1f8745786a2934b3dea4fee5ef2bd764564463.png">
-<meta property="og:updated_time" content="2018-09-23T08:18:14.000Z">
+<meta property="og:updated_time" content="2020-03-29T04:57:55.223Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="缓存相关记录">
-<meta name="twitter:description" content="redis主从redis一主可以对应多个从节点，主节点可以读写，从节点只能查询 配置文件salve节点文件里面添加以下内容 slaveof &amp;lt;masterip&amp;gt; &amp;lt;masterport&amp;gt; //主节点的ip masterauth &amp;lt;master-password&amp;gt;   //主节点的密码 客户端实现对于写的操作需要路由到主节点redis数据源 对于读操作需要路由到从">
+<meta name="twitter:description" content="概念缓存乱用1、缓存大对象 2、缓存不常用的 3、缓存频繁更新的 4、没有及时的更新或者删除再缓存中已经过期或者失效的数据 缓存穿透、并发、失效、一致性穿透    一般缓存数据流程都是先查缓存系统，如果缓存系统不存在，再查db，然后异步更新缓存系统，正常的这样流程是没有 任何风险的，可当黑客攻击的时候，会模拟一个不存在的缓存KEY，导致缓存无法命中直接查询DB。 防止缓存穿透首先要过滤缓存key,">
 <meta name="twitter:image" content="http://p0.meituan.net/education/1f8745786a2934b3dea4fee5ef2bd764564463.png">
 
 
@@ -354,20 +354,14 @@
       
 
       
-        <h3 id="redis主从"><a href="#redis主从" class="headerlink" title="redis主从"></a>redis主从</h3><pre><code>redis一主可以对应多个从节点，主节点可以读写，从节点只能查询
-</code></pre><h4 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h4><pre><code>salve节点文件里面添加以下内容
-slaveof &lt;masterip&gt; &lt;masterport&gt; //主节点的ip
-masterauth &lt;master-password&gt;   //主节点的密码
-</code></pre><h4 id="客户端实现"><a href="#客户端实现" class="headerlink" title="客户端实现"></a>客户端实现</h4><pre><code>对于写的操作需要路由到主节点redis数据源
-对于读操作需要路由到从节点的数据源。
-</code></pre><h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><pre><code>如果redis主节点挂了，从节点不会自动切换， 需要借助redis的Sentinel或者keepalive来实现主的故障转移
-</code></pre><h4 id="redis-Sentinel"><a href="#redis-Sentinel" class="headerlink" title="redis Sentinel"></a>redis Sentinel</h4><pre><code>配置可参考：https://cachecloud.github.io/2016/03/11/Redis%203.2.0-Sentinel%E6%95%85%E9%9A%9C%E8%BD%AC%E7%A7%BB%E6%B5%8B%E8%AF%95/
-./redis-server.sh sentinel.conf --sentinel //--sentinel是哨兵模式启动需要带的参数
-</code></pre><h3 id="redis集群"><a href="#redis集群" class="headerlink" title="redis集群"></a>redis集群</h3><pre><code>因为单台服务器内存的局限性，必须要进行横向扩展，主从模式不能保证高可用,redis官方自带的redis-cluter
+        <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><h3 id="缓存乱用"><a href="#缓存乱用" class="headerlink" title="缓存乱用"></a>缓存乱用</h3><pre><code>1、缓存大对象
+2、缓存不常用的
+3、缓存频繁更新的
+4、没有及时的更新或者删除再缓存中已经过期或者失效的数据
 </code></pre><h3 id="缓存穿透、并发、失效、一致性"><a href="#缓存穿透、并发、失效、一致性" class="headerlink" title="缓存穿透、并发、失效、一致性"></a>缓存穿透、并发、失效、一致性</h3><h4 id="穿透"><a href="#穿透" class="headerlink" title="穿透"></a>穿透</h4><pre><code>    一般缓存数据流程都是先查缓存系统，如果缓存系统不存在，再查db，然后异步更新缓存系统，正常的这样流程是没有
 任何风险的，可当黑客攻击的时候，会模拟一个不存在的缓存KEY，导致缓存无法命中直接查询DB。
 防止缓存穿透首先要过滤缓存key,比如key不符合要求直接打回，如果key查询db后返回的结果为null,我们可以为这个key预设一个
-特定的值比如“&amp;&amp;”，这样后续的查询返回的都是“&amp;&amp;”，就不会直接查询db了。
+特定的值比如“&amp;&amp;”，这样后续的查询返回的都是“&amp;&amp;”，就不会直接查询db了，但是缓存的失效时间需要短下
 </code></pre><h4 id="并发"><a href="#并发" class="headerlink" title="并发"></a>并发</h4><pre><code>    比如手机app首页的推荐位数据一般都是从缓存里面取的，比如在用户访问高峰期的时候缓存失效了，用户打开app首页的时候，加载的
 推荐位数据会并发请求到数据库，这种情况就需要对查询db的操作进行加分布式锁的功能了。可以使用一个锁，也可以初始化多个锁，保证
 打到数据库的请求是在可控范围。或者使用本地缓存，当nosql缓存失效的时候，直接先拿本地缓存挡着，但是要注意本地缓存的大小。
@@ -379,8 +373,18 @@ masterauth &lt;master-password&gt;   //主节点的密码
 丢一条更新缓存的请求，异步的去更新缓存。
 </code></pre><h4 id="缓存雪崩"><a href="#缓存雪崩" class="headerlink" title="缓存雪崩"></a>缓存雪崩</h4><pre><code>当缓存服务器重启或者大量缓存集中在某一个时间段失效，
 如果缓存服务器不是高可用了，使用hystrix拦截。
-</code></pre><h3 id="memcache"><a href="#memcache" class="headerlink" title="memcache"></a>memcache</h3><pre><code>memcache是完全基于内存的，不能持久化存储，只能存储key value
-</code></pre><h4 id="缓存序列化与反序列化"><a href="#缓存序列化与反序列化" class="headerlink" title="缓存序列化与反序列化"></a>缓存序列化与反序列化</h4><h3 id="内存访问速度"><a href="#内存访问速度" class="headerlink" title="内存访问速度"></a>内存访问速度</h3><p>   <img src="http://p0.meituan.net/education/1f8745786a2934b3dea4fee5ef2bd764564463.png" alt=""></p>
+</code></pre><h2 id="redis相关"><a href="#redis相关" class="headerlink" title="redis相关"></a>redis相关</h2><h3 id="redis主从"><a href="#redis主从" class="headerlink" title="redis主从"></a>redis主从</h3><pre><code>redis一主可以对应多个从节点，主节点可以读写，从节点只能查询
+</code></pre><h4 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h4><pre><code>salve节点文件里面添加以下内容
+slaveof &lt;masterip&gt; &lt;masterport&gt; //主节点的ip
+masterauth &lt;master-password&gt;   //主节点的密码
+</code></pre><h4 id="客户端实现"><a href="#客户端实现" class="headerlink" title="客户端实现"></a>客户端实现</h4><pre><code>对于写的操作需要路由到主节点redis数据源
+对于读操作需要路由到从节点的数据源。
+</code></pre><h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><pre><code>如果redis主节点挂了，从节点不会自动切换， 需要借助redis的Sentinel或者keepalive来实现主的故障转移
+</code></pre><h4 id="redis-Sentinel"><a href="#redis-Sentinel" class="headerlink" title="redis Sentinel"></a>redis Sentinel</h4><pre><code>配置可参考：https://cachecloud.github.io/2016/03/11/Redis%203.2.0-Sentinel%E6%95%85%E9%9A%9C%E8%BD%AC%E7%A7%BB%E6%B5%8B%E8%AF%95/
+./redis-server.sh sentinel.conf --sentinel //--sentinel是哨兵模式启动需要带的参数
+</code></pre><h3 id="redis集群"><a href="#redis集群" class="headerlink" title="redis集群"></a>redis集群</h3><pre><code>因为单台服务器内存的局限性，必须要进行横向扩展，主从模式不能保证高可用,redis官方自带的redis-cluter
+</code></pre><h2 id="memcache"><a href="#memcache" class="headerlink" title="memcache"></a>memcache</h2><pre><code>memcache是完全基于内存的，不能持久化存储，只能存储key value
+</code></pre><h3 id="缓存序列化与反序列化"><a href="#缓存序列化与反序列化" class="headerlink" title="缓存序列化与反序列化"></a>缓存序列化与反序列化</h3><h3 id="内存访问速度"><a href="#内存访问速度" class="headerlink" title="内存访问速度"></a>内存访问速度</h3><p>   <img src="http://p0.meituan.net/education/1f8745786a2934b3dea4fee5ef2bd764564463.png" alt=""></p>
 <table>
 <thead>
 <tr>
@@ -407,7 +411,77 @@ masterauth &lt;master-password&gt;   //主节点的密码
 </tr>
 </tbody>
 </table>
-
+<h3 id="固态硬盘SSD与机械硬盘HDD"><a href="#固态硬盘SSD与机械硬盘HDD" class="headerlink" title="固态硬盘SSD与机械硬盘HDD"></a>固态硬盘SSD与机械硬盘HDD</h3><table>
+<thead>
+<tr>
+<th>项目</th>
+<th style="text-align:center">SSD</th>
+<th style="text-align:center">HDD</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>容 量</td>
+<td style="text-align:center">较小</td>
+<td style="text-align:center">大</td>
+</tr>
+<tr>
+<td>价 格</td>
+<td style="text-align:center">贵</td>
+<td style="text-align:center">便宜</td>
+</tr>
+<tr>
+<td>随机存取</td>
+<td style="text-align:center">极快</td>
+<td style="text-align:center">便宜</td>
+</tr>
+<tr>
+<td>写入次数</td>
+<td style="text-align:center">SLC:10万次/MLC:1万次</td>
+<td style="text-align:center">无限制</td>
+</tr>
+<tr>
+<td>防震能力</td>
+<td style="text-align:center">很好</td>
+<td style="text-align:center">较差</td>
+</tr>
+<tr>
+<td>数据恢复</td>
+<td style="text-align:center">难</td>
+<td style="text-align:center">容易</td>
+</tr>
+</tbody>
+</table>
+<h3 id="RAID磁盘阵列"><a href="#RAID磁盘阵列" class="headerlink" title="RAID磁盘阵列"></a>RAID磁盘阵列</h3><pre><code>RAID （ Redundant Array of Independent Disks ）即独立磁盘冗余阵列，简称为「磁盘阵列」，
+其实就是用多个独立的磁盘组成在一起形成一个大的磁盘系统，从而实现比单块磁盘更好的存储性能和更高的可靠性
+</code></pre><h4 id="RAID0"><a href="#RAID0" class="headerlink" title="RAID0"></a>RAID0</h4><pre><code>RAID0 是一种非常简单的的方式，它将多块磁盘组合在一起形成一个大容量的存储。
+当我们要写数据的时候，会将数据分为N份，以独立的方式实现N块磁盘的读写，那么这N份数据会同时并发的写到磁盘中，因此执行性能非常的高
+但RAID0的问题是，它并不提供数据校验或冗余备份，因此一旦某块磁盘损坏了，数据就直接丢失，无法恢复了。
+因此RAID0就不可能用于高要求的业务中，但可以用在对可靠性要求不高，对读写性能要求高的场景中
+</code></pre><h4 id="RAID1"><a href="#RAID1" class="headerlink" title="RAID1"></a>RAID1</h4><pre><code>RAID1 是磁盘阵列中单位成本最高的一种方式。因为它的原理是在往磁盘写数据的时候，
+将同一份数据无差别的写两份到磁盘，分别写到工作磁盘和镜像磁盘，那么它的实际空间使用率只有50%了，
+两块磁盘当做一块用，这是一种比较昂贵的方案
+数据的可靠性非常强，但性能就没那么好了
+</code></pre><h4 id="RAID5"><a href="#RAID5" class="headerlink" title="RAID5"></a>RAID5</h4><pre><code>RAID5模式中，不再需要用单独的磁盘写校验码了。它把校验码信息分布到各个磁盘上。
+例如，总共有N块磁盘，那么会将要写入的数据分成N份，并发的写入到N块磁盘中，
+同时还将数据的校验码信息也写入到这N块磁盘中（数据与对应的校验码信息必须得分开存储在不同的磁盘上）。
+一旦某一块磁盘损坏了，就可以用剩下的数据和对应的奇偶校验码信息去恢复损坏的数据
+RAID5的方式，最少需要三块磁盘来组建磁盘阵列，允许最多同时坏一块磁盘。
+如果有两块磁盘同时损坏了，那数据就无法恢复了
+</code></pre><h2 id="Guava-Cache"><a href="#Guava-Cache" class="headerlink" title="Guava Cache"></a>Guava Cache</h2><h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><p>   轻量级单机缓存，缓存存放在内存里面，不像ehcache支持缓存数据落地磁盘<br>   可以将程序频繁用到的少量数据存储到Guava Cache中<br>   guava支持多重缓存失效策略，同时支持缓存并发</p>
+<p>###</p>
+<h2 id="JSR-107-cache规范"><a href="#JSR-107-cache规范" class="headerlink" title="JSR-107 cache规范"></a>JSR-107 cache规范</h2><h3 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖</h3><pre><code>&lt;dependency&gt;
+  &lt;groupId&gt;javax.cache&lt;/groupId&gt;
+  &lt;artifactId&gt;cache-api&lt;/artifactId&gt;
+  &lt;version&gt;1.0.0&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre><h3 id="核心接口"><a href="#核心接口" class="headerlink" title="核心接口"></a>核心接口</h3><pre><code>. CachingProvider
+定义了建立，配置，得到，管理和控制0个或多个CacheManager，一个应用在运行时可能访问0个或者多个CachingProvider。
+2.CacheManager
+它定义了建立，配置，得到，管理和控制0个或多个有着唯一名字的Cache ，一个CacheManager被包含在单一的CachingProvider.
+3. Cache
+Cache是一个Map类型的数据结构，用来存储基于键的数据，很多方面都像java.util.Map数据类型。一个Cache 存在在单一的CacheManager.
+</code></pre>
       
     </div>
 
@@ -521,7 +595,7 @@ masterauth &lt;master-password&gt;   //主节点的密码
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">39</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -598,7 +672,7 @@ masterauth &lt;master-password&gt;   //主节点的密码
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#redis主从"><span class="nav-number">1.</span> <span class="nav-text">redis主从</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#配置文件"><span class="nav-number">1.1.</span> <span class="nav-text">配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#客户端实现"><span class="nav-number">1.2.</span> <span class="nav-text">客户端实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#缺点"><span class="nav-number">1.3.</span> <span class="nav-text">缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#redis-Sentinel"><span class="nav-number">1.4.</span> <span class="nav-text">redis Sentinel</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redis集群"><span class="nav-number">2.</span> <span class="nav-text">redis集群</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存穿透、并发、失效、一致性"><span class="nav-number">3.</span> <span class="nav-text">缓存穿透、并发、失效、一致性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#穿透"><span class="nav-number">3.1.</span> <span class="nav-text">穿透</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#并发"><span class="nav-number">3.2.</span> <span class="nav-text">并发</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#失效"><span class="nav-number">3.3.</span> <span class="nav-text">失效</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一致性"><span class="nav-number">3.4.</span> <span class="nav-text">一致性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#缓存雪崩"><span class="nav-number">3.5.</span> <span class="nav-text">缓存雪崩</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#memcache"><span class="nav-number">4.</span> <span class="nav-text">memcache</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#缓存序列化与反序列化"><span class="nav-number">4.1.</span> <span class="nav-text">缓存序列化与反序列化</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内存访问速度"><span class="nav-number">5.</span> <span class="nav-text">内存访问速度</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概念"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存乱用"><span class="nav-number">1.1.</span> <span class="nav-text">缓存乱用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存穿透、并发、失效、一致性"><span class="nav-number">1.2.</span> <span class="nav-text">缓存穿透、并发、失效、一致性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#穿透"><span class="nav-number">1.2.1.</span> <span class="nav-text">穿透</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#并发"><span class="nav-number">1.2.2.</span> <span class="nav-text">并发</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#失效"><span class="nav-number">1.2.3.</span> <span class="nav-text">失效</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一致性"><span class="nav-number">1.2.4.</span> <span class="nav-text">一致性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#缓存雪崩"><span class="nav-number">1.2.5.</span> <span class="nav-text">缓存雪崩</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis相关"><span class="nav-number">2.</span> <span class="nav-text">redis相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#redis主从"><span class="nav-number">2.1.</span> <span class="nav-text">redis主从</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#配置文件"><span class="nav-number">2.1.1.</span> <span class="nav-text">配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#客户端实现"><span class="nav-number">2.1.2.</span> <span class="nav-text">客户端实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#缺点"><span class="nav-number">2.1.3.</span> <span class="nav-text">缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#redis-Sentinel"><span class="nav-number">2.1.4.</span> <span class="nav-text">redis Sentinel</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redis集群"><span class="nav-number">2.2.</span> <span class="nav-text">redis集群</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#memcache"><span class="nav-number">3.</span> <span class="nav-text">memcache</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存序列化与反序列化"><span class="nav-number">3.1.</span> <span class="nav-text">缓存序列化与反序列化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内存访问速度"><span class="nav-number">3.2.</span> <span class="nav-text">内存访问速度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#固态硬盘SSD与机械硬盘HDD"><span class="nav-number">3.3.</span> <span class="nav-text">固态硬盘SSD与机械硬盘HDD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RAID磁盘阵列"><span class="nav-number">3.4.</span> <span class="nav-text">RAID磁盘阵列</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#RAID0"><span class="nav-number">3.4.1.</span> <span class="nav-text">RAID0</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RAID1"><span class="nav-number">3.4.2.</span> <span class="nav-text">RAID1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RAID5"><span class="nav-number">3.4.3.</span> <span class="nav-text">RAID5</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Guava-Cache"><span class="nav-number">4.</span> <span class="nav-text">Guava Cache</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用场景"><span class="nav-number">4.1.</span> <span class="nav-text">使用场景</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JSR-107-cache规范"><span class="nav-number">5.</span> <span class="nav-text">JSR-107 cache规范</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#依赖"><span class="nav-number">5.1.</span> <span class="nav-text">依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#核心接口"><span class="nav-number">5.2.</span> <span class="nav-text">核心接口</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -621,7 +695,7 @@ masterauth &lt;master-password&gt;   //主节点的密码
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

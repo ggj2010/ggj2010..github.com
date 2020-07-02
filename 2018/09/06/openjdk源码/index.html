@@ -87,18 +87,18 @@
 
 
 
-<meta name="description" content="下载地址：http://jdk.java.net/java-se-ri/7 java native源码目录 jdk/src/share/native 比如要找 如何查看源码例如：Thread.java的start0()的native方法源码  private native void start0();  1、registerNatives如果想调用本地方法，必须要先声明registerNative">
+<meta name="description" content="下载地址：http://jdk.java.net/java-se-ri/7 或者：https://github.com/openjdk-mirror/jdk7u-hotspot java native源码目录 jdk/src/share/native 比如要找 如何查看源码例如：Thread.java的start0()的native方法源码  private native void start0(">
 <meta name="keywords" content="jvm">
 <meta property="og:type" content="article">
 <meta property="og:title" content="openjdk源码">
 <meta property="og:url" content="http://ggj2010.github.io/2018/09/06/openjdk源码/index.html">
 <meta property="og:site_name" content="高广金博客">
-<meta property="og:description" content="下载地址：http://jdk.java.net/java-se-ri/7 java native源码目录 jdk/src/share/native 比如要找 如何查看源码例如：Thread.java的start0()的native方法源码  private native void start0();  1、registerNatives如果想调用本地方法，必须要先声明registerNative">
+<meta property="og:description" content="下载地址：http://jdk.java.net/java-se-ri/7 或者：https://github.com/openjdk-mirror/jdk7u-hotspot java native源码目录 jdk/src/share/native 比如要找 如何查看源码例如：Thread.java的start0()的native方法源码  private native void start0(">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-06T07:39:21.000Z">
+<meta property="og:updated_time" content="2020-06-16T11:40:10.230Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="openjdk源码">
-<meta name="twitter:description" content="下载地址：http://jdk.java.net/java-se-ri/7 java native源码目录 jdk/src/share/native 比如要找 如何查看源码例如：Thread.java的start0()的native方法源码  private native void start0();  1、registerNatives如果想调用本地方法，必须要先声明registerNative">
+<meta name="twitter:description" content="下载地址：http://jdk.java.net/java-se-ri/7 或者：https://github.com/openjdk-mirror/jdk7u-hotspot java native源码目录 jdk/src/share/native 比如要找 如何查看源码例如：Thread.java的start0()的native方法源码  private native void start0(">
 
 
 
@@ -354,15 +354,17 @@
 
       
         <h3 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h3><pre><code>地址：http://jdk.java.net/java-se-ri/7
+或者：https://github.com/openjdk-mirror/jdk7u-hotspot
 </code></pre><h3 id="java-native源码目录"><a href="#java-native源码目录" class="headerlink" title="java native源码目录"></a>java native源码目录</h3><pre><code> jdk/src/share/native
 比如要找
 </code></pre><h3 id="如何查看源码"><a href="#如何查看源码" class="headerlink" title="如何查看源码"></a>如何查看源码</h3><pre><code>例如：Thread.java的start0()的native方法源码
- private native void start0(); 
-</code></pre><h4 id="1、registerNatives"><a href="#1、registerNatives" class="headerlink" title="1、registerNatives"></a>1、registerNatives</h4><pre><code>如果想调用本地方法，必须要先声明registerNatives
- private static native void registerNatives();
-     static {
-         registerNatives();
-     }  
+ private native void start0();
+</code></pre><h4 id="1、registerNatives"><a href="#1、registerNatives" class="headerlink" title="1、registerNatives"></a>1、registerNatives</h4><pre><code> 如果想调用本地方法，必须要先声明registerNatives
+private static native void registerNatives();
+    static {
+        registerNatives();
+    }
+}
 </code></pre>
       
     </div>
@@ -483,7 +485,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">39</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -583,7 +585,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

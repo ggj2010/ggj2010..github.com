@@ -98,7 +98,7 @@
 <meta property="og:image" content="http://p1.meituan.net/education/5a6029aa779cb3abe8f905205e9d90f9131912.png">
 <meta property="og:image" content="http://p1.meituan.net/education/15f0eaa78bd37faf90c1385c51e964f474213.png">
 <meta property="og:image" content="http://p1.meituan.net/education/b617a455e66cc3f7880951f0531f177a28590.png">
-<meta property="og:updated_time" content="2018-10-08T13:33:24.000Z">
+<meta property="og:updated_time" content="2020-06-17T12:20:29.636Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="gc相关记录">
 <meta name="twitter:description" content="重新整理下以前的笔记，jvm的参数随着jdk变更会有坑，比如线上用的jdk1.8，却使用废弃的参数。所以不要单纯的拷贝网上的配置。 虚拟机运行时数据区域方法区，堆都是线程共享的数据区域，虚拟机栈和本地方法栈还有程序计数器都是线程隔离的数据区     程序计数器：【1】作用可以定义成查看当前线程所执行的字节码的行号指示器，字节码解释器工作时就是通过改变这个计时器的值来选取下一条需要执行的字节码指令。">
@@ -364,44 +364,61 @@
   例如分支，循环异常。线程恢复等功能，
 【2】因为多线程是通过线程轮流切换来实现的。在任何一个指定的时刻，一个处理器指挥处理一条线程中的指令，
  所以每个线程都需要一个独立的程序计数器，是线程私有
-【3】如果线程执行的是ntive方法 则计数器为空。此区域是唯一一个在虚拟机规范中没有任何OutMemoryError
+【3】如果线程执行的是native方法 则计数器为空。此区域是唯一一个在虚拟机规范中没有任何OutMemoryError
 </code></pre><h4 id="java虚拟机栈stack"><a href="#java虚拟机栈stack" class="headerlink" title="java虚拟机栈stack"></a>java虚拟机栈stack</h4><pre><code>【1】线程私有，描述的是Java方法的内存模型。每个方法被执行都会创建一个栈帧用来存放局部变量表，操作栈、动态链接等。
 【2】局部变量表存放了各种基本数据类型 boolean byte char short int float long double 、
   对象的引用 reference类型（可能是对象起始地址的引用指针）
 【3】64位的长度long和double的数据会占用两个局部变量空间（Sloat）【会导致线程安全问题】，其余的都只占用一个。
-【4】局部变量表所需要的内存空间都是在编译器完成分配的，在方法运行期间不会改变局部变量表的大小。全局变量是在堆里面，
+【4】局部变量表所需要的内存空间都是在编译器完成分配的，在方法运行期间不会改变局部变量表的大小。
 【5】 线程请求栈深度大于虚拟机允许的深度会抛出StackOverFlowError,如果虚拟机可以动态扩展，
     当扩展无法申请到足够的内存会抛出OutOfMemoryError异常
-  一般通过 -Xss 设置栈的大小  
+  一般通过 -Xss 设置栈的大小
 </code></pre><h4 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h4><pre><code>【1】 与虚拟机栈发挥作用相似，区别在于本地方法栈执行的是虚拟机使用到的Native方法。而虚拟机栈使用的是java方法服务。
 【2】 线程请求栈深度大于虚拟机允许的深度会抛出StackOverFlowError。如果虚拟机可以动态扩展，
-    当扩展无法申请到足够的内存会抛出OutOfMemoryError异常 
+    当扩展无法申请到足够的内存会抛出OutOfMemoryError异常
 </code></pre><h4 id="java堆-heap"><a href="#java堆-heap" class="headerlink" title="java堆 heap"></a>java堆 heap</h4><pre><code>【1】Java Heap 是java虚拟机中管理内存最大的一块，所有线程共享的一块内存区域。虚拟机启动时候创建，
 目的就是存放对象实例，几乎所有对象都在这里分配内存。
 【2】Java 虚拟机规范中描述：所有的对象实例以及数组都要在堆上面分配内存。
-【3】Java 堆是垃圾收集器管理的主要区域。java堆可分为：新生代和老年代。 再细致点有Eden空间、From Survivor 空间、To Survivor空间, 
+【3】Java 堆是垃圾收集器管理的主要区域。java堆可分为：新生代和老年代。 再细致点有Eden空间、From Survivor 空间、To Survivor空间,
 【4】Java 堆处于物理上不连续的内存空间中。可以通过设定 -Xmx 和 -Xms设定jvm堆内存大小
 </code></pre><h4 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h4><pre><code>【1】、多个线程共享内存区域，用于存储已被虚拟机加载的类信息、静态变量，及时编译器后的代码。
 【2】、垃圾收集行为在这个区域是比较少出现的
+ jdk1.8之后常量池、静态成员变量等迁移到了堆中
 </code></pre><h4 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h4><pre><code>是方法区的一个部分，.class文件中除了有类的版本、字段、方法、接口等信息外，
 还有常量池用于存放编译期生成的各种字面量的符号引用，这部分内容将在类加载后存放到方法区的运行时常量池，可以在运行期间将常量放入池中。
 一般通过-XX:PermSize -XX:MaxPremSize设定值
 </code></pre><h4 id="本机内存"><a href="#本机内存" class="headerlink" title="本机内存"></a>本机内存</h4><pre><code>（-XX:MaxDirectMemorySize指定。）如果不指定那就是默认和java堆的最大值一样
 </code></pre><h3 id="堆和栈常用参数"><a href="#堆和栈常用参数" class="headerlink" title="堆和栈常用参数"></a>堆和栈常用参数</h3><p>   <a href="https://www.cnblogs.com/redcreen/archive/2011/05/04/2037057.html" target="_blank" rel="external">jvm参数</a></p>
-<h4 id="java堆："><a href="#java堆：" class="headerlink" title="java堆："></a>java堆：</h4><pre><code> -Xms2560m -Xmx2560m 则表示限制java堆大小为2560MB，且不可扩展。
+<h4 id="java堆："><a href="#java堆：" class="headerlink" title="java堆："></a>java堆：</h4><pre><code>  永久代不属于堆内存，堆内存只包含新生代和老年代
+ -Xms2560m -Xmx2560m 则表示限制java堆大小为2560MB，且不可扩展。
 -Xmn1024M
-   如果新生代有最大和最小值那就用 -XX:newSize、-XX:MaxnewSize两个参数的同时配置。
-    如果 -XX:newSize = -XX:MaxnewSize　其实可以直接使用Xmn
-    设置年轻代大小，此处的大小是（eden+ 2 survivor space).与jmap -heap中显示的New gen是不同的
--XX:NewRatio=3  
-    设置年轻代（包括Eden和两个Survivor区）与年老代的比值（除去持久代）
-    表示年轻代与年老代比值为1：3，年轻代占整个年轻代年老代和的1/4
+   如果新生代有最大和最小值那就用 -XX:NewSize、-XX:MaxNewSize两个参数的同时配置。
+    如果 -XX:NewSize = -XX:MaxNewSize　其实可以直接使用Xmn
+    设置新生代大小，此处的大小是（eden+ 2 survivor space).与jmap -heap中显示的New gen是不同的
+-XX:NewRatio=3
+    设置新生代（包括Eden和两个Survivor区）与年老代的比值（除去持久代）
+    表示新生代与年老代比值为1：3，新生代占整个堆内存的1/4
     如果Xms=Xmx并且设置了Xmn的情况下，该参数不需要进行设置
 -XX:SurvivorRatio=8
-    设置年轻中Eden区与Survivor区的大小比值 如果是SurvivorRatio=8 则就是2：8 一个Survivor则为1/10
+    设置新生代Eden区与Survivor区的大小比值 如果是SurvivorRatio=8 则就是2：8 一个Survivor则为1/10
+    新生代可用内存为eden+单个Survivor 90%新生代大小
+    无论什么时候总有一块Survivor为空
+    from Survivor区域与To Survivor区域是交替切换空间，在同一时间内两者中只有一个不为空
+    如果对象的复制次数达到默认（16）次，该对象就会被送到老年代中
+</code></pre><h5 id="为什么要有Survivor区域"><a href="#为什么要有Survivor区域" class="headerlink" title="为什么要有Survivor区域"></a>为什么要有Survivor区域</h5><pre><code>如果没有survivor区域，eden区域每次minor gc 存活的对象都会直接进入老年代，老年代很快被撑满，从而触发Major GC（full gc）
+一般老年代的内存空间远大于新生代 所以gc 耗时时间更长
+</code></pre><p> 假设不用Survivor，以下两种方案都无法解决gc问题<br> | 方案 | 优点 | 缺点 |<br> | - | :-: |<br> |加大老年代空间    |更多存活对象才能填满老年代。|降低Full GC频率    随着老年代空间加大，一旦发生Full GC，执行所需要的时间更长<br> |减少老年代空间    |Full GC所需时间减少    |老年代很快被存活对象填满，Full GC频率增加</p>
+<h5 id="为什么要有Survivor区域需要两个"><a href="#为什么要有Survivor区域需要两个" class="headerlink" title="为什么要有Survivor区域需要两个"></a>为什么要有Survivor区域需要两个</h5><pre><code>设置两个Survivor区最大的好处就是解决了碎片化
+因为复制算法就是利用新生代98%朝夕生死的特性，存活的对象很少，如果只有一个区域
+那么gc时候无法解决内存碎片的问题。
 </code></pre><h4 id="java栈："><a href="#java栈：" class="headerlink" title="java栈："></a>java栈：</h4><pre><code>-Xss256k  设置java线程栈的大小，如果程序 StackOverflow就需要将xss设置大一点
-</code></pre><h4 id="java永久代："><a href="#java永久代：" class="headerlink" title="java永久代："></a>java永久代：</h4><pre><code>-XX:PermSize=384m # 永久代默认初始大小（方法区，类、接口、方法等）jdk1.8已经不支持了，换成 -XX:MetaspaceSize
+线程启动后，只是会去先占用相应的栈大小的地址空间，但不会真正去占用内存，只有在真正需要使用的时候才会去占用；
+如果是在32bit机器上执行，Java进程会直接crash，原因是32 bit的linux默认每个进程最多申请3G的地址空间
+</code></pre><h4 id="java永久代："><a href="#java永久代：" class="headerlink" title="java永久代："></a>java永久代：</h4><pre><code>-XX:PermSize=384m # 永久代默认初始大小（方法区，类、接口、方法等）jdk1.8已经不支持了，
+换成 -XX:MetaspaceSize
 -XX:MaxPermSize=512m # 永久代最大值 jdk1.8已经不支持了，换成 -XX:MaxMetaspaceSize
+元空间并不在虚拟机中，而是使用本地内存
+JDK8之后，取消了永久代，提出了元空间，并且常量池、静态成员变量等迁移到了堆中
 </code></pre><h3 id="gc相关"><a href="#gc相关" class="headerlink" title="gc相关"></a>gc相关</h3><pre><code>那些内存需要回收，什么时候回收，如何回收。
 </code></pre><h4 id="可达性分析算法"><a href="#可达性分析算法" class="headerlink" title="可达性分析算法"></a>可达性分析算法</h4><pre><code>通过一系列的名为‘GC Roots’的对象作为起始点，从这些节点开始向下所搜，搜索所走过的路径为引用链，
 当一个对象到GC Roots没有任何引用链相连时，则证明此对象是不可用的，简单来说就是GC Roots到这个对象不可达。
@@ -416,8 +433,8 @@
 或者已经被虚拟机调用过，因为finalize（）方法只会执行一次。
 如果finalize方法已经被执行。代表没必要进行筛选。那就直接回收了
 如果对象判定为有必要执行finalize方法，对象会被放置在一个f-queue队列中。
-由虚拟机建立的finalizer低优先级的线程去执行。如果对象在finalize成功拯救自己－重新与引用链上面任何一个对象建立关联，
-那么在第二次标记时候就会移出去 
+由虚拟机建立的finalizer低优先级的线程去执行。如果对象在finalize成功拯救自己－重新与引用链上面任何
+一个对象建立关联，那么在第二次标记时候就会移出去
 </code></pre><h4 id="收集算法"><a href="#收集算法" class="headerlink" title="收集算法"></a>收集算法</h4><h5 id="引用计数算法"><a href="#引用计数算法" class="headerlink" title="引用计数算法"></a>引用计数算法</h5><pre><code>堆中的每个对象有一个引用计数器（初始值为0），当有引用连接对象的时候，引用计数器加1。垃圾回收器开始作用的时候，
 会在堆中遍历，把引用计数为0的对象都释放
 缺点：无法释放循环引用
@@ -430,9 +447,10 @@
 缺点:内存缩小一半，效率不高。
 如果老年代使用这种算法，那就是需要较多复制操作，不适合
 将可用内存按照容量划分为大小相等的两块，每次都只使用其中的一块，当这一块内存用完，就将还存活着的对象复制到另外一块上面，
-然后再把已经使用过的内存空间一次清理掉。这样使得每次都是对其中一块进行内存回收。 
-</code></pre><h5 id="分代收集算法"><a href="#分代收集算法" class="headerlink" title="分代收集算法"></a>分代收集算法</h5><pre><code>根据对象的存活周期不同将内存划分为新生代和老年代，存活周期短的为新生代，存活周期长的为老年代。这样就可以根据每块内存的特点采用最适当的收集算法。 
-新生代的中每次垃圾收集中会发现有大批对象死区，只有少量存活，那就选用复制算法，只需要付出少量存活对象的复制成本就可以完成收集。 
+然后再把已经使用过的内存空间一次清理掉。这样使得每次都是对其中一块进行内存回收。
+</code></pre><h5 id="分代收集算法"><a href="#分代收集算法" class="headerlink" title="分代收集算法"></a>分代收集算法</h5><pre><code>根据对象的存活周期不同将内存划分为新生代和老年代，存活周期短的为新生代，存活周期长的为老年代。
+这样就可以根据每块内存的特点采用最适当的收集算法。新生代的中每次垃圾收集中会发现有大批对象死区，
+只有少量存活，那就选用复制算法，只需要付出少量存活对象的复制成本就可以完成收集。
 老年代中因为对象的存活率高，没有额外的控件对它进行分配担保，就必须使用“标记-清扫”或者“标记-整理”算法来进行回收。
 </code></pre><h4 id="Java垃圾收集器的历史"><a href="#Java垃圾收集器的历史" class="headerlink" title="Java垃圾收集器的历史"></a>Java垃圾收集器的历史</h4><h5 id="Serial收集器-简称（Copy）"><a href="#Serial收集器-简称（Copy）" class="headerlink" title="Serial收集器 简称（Copy）"></a>Serial收集器 简称（Copy）</h5><pre><code>特点：针对新生代，采用复制算法；单线程收集；
 serial收集器是java虚拟机最早的收集器，主要收集新生代，进行垃圾回收时候回出现stop the world
@@ -442,27 +460,31 @@ serial收集器是java虚拟机最早的收集器，主要收集新生代，进�
 应用场景：在Server模式下，ParNew收集器是一个非常重要的收集器，因为除Serial外，目前只有它能与CMS收集器配合工作
 parnew收集器主要收集新生代，是Serial收集器的多线程版本，停顿低
 -XX:+USeParNewGC 打开并发标记扫描垃圾回收器，jdk1.8默认是关闭的
--XX:+ParallelGCThreads 指定垃圾收集的线程数量，ParNew默认开启的收集线程与CPU的数量相同 
+-XX:+ParallelGCThreads 指定垃圾收集的线程数量，ParNew默认开启的收集线程与CPU的数量相同
 如果使用cms收集器后，新生代会默认使用ParNew作为新生代收集器
 </code></pre><h5 id="Parallel-Scavenge-收集器-简称（PS-Scavenge）"><a href="#Parallel-Scavenge-收集器-简称（PS-Scavenge）" class="headerlink" title="Parallel Scavenge 收集器 简称（PS Scavenge）"></a>Parallel Scavenge 收集器 简称（PS Scavenge）</h5><pre><code>特点：新生代收集器，采用复制算法，多线程收集；
 应用场景：当应用程序运行在具有多个CPU上，对暂停时间没有特别高的要求时，即程序主要在后台进行计算，而不需要与用户进行太多交互；
 例如，那些执行批量处理、订单处理、工资支付、科学计算的应用程序
 Parallel收集器也是收集新生代，并行收集，吞吐量优先，会自动调节
 并行是指多条垃圾收集线程并行工作，如果服务器只有单核单cpu是无法并行的
-XX:+UseParallelGC 开启并行收集器，jdk1.8默认是开启的 
-XX:+UseAdaptiveSizePolicy 开启GC自适应的调节策略，jdk1.8默认是开启的 
+XX:+UseParallelGC 开启并行收集器，jdk1.8默认是开启的
+XX:+UseAdaptiveSizePolicy 开启GC自适应的调节策略，jdk1.8默认是开启的
+
+在YGC前还会进行一次判断，如果要分配的内存&gt;=Eden区大小的一半，
+那么会直接把要分配的内存放入老年代中。否则才会进入担保机制。
+如果晋升到老生代的平均大小大于老生代的剩余大小，则会返回true，认为需要一次full gc
 </code></pre><h5 id="Serial-Old收集器-俗称（MarkSweepCompact）"><a href="#Serial-Old收集器-俗称（MarkSweepCompact）" class="headerlink" title="Serial Old收集器 俗称（MarkSweepCompact）"></a>Serial Old收集器 俗称（MarkSweepCompact）</h5><pre><code>特点针：对老年代，采用&quot;标记-整理&quot;算法（还有压缩，Mark-Sweep-Compact），单线程收集；
 serial收集器的老年代版本，作为CMS收集器的后备预案，在并发收集发生Concurrent Mode Failure时使用
 -XX:+UseSerialOldGC jdk1.8 已经没有这个参数
 </code></pre><h5 id="Parallel-Old收集器-简称（PS-MarkSweep）"><a href="#Parallel-Old收集器-简称（PS-MarkSweep）" class="headerlink" title="Parallel Old收集器 简称（PS MarkSweep）"></a>Parallel Old收集器 简称（PS MarkSweep）</h5><pre><code>特点：针对老年代；采用&quot;标记-整理&quot;算法；多线程收集；
 Parallel old 是并行收集器Parallel Scavenge收集器的老年代版本
-通过JVM参数 -XX:+UseParallelOldGC jdk1.8默认是开启的 
+通过JVM参数 -XX:+UseParallelOldGC jdk1.8默认是开启的
 </code></pre><h5 id="cms收集器-俗称-ConcurrentMarkSweep"><a href="#cms收集器-俗称-ConcurrentMarkSweep" class="headerlink" title="cms收集器 俗称 ConcurrentMarkSweep"></a>cms收集器 俗称 ConcurrentMarkSweep</h5><pre><code>cms收集器也称为并发低停顿收集器，
 特点：针对老年代，基于&quot;标记-清除&quot;算法(不进行压缩操作，产生内存碎片)，以获取最短回收停顿时间为目标；
 并发收集、低停顿；需要更多的内存
 应用场景：与用户交互较多的场景；希望系统停顿时间最短，注重服务的响应速度；以给用户带来较好的体验；
 如常见WEB、B/S系统的服务器上的应用
-通过jvm参数 -XX:+UseConcMarkSweepGC 开启 jdk1.8默认是关闭的 
+通过jvm参数 -XX:+UseConcMarkSweepGC 开启 jdk1.8默认是关闭的
 </code></pre><h6 id="cms-gc触发机制"><a href="#cms-gc触发机制" class="headerlink" title="cms-gc触发机制"></a>cms-gc触发机制</h6><pre><code>分两种类型：定时GC和主动GC
 </code></pre><ul>
 <li>定时GC</li>
@@ -471,7 +493,7 @@ Parallel old 是并行收集器Parallel Scavenge收集器的老年代版本
 如果老年代满足gc条件就会进行gc操作,那么什么时候满足gc条件了
 1、 -XX:CMSInitiatingOccupancyFraction 老年代的使用值达到阈值jdk默认是-1
 任何负值都是使用-XX:CMSTriggerRatio选项来定义这个百分比数，也就是默认80%
-2、 -XX:CMSInitiatingPermOccupancyFraction 当永久代的使用值达到阀值 
+2、 -XX:CMSInitiatingPermOccupancyFraction 当永久代的使用值达到阀值
     jdk1.8已经没有这个参数了
 3、新生代的晋升担保失败（触发full gc）
 这个地方有个坑，如果没有设置-XX:+UseCMSInitiatingOccupancyOnly，默认关闭，jvm只会在第一次gc时候
@@ -483,7 +505,7 @@ Parallel old 是并行收集器Parallel Scavenge收集器的老年代版本
 <pre><code>1、YGC过程发生Promotion Failed，进而对老年代进行回收
 
 2、比如执行了System.gc()，前提是没有参数ExplicitGCInvokesConcurrent
-主动GC开始时，需要判断本次GC是否要对老年代的空间进行Compact（因为长时间的周期性GC会造成大量的碎片空间） 
+主动GC开始时，需要判断本次GC是否要对老年代的空间进行Compact（因为长时间的周期性GC会造成大量的碎片空间）
 其中参数UseCMSCompactAtFullCollection(默认true)和 CMSFullGCsBeforeCompaction(默认0)，
 所以默认每次的主动GC都会对老年代的内存空间进行压缩，就是把对象移动到内存的最左边。
 带压缩动作的算法，称为MSC，标记-清理-压缩，采用单线程，全暂停的方式进行垃圾收集，暂停时间很长很长
@@ -517,29 +539,29 @@ Parallel old 是并行收集器Parallel Scavenge收集器的老年代版本
 </code></pre><ul>
 <li>重置</li>
 </ul>
-<pre><code>CMS清除内部状态，为下次回收做准备。 
+<pre><code>CMS清除内部状态，为下次回收做准备。
 </code></pre><ul>
 <li>完整的cmsjdk gc日志</li>
 </ul>
 <pre><code>加参数 -XX:+PrintGCDetails 可以打印出来日志。
-[GC (CMS Initial Mark) [1 CMS-initial-mark: 6146K(10240K)] 10796K(19456K), 0.0002795 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
+[GC (CMS Initial Mark) [1 CMS-initial-mark: 6146K(10240K)] 10796K(19456K), 0.0002795 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]
 [CMS-concurrent-mark-start]
-[CMS-concurrent-mark: 0.000/0.000 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
+[CMS-concurrent-mark: 0.000/0.000 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]
 [CMS-concurrent-preclean-start]
-[CMS-concurrent-preclean: 0.000/0.000 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
+[CMS-concurrent-preclean: 0.000/0.000 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]
 [CMS-concurrent-abortable-preclean-start]
-[CMS-concurrent-abortable-preclean: 0.000/0.000 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
-[GC (CMS Final Remark) [YG occupancy: 4650 K (9216 K)][Rescan (parallel) , 0.0003093 secs][weak refs processing, 0.0000420 secs][class unloading, 0.0003072 secs][scrub symbol table, 0.0005371 secs][scrub string table, 0.0001305 secs][1 CMS-remark: 6146K(10240K)] 10796K(19456K), 0.0013804 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
+[CMS-concurrent-abortable-preclean: 0.000/0.000 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]
+[GC (CMS Final Remark) [YG occupancy: 4650 K (9216 K)][Rescan (parallel) , 0.0003093 secs][weak refs processing, 0.0000420 secs][class unloading, 0.0003072 secs][scrub symbol table, 0.0005371 secs][scrub string table, 0.0001305 secs][1 CMS-remark: 6146K(10240K)] 10796K(19456K), 0.0013804 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]
 [CMS-concurrent-sweep-start]
-[CMS-concurrent-sweep: 0.000/0.000 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
+[CMS-concurrent-sweep: 0.000/0.000 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]
 [CMS-concurrent-reset-start]
-[CMS-concurrent-reset: 0.000/0.000 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]   
+[CMS-concurrent-reset: 0.000/0.000 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]
 </code></pre><h6 id="cms执行过程优化"><a href="#cms执行过程优化" class="headerlink" title="cms执行过程优化"></a>cms执行过程优化</h6><ul>
 <li>如何确定老年代的对象活着的？</li>
 </ul>
 <pre><code>根据可达性分析算法可以直接到达的对象就是存活的，
 但是如果某个对象的gc-root链路下图所示 gcroot--&gt;新生代对象--&gt;老年代对象
-</code></pre><p><img src="http://p1.meituan.net/education/15f0eaa78bd37faf90c1385c51e964f474213.png" alt="">  </p>
+</code></pre><p><img src="http://p1.meituan.net/education/15f0eaa78bd37faf90c1385c51e964f474213.png" alt=""></p>
 <pre><code>那么我们在老年代gc的时候,如何保证上图Current Obj标记为活着，因为新生代可能随时被回收。
 所以必须要扫描新生代来担保，这也是cms是老年代的gc，但是还要扫描新生代的原因。
 </code></pre><ul>
@@ -569,23 +591,49 @@ Parallel old 是并行收集器Parallel Scavenge收集器的老年代版本
 CMS将老年代的空间分成大小为512bytes的块，card table中的每个元素对应着一个块。
 并发标记时，如果某个对象的引用发生了变化，就标记该对象所在的块为  dirty card。
 并发预清理阶段就会重新扫描该块，将该对象引用的对象标识为可达。
-</code></pre><h5 id="g1-Garbage-First-收集器"><a href="#g1-Garbage-First-收集器" class="headerlink" title="g1(Garbage-First)收集器"></a>g1(Garbage-First)收集器</h5><pre><code>通过jvm参数 -XX:+UseG1GC 开启 jdk1.8默认是关闭的
+</code></pre><h5 id="g1-Garbage-First-收集器"><a href="#g1-Garbage-First-收集器" class="headerlink" title="g1(Garbage-First)收集器"></a>g1(Garbage-First)收集器</h5><pre><code>   通过jvm参数 -XX:+UseG1GC 开启 jdk1.8默认是关闭的， Java 9 开始，采用 G1 作为默认垃圾收集器
+G1 可以并发完成大部分 GC 的工作，这期间不会“Stop-The-World”。
+，这使 G1 能够有效地处理非常大的堆。此外，G1 可以同时收集新生代和年老代。
+G1 并没有将 Java 堆分成三个空间（Eden、Survivor 和 Old），而是将堆分成许多（通常是几百个）非常小的区域。
+这些区域是固定大小的（默认情况下大约为 2MB）。每个区域都分配给一个空间。
+
+G1 还有一个较关键的参数是-XX:MaxGCPauseMillis = n
+，这个参数是用来限制最大的 GC 暂停时间，目的是尽量不影响请求处理的响应时间。
+G1 将根据先前收集的信息以及检测到的垃圾量，估计它可以立即收集的最大区域数量，
+从而尽量保证 GC 时间不会超出这个限制。因此 G1 相对来说更加“智能”，使用起来更加简单。
 </code></pre><h4 id="垃圾收集器组合"><a href="#垃圾收集器组合" class="headerlink" title="垃圾收集器组合"></a>垃圾收集器组合</h4><pre><code>新生代收集器：Serial、ParNew、Parallel Scavenge；
 老年代收集器：Serial Old、Parallel Old、CMS；
 整堆收集器：G1；
-</code></pre><p>   <img src="http://p1.meituan.net/education/b617a455e66cc3f7880951f0531f177a28590.png" alt="">    </p>
+</code></pre><p>   <img src="http://p1.meituan.net/education/b617a455e66cc3f7880951f0531f177a28590.png" alt=""></p>
 <h4 id="内存分配"><a href="#内存分配" class="headerlink" title="内存分配"></a>内存分配</h4><pre><code>对象优先在新生代分配，除非特定情况才会直接分配到老年代
-</code></pre><h5 id="对象如何进入老年代"><a href="#对象如何进入老年代" class="headerlink" title="对象如何进入老年代"></a>对象如何进入老年代</h5><pre><code>大对象直接进去老年代：
+</code></pre><h5 id="对象如何进入老年代"><a href="#对象如何进入老年代" class="headerlink" title="对象如何进入老年代"></a>对象如何进入老年代</h5><pre><code>1、大对象直接进去老年代：
 可以通过设置-XX:PretenureSizeThreshold设置大小，如果对象大于这个值直接进入老年代。
-长期存活对象进入老年代：
-可以通过MaxTenuringThreshold设定次数，如果对象在eden经历过一次minor gc还存活，就会被移到survivor空间，则对象年龄加一，当年龄达到默认十五则进入老年代。     
-动态对象年龄判定：
-如果在新生代存活区中相同年龄所有对象大小的总和大于存活区的一半，年龄大于或等于该年龄的对象就会直接进入老年代。 
+2、长期存活对象进入老年代：
+可以通过MaxTenuringThreshold设定次数，如果对象在eden经历过一次minor gc还存活，就会被移到survivor空间，
+则对象年龄加一，当年龄达到默认15则进入老年代。
+3、动态对象年龄判定：
+为了能更好地适应不同程度的内存状况，虚拟机并不是永远地要求对象的年龄必须达到了MaxTenuringThreshold才能晋升到老年代
+如果在新生代存活区中相同年龄所有对象大小的总和大于存活区的一半，年龄大于或等于该年龄的对象就会直接进入老年代。
 比如现在存活区有三个对象，Age分别为2、2、3。那么Age为3的这个对象就会进入老年代。
-</code></pre><h4 id="内存回收策略"><a href="#内存回收策略" class="headerlink" title="内存回收策略"></a>内存回收策略</h4><h5 id="什么情况才有minor-gc"><a href="#什么情况才有minor-gc" class="headerlink" title="什么情况才有minor gc"></a>什么情况才有minor gc</h5><pre><code>对象优先在Eden分配，当eden不够用就发起minor Gc，该GC仅回收年轻代。需要强调的时，年轻代满是指Eden代满，Survivor满不会引发GC。
-</code></pre><h5 id="什么情况才有fullgc"><a href="#什么情况才有fullgc" class="headerlink" title="什么情况才有fullgc"></a>什么情况才有fullgc</h5><pre><code>当年老代满时会引发Full GC，Full GC将会同时回收年轻代、年老代。或者这样说fullgc就是老年代的gc
-当永久代满时也会引发Full GC，会导致Class、Method元信息的卸载 
-fullgc会导致stop world 整个应用等待gc完成才可以被使用
+4、Eden区满时，进行Minor GC，当Eden和一个Survivor区中依然存活的对象无法放入到Survivor中，
+则通过分配担保机制提前转移到老年代中
+
+内存分配是在JVM在内存分配的时候，新生代内存不足时，把新生代的存活的对象搬到老生代，
+然后新生代腾出来的空间用于为分配给最新的对象。这里老生代是担保人。
+在不同的GC机制下，也就是不同垃圾回收器组合下，担保机制也略有不同。
+在Serial+Serial Old的情况下，发现放不下就直接启动担保机制；
+在Parallel Scavenge+Serial Old的情况下，
+却是先要去判断一下要分配的内存是不是&gt;=Eden区大小的一半，
+如果是那么直接把该对象放入老生代，否则才会启动担保机制。
+</code></pre><h4 id="内存回收策略"><a href="#内存回收策略" class="headerlink" title="内存回收策略"></a>内存回收策略</h4><h5 id="什么情况才有minor-gc"><a href="#什么情况才有minor-gc" class="headerlink" title="什么情况才有minor gc"></a>什么情况才有minor gc</h5><pre><code>对象优先在Eden分配，当eden不够用就发起minor Gc，该GC仅回收新生代 存活的对象放到Survivor from
+需要强调的时，新生代满是指Eden代满，Survivor满不会引发GC。
+新创建的对象都会被分配到Eden区(如果该对象占用内存非常大，则直接分配到老年代区),
+当Eden区内存不够的时候就会触发MinorGC（Survivor满不会引发MinorGC，而是将对象移动到老年代中）
+
+
+ 当年老代满时会引发Full GC，Full GC将会同时回收新生代、年老代。或者这样说fullgc就是老年代的gc
+ 当永久代满时也会引发Full GC，会导致Class、Method元信息的卸载
+ fullgc会导致stop world 整个应用等待gc完成才可以被使用
 </code></pre><h5 id="cms回收期产生fullgc条件"><a href="#cms回收期产生fullgc条件" class="headerlink" title="cms回收期产生fullgc条件"></a>cms回收期产生fullgc条件</h5><pre><code>对于CMS，JVM产生Full GC，需要满足以下任一条件
 1、老年代使用情况超过阈值，由XX:CMSInitiatingOccupancyFraction确定；
  当老年大的大小占用堆的比例超过设定值除非fullgc
@@ -595,14 +643,33 @@ fullgc会导致stop world 整个应用等待gc完成才可以被使用
    解决办法：+XX:CMSInitiatingOccupancyFraction，调大老年带的空间，+XX:CMSMaxAbortablePrecleanTime
 3、Promotion Failure，晋升担保失败
     是在进行Minor GC时，survivor space放不下、对象只能放入老年代，而此时老年代也放不下造成的
-    第一个原因是救助空间不够，救助空间里的对象还不应该被移动到年老代，但年轻代又有很多对象需要放入救助空间；
-    第二个原因是年老代没有足够的空间接纳来自年轻代的对象；这两种情况都会转向Full GC，网站停顿时间较长。
+    第一个原因是救助空间不够，救助空间里的对象还不应该被移动到年老代，但新生代又有很多对象需要放入救助空间；
+    第二个原因是老年代没有足够的空间接纳来自新生代的对象；这两种情况都会转向Full GC，网站停顿时间较长。
     解决办法：-XX:UseCMSCompactAtFullCollection -XX:CMSFullGCBeforeCompaction=5 或者调大新生代或者Survivor空间
 4、System.gc()方法；
-5、jmap dump/histo:live命令        
-</code></pre><h3 id="jvm-默认参数"><a href="#jvm-默认参数" class="headerlink" title="jvm 默认参数"></a>jvm 默认参数</h3><pre><code>  启动的时候加上-XX:+PrintFlagsFinal -XX:+PrintGCTimeStamps 会打印jvm启动时候默认加载的参数
-  下面是jdk1.8.0_144的启动参数，不同的jdk版本默认开启的参数都不一样。
-   常用功能：
+5、jmap dump/histo:live命令
+</code></pre><h3 id="jdk8-推荐jvm参数"><a href="#jdk8-推荐jvm参数" class="headerlink" title="jdk8 推荐jvm参数"></a>jdk8 推荐jvm参数</h3><pre><code>-Xms2560m -Xmx2560m -Xss256k -XX:NewRatio=3 # 限制 java 堆大小为 2560MB，且不可扩展
+-XX:+UseConcMarkSweepGC 开启cms gc
+-XX:CMSInitiatingOccupancyFraction=80
+-XX:+UseCMSInitiatingOccupancyOnly #如果没有这个参数, jvm只有第一次cms gc会使用 CMSInitiatingPermOccupancyFraction=80 这个值，后面的情况会自动调整
+-XX:+DisableExplicitGC #设置后自动将System.gc()调用转换成一个空操作
+-XX:+ExplicitGCInvokesConcurrent # 当使用 CMS 时希望又保留部分 System.gc() 的功能，只不过这种情况下触发的不是系统GC，而是 CMS GC
+-XX:+HeapDumpOnOutOfMemory
+ -XX:HeapDumpPath=path
+ -XX:+PrintGCDetails
+</code></pre><h3 id="Java的对象头"><a href="#Java的对象头" class="headerlink" title="Java的对象头"></a>Java的对象头</h3><pre><code>每一个Java类，在被JVM加载的时候，JVM会给这个类创建一个instanceKlass，保存在方法区，用来在JVM层表示该Java类。
+当我们在Java代码中，使用new创建一个对象的时候，JVM会创建一个instanceOopDesc对象，这个对象中包含了对象头以及实例数据
+</code></pre><h4 id="对齐"><a href="#对齐" class="headerlink" title="对齐"></a>对齐</h4><pre><code>class X {                      // 8 字节-指向class定义的引用
+   int a;                      // 4 字节
+   byte b;                     // 1 字节
+   Integer c = new Integer();  // 4 字节的引用
+}
+
+新手可能会认为, 一个X类的实例占用17字节的空间。 但由于需要对齐,也可称为补齐(padding),
+JVM分配的内存是8字节的整数倍, 所以占用的空间不是17字节,而是24字节
+</code></pre><h4 id="Object-o-new-Object（）在内存中占了多少字节"><a href="#Object-o-new-Object（）在内存中占了多少字节" class="headerlink" title="Object o = new Object（）在内存中占了多少字节"></a>Object o = new Object（）在内存中占了多少字节</h4><p>   在64位JVM中, 对象头占据的空间是 12-byte(=96bit=64+32), 但是以8字节对齐, 所以一个空类的实例至少占用16字节。<br>   在32位JVM中, 对象头占8个字节, 以4的倍数对齐(32=4*8)。</p>
+<h3 id="jvm-默认参数"><a href="#jvm-默认参数" class="headerlink" title="jvm 默认参数"></a>jvm 默认参数</h3><p>  <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/vm/gctuning/ergonomics.html#sthref5" target="_blank" rel="external">官方文档</a><br>      启动的时候加上-XX:+PrintFlagsFinal -XX:+PrintGCTimeStamps 会打印jvm启动时候默认加载的参数<br>      XX:+PrintCommandLineFlags 打印初始启动的参数<br>      下面是jdk1.8.0_144的启动参数，不同的jdk版本默认开启的参数都不一样。<br>      默认的堆栈大小参数<br>       -XX:InitialHeapSize=268435456<br>        initial heap size（默认初始大小， 物理内存的64分之一，或者合理的最小值。 我的机器物理内存是16G, 因此默认就是0.25G， 也就是256M）<br>       -XX:MaxHeapSize=4294967296<br>        maximum heap size（默认最大堆, 物理内存的四分之一，或者1G。 我机器物理内存16G， 默认最大值就是4G）</p>
+<pre><code>   常用功能：
    -XX:+HeapDumpOnOutOfMemory 当内存溢出时候可以dump出java堆里面的信息，
    -XX:HeapDumpPath=path 设置具体dump的路径
 
@@ -1333,7 +1400,7 @@ ccstrlist OnOutOfMemoryError                        =                           
     uintx YoungPLABSize                             = 4096                                {product}
      bool ZeroTLAB                                  = false                               {product}
      intx hashCode                                  = 5                                   {product}
-</code></pre><h2 id="参考博客"><a href="#参考博客" class="headerlink" title="参考博客"></a>参考博客</h2><p>   <a href="http://ifeve.com/useful-jvm-flags-part-7-cms-collector/" target="_blank" rel="external">JVM实用参数（七）CMS收集器</a><br>   <a href="http://www.cnblogs.com/littleLord/p/5380624.html" target="_blank" rel="external">详解CMS垃圾回收机制</a><br>   <a href="https://www.jianshu.com/p/2a1b2f17d3e4" target="_blank" rel="external">图解CMS垃圾回收机制，你值得拥有</a><br>   <a href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html" target="_blank" rel="external">jvm 参数</a>    </p>
+</code></pre><h2 id="参考博客"><a href="#参考博客" class="headerlink" title="参考博客"></a>参考博客</h2><p>   <a href="http://ifeve.com/useful-jvm-flags-part-7-cms-collector/" target="_blank" rel="external">JVM实用参数（七）CMS收集器</a><br>   <a href="http://www.cnblogs.com/littleLord/p/5380624.html" target="_blank" rel="external">详解CMS垃圾回收机制</a><br>   <a href="https://www.jianshu.com/p/2a1b2f17d3e4" target="_blank" rel="external">图解CMS垃圾回收机制，你值得拥有</a><br>   <a href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html" target="_blank" rel="external">jvm 参数</a></p>
 
       
     </div>
@@ -1454,7 +1521,7 @@ ccstrlist OnOutOfMemoryError                        =                           
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">39</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1531,7 +1598,7 @@ ccstrlist OnOutOfMemoryError                        =                           
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#虚拟机运行时数据区域"><span class="nav-number">1.</span> <span class="nav-text">虚拟机运行时数据区域</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#程序计数器："><span class="nav-number">1.1.</span> <span class="nav-text">程序计数器：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java虚拟机栈stack"><span class="nav-number">1.2.</span> <span class="nav-text">java虚拟机栈stack</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#本地方法栈"><span class="nav-number">1.3.</span> <span class="nav-text">本地方法栈</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java堆-heap"><span class="nav-number">1.4.</span> <span class="nav-text">java堆 heap</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方法区"><span class="nav-number">1.5.</span> <span class="nav-text">方法区</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运行时常量池"><span class="nav-number">1.6.</span> <span class="nav-text">运行时常量池</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#本机内存"><span class="nav-number">1.7.</span> <span class="nav-text">本机内存</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#堆和栈常用参数"><span class="nav-number">2.</span> <span class="nav-text">堆和栈常用参数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#java堆："><span class="nav-number">2.1.</span> <span class="nav-text">java堆：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java栈："><span class="nav-number">2.2.</span> <span class="nav-text">java栈：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java永久代："><span class="nav-number">2.3.</span> <span class="nav-text">java永久代：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gc相关"><span class="nav-number">3.</span> <span class="nav-text">gc相关</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#可达性分析算法"><span class="nav-number">3.1.</span> <span class="nav-text">可达性分析算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#收集算法"><span class="nav-number">3.2.</span> <span class="nav-text">收集算法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#引用计数算法"><span class="nav-number">3.2.1.</span> <span class="nav-text">引用计数算法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#标记-清除算法"><span class="nav-number">3.2.2.</span> <span class="nav-text">标记-清除算法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#标记-整理算法"><span class="nav-number">3.2.3.</span> <span class="nav-text">标记-整理算法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#复制算法"><span class="nav-number">3.2.4.</span> <span class="nav-text">复制算法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#分代收集算法"><span class="nav-number">3.2.5.</span> <span class="nav-text">分代收集算法</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Java垃圾收集器的历史"><span class="nav-number">3.3.</span> <span class="nav-text">Java垃圾收集器的历史</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Serial收集器-简称（Copy）"><span class="nav-number">3.3.1.</span> <span class="nav-text">Serial收集器 简称（Copy）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ParNew收集器-简称（ParNew）"><span class="nav-number">3.3.2.</span> <span class="nav-text">ParNew收集器 简称（ParNew）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Parallel-Scavenge-收集器-简称（PS-Scavenge）"><span class="nav-number">3.3.3.</span> <span class="nav-text">Parallel Scavenge 收集器 简称（PS Scavenge）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Serial-Old收集器-俗称（MarkSweepCompact）"><span class="nav-number">3.3.4.</span> <span class="nav-text">Serial Old收集器 俗称（MarkSweepCompact）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Parallel-Old收集器-简称（PS-MarkSweep）"><span class="nav-number">3.3.5.</span> <span class="nav-text">Parallel Old收集器 简称（PS MarkSweep）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#cms收集器-俗称-ConcurrentMarkSweep"><span class="nav-number">3.3.6.</span> <span class="nav-text">cms收集器 俗称 ConcurrentMarkSweep</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#cms-gc触发机制"><span class="nav-number">3.3.6.1.</span> <span class="nav-text">cms-gc触发机制</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#cms执行过程"><span class="nav-number">3.3.6.2.</span> <span class="nav-text">cms执行过程</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#cms执行过程优化"><span class="nav-number">3.3.6.3.</span> <span class="nav-text">cms执行过程优化</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#g1-Garbage-First-收集器"><span class="nav-number">3.3.7.</span> <span class="nav-text">g1(Garbage-First)收集器</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#垃圾收集器组合"><span class="nav-number">3.4.</span> <span class="nav-text">垃圾收集器组合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#内存分配"><span class="nav-number">3.5.</span> <span class="nav-text">内存分配</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#对象如何进入老年代"><span class="nav-number">3.5.1.</span> <span class="nav-text">对象如何进入老年代</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#内存回收策略"><span class="nav-number">3.6.</span> <span class="nav-text">内存回收策略</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#什么情况才有minor-gc"><span class="nav-number">3.6.1.</span> <span class="nav-text">什么情况才有minor gc</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#什么情况才有fullgc"><span class="nav-number">3.6.2.</span> <span class="nav-text">什么情况才有fullgc</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#cms回收期产生fullgc条件"><span class="nav-number">3.6.3.</span> <span class="nav-text">cms回收期产生fullgc条件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jvm-默认参数"><span class="nav-number">4.</span> <span class="nav-text">jvm 默认参数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考博客"><span class="nav-number"></span> <span class="nav-text">参考博客</span></a></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#虚拟机运行时数据区域"><span class="nav-number">1.</span> <span class="nav-text">虚拟机运行时数据区域</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#程序计数器："><span class="nav-number">1.1.</span> <span class="nav-text">程序计数器：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java虚拟机栈stack"><span class="nav-number">1.2.</span> <span class="nav-text">java虚拟机栈stack</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#本地方法栈"><span class="nav-number">1.3.</span> <span class="nav-text">本地方法栈</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java堆-heap"><span class="nav-number">1.4.</span> <span class="nav-text">java堆 heap</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方法区"><span class="nav-number">1.5.</span> <span class="nav-text">方法区</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运行时常量池"><span class="nav-number">1.6.</span> <span class="nav-text">运行时常量池</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#本机内存"><span class="nav-number">1.7.</span> <span class="nav-text">本机内存</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#堆和栈常用参数"><span class="nav-number">2.</span> <span class="nav-text">堆和栈常用参数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#java堆："><span class="nav-number">2.1.</span> <span class="nav-text">java堆：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#为什么要有Survivor区域"><span class="nav-number">2.1.1.</span> <span class="nav-text">为什么要有Survivor区域</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#为什么要有Survivor区域需要两个"><span class="nav-number">2.1.2.</span> <span class="nav-text">为什么要有Survivor区域需要两个</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java栈："><span class="nav-number">2.2.</span> <span class="nav-text">java栈：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java永久代："><span class="nav-number">2.3.</span> <span class="nav-text">java永久代：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gc相关"><span class="nav-number">3.</span> <span class="nav-text">gc相关</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#可达性分析算法"><span class="nav-number">3.1.</span> <span class="nav-text">可达性分析算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#收集算法"><span class="nav-number">3.2.</span> <span class="nav-text">收集算法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#引用计数算法"><span class="nav-number">3.2.1.</span> <span class="nav-text">引用计数算法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#标记-清除算法"><span class="nav-number">3.2.2.</span> <span class="nav-text">标记-清除算法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#标记-整理算法"><span class="nav-number">3.2.3.</span> <span class="nav-text">标记-整理算法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#复制算法"><span class="nav-number">3.2.4.</span> <span class="nav-text">复制算法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#分代收集算法"><span class="nav-number">3.2.5.</span> <span class="nav-text">分代收集算法</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Java垃圾收集器的历史"><span class="nav-number">3.3.</span> <span class="nav-text">Java垃圾收集器的历史</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Serial收集器-简称（Copy）"><span class="nav-number">3.3.1.</span> <span class="nav-text">Serial收集器 简称（Copy）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ParNew收集器-简称（ParNew）"><span class="nav-number">3.3.2.</span> <span class="nav-text">ParNew收集器 简称（ParNew）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Parallel-Scavenge-收集器-简称（PS-Scavenge）"><span class="nav-number">3.3.3.</span> <span class="nav-text">Parallel Scavenge 收集器 简称（PS Scavenge）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Serial-Old收集器-俗称（MarkSweepCompact）"><span class="nav-number">3.3.4.</span> <span class="nav-text">Serial Old收集器 俗称（MarkSweepCompact）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Parallel-Old收集器-简称（PS-MarkSweep）"><span class="nav-number">3.3.5.</span> <span class="nav-text">Parallel Old收集器 简称（PS MarkSweep）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#cms收集器-俗称-ConcurrentMarkSweep"><span class="nav-number">3.3.6.</span> <span class="nav-text">cms收集器 俗称 ConcurrentMarkSweep</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#cms-gc触发机制"><span class="nav-number">3.3.6.1.</span> <span class="nav-text">cms-gc触发机制</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#cms执行过程"><span class="nav-number">3.3.6.2.</span> <span class="nav-text">cms执行过程</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#cms执行过程优化"><span class="nav-number">3.3.6.3.</span> <span class="nav-text">cms执行过程优化</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#g1-Garbage-First-收集器"><span class="nav-number">3.3.7.</span> <span class="nav-text">g1(Garbage-First)收集器</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#垃圾收集器组合"><span class="nav-number">3.4.</span> <span class="nav-text">垃圾收集器组合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#内存分配"><span class="nav-number">3.5.</span> <span class="nav-text">内存分配</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#对象如何进入老年代"><span class="nav-number">3.5.1.</span> <span class="nav-text">对象如何进入老年代</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#内存回收策略"><span class="nav-number">3.6.</span> <span class="nav-text">内存回收策略</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#什么情况才有minor-gc"><span class="nav-number">3.6.1.</span> <span class="nav-text">什么情况才有minor gc</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#cms回收期产生fullgc条件"><span class="nav-number">3.6.2.</span> <span class="nav-text">cms回收期产生fullgc条件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jdk8-推荐jvm参数"><span class="nav-number">4.</span> <span class="nav-text">jdk8 推荐jvm参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java的对象头"><span class="nav-number">5.</span> <span class="nav-text">Java的对象头</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#对齐"><span class="nav-number">5.1.</span> <span class="nav-text">对齐</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Object-o-new-Object（）在内存中占了多少字节"><span class="nav-number">5.2.</span> <span class="nav-text">Object o = new Object（）在内存中占了多少字节</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jvm-默认参数"><span class="nav-number">6.</span> <span class="nav-text">jvm 默认参数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考博客"><span class="nav-number"></span> <span class="nav-text">参考博客</span></a></div>
             
 
           </div>
@@ -1554,7 +1621,7 @@ ccstrlist OnOutOfMemoryError                        =                           
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

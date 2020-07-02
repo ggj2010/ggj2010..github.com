@@ -1,0 +1,951 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="抽象类实现接口某个方法，再定义抽象方法抽象类定义的抽象方法都是让子类实现的，也就是说扩展的抽象方法都在子类定制，共性的方法都可以在抽象类里面实现 例如下面这个例子，我们想在某个接口方法执行的时候 再执行某些自定义方法 就可以再抽象类里面实现这个接口方法，然后再定义几个抽象方法让子类去实现 public interface Job {   void execute(JobExecutionConte">
+<meta property="og:type" content="article">
+<meta property="og:title" content="个人代码库速查">
+<meta property="og:url" content="http://ggj2010.github.io/2020/02/26/个人代码库速查/index.html">
+<meta property="og:site_name" content="高广金博客">
+<meta property="og:description" content="抽象类实现接口某个方法，再定义抽象方法抽象类定义的抽象方法都是让子类实现的，也就是说扩展的抽象方法都在子类定制，共性的方法都可以在抽象类里面实现 例如下面这个例子，我们想在某个接口方法执行的时候 再执行某些自定义方法 就可以再抽象类里面实现这个接口方法，然后再定义几个抽象方法让子类去实现 public interface Job {   void execute(JobExecutionConte">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-06-07T05:14:24.989Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="个人代码库速查">
+<meta name="twitter:description" content="抽象类实现接口某个方法，再定义抽象方法抽象类定义的抽象方法都是让子类实现的，也就是说扩展的抽象方法都在子类定制，共性的方法都可以在抽象类里面实现 例如下面这个例子，我们想在某个接口方法执行的时候 再执行某些自定义方法 就可以再抽象类里面实现这个接口方法，然后再定义几个抽象方法让子类去实现 public interface Job {   void execute(JobExecutionConte">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://ggj2010.github.io/2020/02/26/个人代码库速查/"/>
+
+
+
+
+
+  <title> 个人代码库速查 | 高广金博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">高广金博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-webmagic">
+          <a href="http://scedai.com/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            爬虫
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://ggj2010.github.io/2020/02/26/个人代码库速查/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ggj2010">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="高广金博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                个人代码库速查
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-26T00:28:08+08:00">
+                2020-02-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="抽象类实现接口某个方法，再定义抽象方法"><a href="#抽象类实现接口某个方法，再定义抽象方法" class="headerlink" title="抽象类实现接口某个方法，再定义抽象方法"></a>抽象类实现接口某个方法，再定义抽象方法</h3><pre><code>抽象类定义的抽象方法都是让子类实现的，也就是说扩展的抽象方法都在子类定制，共性的方法都可以在抽象类里面实现
+例如下面这个例子，我们想在某个接口方法执行的时候 再执行某些自定义方法
+就可以再抽象类里面实现这个接口方法，然后再定义几个抽象方法让子类去实现
+public interface Job {
+  void execute(JobExecutionContext context)
+        throws JobExecutionException;
+}
+public abstract class AbstractJob implements Job {
+public abstract void beforeExecuteJob(JobExecutionContext jobExecutionContext) throws JobExecutionException;
+public abstract void afterExecuteJob(JobExecutionContext jobExecutionContext) throws JobExecutionException;
+public abstract void executeJob(JobExecutionContext jobExecutionContext) throws JobExecutionException;
+    @Override
+public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+    this.beforeExecuteJob(jobExecutionContext);
+    MasterSelector masterSelector = MasterSelector.getInstance();
+    if (masterSelector.isMaster()) {
+        masterSelector.increaseJobNum();
+        try {
+            long excuteTimeOut = jobExecutionContext.getJobDetail().getJobDataMap().getLong(Constants.TASK_EXCUETE_TIMEOUT_KEY);
+            Future&lt;?&gt; future = ExcuteTaskThreadPool.getThreadPoolExecutor().submit(new Thread(() -&gt; {
+                try {
+                    executeJob(jobExecutionContext);
+                } catch (JobExecutionException e) {
+                    log.error(&quot;excute job error&quot;);
+                }
+            }));
+            future.get(excuteTimeOut, TimeUnit.MINUTES);
+        } catch (Exception e) {
+            log.error(&quot;excute job timeout&quot;, e);
+            //TODO 报警监控
+        }  finally {
+            masterSelector.decreaseJobNum();
+        }
+    }
+    this.afterExecuteJob(jobExecutionContext);
+}
+}
+</code></pre><h3 id="抽象类-策略模式"><a href="#抽象类-策略模式" class="headerlink" title="抽象类+策略模式"></a>抽象类+策略模式</h3><pre><code>父类定义的抽象方法子类都要实现，有时候某些方法不想子类实现，我们就可以使用
+抽象类+接口方式，如果子类一旦有点多，都实现这个接口就没发做到代码重用，
+这时候就可以使用策略模式
+例如下面的flyable 就是变化的部分，我们把变化的部分抽象成接口
+abstarct class Duck{
+ @Setter
+ Flyable flyable;
+ public void swim(){
+ //
+ }
+
+ public abstract void display();
+
+ public void performFly(){
+    flyable.fly();
+ }
+}
+
+public interface Flyable{
+ void flay();
+}
+
+public class FlyWithWing implements Flyable{
+   public void fly(){
+   //....
+   }
+}
+
+public class GreenDuck extends Duck{
+   public GreenDuck(){
+    this.flyable=new FlyWithWing();
+   }
+
+   @Override
+   public void display(){
+
+   }
+}
+</code></pre><h3 id="double-check"><a href="#double-check" class="headerlink" title="double check"></a>double check</h3><pre><code>private final Map&lt;String, String&gt; myCache = new ConcurrentHashMap&lt;String, String&gt;(256);
+   public String getValue(String name) {
+       String value = myCache.get(name);
+       //check one
+       if (value == null) {
+           synchronized (this.myCache) {
+               value = myCache.get(name);
+               //check two
+               if (value == null) {
+                   value = getValueFromDB();
+               }
+               myCache.put(value, value);
+           }
+       }
+       return value;
+   }
+
+   public String getValueFromDB() {
+       return new Random().nextInt(100) + &quot;&quot;;
+   }
+
+ // booolean 类型double check
+ private volatile boolean isInitialized = false;
+ if (!isInitialized) {
+     synchronized (Object.class) {
+       if (!isInitialized) {
+       //....
+       isInitialized=true;
+       }
+</code></pre><h3 id="去锁cas-boolean"><a href="#去锁cas-boolean" class="headerlink" title="去锁cas-boolean"></a>去锁cas-boolean</h3><pre><code>private static AtomicBoolean flag = new AtomicBoolean();
+
+public void test(){
+    if (flag.compareAndSet(false, true)) {
+    ///
+    }else{
+    ////
+    }
+}
+</code></pre><h3 id="去锁-future"><a href="#去锁-future" class="headerlink" title="去锁-future"></a>去锁-future</h3><pre><code>假如有这样一个业务场景，从数据库里面查询某个key的值，并将查询到的值缓存到本地。
+如果并发的去查询某个key的值，怎么保证只会调用一次数据库。
+
+//有锁版本-上面的double check
+protected String getWithLock(String key, String defaultValue) {
+        ConfigValue configValue = readCache(key);
+        if (configValue == null) {
+            synchronized (object) {
+                configValue = readCache(key);
+                if (configValue == null) {
+                    configValue = get(key);
+                    writeCache(key, configValue);
+                }
+            }
+        }
+   return configValue.getValue() == null ? defaultValue : configValue.getValue();
+ }
+
+//无锁版本
+ private ConcurrentMap&lt;String, ConfigFuture&gt; configFutures = new ConcurrentHashMap&lt;String, ConfigFuture&gt;();
+ protected String get(String key, String defaultValue) {
+        //读
+        ConfigValue configValue = readCache(key);
+        if (configValue == null) {
+            ConfigFuture existingFuture = null;
+            //无锁版本1
+            ConfigFuture future = new ConfigFuture(key);
+            //putIfAbsent可以巧妙避免同时生成多个future
+            existingFuture = configFutures.putIfAbsent(key, future);
+            if (existingFuture != null) {
+                log.info(&quot;wait future&quot;);
+                // wait for other threads to load the config
+                try {
+                    configValue = existingFuture.get();
+                } catch (Exception e) {
+                }
+            } else {
+                // load the config and notify other threads
+                try {
+                    configValue = get(key);
+                    future.setResult(configValue);
+                    writeCache(key, configValue);
+                } catch (Exception e) {
+                    future.setResult(e);
+                } finally {
+                    configFutures.remove(key);
+                }
+            }
+
+
+            //无锁版本2 多次穿透数据库,多线程可能会生成多个，new ConfigFuture
+               /*ConfigFuture future2 = configFutures.get(key);
+               if(future2==null){
+                   future2 = configFutures.get(key);
+                   if(future2==null){
+                       log.info(&quot;future2 is null&quot;);
+                       configFutures.put(key, new ConfigFuture(key));
+                       configValue = get(key);
+                       writeCache(key, configValue);
+                   }
+                   //dd
+               }else{
+                   try {
+                       configValue = future2.get();
+                   } catch (Exception e) {
+                  }
+              }*/
+
+
+ }
+
+ //自定义future
+ public class ConfigFuture implements Future&lt;ConfigValue&gt; {
+
+     private String key;
+     private CountDownLatch latch;
+     private Object result;
+
+     public ConfigFuture(String key) {
+         this.key = key;
+         latch = new CountDownLatch(1);
+     }
+
+     @Override
+     public boolean cancel(boolean arg0) {
+         return false;
+     }
+
+     @Override
+     public ConfigValue get() throws InterruptedException, ExecutionException {
+         latch.await();
+         if (result instanceof Throwable) {
+             throw new ExecutionException((Throwable) result);
+         }
+         return (ConfigValue) result;
+     }
+
+     @Override
+     public ConfigValue get(long arg0, TimeUnit arg1)
+             throws InterruptedException, ExecutionException, TimeoutException {
+         latch.await(arg0, arg1);
+         if (result instanceof Throwable) {
+             throw new ExecutionException((Throwable) result);
+         }
+         return (ConfigValue) result;
+     }
+
+     @Override
+     public boolean isCancelled() {
+         return false;
+     }
+
+     @Override
+     public boolean isDone() {
+         return result != null;
+     }
+
+     public void setResult(Object result) {
+         this.result = result;
+         latch.countDown();
+     }
+
+ }
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/06/word导出堆内存优化记录/" rel="next" title="word导出堆内存优化记录">
+                <i class="fa fa-chevron-left"></i> word导出堆内存优化记录
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/04/05/十万个为什么总结系列/" rel="prev" title="十万个为什么总结系列">
+                十万个为什么总结系列 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg"
+               alt="ggj2010" />
+          <p class="site-author-name" itemprop="name">ggj2010</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ggj2010" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/ggjlvzjy" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#抽象类实现接口某个方法，再定义抽象方法"><span class="nav-number">1.</span> <span class="nav-text">抽象类实现接口某个方法，再定义抽象方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#抽象类-策略模式"><span class="nav-number">2.</span> <span class="nav-text">抽象类+策略模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#double-check"><span class="nav-number">3.</span> <span class="nav-text">double check</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#去锁cas-boolean"><span class="nav-number">4.</span> <span class="nav-text">去锁cas-boolean</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#去锁-future"><span class="nav-number">5.</span> <span class="nav-text">去锁-future</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ggj2010</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

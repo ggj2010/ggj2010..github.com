@@ -98,8 +98,7 @@
 <meta property="og:image" content="https://tech.meituan.com/img/dp_account_high_avaliable_road/account_multi_alive_redis_before.png">
 <meta property="og:image" content="https://tech.meituan.com/img/dp_account_high_avaliable_road/account_sync_dirty_data.png">
 <meta property="og:image" content="https://tech.meituan.com/img/dp_account_high_avaliable_road/account_multi_alive_redis_after.png">
-<meta property="og:image" content="http://ggj2010.github.io/2018/06/14/技术阅读笔记/%22https://tech.meituan.com/2017/12/22/ddd-in-practice.html%27">
-<meta property="og:updated_time" content="2019-04-08T12:09:58.694Z">
+<meta property="og:updated_time" content="2020-04-05T15:38:09.485Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="技术阅读笔记">
 <meta name="twitter:description" content="好记性不如烂笔头。 日志级别动态调整   日志级别动态调整——小工具解决大问题     日志是每个项目必备的组件，这几年从开始工作接触的log4j到后来的logback，再到现在用的log4j2,日志文件 的查看从最开始的登录单台机器查看，到shell脚本一次性查看多台机器，再到后来ELK搜索搭建的可视化日志查询 系统。     日志使用不当对于高qps的服务来说会导致的线上严重的故障，所以统一化">
@@ -426,7 +425,7 @@ Redis不能使用一主多从，因为Redis主从同步机制会优先尝试增�
 同时也可以解耦缓存更新的逻辑
 </code></pre><p>   <img src="https://tech.meituan.com/img/dp_account_high_avaliable_road/account_multi_alive_redis_after.png" alt=""></p>
 <pre><code>同时还需要一个定时任务去scan两地的数据做对比统计
-</code></pre><h4 id="领域驱动设计（DDD）"><a href="#领域驱动设计（DDD）" class="headerlink" title="领域驱动设计（DDD）"></a>领域驱动设计（DDD）</h4><p>   <img src="&quot;https://tech.meituan.com/2017/12/22/ddd-in-practice.html&#39;" alt="大家一直在谈的领域驱动设计（DDD），我们在互联网业务系统是这么实践的"></p>
+</code></pre><h4 id="领域驱动设计（DDD）"><a href="#领域驱动设计（DDD）" class="headerlink" title="领域驱动设计（DDD）"></a>领域驱动设计（DDD）</h4><p>   <a href="https://tech.meituan.com/2017/12/22/ddd-in-practice.html" target="_blank" rel="external">大家一直在谈的领域驱动设计（DDD），我们在互联网业务系统是这么实践的</a></p>
 <pre><code>1、敏捷实践中的重构、测试驱动设计及持续集成可以对付各种混乱问题，但是重构出来的类没有业务上的含义
 只能给予一个技术维度描绘的含义，这就会导致其他人开发需求的时候不会将业务问题对应到重构后的设计模型，
 导致代码继续重构
@@ -456,6 +455,7 @@ Aggregate(聚合）是一组相关对象的集合，作为一个整体被外界�
 防腐层亦称适配层
 领域行为封装到领域对象中，将资源管理行为封装到资源库中，将外部上下文的交互行为封装到防腐层中，
 领域服务就是通过串联领域对象、资源库和防腐层等一系列领域内的对象的行为，对其他上下文提供交互的接口。
+</code></pre><h4 id="微服务如何拆分"><a href="#微服务如何拆分" class="headerlink" title="微服务如何拆分"></a>微服务如何拆分</h4><pre><code>微服务划分的姿势
 </code></pre><h4 id="如何高效的提问"><a href="#如何高效的提问" class="headerlink" title="如何高效的提问"></a>如何高效的提问</h4><p>   ![](<a href="http://p0.meituan.net/education/81e90fe7a3a31ee68a892e79830fb61b209197.png" target="_blank" rel="external">http://p0.meituan.net/education/81e90fe7a3a31ee68a892e79830fb61b209197.png</a></p>
 <p>)</p>
 
@@ -572,7 +572,7 @@ Aggregate(聚合）是一组相关对象的集合，作为一个整体被外界�
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">39</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -649,7 +649,7 @@ Aggregate(聚合）是一组相关对象的集合，作为一个整体被外界�
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#日志级别动态调整"><span class="nav-number">1.</span> <span class="nav-text">日志级别动态调整</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#mysql-性能容量评估"><span class="nav-number">2.</span> <span class="nav-text">mysql 性能容量评估</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#达达-高性能服务端优化之路"><span class="nav-number">3.</span> <span class="nav-text">达达-高性能服务端优化之路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#大众点评账号业务高可用进阶之路"><span class="nav-number">4.</span> <span class="nav-text">大众点评账号业务高可用进阶之路</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#异地多活"><span class="nav-number">4.1.</span> <span class="nav-text">异地多活</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#数据同步"><span class="nav-number">4.2.</span> <span class="nav-text">数据同步</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#领域驱动设计（DDD）"><span class="nav-number">5.</span> <span class="nav-text">领域驱动设计（DDD）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何高效的提问"><span class="nav-number">6.</span> <span class="nav-text">如何高效的提问</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#日志级别动态调整"><span class="nav-number">1.</span> <span class="nav-text">日志级别动态调整</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#mysql-性能容量评估"><span class="nav-number">2.</span> <span class="nav-text">mysql 性能容量评估</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#达达-高性能服务端优化之路"><span class="nav-number">3.</span> <span class="nav-text">达达-高性能服务端优化之路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#大众点评账号业务高可用进阶之路"><span class="nav-number">4.</span> <span class="nav-text">大众点评账号业务高可用进阶之路</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#异地多活"><span class="nav-number">4.1.</span> <span class="nav-text">异地多活</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#数据同步"><span class="nav-number">4.2.</span> <span class="nav-text">数据同步</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#领域驱动设计（DDD）"><span class="nav-number">5.</span> <span class="nav-text">领域驱动设计（DDD）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#微服务如何拆分"><span class="nav-number">6.</span> <span class="nav-text">微服务如何拆分</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何高效的提问"><span class="nav-number">7.</span> <span class="nav-text">如何高效的提问</span></a></li></ol></div>
             
 
           </div>
@@ -672,7 +672,7 @@ Aggregate(聚合）是一组相关对象的集合，作为一个整体被外界�
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
