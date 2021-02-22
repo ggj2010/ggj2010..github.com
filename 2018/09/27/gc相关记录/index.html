@@ -87,21 +87,21 @@
 
 
 
-<meta name="description" content="重新整理下以前的笔记，jvm的参数随着jdk变更会有坑，比如线上用的jdk1.8，却使用废弃的参数。所以不要单纯的拷贝网上的配置。 虚拟机运行时数据区域方法区，堆都是线程共享的数据区域，虚拟机栈和本地方法栈还有程序计数器都是线程隔离的数据区     程序计数器：【1】作用可以定义成查看当前线程所执行的字节码的行号指示器，字节码解释器工作时就是通过改变这个计时器的值来选取下一条需要执行的字节码指令。">
+<meta name="description" content="重新整理下以前的笔记，jvm的参数随着jdk变更会有坑，比如线上用的jdk1.8，却使用废弃的参数。 所以不要单纯的拷贝网上的配置。 虚拟机运行时数据区域方法区，堆都是线程共享的数据区域，虚拟机栈和本地方法栈还有程序计数器都是线程隔离的数据区     程序计数器：【1】作用可以定义成查看当前线程所执行的字节码的行号指示器，字节码解释器工作时就是通过改变这个计时器的值 来选取下 一条需要执行的字节码">
 <meta name="keywords" content="jvm">
 <meta property="og:type" content="article">
 <meta property="og:title" content="gc相关记录">
 <meta property="og:url" content="http://ggj2010.github.io/2018/09/27/gc相关记录/index.html">
 <meta property="og:site_name" content="高广金博客">
-<meta property="og:description" content="重新整理下以前的笔记，jvm的参数随着jdk变更会有坑，比如线上用的jdk1.8，却使用废弃的参数。所以不要单纯的拷贝网上的配置。 虚拟机运行时数据区域方法区，堆都是线程共享的数据区域，虚拟机栈和本地方法栈还有程序计数器都是线程隔离的数据区     程序计数器：【1】作用可以定义成查看当前线程所执行的字节码的行号指示器，字节码解释器工作时就是通过改变这个计时器的值来选取下一条需要执行的字节码指令。">
+<meta property="og:description" content="重新整理下以前的笔记，jvm的参数随着jdk变更会有坑，比如线上用的jdk1.8，却使用废弃的参数。 所以不要单纯的拷贝网上的配置。 虚拟机运行时数据区域方法区，堆都是线程共享的数据区域，虚拟机栈和本地方法栈还有程序计数器都是线程隔离的数据区     程序计数器：【1】作用可以定义成查看当前线程所执行的字节码的行号指示器，字节码解释器工作时就是通过改变这个计时器的值 来选取下 一条需要执行的字节码">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://p1.meituan.net/education/5a6029aa779cb3abe8f905205e9d90f9131912.png">
 <meta property="og:image" content="http://p1.meituan.net/education/15f0eaa78bd37faf90c1385c51e964f474213.png">
 <meta property="og:image" content="http://p1.meituan.net/education/b617a455e66cc3f7880951f0531f177a28590.png">
-<meta property="og:updated_time" content="2020-06-17T12:20:29.636Z">
+<meta property="og:updated_time" content="2021-01-02T04:46:17.168Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="gc相关记录">
-<meta name="twitter:description" content="重新整理下以前的笔记，jvm的参数随着jdk变更会有坑，比如线上用的jdk1.8，却使用废弃的参数。所以不要单纯的拷贝网上的配置。 虚拟机运行时数据区域方法区，堆都是线程共享的数据区域，虚拟机栈和本地方法栈还有程序计数器都是线程隔离的数据区     程序计数器：【1】作用可以定义成查看当前线程所执行的字节码的行号指示器，字节码解释器工作时就是通过改变这个计时器的值来选取下一条需要执行的字节码指令。">
+<meta name="twitter:description" content="重新整理下以前的笔记，jvm的参数随着jdk变更会有坑，比如线上用的jdk1.8，却使用废弃的参数。 所以不要单纯的拷贝网上的配置。 虚拟机运行时数据区域方法区，堆都是线程共享的数据区域，虚拟机栈和本地方法栈还有程序计数器都是线程隔离的数据区     程序计数器：【1】作用可以定义成查看当前线程所执行的字节码的行号指示器，字节码解释器工作时就是通过改变这个计时器的值 来选取下 一条需要执行的字节码">
 <meta name="twitter:image" content="http://p1.meituan.net/education/5a6029aa779cb3abe8f905205e9d90f9131912.png">
 
 
@@ -290,7 +290,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ggj2010">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg">
+      <meta itemprop="image" content="https://avatar.csdnimg.cn/1/E/3/ggj20ss.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -357,11 +357,12 @@
       
 
       
-        <pre><code>重新整理下以前的笔记，jvm的参数随着jdk变更会有坑，比如线上用的jdk1.8，却使用废弃的参数。所以不要单纯的拷贝网上的配置。
+        <pre><code>重新整理下以前的笔记，jvm的参数随着jdk变更会有坑，比如线上用的jdk1.8，却使用废弃的参数。
+所以不要单纯的拷贝网上的配置。
 </code></pre><h3 id="虚拟机运行时数据区域"><a href="#虚拟机运行时数据区域" class="headerlink" title="虚拟机运行时数据区域"></a>虚拟机运行时数据区域</h3><pre><code>方法区，堆都是线程共享的数据区域，虚拟机栈和本地方法栈还有程序计数器都是线程隔离的数据区
 </code></pre><p>   <img src="http://p1.meituan.net/education/5a6029aa779cb3abe8f905205e9d90f9131912.png" alt=""></p>
-<h4 id="程序计数器："><a href="#程序计数器：" class="headerlink" title="程序计数器："></a>程序计数器：</h4><pre><code>【1】作用可以定义成查看当前线程所执行的字节码的行号指示器，字节码解释器工作时就是通过改变这个计时器的值来选取下一条需要执行的字节码指令。
-  例如分支，循环异常。线程恢复等功能，
+<h4 id="程序计数器："><a href="#程序计数器：" class="headerlink" title="程序计数器："></a>程序计数器：</h4><pre><code>【1】作用可以定义成查看当前线程所执行的字节码的行号指示器，字节码解释器工作时就是通过改变这个计时器的值
+来选取下 一条需要执行的字节码指令。例如分支，循环异常。线程恢复等功能，
 【2】因为多线程是通过线程轮流切换来实现的。在任何一个指定的时刻，一个处理器指挥处理一条线程中的指令，
  所以每个线程都需要一个独立的程序计数器，是线程私有
 【3】如果线程执行的是native方法 则计数器为空。此区域是唯一一个在虚拟机规范中没有任何OutMemoryError
@@ -379,7 +380,8 @@
 </code></pre><h4 id="java堆-heap"><a href="#java堆-heap" class="headerlink" title="java堆 heap"></a>java堆 heap</h4><pre><code>【1】Java Heap 是java虚拟机中管理内存最大的一块，所有线程共享的一块内存区域。虚拟机启动时候创建，
 目的就是存放对象实例，几乎所有对象都在这里分配内存。
 【2】Java 虚拟机规范中描述：所有的对象实例以及数组都要在堆上面分配内存。
-【3】Java 堆是垃圾收集器管理的主要区域。java堆可分为：新生代和老年代。 再细致点有Eden空间、From Survivor 空间、To Survivor空间,
+【3】Java 堆是垃圾收集器管理的主要区域。
+java堆可分为：新生代和老年代。 再细致点有Eden空间、From Survivor 空间、To Survivor空间,
 【4】Java 堆处于物理上不连续的内存空间中。可以通过设定 -Xmx 和 -Xms设定jvm堆内存大小
 </code></pre><h4 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h4><pre><code>【1】、多个线程共享内存区域，用于存储已被虚拟机加载的类信息、静态变量，及时编译器后的代码。
 【2】、垃圾收集行为在这个区域是比较少出现的
@@ -405,9 +407,30 @@
     无论什么时候总有一块Survivor为空
     from Survivor区域与To Survivor区域是交替切换空间，在同一时间内两者中只有一个不为空
     如果对象的复制次数达到默认（16）次，该对象就会被送到老年代中
-</code></pre><h5 id="为什么要有Survivor区域"><a href="#为什么要有Survivor区域" class="headerlink" title="为什么要有Survivor区域"></a>为什么要有Survivor区域</h5><pre><code>如果没有survivor区域，eden区域每次minor gc 存活的对象都会直接进入老年代，老年代很快被撑满，从而触发Major GC（full gc）
-一般老年代的内存空间远大于新生代 所以gc 耗时时间更长
-</code></pre><p> 假设不用Survivor，以下两种方案都无法解决gc问题<br> | 方案 | 优点 | 缺点 |<br> | - | :-: |<br> |加大老年代空间    |更多存活对象才能填满老年代。|降低Full GC频率    随着老年代空间加大，一旦发生Full GC，执行所需要的时间更长<br> |减少老年代空间    |Full GC所需时间减少    |老年代很快被存活对象填满，Full GC频率增加</p>
+</code></pre><h5 id="为什么要有Survivor区域"><a href="#为什么要有Survivor区域" class="headerlink" title="为什么要有Survivor区域"></a>为什么要有Survivor区域</h5><pre><code>如果没有survivor区域，eden区域每次minor gc 存活的对象都会直接进入老年代，老年代很快被撑满，
+从而触发Major GC（full gc）一般老年代的内存空间远大于新生代 所以gc 耗时时间更长
+</code></pre><p> 假设不用Survivor，以下两种方案都无法解决gc问题</p>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th style="text-align:center">优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>加大老年代空间</td>
+<td style="text-align:center">更多存活对象才能填满老年代。</td>
+<td>降低Full GC频率    随着老年代空间加大，一旦发生Full GC，执行所需要的时间更长</td>
+</tr>
+<tr>
+<td>减少老年代空间</td>
+<td style="text-align:center">Full GC所需时间减少</td>
+<td>老年代很快被存活对象填满，Full GC频率增加</td>
+</tr>
+</tbody>
+</table>
 <h5 id="为什么要有Survivor区域需要两个"><a href="#为什么要有Survivor区域需要两个" class="headerlink" title="为什么要有Survivor区域需要两个"></a>为什么要有Survivor区域需要两个</h5><pre><code>设置两个Survivor区最大的好处就是解决了碎片化
 因为复制算法就是利用新生代98%朝夕生死的特性，存活的对象很少，如果只有一个区域
 那么gc时候无法解决内存碎片的问题。
@@ -651,10 +674,11 @@ G1 将根据先前收集的信息以及检测到的垃圾量，估计它可以�
 </code></pre><h3 id="jdk8-推荐jvm参数"><a href="#jdk8-推荐jvm参数" class="headerlink" title="jdk8 推荐jvm参数"></a>jdk8 推荐jvm参数</h3><pre><code>-Xms2560m -Xmx2560m -Xss256k -XX:NewRatio=3 # 限制 java 堆大小为 2560MB，且不可扩展
 -XX:+UseConcMarkSweepGC 开启cms gc
 -XX:CMSInitiatingOccupancyFraction=80
--XX:+UseCMSInitiatingOccupancyOnly #如果没有这个参数, jvm只有第一次cms gc会使用 CMSInitiatingPermOccupancyFraction=80 这个值，后面的情况会自动调整
+-XX:+UseCMSInitiatingOccupancyOnly
+#如果没有这个参数, jvm只有第一次cms gc会使用 CMSInitiatingPermOccupancyFraction=80 这个值，后面的情况会自动调整
 -XX:+DisableExplicitGC #设置后自动将System.gc()调用转换成一个空操作
 -XX:+ExplicitGCInvokesConcurrent # 当使用 CMS 时希望又保留部分 System.gc() 的功能，只不过这种情况下触发的不是系统GC，而是 CMS GC
--XX:+HeapDumpOnOutOfMemory
+-XX:+HeapDumpOnOutOfMemoryError
  -XX:HeapDumpPath=path
  -XX:+PrintGCDetails
 </code></pre><h3 id="Java的对象头"><a href="#Java的对象头" class="headerlink" title="Java的对象头"></a>Java的对象头</h3><pre><code>每一个Java类，在被JVM加载的时候，JVM会给这个类创建一个instanceKlass，保存在方法区，用来在JVM层表示该Java类。
@@ -670,7 +694,7 @@ JVM分配的内存是8字节的整数倍, 所以占用的空间不是17字节,�
 </code></pre><h4 id="Object-o-new-Object（）在内存中占了多少字节"><a href="#Object-o-new-Object（）在内存中占了多少字节" class="headerlink" title="Object o = new Object（）在内存中占了多少字节"></a>Object o = new Object（）在内存中占了多少字节</h4><p>   在64位JVM中, 对象头占据的空间是 12-byte(=96bit=64+32), 但是以8字节对齐, 所以一个空类的实例至少占用16字节。<br>   在32位JVM中, 对象头占8个字节, 以4的倍数对齐(32=4*8)。</p>
 <h3 id="jvm-默认参数"><a href="#jvm-默认参数" class="headerlink" title="jvm 默认参数"></a>jvm 默认参数</h3><p>  <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/vm/gctuning/ergonomics.html#sthref5" target="_blank" rel="external">官方文档</a><br>      启动的时候加上-XX:+PrintFlagsFinal -XX:+PrintGCTimeStamps 会打印jvm启动时候默认加载的参数<br>      XX:+PrintCommandLineFlags 打印初始启动的参数<br>      下面是jdk1.8.0_144的启动参数，不同的jdk版本默认开启的参数都不一样。<br>      默认的堆栈大小参数<br>       -XX:InitialHeapSize=268435456<br>        initial heap size（默认初始大小， 物理内存的64分之一，或者合理的最小值。 我的机器物理内存是16G, 因此默认就是0.25G， 也就是256M）<br>       -XX:MaxHeapSize=4294967296<br>        maximum heap size（默认最大堆, 物理内存的四分之一，或者1G。 我机器物理内存16G， 默认最大值就是4G）</p>
 <pre><code>   常用功能：
-   -XX:+HeapDumpOnOutOfMemory 当内存溢出时候可以dump出java堆里面的信息，
+   -XX:+HeapDumpOnOutOfMemoryError 当内存溢出时候可以dump出java堆里面的信息，
    -XX:HeapDumpPath=path 设置具体dump的路径
 
 
@@ -1509,7 +1533,7 @@ ccstrlist OnOutOfMemoryError                        =                           
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg"
+               src="https://avatar.csdnimg.cn/1/E/3/ggj20ss.jpg"
                alt="ggj2010" />
           <p class="site-author-name" itemprop="name">ggj2010</p>
            
@@ -1521,7 +1545,7 @@ ccstrlist OnOutOfMemoryError                        =                           
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-count">42</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1621,7 +1645,7 @@ ccstrlist OnOutOfMemoryError                        =                           
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

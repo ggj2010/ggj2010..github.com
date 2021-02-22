@@ -97,7 +97,7 @@
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2184951-9723bfce3c71c591.png">
 <meta property="og:image" content="https://segmentfault.com/img/remote/1460000017372070?w=804&h=449">
 <meta property="og:image" content="https://segmentfault.com/img/remote/1460000017372071?w=439&h=204">
-<meta property="og:updated_time" content="2020-06-18T03:42:02.248Z">
+<meta property="og:updated_time" content="2021-02-03T08:17:19.386Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Thread 回顾">
 <meta name="twitter:description" content="操作系统相关概念CPUcpu主要是用来解释计算机指令以及处理计算机软件的中的数据 主频，单位是兆赫（MHz）或千兆赫（GHz），用来表示CPU的运算、处理数据的速度。通常，主频越高，CPU处理数据的速度就越快。 缓存，缓存大小也是CPU的重要指标之一，而且缓存的结构和大小对CPU速度的影响非常大。 cpu有L1 Cache和L2　Cache、L3　Cache 物理核物理核=cpu数(机子上装的cp">
@@ -289,7 +289,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ggj2010">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg">
+      <meta itemprop="image" content="https://avatar.csdnimg.cn/1/E/3/ggj20ss.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -750,6 +750,23 @@ CallerRunsPolicy 如果添加到线程池失败，那么主线程会自己去执
 
 allowCoreThreadTimeOut为false 默认为false 所以keepAliveTime才起作用
 销毁机制：超过核心线程数时，而且（超过最大值或者timeout过），就会销毁。
+</code></pre><h3 id="thread-pool-状态设计"><a href="#thread-pool-状态设计" class="headerlink" title="thread pool 状态设计"></a>thread pool 状态设计</h3><pre><code>private final AtomicInteger ctl = new AtomicInteger(ctlOf(RUNNING, 0));
+    private static final int COUNT_BITS = Integer.SIZE - 3;
+    // runState is stored in the high-order bits
+    //对应的高3位值是111
+    private static final int RUNNING    = -1 &lt;&lt; COUNT_BITS;
+    //对应的高3位值是000
+    private static final int SHUTDOWN   =  0 &lt;&lt; COUNT_BITS;
+    //对应的高3位值是001
+    private static final int STOP       =  1 &lt;&lt; COUNT_BITS;
+    //对应的高3位值是010
+    private static final int TIDYING    =  2 &lt;&lt; COUNT_BITS;
+    //对应的高3位值是011
+    private static final int TERMINATED =  3 &lt;&lt; COUNT_BITS;
+ 其中，高3位就表示着&quot;线程池状态&quot;，低29位则表示&quot;线程池中的任务数量&quot;
+  COUNT_BITS = Integer.SIZE - 3;
+  也就是11111111  11111111  11111100
+  &lt;&lt;是向左边位移
 </code></pre><h3 id="threadPoolExecutor-中的-shutdown-、-shutdownNow-、-awaitTermination-的用法和区别"><a href="#threadPoolExecutor-中的-shutdown-、-shutdownNow-、-awaitTermination-的用法和区别" class="headerlink" title="threadPoolExecutor 中的 shutdown() 、 shutdownNow() 、 awaitTermination() 的用法和区别"></a>threadPoolExecutor 中的 shutdown() 、 shutdownNow() 、 awaitTermination() 的用法和区别</h3><pre><code>shutdown()和shutdownNow()的区别
 从字面意思就能理解，shutdownNow()能立即停止线程池，正在跑的和正在等待的任务都停下了。
 这样做立即生效，但是风险也比较大；
@@ -808,7 +825,7 @@ newCachedThreadPool是指创建的线程可以被缓存，同时也可以被回�
 isTerminated当调用shutdownNow()方法后，成功停止后返回为true;
 </code></pre><h3 id="BlockQueue"><a href="#BlockQueue" class="headerlink" title="BlockQueue"></a>BlockQueue</h3><pre><code>Queuel里面一些方法
 remove   移除并返回队列头部的元素     如果队列为空，则抛出一个NoSuchElementException异常
-poll         移除并返问队列头部的元素     如果队列为空，则返回null
+poll        移除并返问队列头部的元素     如果队列为空，则返回null
 add         增加一个元索                      如果队列已满，则抛出一个IIIegaISlabEepeplian异常
 offer       添加一个元素并返回true        如果队列已满，则返回false
 put         添加一个元素                       如果队列满，则阻塞
@@ -882,7 +899,8 @@ put(anObject):把anObject加到BlockingQueue里,如果BlockQueue没有空间,则
 当往这个Queue放东西时，必须有另外一个线程在从这个Queue里拿，如没有，则直接失败
 </code></pre><h4 id="ConcurrentLinkedQueue"><a href="#ConcurrentLinkedQueue" class="headerlink" title="ConcurrentLinkedQueue"></a>ConcurrentLinkedQueue</h4><pre><code>ConcurrentLinkedQueue是Queue的一个安全实现．Queue中元素按FIFO原则进行排序．采用CAS操作，
 来保证元素的一致性。
-</code></pre><h3 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h3><h4 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h4><pre><code>如果想实现每个线程都有自己的变量副本，有两种方式，
+</code></pre><h3 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h3><pre><code>为什么要用threadLocal,自己如何实现变量副本功能
+</code></pre><h4 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h4><pre><code>如果想实现每个线程都有自己的变量副本，有两种方式，
 一种是直接加锁，保证同一时间只有一个线程访问这个变量
 还有一种就是每个线程分配一个变量副本，ThreadLocal就是使用这种方式。
 
@@ -931,9 +949,17 @@ void createMap(Thread t, T firstValue) {
      }
 Thread==&gt; ThreadLocal.ThreadLocalMap threadLocals = null;
 </code></pre><h4 id="为什么使用ThreadLocalMap"><a href="#为什么使用ThreadLocalMap" class="headerlink" title="为什么使用ThreadLocalMap"></a>为什么使用ThreadLocalMap</h4><p>   以前总是不理解为什么Thread上面绑定的是ThreadLocal.ThreadLocalMap而不是ThreadLocal，因为我们设置值<br>   时候无非就是set和get，但当一个线程需要多个局部变量副本的时候，如果线程绑定的是ThreadLocal肯定是不满足<br>   多个变量的场景，所以只能是ThreadLocalMap，而且ThreadLocalMap的key就是ThreadLocal实例.<br>   每一个ThreadLocal都一个唯一的threadLocalHashCode（）</p>
-<h4 id="ThreadLocalMap的Entry为什么是软引用"><a href="#ThreadLocalMap的Entry为什么是软引用" class="headerlink" title="ThreadLocalMap的Entry为什么是软引用"></a>ThreadLocalMap的Entry为什么是软引用</h4><pre><code>ThreadLocalMap里面Entry key就是threadLocal对象本身，value就是放进threadLocal里面的值
+<h4 id="为什么使用ThreadLocalMap，而不是普通的Map"><a href="#为什么使用ThreadLocalMap，而不是普通的Map" class="headerlink" title="为什么使用ThreadLocalMap，而不是普通的Map"></a>为什么使用ThreadLocalMap，而不是普通的Map<threadlocal,value></threadlocal,value></h4><pre><code>Thread类里面定义了一个 ThreadLocal.ThreadLocalMap threadLocals变量
+如果绑定的是Map&lt;ThreadLocal,value&gt; 会有什么问题么。
+</code></pre><h4 id="ThreadLocalMap的Entry为什么是软引用"><a href="#ThreadLocalMap的Entry为什么是软引用" class="headerlink" title="ThreadLocalMap的Entry为什么是软引用"></a>ThreadLocalMap的Entry为什么是软引用</h4><pre><code>首先了解下
+强引用：垃圾回收期不会主动去回收，哪怕Java虚拟机报OutOfMemoryError
+软引用：当Java堆内存不够的时候，才会进行回收 （没有任何强引用关联），例如缓存系统
+弱引用：比软引用更容易被回收，当垃圾回收期线程执行的时候，不管当前堆内存是否够，都会回收（没有任何强引用关联）
+
+ThreadLocalMap里面Entry key就是threadLocal对象本身，value就是放进threadLocal里面的值
 假设ThreadLocalMap的Entry key threadLocal是强引用，当线程创建一个threadLocalA，将threadLocalA置为null，
-ThreadLocalMap里面的Entry key 还是会持有threadLocalA的强引用,这时候threadLocalA是始终无法被回收的
+ThreadLocalMap里面的Entry key 还是会持有threadLocalA的强引用,这时候threadLocalA是始终无法被回收的，除非线程回收了
+线程的ThreadLocalMap才会被回收，不然会造成内存泄露，同时在使用线程池的情况下，ThreadLocalMa会一直存在的。
 </code></pre><h4 id="内存泄漏"><a href="#内存泄漏" class="headerlink" title="内存泄漏"></a>内存泄漏</h4><pre><code>在配合线程池使用的情况下可能会有内存泄露的风险
 ThreadLocalMap内部Entry中key使用的是对ThreadLocal对象的弱引用，当key被回收后，对于的value还是不能被回收，这时候ThreadLocalMap里面就会存在key为null但是value不为null的entry项，虽然ThreadLocalMap提供了set,get,remove方法在一些时机下会对这些Entry项进行清理，但是这是不及时的，也不是每次都会执行的，所以一些情况下还是会发生内存泄露，所以在使用完毕后即使调用remove方法才是解决内存泄露的王道。
 首先从ThreadLocal的直接索引位置(通过ThreadLocal.threadLocalHashCode &amp; (table.length-1)运算得到)获取Entry e，如果e不为null并且key相同则返回e；
@@ -975,7 +1001,104 @@ aqs提供以下两种功能：独占锁（ReetrantLock）与共享锁（Reetrant
 NonfairSync extends Sync 非公平锁
 Sync extends AbstractQueuedSynchronizer
 </code></pre><p>  <img src="https://segmentfault.com/img/remote/1460000017372070?w=804&amp;h=449" alt=""></p>
-<h4 id="AQS内部实现"><a href="#AQS内部实现" class="headerlink" title="AQS内部实现"></a>AQS内部实现</h4><pre><code>// https://segmentfault.com/a/1190000017372067
+<h5 id="ReentrantLock源码分析"><a href="#ReentrantLock源码分析" class="headerlink" title="ReentrantLock源码分析"></a>ReentrantLock源码分析</h5><h6 id="lock-过程，以默认的非公平锁为例"><a href="#lock-过程，以默认的非公平锁为例" class="headerlink" title="lock()过程，以默认的非公平锁为例"></a>lock()过程，以默认的非公平锁为例</h6><pre><code>总结：
+   1、由于这里是非公平锁，所以调用lock方法时，先去通过cas去抢占锁，
+   如果抢占锁成功，保存获得锁成功的当前线程， 抢占锁失败，调用acquire来走锁竞争逻辑
+   2、通过tryAcquire尝试获取独占锁，如果成功返回true，失败返回false
+   3、如果tryAcquire失败，则会通过addWaiter方法将当前线程封装成Node添加到AQS队列尾部
+   4、acquireQueued，将Node作为参数，通过自旋去尝试获取锁。
+
+  static final class NonfairSync extends Sync {
+        private static final long serialVersionUID = 7316153563782823691L;
+
+        //由于这里是非公平锁，所以调用lock方法时，先去通过cas去抢占锁 如果抢占锁成功，保存获得锁成功的当前线程
+         //抢占锁失败，调用acquire来走锁竞争逻辑
+        final void lock() {
+            //1、cas取抢锁status
+            if (compareAndSetState(0, 1))
+               //2、设置当前获取到锁的线程
+                setExclusiveOwnerThread(Thread.currentThread());
+            else
+            //3、获取锁
+                acquire(1);
+        }
+        //子类调用父类Sync
+        protected final boolean tryAcquire(int acquires) {
+            return nonfairTryAcquire(acquires);
+        }
+
+    }
+
+   abstract static class Sync extends AbstractQueuedSynchronizer {
+        private static final long serialVersionUID = -5179523762034025860L;
+
+        /**
+         * Performs {@link Lock#lock}. The main reason for subclassing
+         * is to allow fast path for nonfair version.
+         */
+        abstract void lock();
+
+        //当state=0时，表示无锁状态
+        //当state&gt;0时，表示已经有线程获得了锁，也就是state=1，但是因为ReentrantLock允许重入，
+        //所以同一个线程多次获得同步锁的时候，state会递增，比如重入5次，那么state=5。
+        //而在释放锁的时候，同样需要释放5次直到state=0其他线程才有资格获得锁
+
+
+        final boolean nonfairTryAcquire(int acquires) {
+            final Thread current = Thread.currentThread();
+            int c = getState();
+            if (c == 0) {
+                if (compareAndSetState(0, acquires)) {
+                    setExclusiveOwnerThread(current);
+                    return true;
+                }
+            }
+            else if (current == getExclusiveOwnerThread()) {
+                int nextc = c + acquires;
+                if (nextc &lt; 0) // overflow
+                    throw new Error(&quot;Maximum lock count exceeded&quot;);
+                setState(nextc);
+                return true;
+            }
+            return false;
+        }
+   }
+
+
+
+   public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchronizer {
+     //tryAcquire 调用子类的方法
+    public final void acquire(int arg) {
+            if (!tryAcquire(arg) &amp;&amp;
+                //5获取锁失败，阻塞
+                acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
+                selfInterrupt();
+        }
+   }
+  final boolean acquireQueued(final Node node, int arg) {
+          boolean failed = true;
+          try {
+              boolean interrupted = false;
+              //自旋获取锁
+              for (;;) {
+                  final Node p = node.predecessor();
+                  if (p == head &amp;&amp; tryAcquire(arg)) {
+                      setHead(node);
+                      p.next = null; // help GC
+                      failed = false;
+                      return interrupted;
+                  }
+                  if (shouldParkAfterFailedAcquire(p, node) &amp;&amp;
+                      parkAndCheckInterrupt())
+                      interrupted = true;
+              }
+          } finally {
+              if (failed)
+                  cancelAcquire(node);
+          }
+      }
+   }
+</code></pre><h4 id="AQS内部实现"><a href="#AQS内部实现" class="headerlink" title="AQS内部实现"></a>AQS内部实现</h4><pre><code>// https://segmentfault.com/a/1190000017372067
 aqs的实现依赖内部的同步队列（fifo双向队列），如果当前线程竞争锁失败，那么aqs会把当前线程以及等待信息构造
 成一个Node放到同步队列里面，同时阻塞该线程，只有当线程释放锁时候，会从队列中唤醒一个阻塞的节点（线程）
 
@@ -1137,6 +1260,54 @@ cas 会出现aba的问题，可以用版本号区别 AtomicStampedReference
 不会使线程进入阻塞状态，减少了不必要的上下文切换，执行速度快
 2、非自旋锁在获取不到锁的时候会进入阻塞状态，从而进入内核态，当获取到锁的时候需要从内核态恢复，需要线程上下文切换。
  （线程被阻塞后便进入内核（Linux）调度状态，这个会导致系统在用户态与内核态之间来回切换，严重影响锁的性能）
+
+ AtomicInteger 其实就是通过unsafe类获取当前value的内存偏移量
+public final int getAndAddInt(Object o, long offset, int delta) {
+         int v;
+         do {
+             //获取当前值
+             v = getIntVolatile(o, offset);
+             //如果预期值current与内存值相等
+         } while (!weakCompareAndSetInt(o, offset, v, v + delta));
+         return v;
+ }
+
+
+ public final int getAndIncrement() {
+     for (;;) {//一直循环直到CAS成功
+         int current = get();//获取当前值（预期值）
+         int next = current + 1; //当前值+1（更新值）
+         if (compareAndSet(current, next))//如果预期值current与内存值相等，设置新值
+             return current;//返回新增之前的值
+     }
+ }
+
+ 底层代码：
+ unsaffe.app类:
+
+ // cas compareand set
+ UNSAFE_ENTRY(jboolean, Unsafe_CompareAndSwapInt(JNIEnv *env, jobject unsafe, jobject obj, jlong offset, jint e, jint x))
+   UnsafeWrapper(&quot;Unsafe_CompareAndSwapInt&quot;);
+   oop p = JNIHandles::resolve(obj);
+   jint* addr = (jint *) index_oop_from_field_offset_long(p, offset);
+   return (jint)(Atomic::cmpxchg(x, addr, e)) == e;
+ UNSAFE_END
+
+ atomic_linux_x86.inline.hpp类:
+inline jint     Atomic::cmpxchg    (jint     exchange_value, volatile jint*     dest, jint     compare_value) {
+  int mp = os::is_MP();
+  //程序会根据当前处理器的类型来决定是否为cmpxchg指令添加lock前缀
+  __asm__ volatile (LOCK_IF_MP(%4) &quot;cmpxchgl %1,(%3)&quot;
+                    : &quot;=a&quot; (exchange_value)
+                    : &quot;r&quot; (exchange_value), &quot;a&quot; (compare_value), &quot;r&quot; (dest), &quot;r&quot; (mp)
+                    : &quot;cc&quot;, &quot;memory&quot;);
+  return exchange_value;
+}
+
+用嵌入的汇编实现的, CPU指令是 cmpxchg，程序会根据当前处理器的类型来决定是否为cmpxchg指令添加lock前缀。
+如果程序是在多处理器上运行，就为cmpxchg指令加上lock前缀(lock cmpxchg).
+反之，如果程序是在单处理器上运行，就省略lock前缀(单处理器自身会维护单处理器内的顺序一致性，不需要lock前缀提供的内存屏障效果).
+lock前缀的作用说明：1禁止该指令与之前和之后的读和写指令重排序,2把写缓冲区中的所有数据刷新到内存中。
 </code></pre><h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p>   <a href="http://ifeve.com/%E4%BD%BF%E7%94%A8threadlocal%E4%B8%8D%E5%BD%93%E5%8F%AF%E8%83%BD%E4%BC%9A%E5%AF%BC%E8%87%B4%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2/" target="_blank" rel="external">使用threadlocal不当可能会导致内存泄露</a><br>   <a href="http://ifeve.com/java-concurrency-thread-directory/" target="_blank" rel="external">Java并发性和多线程介绍目录</a><br>   <a href="http://ifeve.com/volatile/" target="_blank" rel="external">http://ifeve.com/volatile/</a><br>   <a href="https://www.cnblogs.com/paddix/p/5367116.html" target="_blank" rel="external">https://www.cnblogs.com/paddix/p/5367116.html</a></p>
 
       
@@ -1240,7 +1411,7 @@ cas 会出现aba的问题，可以用版本号区别 AtomicStampedReference
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg"
+               src="https://avatar.csdnimg.cn/1/E/3/ggj20ss.jpg"
                alt="ggj2010" />
           <p class="site-author-name" itemprop="name">ggj2010</p>
            
@@ -1252,7 +1423,7 @@ cas 会出现aba的问题，可以用版本号区别 AtomicStampedReference
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-count">42</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1329,7 +1500,7 @@ cas 会出现aba的问题，可以用版本号区别 AtomicStampedReference
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#操作系统相关概念"><span class="nav-number">1.</span> <span class="nav-text">操作系统相关概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CPU"><span class="nav-number">1.1.</span> <span class="nav-text">CPU</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#物理核"><span class="nav-number">1.2.</span> <span class="nav-text">物理核</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单核与多核"><span class="nav-number">1.3.</span> <span class="nav-text">单核与多核</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#进程和线程"><span class="nav-number">1.4.</span> <span class="nav-text">进程和线程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#串行、并行、并发"><span class="nav-number">1.5.</span> <span class="nav-text">串行、并行、并发</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#io密集与计算密集"><span class="nav-number">1.6.</span> <span class="nav-text">io密集与计算密集</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java内存模型"><span class="nav-number">2.</span> <span class="nav-text">Java内存模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#cpu高速缓存"><span class="nav-number">2.1.</span> <span class="nav-text">cpu高速缓存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#理解java内存模型才能了解线程安全"><span class="nav-number">2.2.</span> <span class="nav-text">理解java内存模型才能了解线程安全</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java线程相关"><span class="nav-number">3.</span> <span class="nav-text">java线程相关</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#为什么使用多线程"><span class="nav-number">3.1.</span> <span class="nav-text">为什么使用多线程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#资源利用率更好"><span class="nav-number">3.1.1.</span> <span class="nav-text">资源利用率更好</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#程序设计更简单"><span class="nav-number">3.1.2.</span> <span class="nav-text">程序设计更简单</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#程序响应更快"><span class="nav-number">3.1.3.</span> <span class="nav-text">程序响应更快</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多线程的代价"><span class="nav-number">3.2.</span> <span class="nav-text">多线程的代价</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#线程安全"><span class="nav-number">3.2.1.</span> <span class="nav-text">线程安全</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#上下文切换的开销"><span class="nav-number">3.2.2.</span> <span class="nav-text">上下文切换的开销</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#增加资源消耗"><span class="nav-number">3.2.3.</span> <span class="nav-text">增加资源消耗</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线程数"><span class="nav-number">3.3.</span> <span class="nav-text">线程数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thread的六种状态"><span class="nav-number">4.</span> <span class="nav-text">Thread的六种状态</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#NEW"><span class="nav-number">4.1.</span> <span class="nav-text">NEW</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RUNNABLE"><span class="nav-number">4.2.</span> <span class="nav-text">RUNNABLE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BLOCKED"><span class="nav-number">4.3.</span> <span class="nav-text">BLOCKED</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#WAITING"><span class="nav-number">4.4.</span> <span class="nav-text">WAITING</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TIMED-WAITING"><span class="nav-number">4.5.</span> <span class="nav-text">TIMED_WAITING</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TERMINATED"><span class="nav-number">4.6.</span> <span class="nav-text">TERMINATED</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线程状态流转"><span class="nav-number">4.7.</span> <span class="nav-text">线程状态流转</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#blocked与wating区别"><span class="nav-number">4.8.</span> <span class="nav-text">blocked与wating区别</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程的优先级"><span class="nav-number">5.</span> <span class="nav-text">线程的优先级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用户线程和守护线程"><span class="nav-number">6.</span> <span class="nav-text">用户线程和守护线程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程组"><span class="nav-number">7.</span> <span class="nav-text">线程组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#suspend与resume"><span class="nav-number">8.</span> <span class="nav-text">suspend与resume</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stop"><span class="nav-number">9.</span> <span class="nav-text">stop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#wait与notify"><span class="nav-number">10.</span> <span class="nav-text">wait与notify</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#join"><span class="nav-number">11.</span> <span class="nav-text">join</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized"><span class="nav-number">12.</span> <span class="nav-text">synchronized</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java同步的monitor"><span class="nav-number">13.</span> <span class="nav-text">java同步的monitor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么说synchroized是重量级锁"><span class="nav-number">14.</span> <span class="nav-text">为什么说synchroized是重量级锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#volatile"><span class="nav-number">15.</span> <span class="nav-text">volatile</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#可见性"><span class="nav-number">15.1.</span> <span class="nav-text">可见性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#有序性"><span class="nav-number">15.2.</span> <span class="nav-text">有序性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用户线程与守护线程"><span class="nav-number">16.</span> <span class="nav-text">用户线程与守护线程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java线程池"><span class="nav-number">17.</span> <span class="nav-text">java线程池</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ThreadPoolExecutor"><span class="nav-number">17.1.</span> <span class="nav-text">ThreadPoolExecutor</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#corePoolSize"><span class="nav-number">17.1.1.</span> <span class="nav-text">corePoolSize</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#maximumPoolSize"><span class="nav-number">17.1.2.</span> <span class="nav-text">maximumPoolSize</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#keepAliveTime-imeUnit-unit"><span class="nav-number">17.1.3.</span> <span class="nav-text">keepAliveTime,imeUnit unit</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#BlockingQueue-workQueue"><span class="nav-number">17.1.4.</span> <span class="nav-text">BlockingQueue workQueue</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ThreadFactory-threadFactory"><span class="nav-number">17.1.5.</span> <span class="nav-text">ThreadFactory threadFactory</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#RejectedExecutionHandler-handler"><span class="nav-number">17.1.6.</span> <span class="nav-text">RejectedExecutionHandler handler</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#allowCoreThreadTimeOut"><span class="nav-number">17.2.</span> <span class="nav-text">allowCoreThreadTimeOut</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#threadPoolExecutor-中的-shutdown-、-shutdownNow-、-awaitTermination-的用法和区别"><span class="nav-number">18.</span> <span class="nav-text">threadPoolExecutor 中的 shutdown() 、 shutdownNow() 、 awaitTermination() 的用法和区别</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#线程池监控"><span class="nav-number">18.0.1.</span> <span class="nav-text">线程池监控</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ExecutorService的各种写法"><span class="nav-number">18.0.2.</span> <span class="nav-text">ExecutorService的各种写法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#isTerminated"><span class="nav-number">18.0.3.</span> <span class="nav-text">isTerminated</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BlockQueue"><span class="nav-number">19.</span> <span class="nav-text">BlockQueue</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ArrayBlockingQueue"><span class="nav-number">19.1.</span> <span class="nav-text">ArrayBlockingQueue</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LinkedBlockingQueue"><span class="nav-number">19.2.</span> <span class="nav-text">LinkedBlockingQueue</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PriorityBlockingQueue"><span class="nav-number">19.3.</span> <span class="nav-text">PriorityBlockingQueue</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SynchronousQueue"><span class="nav-number">19.4.</span> <span class="nav-text">SynchronousQueue</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ConcurrentLinkedQueue"><span class="nav-number">19.5.</span> <span class="nav-text">ConcurrentLinkedQueue</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ThreadLocal"><span class="nav-number">20.</span> <span class="nav-text">ThreadLocal</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#实现原理"><span class="nav-number">20.1.</span> <span class="nav-text">实现原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#为什么使用ThreadLocalMap"><span class="nav-number">20.2.</span> <span class="nav-text">为什么使用ThreadLocalMap</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ThreadLocalMap的Entry为什么是软引用"><span class="nav-number">20.3.</span> <span class="nav-text">ThreadLocalMap的Entry为什么是软引用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#内存泄漏"><span class="nav-number">20.4.</span> <span class="nav-text">内存泄漏</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thread启动源码"><span class="nav-number">21.</span> <span class="nav-text">Thread启动源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CAS-compare-and-swap"><span class="nav-number">22.</span> <span class="nav-text">CAS(compare and swap)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AbstractQueuedSynchronizer（AQS"><span class="nav-number">23.</span> <span class="nav-text">AbstractQueuedSynchronizer（AQS)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ReentrantLock-类图"><span class="nav-number">23.1.</span> <span class="nav-text">ReentrantLock 类图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AQS内部实现"><span class="nav-number">23.2.</span> <span class="nav-text">AQS内部实现</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#锁的类型"><span class="nav-number"></span> <span class="nav-text">锁的类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#公平锁与非公平锁"><span class="nav-number">1.</span> <span class="nav-text">公平锁与非公平锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可重入锁与不可重入锁"><span class="nav-number">2.</span> <span class="nav-text">可重入锁与不可重入锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#独享锁与共享锁"><span class="nav-number">3.</span> <span class="nav-text">独享锁与共享锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#互斥锁与读写锁"><span class="nav-number">4.</span> <span class="nav-text">互斥锁与读写锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#乐观锁与悲观锁"><span class="nav-number">5.</span> <span class="nav-text">乐观锁与悲观锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分段锁"><span class="nav-number">6.</span> <span class="nav-text">分段锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#偏向锁、轻量级锁、重量级锁"><span class="nav-number">7.</span> <span class="nav-text">偏向锁、轻量级锁、重量级锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自旋锁"><span class="nav-number">8.</span> <span class="nav-text">自旋锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文章"><span class="nav-number">9.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#操作系统相关概念"><span class="nav-number">1.</span> <span class="nav-text">操作系统相关概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CPU"><span class="nav-number">1.1.</span> <span class="nav-text">CPU</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#物理核"><span class="nav-number">1.2.</span> <span class="nav-text">物理核</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单核与多核"><span class="nav-number">1.3.</span> <span class="nav-text">单核与多核</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#进程和线程"><span class="nav-number">1.4.</span> <span class="nav-text">进程和线程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#串行、并行、并发"><span class="nav-number">1.5.</span> <span class="nav-text">串行、并行、并发</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#io密集与计算密集"><span class="nav-number">1.6.</span> <span class="nav-text">io密集与计算密集</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java内存模型"><span class="nav-number">2.</span> <span class="nav-text">Java内存模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#cpu高速缓存"><span class="nav-number">2.1.</span> <span class="nav-text">cpu高速缓存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#理解java内存模型才能了解线程安全"><span class="nav-number">2.2.</span> <span class="nav-text">理解java内存模型才能了解线程安全</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java线程相关"><span class="nav-number">3.</span> <span class="nav-text">java线程相关</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#为什么使用多线程"><span class="nav-number">3.1.</span> <span class="nav-text">为什么使用多线程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#资源利用率更好"><span class="nav-number">3.1.1.</span> <span class="nav-text">资源利用率更好</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#程序设计更简单"><span class="nav-number">3.1.2.</span> <span class="nav-text">程序设计更简单</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#程序响应更快"><span class="nav-number">3.1.3.</span> <span class="nav-text">程序响应更快</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多线程的代价"><span class="nav-number">3.2.</span> <span class="nav-text">多线程的代价</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#线程安全"><span class="nav-number">3.2.1.</span> <span class="nav-text">线程安全</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#上下文切换的开销"><span class="nav-number">3.2.2.</span> <span class="nav-text">上下文切换的开销</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#增加资源消耗"><span class="nav-number">3.2.3.</span> <span class="nav-text">增加资源消耗</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线程数"><span class="nav-number">3.3.</span> <span class="nav-text">线程数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thread的六种状态"><span class="nav-number">4.</span> <span class="nav-text">Thread的六种状态</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#NEW"><span class="nav-number">4.1.</span> <span class="nav-text">NEW</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RUNNABLE"><span class="nav-number">4.2.</span> <span class="nav-text">RUNNABLE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BLOCKED"><span class="nav-number">4.3.</span> <span class="nav-text">BLOCKED</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#WAITING"><span class="nav-number">4.4.</span> <span class="nav-text">WAITING</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TIMED-WAITING"><span class="nav-number">4.5.</span> <span class="nav-text">TIMED_WAITING</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TERMINATED"><span class="nav-number">4.6.</span> <span class="nav-text">TERMINATED</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线程状态流转"><span class="nav-number">4.7.</span> <span class="nav-text">线程状态流转</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#blocked与wating区别"><span class="nav-number">4.8.</span> <span class="nav-text">blocked与wating区别</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程的优先级"><span class="nav-number">5.</span> <span class="nav-text">线程的优先级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用户线程和守护线程"><span class="nav-number">6.</span> <span class="nav-text">用户线程和守护线程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程组"><span class="nav-number">7.</span> <span class="nav-text">线程组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#suspend与resume"><span class="nav-number">8.</span> <span class="nav-text">suspend与resume</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stop"><span class="nav-number">9.</span> <span class="nav-text">stop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#wait与notify"><span class="nav-number">10.</span> <span class="nav-text">wait与notify</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#join"><span class="nav-number">11.</span> <span class="nav-text">join</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized"><span class="nav-number">12.</span> <span class="nav-text">synchronized</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java同步的monitor"><span class="nav-number">13.</span> <span class="nav-text">java同步的monitor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么说synchroized是重量级锁"><span class="nav-number">14.</span> <span class="nav-text">为什么说synchroized是重量级锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#volatile"><span class="nav-number">15.</span> <span class="nav-text">volatile</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#可见性"><span class="nav-number">15.1.</span> <span class="nav-text">可见性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#有序性"><span class="nav-number">15.2.</span> <span class="nav-text">有序性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用户线程与守护线程"><span class="nav-number">16.</span> <span class="nav-text">用户线程与守护线程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java线程池"><span class="nav-number">17.</span> <span class="nav-text">java线程池</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ThreadPoolExecutor"><span class="nav-number">17.1.</span> <span class="nav-text">ThreadPoolExecutor</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#corePoolSize"><span class="nav-number">17.1.1.</span> <span class="nav-text">corePoolSize</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#maximumPoolSize"><span class="nav-number">17.1.2.</span> <span class="nav-text">maximumPoolSize</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#keepAliveTime-imeUnit-unit"><span class="nav-number">17.1.3.</span> <span class="nav-text">keepAliveTime,imeUnit unit</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#BlockingQueue-workQueue"><span class="nav-number">17.1.4.</span> <span class="nav-text">BlockingQueue workQueue</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ThreadFactory-threadFactory"><span class="nav-number">17.1.5.</span> <span class="nav-text">ThreadFactory threadFactory</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#RejectedExecutionHandler-handler"><span class="nav-number">17.1.6.</span> <span class="nav-text">RejectedExecutionHandler handler</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#allowCoreThreadTimeOut"><span class="nav-number">17.2.</span> <span class="nav-text">allowCoreThreadTimeOut</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#thread-pool-状态设计"><span class="nav-number">18.</span> <span class="nav-text">thread pool 状态设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#threadPoolExecutor-中的-shutdown-、-shutdownNow-、-awaitTermination-的用法和区别"><span class="nav-number">19.</span> <span class="nav-text">threadPoolExecutor 中的 shutdown() 、 shutdownNow() 、 awaitTermination() 的用法和区别</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#线程池监控"><span class="nav-number">19.0.1.</span> <span class="nav-text">线程池监控</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ExecutorService的各种写法"><span class="nav-number">19.0.2.</span> <span class="nav-text">ExecutorService的各种写法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#isTerminated"><span class="nav-number">19.0.3.</span> <span class="nav-text">isTerminated</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BlockQueue"><span class="nav-number">20.</span> <span class="nav-text">BlockQueue</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ArrayBlockingQueue"><span class="nav-number">20.1.</span> <span class="nav-text">ArrayBlockingQueue</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LinkedBlockingQueue"><span class="nav-number">20.2.</span> <span class="nav-text">LinkedBlockingQueue</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PriorityBlockingQueue"><span class="nav-number">20.3.</span> <span class="nav-text">PriorityBlockingQueue</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SynchronousQueue"><span class="nav-number">20.4.</span> <span class="nav-text">SynchronousQueue</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ConcurrentLinkedQueue"><span class="nav-number">20.5.</span> <span class="nav-text">ConcurrentLinkedQueue</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ThreadLocal"><span class="nav-number">21.</span> <span class="nav-text">ThreadLocal</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#实现原理"><span class="nav-number">21.1.</span> <span class="nav-text">实现原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#为什么使用ThreadLocalMap"><span class="nav-number">21.2.</span> <span class="nav-text">为什么使用ThreadLocalMap</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#为什么使用ThreadLocalMap，而不是普通的Map"><span class="nav-number">21.3.</span> <span class="nav-text">为什么使用ThreadLocalMap，而不是普通的Map</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ThreadLocalMap的Entry为什么是软引用"><span class="nav-number">21.4.</span> <span class="nav-text">ThreadLocalMap的Entry为什么是软引用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#内存泄漏"><span class="nav-number">21.5.</span> <span class="nav-text">内存泄漏</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thread启动源码"><span class="nav-number">22.</span> <span class="nav-text">Thread启动源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CAS-compare-and-swap"><span class="nav-number">23.</span> <span class="nav-text">CAS(compare and swap)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AbstractQueuedSynchronizer（AQS"><span class="nav-number">24.</span> <span class="nav-text">AbstractQueuedSynchronizer（AQS)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ReentrantLock-类图"><span class="nav-number">24.1.</span> <span class="nav-text">ReentrantLock 类图</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#ReentrantLock源码分析"><span class="nav-number">24.1.1.</span> <span class="nav-text">ReentrantLock源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#lock-过程，以默认的非公平锁为例"><span class="nav-number">24.1.1.1.</span> <span class="nav-text">lock()过程，以默认的非公平锁为例</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AQS内部实现"><span class="nav-number">24.2.</span> <span class="nav-text">AQS内部实现</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#锁的类型"><span class="nav-number"></span> <span class="nav-text">锁的类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#公平锁与非公平锁"><span class="nav-number">1.</span> <span class="nav-text">公平锁与非公平锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可重入锁与不可重入锁"><span class="nav-number">2.</span> <span class="nav-text">可重入锁与不可重入锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#独享锁与共享锁"><span class="nav-number">3.</span> <span class="nav-text">独享锁与共享锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#互斥锁与读写锁"><span class="nav-number">4.</span> <span class="nav-text">互斥锁与读写锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#乐观锁与悲观锁"><span class="nav-number">5.</span> <span class="nav-text">乐观锁与悲观锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分段锁"><span class="nav-number">6.</span> <span class="nav-text">分段锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#偏向锁、轻量级锁、重量级锁"><span class="nav-number">7.</span> <span class="nav-text">偏向锁、轻量级锁、重量级锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自旋锁"><span class="nav-number">8.</span> <span class="nav-text">自旋锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文章"><span class="nav-number">9.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
             
 
           </div>
@@ -1352,7 +1523,7 @@ cas 会出现aba的问题，可以用版本号区别 AtomicStampedReference
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

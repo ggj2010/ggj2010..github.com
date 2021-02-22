@@ -95,7 +95,7 @@
 <meta property="og:site_name" content="高广金博客">
 <meta property="og:description" content="架构相关知识记录,遇到什么记什么 异地多活之多机房架构为了保证关键业务系统的高可用，一般都要支持异地多活  单机房的缺点 服务不能保证高可能用 用户响应延迟，有可能广州的用户访问确实北京的服务器   多机房的好处 服务高可用（数据容灾和业务容灾） 提供系统访问速度，让服务离用户最近   多机房的缺点  如何保证数据一致性问题     CAP理论，Consistency(一致性),Availabil">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-03-14T07:50:18.331Z">
+<meta property="og:updated_time" content="2021-01-20T14:31:49.556Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="架构相关-长期记录">
 <meta name="twitter:description" content="架构相关知识记录,遇到什么记什么 异地多活之多机房架构为了保证关键业务系统的高可用，一般都要支持异地多活  单机房的缺点 服务不能保证高可能用 用户响应延迟，有可能广州的用户访问确实北京的服务器   多机房的好处 服务高可用（数据容灾和业务容灾） 提供系统访问速度，让服务离用户最近   多机房的缺点  如何保证数据一致性问题     CAP理论，Consistency(一致性),Availabil">
@@ -286,7 +286,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ggj2010">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg">
+      <meta itemprop="image" content="https://avatar.csdnimg.cn/1/E/3/ggj20ss.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -457,6 +457,7 @@ app -&gt; gateway-&gt;bff1--&gt;服务A
 3、监控，对API调用进行性能监控。
 4、限流熔断，当出现流量洪峰，或者后端BFF/微服务出现延迟或故障，网关能够主动进行限流熔断，保护后端服务，并保持前端用户体验可以接受。
 5、安全防爬，收集访问日志，通过后台分析出恶意行为，并阻断恶意请求。
+</code></pre><h3 id="中间件指标"><a href="#中间件指标" class="headerlink" title="中间件指标"></a>中间件指标</h3><h4 id="nginx"><a href="#nginx" class="headerlink" title="nginx"></a>nginx</h4><pre><code>单机nginx最高支持5万并发，所以百万并发的一般都要20台nginx做slb
 </code></pre><h2 id="创业公司架构选型"><a href="#创业公司架构选型" class="headerlink" title="创业公司架构选型"></a>创业公司架构选型</h2><p>   <a href="https://www.cnblogs.com/dadadechengzi/p/9478061.html" target="_blank" rel="external">https://www.cnblogs.com/dadadechengzi/p/9478061.html</a><br>   <a href="https://blog.csdn.net/j3T9Z7H/article/details/102791337" target="_blank" rel="external">https://blog.csdn.net/j3T9Z7H/article/details/102791337</a></p>
 
       
@@ -566,7 +567,7 @@ app -&gt; gateway-&gt;bff1--&gt;服务A
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg"
+               src="https://avatar.csdnimg.cn/1/E/3/ggj20ss.jpg"
                alt="ggj2010" />
           <p class="site-author-name" itemprop="name">ggj2010</p>
            
@@ -578,7 +579,7 @@ app -&gt; gateway-&gt;bff1--&gt;服务A
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-count">42</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -655,7 +656,7 @@ app -&gt; gateway-&gt;bff1--&gt;服务A
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#异地多活之多机房架构"><span class="nav-number">1.</span> <span class="nav-text">异地多活之多机房架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#架构之荔枝荔枝FM"><span class="nav-number">2.</span> <span class="nav-text">架构之荔枝荔枝FM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#架构概念"><span class="nav-number">3.</span> <span class="nav-text">架构概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#内聚和耦合"><span class="nav-number">3.1.</span> <span class="nav-text">内聚和耦合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#C4模型"><span class="nav-number">3.2.</span> <span class="nav-text">C4模型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#系统上下文图"><span class="nav-number">3.2.1.</span> <span class="nav-text">系统上下文图</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#容器图"><span class="nav-number">3.2.2.</span> <span class="nav-text">容器图</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#组件图"><span class="nav-number">3.2.3.</span> <span class="nav-text">组件图</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#代码图"><span class="nav-number">3.2.4.</span> <span class="nav-text">代码图</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BFF-Backend-for-Frontend-和网关Gateway"><span class="nav-number">3.3.</span> <span class="nav-text">BFF(Backend for Frontend)和网关Gateway</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创业公司架构选型"><span class="nav-number"></span> <span class="nav-text">创业公司架构选型</span></a></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#异地多活之多机房架构"><span class="nav-number">1.</span> <span class="nav-text">异地多活之多机房架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#架构之荔枝荔枝FM"><span class="nav-number">2.</span> <span class="nav-text">架构之荔枝荔枝FM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#架构概念"><span class="nav-number">3.</span> <span class="nav-text">架构概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#内聚和耦合"><span class="nav-number">3.1.</span> <span class="nav-text">内聚和耦合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#C4模型"><span class="nav-number">3.2.</span> <span class="nav-text">C4模型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#系统上下文图"><span class="nav-number">3.2.1.</span> <span class="nav-text">系统上下文图</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#容器图"><span class="nav-number">3.2.2.</span> <span class="nav-text">容器图</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#组件图"><span class="nav-number">3.2.3.</span> <span class="nav-text">组件图</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#代码图"><span class="nav-number">3.2.4.</span> <span class="nav-text">代码图</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BFF-Backend-for-Frontend-和网关Gateway"><span class="nav-number">3.3.</span> <span class="nav-text">BFF(Backend for Frontend)和网关Gateway</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#中间件指标"><span class="nav-number">4.</span> <span class="nav-text">中间件指标</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#nginx"><span class="nav-number">4.1.</span> <span class="nav-text">nginx</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创业公司架构选型"><span class="nav-number"></span> <span class="nav-text">创业公司架构选型</span></a></div>
             
 
           </div>
@@ -678,7 +679,7 @@ app -&gt; gateway-&gt;bff1--&gt;服务A
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

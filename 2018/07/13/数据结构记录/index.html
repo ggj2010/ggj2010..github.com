@@ -99,7 +99,7 @@
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/13838784-37261f90d90bba24.png">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/13838784-7bbab4d36a1b60bd.png">
 <meta property="og:image" content="http://p1.meituan.net/education/33f35bfb2ea84e10e76d43d8ec07dbe237751.png">
-<meta property="og:updated_time" content="2020-06-22T09:26:44.549Z">
+<meta property="og:updated_time" content="2021-01-25T06:23:52.873Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据结构记录">
 <meta name="twitter:description" content="常见概念时间复杂度常见的算法时间复杂度由小到大依次为：Ο(1)＜Ο(log2n)＜Ο(n)＜Ο(nlog2n)＜Ο(n^2)＜Ο(n^3)＜…＜Ο(2n)＜Ο(n!) 例如： 1、时间复杂度为Ο(1) sum = n*(n+1)/2 2、时间复杂度O(n) for(int i = 0; i &amp;lt; n; i++){     printf(&amp;quot;%d &amp;quot;,i); } 3、时间复杂度">
@@ -291,7 +291,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ggj2010">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg">
+      <meta itemprop="image" content="https://avatar.csdnimg.cn/1/E/3/ggj20ss.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -491,10 +491,10 @@ while(i &lt; n){
        }
        return temp;
    }
-</code></pre><h3 id="队列与栈"><a href="#队列与栈" class="headerlink" title="队列与栈"></a>队列与栈</h3><pre><code>栈是只只能在表尾部进行插入和删除操作等线性表
-FIFO先进先出，最先使用当缓存会先失效
+</code></pre><h3 id="队列与栈"><a href="#队列与栈" class="headerlink" title="队列与栈"></a>队列与栈</h3><pre><code>栈是只只能在表【尾部】进行插入和删除操作等线性表，后进先出，
 入栈：它是把新元素放到栈顶元素的上面，使之成为新的栈顶元素
 出栈：它是把栈顶元素删除掉，使其相邻的元素成为新的栈顶元素
+
 java中的栈是用Stack,Stack继承了Vector Vector与ArrayList类似只是Vector是
 线程安全的，所有操作方法都加了synchronized
 push 压栈 pop出栈，peek获取栈顶的元素。
@@ -524,16 +524,19 @@ push 压栈 pop出栈，peek获取栈顶的元素。
     }
 
 
-
-
-队列是只只能在一端插入，在另外一端删除等线性表
-允许插入的是队列尾部，允许删除的叫队列头部
-队列 ：先进先出FIFO(First Input First Output)
-         新元素（等待进入队列的元素）总是被插入到链表的尾部，
-         而读取的时候总是从链表的头部开始读取。
+队列是只只能在一端插入，在另外一端删除等线性表，
+允许插入的是【队列尾部】，允许删除的叫【队列头部】
+=》尾e,d,c,b,a头=》
+队列 ：先进先出 FIFO(First Input First Output)
+      新元素（等待进入队列的元素）总是被插入到队列的尾部，
+      而读取的时候总是从队列的头部开始读取。
 
 栈就是一个桶，后放进去的先拿出来，它下面本来有的东西要等它出来之后才能出来。（后进先出）
+栈的概念bai是弹压，就像子弹壳装弹，一du粒一粒压进去，zhi但是打出来的dao时候是从上面打出来zhuan的，
+最先shu压进去的最后弹出来，如果进去顺序是123，打出来顺序是321，这就是后进先出
+
 队列只能在队头做删除操作,在队尾做插入操作.而栈只能在栈顶做插入和删除操作。（先进先出）
+队列的概念就是我们平时排队，按次序来，你排在第1个，那你就第一个轮到，就是先进先出，先到先来
 </code></pre><h3 id="字符串搜索KMP算法"><a href="#字符串搜索KMP算法" class="headerlink" title="字符串搜索KMP算法"></a>字符串搜索KMP算法</h3><pre><code>避免不必要的回溯，利用已经部分匹配这个有效信息，保持i指针不回溯，通过修改j指针，让模式串尽量地移动到有效的位置
 j指针可以基于next数组，j的值多少是基于当前字符串之前的串的前后缀相似度
 next[j] 公式
@@ -599,7 +602,21 @@ public static int[] getNext(char[] p) {
         }
         return next;
     }
-</code></pre><h3 id="树记录"><a href="#树记录" class="headerlink" title="树记录"></a>树记录</h3><pre><code>树有以下种类：
+</code></pre><h3 id="跳跃表"><a href="#跳跃表" class="headerlink" title="跳跃表"></a>跳跃表</h3><pre><code>https://www.jianshu.com/p/168423ad0ab9
+https://www.cnblogs.com/cofjus/p/13602564.html
+跳跃表是一种可以替代平衡树的数据结构，跳跃表让已经排序好的数据分布在多层次的链表中，
+默认是将key值升序排列，以0到1决定一个数字是否爬升到高层次到链表中。
+它通过容许一些数据到冗余，达到以&quot;空间换时间&quot;的目的
+跳跃表的效率和 AVL 相媲美，查找、添加、插入、删除操作都能够在 O(LogN) 的复杂度内完成
+</code></pre><h4 id="规则"><a href="#规则" class="headerlink" title="规则"></a>规则</h4><p>   一个跳跃表应该有若干个层（Level）链表组成；</p>
+<ol>
+<li>跳跃表中最底层的链表包含所有数据； 每一层链表中的数据都是有序的；</li>
+<li>如果一个元素 X 出现在第i层，那么编号比 i 小的层都包含元素 X；</li>
+<li>第 i 层的元素通过一个指针指向下一层拥有相同值的元素；</li>
+<li>在每一层中，-∞ 和 +∞ 两个元素都出现(分别表示 INT_MIN 和 INT_MAX)；</li>
+<li>头指针（head）指向最高一层的第一个元素；</li>
+</ol>
+<h3 id="树记录"><a href="#树记录" class="headerlink" title="树记录"></a>树记录</h3><pre><code>树有以下种类：
 多叉树-&gt;平衡多路搜索树-&gt; B(Balanced Tree)树、与B+树
 
 二叉树-&gt;二叉搜索树（BST二叉排序树）-&gt;普通二叉搜索树
@@ -874,7 +891,7 @@ hashmap统计 O(n)
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg"
+               src="https://avatar.csdnimg.cn/1/E/3/ggj20ss.jpg"
                alt="ggj2010" />
           <p class="site-author-name" itemprop="name">ggj2010</p>
            
@@ -886,7 +903,7 @@ hashmap统计 O(n)
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-count">42</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -963,7 +980,7 @@ hashmap统计 O(n)
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#常见概念"><span class="nav-number">1.</span> <span class="nav-text">常见概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#时间复杂度"><span class="nav-number">1.1.</span> <span class="nav-text">时间复杂度</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#数组"><span class="nav-number">1.1.1.</span> <span class="nav-text">数组</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常用排序算法的时间复杂度"><span class="nav-number">1.2.</span> <span class="nav-text">常用排序算法的时间复杂度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#空间复杂度"><span class="nav-number">1.3.</span> <span class="nav-text">空间复杂度</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据结构"><span class="nav-number">2.</span> <span class="nav-text">数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据存储结构"><span class="nav-number">2.1.</span> <span class="nav-text">数据存储结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#算法分析方法"><span class="nav-number">2.2.</span> <span class="nav-text">算法分析方法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#穷举法"><span class="nav-number">2.2.1.</span> <span class="nav-text">穷举法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#回溯法"><span class="nav-number">2.2.2.</span> <span class="nav-text">回溯法</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分治法"><span class="nav-number">2.3.</span> <span class="nav-text">分治法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#减治法"><span class="nav-number">2.4.</span> <span class="nav-text">减治法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#贪心法"><span class="nav-number">2.5.</span> <span class="nav-text">贪心法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#动态规划法"><span class="nav-number">2.6.</span> <span class="nav-text">动态规划法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#队列与栈"><span class="nav-number">3.</span> <span class="nav-text">队列与栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串搜索KMP算法"><span class="nav-number">4.</span> <span class="nav-text">字符串搜索KMP算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#树记录"><span class="nav-number">5.</span> <span class="nav-text">树记录</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#树"><span class="nav-number">5.1.</span> <span class="nav-text">树</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#度"><span class="nav-number">5.1.1.</span> <span class="nav-text">度</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#叶子"><span class="nav-number">5.1.2.</span> <span class="nav-text">叶子</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#结点"><span class="nav-number">5.1.3.</span> <span class="nav-text">结点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#层次"><span class="nav-number">5.1.4.</span> <span class="nav-text">层次</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#树的存储结构"><span class="nav-number">5.2.</span> <span class="nav-text">树的存储结构</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#双亲表示法"><span class="nav-number">5.2.1.</span> <span class="nav-text">双亲表示法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#孩子表示法"><span class="nav-number">5.2.2.</span> <span class="nav-text">孩子表示法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#双亲孩子表示法"><span class="nav-number">5.2.3.</span> <span class="nav-text">双亲孩子表示法</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二叉树"><span class="nav-number">5.3.</span> <span class="nav-text">二叉树</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#二叉树存储结构"><span class="nav-number">5.3.1.</span> <span class="nav-text">二叉树存储结构</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#顺序存储结构"><span class="nav-number">5.3.1.1.</span> <span class="nav-text">顺序存储结构</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#二叉链表"><span class="nav-number">5.3.1.2.</span> <span class="nav-text">二叉链表</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#满二叉树"><span class="nav-number">5.4.</span> <span class="nav-text">满二叉树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#完全二叉树"><span class="nav-number">5.5.</span> <span class="nav-text">完全二叉树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二叉排序树（二叉排序树）"><span class="nav-number">5.6.</span> <span class="nav-text">二叉排序树（二叉排序树）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#平衡二叉树"><span class="nav-number">5.7.</span> <span class="nav-text">平衡二叉树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AVL树"><span class="nav-number">5.8.</span> <span class="nav-text">AVL树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#红黑树"><span class="nav-number">5.9.</span> <span class="nav-text">红黑树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二叉树排序前序、中序、后序"><span class="nav-number">5.10.</span> <span class="nav-text">二叉树排序前序、中序、后序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#B树"><span class="nav-number">5.11.</span> <span class="nav-text">B树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#B-树"><span class="nav-number">5.12.</span> <span class="nav-text">B-树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#B-树-1"><span class="nav-number">5.13.</span> <span class="nav-text">B+树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#B-Tree与B-Tree区别"><span class="nav-number">5.14.</span> <span class="nav-text">B+Tree与B-Tree区别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#为什么数据索引用B-tree"><span class="nav-number">5.15.</span> <span class="nav-text">为什么数据索引用B+tree</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#图"><span class="nav-number">5.16.</span> <span class="nav-text">图</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#图的存储结构"><span class="nav-number">5.16.1.</span> <span class="nav-text">图的存储结构</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查找算法"><span class="nav-number">6.</span> <span class="nav-text">查找算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#顺序查找"><span class="nav-number">6.1.</span> <span class="nav-text">顺序查找</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二分查找"><span class="nav-number">6.2.</span> <span class="nav-text">二分查找</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#场景场景"><span class="nav-number">7.</span> <span class="nav-text">场景场景</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#海量数据场景"><span class="nav-number">7.1.</span> <span class="nav-text">海量数据场景</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#海量无重复数据排序"><span class="nav-number">7.1.1.</span> <span class="nav-text">海量无重复数据排序</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#海量重复数据求排序"><span class="nav-number">7.2.</span> <span class="nav-text">海量重复数据求排序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#海量重复数据求topK"><span class="nav-number">7.3.</span> <span class="nav-text">海量重复数据求topK</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#两个海量数据取重复记录"><span class="nav-number">7.4.</span> <span class="nav-text">两个海量数据取重复记录</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#在2-5亿个整数中找出不重复的整数"><span class="nav-number">7.5.</span> <span class="nav-text">在2.5亿个整数中找出不重复的整数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参考"><span class="nav-number">7.6.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#常见概念"><span class="nav-number">1.</span> <span class="nav-text">常见概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#时间复杂度"><span class="nav-number">1.1.</span> <span class="nav-text">时间复杂度</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#数组"><span class="nav-number">1.1.1.</span> <span class="nav-text">数组</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常用排序算法的时间复杂度"><span class="nav-number">1.2.</span> <span class="nav-text">常用排序算法的时间复杂度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#空间复杂度"><span class="nav-number">1.3.</span> <span class="nav-text">空间复杂度</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据结构"><span class="nav-number">2.</span> <span class="nav-text">数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据存储结构"><span class="nav-number">2.1.</span> <span class="nav-text">数据存储结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#算法分析方法"><span class="nav-number">2.2.</span> <span class="nav-text">算法分析方法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#穷举法"><span class="nav-number">2.2.1.</span> <span class="nav-text">穷举法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#回溯法"><span class="nav-number">2.2.2.</span> <span class="nav-text">回溯法</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分治法"><span class="nav-number">2.3.</span> <span class="nav-text">分治法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#减治法"><span class="nav-number">2.4.</span> <span class="nav-text">减治法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#贪心法"><span class="nav-number">2.5.</span> <span class="nav-text">贪心法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#动态规划法"><span class="nav-number">2.6.</span> <span class="nav-text">动态规划法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#队列与栈"><span class="nav-number">3.</span> <span class="nav-text">队列与栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串搜索KMP算法"><span class="nav-number">4.</span> <span class="nav-text">字符串搜索KMP算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#跳跃表"><span class="nav-number">5.</span> <span class="nav-text">跳跃表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#规则"><span class="nav-number">5.1.</span> <span class="nav-text">规则</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#树记录"><span class="nav-number">6.</span> <span class="nav-text">树记录</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#树"><span class="nav-number">6.1.</span> <span class="nav-text">树</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#度"><span class="nav-number">6.1.1.</span> <span class="nav-text">度</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#叶子"><span class="nav-number">6.1.2.</span> <span class="nav-text">叶子</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#结点"><span class="nav-number">6.1.3.</span> <span class="nav-text">结点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#层次"><span class="nav-number">6.1.4.</span> <span class="nav-text">层次</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#树的存储结构"><span class="nav-number">6.2.</span> <span class="nav-text">树的存储结构</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#双亲表示法"><span class="nav-number">6.2.1.</span> <span class="nav-text">双亲表示法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#孩子表示法"><span class="nav-number">6.2.2.</span> <span class="nav-text">孩子表示法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#双亲孩子表示法"><span class="nav-number">6.2.3.</span> <span class="nav-text">双亲孩子表示法</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二叉树"><span class="nav-number">6.3.</span> <span class="nav-text">二叉树</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#二叉树存储结构"><span class="nav-number">6.3.1.</span> <span class="nav-text">二叉树存储结构</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#顺序存储结构"><span class="nav-number">6.3.1.1.</span> <span class="nav-text">顺序存储结构</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#二叉链表"><span class="nav-number">6.3.1.2.</span> <span class="nav-text">二叉链表</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#满二叉树"><span class="nav-number">6.4.</span> <span class="nav-text">满二叉树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#完全二叉树"><span class="nav-number">6.5.</span> <span class="nav-text">完全二叉树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二叉排序树（二叉排序树）"><span class="nav-number">6.6.</span> <span class="nav-text">二叉排序树（二叉排序树）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#平衡二叉树"><span class="nav-number">6.7.</span> <span class="nav-text">平衡二叉树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AVL树"><span class="nav-number">6.8.</span> <span class="nav-text">AVL树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#红黑树"><span class="nav-number">6.9.</span> <span class="nav-text">红黑树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二叉树排序前序、中序、后序"><span class="nav-number">6.10.</span> <span class="nav-text">二叉树排序前序、中序、后序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#B树"><span class="nav-number">6.11.</span> <span class="nav-text">B树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#B-树"><span class="nav-number">6.12.</span> <span class="nav-text">B-树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#B-树-1"><span class="nav-number">6.13.</span> <span class="nav-text">B+树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#B-Tree与B-Tree区别"><span class="nav-number">6.14.</span> <span class="nav-text">B+Tree与B-Tree区别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#为什么数据索引用B-tree"><span class="nav-number">6.15.</span> <span class="nav-text">为什么数据索引用B+tree</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#图"><span class="nav-number">6.16.</span> <span class="nav-text">图</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#图的存储结构"><span class="nav-number">6.16.1.</span> <span class="nav-text">图的存储结构</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查找算法"><span class="nav-number">7.</span> <span class="nav-text">查找算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#顺序查找"><span class="nav-number">7.1.</span> <span class="nav-text">顺序查找</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二分查找"><span class="nav-number">7.2.</span> <span class="nav-text">二分查找</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#场景场景"><span class="nav-number">8.</span> <span class="nav-text">场景场景</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#海量数据场景"><span class="nav-number">8.1.</span> <span class="nav-text">海量数据场景</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#海量无重复数据排序"><span class="nav-number">8.1.1.</span> <span class="nav-text">海量无重复数据排序</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#海量重复数据求排序"><span class="nav-number">8.2.</span> <span class="nav-text">海量重复数据求排序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#海量重复数据求topK"><span class="nav-number">8.3.</span> <span class="nav-text">海量重复数据求topK</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#两个海量数据取重复记录"><span class="nav-number">8.4.</span> <span class="nav-text">两个海量数据取重复记录</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#在2-5亿个整数中找出不重复的整数"><span class="nav-number">8.5.</span> <span class="nav-text">在2.5亿个整数中找出不重复的整数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参考"><span class="nav-number">8.6.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -986,7 +1003,7 @@ hashmap统计 O(n)
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

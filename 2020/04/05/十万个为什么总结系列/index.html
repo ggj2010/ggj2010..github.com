@@ -94,7 +94,7 @@
 <meta property="og:site_name" content="高广金博客">
 <meta property="og:description" content="为什么要用微服务(Microservices)先介绍架构背景，再介绍各自的利弊 早期的应用架构是单体架构、再到soa的架构、再到现在的微服务和service mesh 单体架构的特点： 优点：便于开发、测试与部署 缺点： 复杂性高：项目随着时间会越来臃肿，代码越来越复杂，难以被修改和重构，同时团队内的人员职责不清晰。 交付效率低：构建和部署耗时长，难以定位问题，开发效率低，改动一个问题都需要全量回">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-06-17T08:16:06.056Z">
+<meta property="og:updated_time" content="2021-01-13T05:48:31.235Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="十万个为什么总结系列">
 <meta name="twitter:description" content="为什么要用微服务(Microservices)先介绍架构背景，再介绍各自的利弊 早期的应用架构是单体架构、再到soa的架构、再到现在的微服务和service mesh 单体架构的特点： 优点：便于开发、测试与部署 缺点： 复杂性高：项目随着时间会越来臃肿，代码越来越复杂，难以被修改和重构，同时团队内的人员职责不清晰。 交付效率低：构建和部署耗时长，难以定位问题，开发效率低，改动一个问题都需要全量回">
@@ -285,7 +285,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ggj2010">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg">
+      <meta itemprop="image" content="https://avatar.csdnimg.cn/1/E/3/ggj20ss.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -467,7 +467,7 @@ public void createUser(User user){
  我们可以看到用户模块service与机构模块service形成依赖
 </code></pre><h3 id="面向对象与基于数据库领域模型设计"><a href="#面向对象与基于数据库领域模型设计" class="headerlink" title="面向对象与基于数据库领域模型设计"></a>面向对象与基于数据库领域模型设计</h3><pre><code>我们目前的绝大数开发都是基于数据库模型开发的，而不是面向对象，假设我们的机器内存
 无限大，不需要持久化数据，也就是不依赖数据库，这个时候我们会怎么设计软件。
-面向对象有封装、继承、多态，而数据库模型是不知道这些的
+面向对象有封装、继承、多态，而数据库模型是不会有这些的
 
 引用
 例如我们创建一个部门，一个部门可以挂多个用户，一个用户可以对应多个部门
@@ -496,8 +496,8 @@ dto-do do-po
 
 由于值对象只做整体替换、不可修改的特性，在值对象中基本不会有修改或新增的方法。
 </code></pre><h3 id="为什么多线程会不完全"><a href="#为什么多线程会不完全" class="headerlink" title="为什么多线程会不完全"></a>为什么多线程会不完全</h3><pre><code>1、先说cpu高速缓存（效率）
-计算机程序在运行的时候，每条指令都在cpu中执行的，执行过程中会涉及到数据的读写，多线程共享的变量是存储在主内存，读写主内存的
-数据没有CPU指令中执行指令的速度快，如果任何操作都要和主内存交互，会影响效率，所以才会有CPU高速缓存（本地内存），CPU高速缓存为
+    计算机程序在运行的时候，每条指令都在cpu中执行的，执行过程中会涉及到数据的读写，多线程共享的变量是存储在主内存，读写主内存的
+ 数据没有CPU指令中执行指令的速度快，如果任何操作都要和主内存交互，会影响效率，所以才会有CPU高速缓存（本地内存），CPU高速缓存为
 某个CPU独有，只与在该CPU运行的线程有关
 
 2、再说java的内存模型（缓存一致性）
@@ -529,7 +529,7 @@ dto-do do-po
     两个操作的执行顺序，synchronized和Lock来保证有序性，volatile禁止重排序
     volatile关键字通过提供“内存屏障”的方式来防止指令被重排序，为了实现volatile的内存语义，编译器在生成字节码时，
     会在指令序列中插入内存屏障来禁止特定类型的处理器重排序。
-</code></pre>
+</code></pre><h3 id="为什么java-ThreadLocalMap的Entry为什么是软引用"><a href="#为什么java-ThreadLocalMap的Entry为什么是软引用" class="headerlink" title="为什么java ThreadLocalMap的Entry为什么是软引用"></a>为什么java ThreadLocalMap的Entry为什么是软引用</h3>
       
     </div>
 
@@ -568,6 +568,10 @@ dto-do do-po
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/09/24/有意思的问题/" rel="prev" title="有意思的问题">
+                有意思的问题 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -627,7 +631,7 @@ dto-do do-po
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg"
+               src="https://avatar.csdnimg.cn/1/E/3/ggj20ss.jpg"
                alt="ggj2010" />
           <p class="site-author-name" itemprop="name">ggj2010</p>
            
@@ -639,7 +643,7 @@ dto-do do-po
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-count">42</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -716,7 +720,7 @@ dto-do do-po
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要用微服务-Microservices"><span class="nav-number">1.</span> <span class="nav-text">为什么要用微服务(Microservices)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#微服务如何拆分"><span class="nav-number">1.1.</span> <span class="nav-text">微服务如何拆分</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是康威定律"><span class="nav-number">2.</span> <span class="nav-text">什么是康威定律</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一定律"><span class="nav-number">2.1.</span> <span class="nav-text">第一定律</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二定律"><span class="nav-number">2.2.</span> <span class="nav-text">第二定律</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三定律"><span class="nav-number">2.3.</span> <span class="nav-text">第三定律</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第四定律"><span class="nav-number">2.4.</span> <span class="nav-text">第四定律</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要用敏捷式开发"><span class="nav-number">3.</span> <span class="nav-text">为什么要用敏捷式开发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要用DDD"><span class="nav-number">4.</span> <span class="nav-text">为什么要用DDD</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#面向对象与基于数据库领域模型设计"><span class="nav-number">4.1.</span> <span class="nav-text">面向对象与基于数据库领域模型设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ddd一些总结"><span class="nav-number">4.2.</span> <span class="nav-text">ddd一些总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么多线程会不完全"><span class="nav-number">4.3.</span> <span class="nav-text">为什么多线程会不完全</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要用微服务-Microservices"><span class="nav-number">1.</span> <span class="nav-text">为什么要用微服务(Microservices)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#微服务如何拆分"><span class="nav-number">1.1.</span> <span class="nav-text">微服务如何拆分</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是康威定律"><span class="nav-number">2.</span> <span class="nav-text">什么是康威定律</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一定律"><span class="nav-number">2.1.</span> <span class="nav-text">第一定律</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二定律"><span class="nav-number">2.2.</span> <span class="nav-text">第二定律</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三定律"><span class="nav-number">2.3.</span> <span class="nav-text">第三定律</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第四定律"><span class="nav-number">2.4.</span> <span class="nav-text">第四定律</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要用敏捷式开发"><span class="nav-number">3.</span> <span class="nav-text">为什么要用敏捷式开发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要用DDD"><span class="nav-number">4.</span> <span class="nav-text">为什么要用DDD</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#面向对象与基于数据库领域模型设计"><span class="nav-number">4.1.</span> <span class="nav-text">面向对象与基于数据库领域模型设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ddd一些总结"><span class="nav-number">4.2.</span> <span class="nav-text">ddd一些总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么多线程会不完全"><span class="nav-number">4.3.</span> <span class="nav-text">为什么多线程会不完全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么java-ThreadLocalMap的Entry为什么是软引用"><span class="nav-number">4.4.</span> <span class="nav-text">为什么java ThreadLocalMap的Entry为什么是软引用</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -739,7 +743,7 @@ dto-do do-po
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

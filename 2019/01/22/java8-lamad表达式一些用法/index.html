@@ -94,7 +94,7 @@
 <meta property="og:site_name" content="高广金博客">
 <meta property="og:description" content="用lamad写了几天业务代码，发现方便不少。 map可以理解成是对对象里面部分属性的提取或者加工转化  filter：过滤某些数据 collect：是输出指定的集合类型，比如 collect(Collectors.toMap(TestBean::getId,  Function.identity())) collect(Collectors.groupingBy(TestBean::getName">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-06-29T11:24:05.300Z">
+<meta property="og:updated_time" content="2020-12-22T04:03:39.060Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java8 lamad表达式一些用法">
 <meta name="twitter:description" content="用lamad写了几天业务代码，发现方便不少。 map可以理解成是对对象里面部分属性的提取或者加工转化  filter：过滤某些数据 collect：是输出指定的集合类型，比如 collect(Collectors.toMap(TestBean::getId,  Function.identity())) collect(Collectors.groupingBy(TestBean::getName">
@@ -285,7 +285,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ggj2010">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg">
+      <meta itemprop="image" content="https://avatar.csdnimg.cn/1/E/3/ggj20ss.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -433,7 +433,10 @@ IntStream.range(0, 10).forEach(s -&gt; System.out.println(&quot;range&quot; + s)
 IntStream.rangeClosed(1, 10).parallel().forEach(i -&gt; {System.out.println(&quot;rangeClosed 并行&quot; + i); });
 
  List&lt;String&gt; itemList = IntStream.range(0, 10).mapToObj(i -&gt; &quot;item&quot; + ThreadLocalRandom.current().nextInt(10)).collect(Collectors.toList());
-        List&lt;Integer&gt; itemList2 = IntStream.range(0, 10).map(i -&gt; i + ThreadLocalRandom.current().nextInt(10)).boxed().collect(Collectors.toList());
+ //Collectors.joining(&quot;&quot;) 其实就是将List&lt;String&gt;转为 String
+  String PAYLOAD=IntStream.range(0, 10).mapToObj（i-&gt;&quot;a&quot;）.collect(Collectors.joining(&quot;&quot;));
+
+ List&lt;Integer&gt; itemList2 = IntStream.range(0, 10).map(i -&gt; i + ThreadLocalRandom.current().nextInt(10)).boxed().collect(Collectors.toList());
 
 //随机创建一个数组，然后转换成List&lt;Item&gt;
 private static List&lt;Item&gt; createCart() {
@@ -461,6 +464,19 @@ ConcurrentHashMap&lt;String, List&lt;UserDTO&gt;&gt; autoCompleteIndex = new Con
                 .add(new UserDTO(&quot;d&quot;));
         autoCompleteIndex.computeIfAbsent(&quot;a&quot;, s -&gt; new ArrayList&lt;&gt;())
                 .add(new UserDTO(&quot;c&quot;));
+</code></pre><h4 id="装箱和拆箱"><a href="#装箱和拆箱" class="headerlink" title="装箱和拆箱"></a>装箱和拆箱</h4><pre><code>案例变量：menu为一个菜单列表（list），内含有name（名字）、calories（热量）、type（类型）属性。
+   int calories = menu.stream()
+            .mapToInt(Dish::getCalories)
+            .sum()
+//省去拆箱过程
+boxed()是装箱过程
+</code></pre><h4 id="list里面是否存在某个元素"><a href="#list里面是否存在某个元素" class="headerlink" title="list里面是否存在某个元素"></a>list里面是否存在某个元素</h4><pre><code>boolean idExists = tabPane.getTabs().stream()
+            .anyMatch(t -&gt; t.getId().equals(idToCheck));
+ subjectResultList.stream().anyMatch(s-&gt;s.getSubjectCode().equals(subjectCode)
+</code></pre><h4 id="逗号分割"><a href="#逗号分割" class="headerlink" title="逗号分割"></a>逗号分割</h4><pre><code>String courseIds = packList.stream()
+      .filter(e -&gt; e.getCourse() != null)
+      .map(PackageCourse::getCourseId).map(String::valueOf).distinct()
+        .collect(joining(&quot;,&quot;));
 </code></pre>
       
     </div>
@@ -563,7 +579,7 @@ ConcurrentHashMap&lt;String, List&lt;UserDTO&gt;&gt; autoCompleteIndex = new Con
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg"
+               src="https://avatar.csdnimg.cn/1/E/3/ggj20ss.jpg"
                alt="ggj2010" />
           <p class="site-author-name" itemprop="name">ggj2010</p>
            
@@ -575,7 +591,7 @@ ConcurrentHashMap&lt;String, List&lt;UserDTO&gt;&gt; autoCompleteIndex = new Con
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-count">42</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -652,7 +668,7 @@ ConcurrentHashMap&lt;String, List&lt;UserDTO&gt;&gt; autoCompleteIndex = new Con
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#List的一些玩法"><span class="nav-number">1.</span> <span class="nav-text">List的一些玩法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#获取List里面到某些属性转化成新的List"><span class="nav-number">1.1.</span> <span class="nav-text">获取List里面到某些属性转化成新的List</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List-转化成List"><span class="nav-number">1.2.</span> <span class="nav-text">List 转化成List</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#根据条件过滤List"><span class="nav-number">1.3.</span> <span class="nav-text">根据条件过滤List</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List-里面某些数据聚合相加"><span class="nav-number">1.4.</span> <span class="nav-text">List 里面某些数据聚合相加</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List-去重复"><span class="nav-number">1.5.</span> <span class="nav-text">List 去重复</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List-转Map"><span class="nav-number">1.6.</span> <span class="nav-text">List 转Map></span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List-转Map-1"><span class="nav-number">1.7.</span> <span class="nav-text">List 转Map</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List处理里面对数据"><span class="nav-number">1.8.</span> <span class="nav-text">List处理里面对数据</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#两个list-比较去除相同元素"><span class="nav-number">2.</span> <span class="nav-text">两个list 比较去除相同元素</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#list自定义排序"><span class="nav-number">3.</span> <span class="nav-text">list自定义排序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#IntStream、DoubleStream和LongStream"><span class="nav-number">4.</span> <span class="nav-text">IntStream、DoubleStream和LongStream</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#map-list-一些用法"><span class="nav-number">5.</span> <span class="nav-text">map list 一些用法</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#List的一些玩法"><span class="nav-number">1.</span> <span class="nav-text">List的一些玩法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#获取List里面到某些属性转化成新的List"><span class="nav-number">1.1.</span> <span class="nav-text">获取List里面到某些属性转化成新的List</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List-转化成List"><span class="nav-number">1.2.</span> <span class="nav-text">List 转化成List</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#根据条件过滤List"><span class="nav-number">1.3.</span> <span class="nav-text">根据条件过滤List</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List-里面某些数据聚合相加"><span class="nav-number">1.4.</span> <span class="nav-text">List 里面某些数据聚合相加</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List-去重复"><span class="nav-number">1.5.</span> <span class="nav-text">List 去重复</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List-转Map"><span class="nav-number">1.6.</span> <span class="nav-text">List 转Map></span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List-转Map-1"><span class="nav-number">1.7.</span> <span class="nav-text">List 转Map</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List处理里面对数据"><span class="nav-number">1.8.</span> <span class="nav-text">List处理里面对数据</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#两个list-比较去除相同元素"><span class="nav-number">2.</span> <span class="nav-text">两个list 比较去除相同元素</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#list自定义排序"><span class="nav-number">3.</span> <span class="nav-text">list自定义排序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#IntStream、DoubleStream和LongStream"><span class="nav-number">4.</span> <span class="nav-text">IntStream、DoubleStream和LongStream</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#map-list-一些用法"><span class="nav-number">5.</span> <span class="nav-text">map list 一些用法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#装箱和拆箱"><span class="nav-number">6.</span> <span class="nav-text">装箱和拆箱</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#list里面是否存在某个元素"><span class="nav-number">7.</span> <span class="nav-text">list里面是否存在某个元素</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#逗号分割"><span class="nav-number">8.</span> <span class="nav-text">逗号分割</span></a></li></ol></div>
             
 
           </div>
@@ -675,7 +691,7 @@ ConcurrentHashMap&lt;String, List&lt;UserDTO&gt;&gt; autoCompleteIndex = new Con
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

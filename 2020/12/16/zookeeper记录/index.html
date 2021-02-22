@@ -1,0 +1,782 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="应用场景1、分布式协调分布式协调简单说就是有人对ZooKeeper中的数据做了监听，如果修改了ZooKeeper中被监听的数据，ZooKeeper反过来会告诉给发起监听的人数据的变更 2、元数据管理3、高可用支持主从选举 4、分布式锁支持分布式锁，高并发场景有性能问题 ZooKeeper集群架构leader领导者为客户端提供读和写功能，负责投票的发起与决议，集群里面只有leader才有写的功能 f">
+<meta property="og:type" content="article">
+<meta property="og:title" content="zookeeper记录">
+<meta property="og:url" content="http://ggj2010.github.io/2020/12/16/zookeeper记录/index.html">
+<meta property="og:site_name" content="高广金博客">
+<meta property="og:description" content="应用场景1、分布式协调分布式协调简单说就是有人对ZooKeeper中的数据做了监听，如果修改了ZooKeeper中被监听的数据，ZooKeeper反过来会告诉给发起监听的人数据的变更 2、元数据管理3、高可用支持主从选举 4、分布式锁支持分布式锁，高并发场景有性能问题 ZooKeeper集群架构leader领导者为客户端提供读和写功能，负责投票的发起与决议，集群里面只有leader才有写的功能 f">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-12-31T11:13:54.959Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="zookeeper记录">
+<meta name="twitter:description" content="应用场景1、分布式协调分布式协调简单说就是有人对ZooKeeper中的数据做了监听，如果修改了ZooKeeper中被监听的数据，ZooKeeper反过来会告诉给发起监听的人数据的变更 2、元数据管理3、高可用支持主从选举 4、分布式锁支持分布式锁，高并发场景有性能问题 ZooKeeper集群架构leader领导者为客户端提供读和写功能，负责投票的发起与决议，集群里面只有leader才有写的功能 f">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://ggj2010.github.io/2020/12/16/zookeeper记录/"/>
+
+
+
+
+
+  <title> zookeeper记录 | 高广金博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">高广金博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-webmagic">
+          <a href="http://scedai.com/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            爬虫
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://ggj2010.github.io/2020/12/16/zookeeper记录/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ggj2010">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatar.csdnimg.cn/1/E/3/ggj20ss.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="高广金博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                zookeeper记录
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-12-16T10:29:47+08:00">
+                2020-12-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h4><h5 id="1、分布式协调"><a href="#1、分布式协调" class="headerlink" title="1、分布式协调"></a>1、分布式协调</h5><pre><code>分布式协调简单说就是有人对ZooKeeper中的数据做了监听，如果修改了ZooKeeper中被监听的数据，ZooKeeper反过来会告诉给发起监听的人数据的变更
+</code></pre><h5 id="2、元数据管理"><a href="#2、元数据管理" class="headerlink" title="2、元数据管理"></a>2、元数据管理</h5><h5 id="3、高可用"><a href="#3、高可用" class="headerlink" title="3、高可用"></a>3、高可用</h5><pre><code>支持主从选举
+</code></pre><h5 id="4、分布式锁"><a href="#4、分布式锁" class="headerlink" title="4、分布式锁"></a>4、分布式锁</h5><pre><code>支持分布式锁，高并发场景有性能问题
+</code></pre><h4 id="ZooKeeper集群架构"><a href="#ZooKeeper集群架构" class="headerlink" title="ZooKeeper集群架构"></a>ZooKeeper集群架构</h4><h5 id="leader领导者"><a href="#leader领导者" class="headerlink" title="leader领导者"></a>leader领导者</h5><pre><code>为客户端提供读和写功能，负责投票的发起与决议，集群里面只有leader才有写的功能
+</code></pre><h5 id="follower跟随者"><a href="#follower跟随者" class="headerlink" title="follower跟随者"></a>follower跟随者</h5><pre><code>为客户端提供读服务，如果是写的请求则转发到leader,在选举过程进行投票
+</code></pre><h5 id="observer观察者"><a href="#observer观察者" class="headerlink" title="observer观察者"></a>observer观察者</h5><pre><code>为客户端提供读服务，如果是写的请求则转发到leader。
+不参与leader的选举投票，也不参与写的过半原则机制。在不影响写的前提下，提高集群读的性能，此角色于zookeeper3.3系列新增的角色。
+</code></pre><h5 id="client"><a href="#client" class="headerlink" title="client"></a>client</h5><pre><code>连接zookeeper集群的使用者，请求的发起者，独立于zookeeper集群的角色
+</code></pre><h4 id="zookeeper读写机制"><a href="#zookeeper读写机制" class="headerlink" title="zookeeper读写机制"></a>zookeeper读写机制</h4><pre><code>在zk选举中，如果有过半的节点都选一个节点为leader的话，那么这个节点就会是leader节点
+，所以zk集群一般都是奇数台，节省机器。
+</code></pre><h5 id="读"><a href="#读" class="headerlink" title="读"></a>读</h5><pre><code>客户端可以去任意节点读数据
+</code></pre><h5 id="写"><a href="#写" class="headerlink" title="写"></a>写</h5><pre><code>所有的客户端只能往leader节点上面写数据，如果客户端连接的是follower节点，则follower会吧写请求转发给leader节点。
+leader接受到写请求就会往其他节点同步，如果有超过一半的节点收到消息后发来ack,那么leader节点就对这条消息进行commit
+,如果集群越大，接收ack的时间就越长，也就是节点越多会增加集群的读性能，也会影响集群的写性能。
+为了解决这个问题，zk中增加一个observer节点，不参与投票，只负责同步数据，所以引入这个角色目的就是为了增加集群读的性能，然后不影响集群的写性能
+
+第一阶段：每次的数据写入事件作为提案广播给所有Follower结点；可以写入的结点返回确认信息ACK；
+第二阶段：Leader收到一半以上的ACK信息后确认写入可以生效，向所有结点广播COMMIT将提案生效。
+</code></pre><h4 id="zk特点"><a href="#zk特点" class="headerlink" title="zk特点"></a>zk特点</h4><pre><code>1、一致性
+    客户端无论连接那个节点，读取的数据都是一样的
+    根据写入过程的两阶段的描述，我们知道ZooKeeper保证的是最终一致性，
+    即Leader向客户端返回写入成功后，可能有部分Follower还没有写入最新的数据，所以是最终一致性
+2、实时性
+      zk保证客户端在一定时间内获取到结果，但是不保证两台客户端同时获取到刚刚更新的消息
+3、原子性
+    leader在同步数据的时候，同步过程保证事务性，要么都成功，要么都失败
+4、原子性
+    一台服务器上如果消息a在消息b前发布，那么所有的server上的消息a都是在消息b前发布的。
+</code></pre><h4 id="zk如何保证数据一致性"><a href="#zk如何保证数据一致性" class="headerlink" title="zk如何保证数据一致性"></a>zk如何保证数据一致性</h4><pre><code>ZooKeeper保证数据一致性用的是ZAB协议。通过这个协议来进行ZooKeeper集群间的数据同步，保证数据的一致性
+</code></pre><h5 id="两阶段提交-过半写机制"><a href="#两阶段提交-过半写机制" class="headerlink" title="两阶段提交+过半写机制"></a>两阶段提交+过半写机制</h5><pre><code>leader节点会把数据通过proposal请求发到所有节点，节点收到数据后会存储到磁盘上面，然后发送一个ack给leader
+,如果leader接收到过半节点发送到ack响应，就会发送commit消息给各个节点，各个节点就会把消息放到内存里面（保证性能）
+，这样这个消息用户就可以看到了。
+</code></pre><h4 id="zk选举过程"><a href="#zk选举过程" class="headerlink" title="zk选举过程"></a>zk选举过程</h4><pre><code>zk每个节点都会包含以下两个即诶单
+zxid：数据ID，每次数据变动都会自增，初始都是0（编号越大在选择算法中的权重越大。）
+sid: 该投票信息所属的serverId （越大说明数据越新，在选举算法中数据越新权重越大。）
+</code></pre><h5 id="规则"><a href="#规则" class="headerlink" title="规则"></a>规则</h5><pre><code>1、第一次投票都是给自己投票
+2、服务器收到投票后，会先比较ZXID，ZXID大的当leader,如果一样，则比较SID,如果SID大的，当leader
+3、每次投票以后，服务器都会统计所有的投票，只要过半的机器投了相同的机器，那么Leader就选举成功了
+</code></pre><h5 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h5><pre><code>假设有两台机器sid=1 ,sid=2,进行投票 （sid,zxid）
+第一次投票：
+第一台机器投票给自己（1，0），
+第二台机器也投票给自己（2，0），
+
+第二次投票：
+ 第一台机器收到的收到的是 （2，0），首先zxid一样，但是sid比自己大，所以投票改成（2，0）
+
+ 第二台机器收到的是（ 1，0），首先zxid一样，但是sid没有自己大，所以投票改成自己（2，0）
+
+因为已经超过半数，所以机器2当选。
+ 如果集群在运行的过程中Follower节点宕机了，对Leader节点是不影响的，
+ 如果集群在运行的过程中Leader节点宕机了，就会进行重新选举，重新选举的流程跟上述一致
+</code></pre><h4 id="ZooKeeper是如何保证事务顺序的呢？"><a href="#ZooKeeper是如何保证事务顺序的呢？" class="headerlink" title="ZooKeeper是如何保证事务顺序的呢？"></a>ZooKeeper是如何保证事务顺序的呢？</h4><pre><code>zxid:
+ZXID由Leader节点生成，有新写入事件时，Leader生成新ZXID并随提案一起广播，
+每个结点本地都保存了当前最近一次事务的ZXID，ZXID是递增的，所以谁的ZXID越大，就表示谁的数据是最新的
+Leader为了保证提案按ZXID顺序生效，使用了一个ConcurrentHashMap，记录所有未提交的提案，命名为outstandingProposals，
+key为ZXID，Value为提案的信息。对outstandingProposals的访问逻辑如下
+
+
+1、每发起一个提案，会将提案的ZXID和内容放到outstandingProposals中，作为待提交的提案；
+2、收到Follower的ACK信息后，根据ACK中的ZXID从outstandingProposals中找到对应的提案，对ACK计数；
+3、执行tryToCommit尝试将提案提交，判断流程如下：
+     3.1：判断当前ZXID之前是否还有未提交提案，如果有，当前提案暂时不能提交；
+     3.2：判断提案是否收到半数以上ACK，如果达到半数则可以提交；
+     3.3：如果可以提交，将当前ZXID从outstandingProposals中清除并向Followers广播提交当前提案；
+
+Leader是如何判断当前ZXID之前是否还有未提交提案的呢？由于前提是保证顺序提交的，
+所以Leader只需判断outstandingProposals里，当前ZXID的前一个ZXID是否存在
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/09/24/有意思的问题/" rel="next" title="有意思的问题">
+                <i class="fa fa-chevron-left"></i> 有意思的问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/01/21/nosql汇总/" rel="prev" title="nosql汇总">
+                nosql汇总 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatar.csdnimg.cn/1/E/3/ggj20ss.jpg"
+               alt="ggj2010" />
+          <p class="site-author-name" itemprop="name">ggj2010</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ggj2010" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/ggjlvzjy" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#应用场景"><span class="nav-number">1.</span> <span class="nav-text">应用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1、分布式协调"><span class="nav-number">1.1.</span> <span class="nav-text">1、分布式协调</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2、元数据管理"><span class="nav-number">1.2.</span> <span class="nav-text">2、元数据管理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3、高可用"><span class="nav-number">1.3.</span> <span class="nav-text">3、高可用</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4、分布式锁"><span class="nav-number">1.4.</span> <span class="nav-text">4、分布式锁</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ZooKeeper集群架构"><span class="nav-number">2.</span> <span class="nav-text">ZooKeeper集群架构</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#leader领导者"><span class="nav-number">2.1.</span> <span class="nav-text">leader领导者</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#follower跟随者"><span class="nav-number">2.2.</span> <span class="nav-text">follower跟随者</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#observer观察者"><span class="nav-number">2.3.</span> <span class="nav-text">observer观察者</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#client"><span class="nav-number">2.4.</span> <span class="nav-text">client</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#zookeeper读写机制"><span class="nav-number">3.</span> <span class="nav-text">zookeeper读写机制</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#读"><span class="nav-number">3.1.</span> <span class="nav-text">读</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#写"><span class="nav-number">3.2.</span> <span class="nav-text">写</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#zk特点"><span class="nav-number">4.</span> <span class="nav-text">zk特点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#zk如何保证数据一致性"><span class="nav-number">5.</span> <span class="nav-text">zk如何保证数据一致性</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#两阶段提交-过半写机制"><span class="nav-number">5.1.</span> <span class="nav-text">两阶段提交+过半写机制</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#zk选举过程"><span class="nav-number">6.</span> <span class="nav-text">zk选举过程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#规则"><span class="nav-number">6.1.</span> <span class="nav-text">规则</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#例子"><span class="nav-number">6.2.</span> <span class="nav-text">例子</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ZooKeeper是如何保证事务顺序的呢？"><span class="nav-number">7.</span> <span class="nav-text">ZooKeeper是如何保证事务顺序的呢？</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ggj2010</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

@@ -94,7 +94,7 @@
 <meta property="og:site_name" content="高广金博客">
 <meta property="og:description" content="学校学的都还给老师了，╮(╯▽╰)╭哎 原码、反码、补码   首先计算机里面保存的数据都是由二进制组成0、1,既然有数据就有正负之分。 原码就是这些二进制的组合，首位为符号位，0表示正数，1表示负数。 例如1的4位二进制就是0001，-1的4位二进制就是1001 原码通俗点说就是给人看的，但是计算机需要对二进制进行运算啊，例如1+（-1）应该等于0， 如果用原码进行求和就是0001+1001=10">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-03-25T16:11:51.824Z">
+<meta property="og:updated_time" content="2021-02-19T04:29:48.009Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="计算机基础原理记录">
 <meta name="twitter:description" content="学校学的都还给老师了，╮(╯▽╰)╭哎 原码、反码、补码   首先计算机里面保存的数据都是由二进制组成0、1,既然有数据就有正负之分。 原码就是这些二进制的组合，首位为符号位，0表示正数，1表示负数。 例如1的4位二进制就是0001，-1的4位二进制就是1001 原码通俗点说就是给人看的，但是计算机需要对二进制进行运算啊，例如1+（-1）应该等于0， 如果用原码进行求和就是0001+1001=10">
@@ -285,7 +285,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ggj2010">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg">
+      <meta itemprop="image" content="https://avatar.csdnimg.cn/1/E/3/ggj20ss.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -358,17 +358,28 @@
 例如1的4位二进制就是0001，-1的4位二进制就是1001
 原码通俗点说就是给人看的，但是计算机需要对二进制进行运算啊，例如1+（-1）应该等于0，
 如果用原码进行求和就是0001+1001=1010 变成了十进制的（-2），结果不对啊，为了解决这个问题就引导出
-了反码的概念，反码是用来处理负数的，正数的反码就是本事，负数反码就是符号位置不变，其他位置变反过。
+了反码的概念，反码是用来处理负数的，
+正数的反码就是本身，负数反码就是符号位置不变，其他位置变反过。
+
 还是刚刚的例子，1+（-1）=0001+1110=1111  反码1111的原码等于（1000）等于十进制的（-0），按道理
-0不应该有正负之分，为了解决这个问题，引入了补码的概念，同样，补码是用来处理负数的，正数的补码就是
-其本身，负数的补码就是在反码的基础上+1。
-  原码         反码    补码
-1+（-1）=》0001+1110=》0001+1111=10000，去掉最高位就是0000，解决了-0的问题。
+0不应该有正负之分，为了解决这个问题，引入了补码的概念，同样，补码是用来处理负数的，
+正数的补码就是其本身，负数的补码就是在反码的基础上+1。(负数的补码是在原码的基础上除符号位外其余位取反后+1)
+  原码            反码           补码
+0001+（1001）=》0001+1110=》0001+1111(1110+1)=10000，去掉最高位就是0000，解决了-0的问题。
 由此推导出计算机在运算中用的都会补码方式进行计算。
+在Java中，所有数据的表示方法都是以补码的形式表示
+补码与原码关系：
+正数补码与原码相同，负数补码是原码减1后取反。
 </code></pre><h3 id="运算"><a href="#运算" class="headerlink" title="%运算"></a>%运算</h3><pre><code>通过取模操作可以获取某个数之间的随机数，例如 a%10 可以获取到0~9之间随机值
 </code></pre><h3 id="amp-运算"><a href="#amp-运算" class="headerlink" title="&amp;运算"></a>&amp;运算</h3><pre><code>与运算 如果相对应位都是1，则结果为1， 否则为0 规则 ：都为1时才为1
 </code></pre><h3 id="运算-1"><a href="#运算-1" class="headerlink" title="|运算"></a>|运算</h3><pre><code>如果相对应位都是0，则结果为0，否则为1，有一个为1，则为1
 </code></pre><h3 id="运算-2"><a href="#运算-2" class="headerlink" title="~运算"></a>~运算</h3><pre><code>按位取反运算符翻转操作数的每一位，即0变成1，1变成0。
+非运算是根据补码来计算的
+
+例如 5的非运算
+～5= -6
+// 5的原码0101 取反就是  1010
+ // 1010 求反码 1101 求补码 1110
 </code></pre><h3 id="20180920-Java位运算的使用场景"><a href="#20180920-Java位运算的使用场景" class="headerlink" title="20180920-Java位运算的使用场景"></a>20180920-Java位运算的使用场景</h3><pre><code>1、乘法 a * (2^n) 等价于 a &lt;&lt; n
     3*2=3&lt;&lt;1
     3*4=3&lt;&lt;2
@@ -395,9 +406,52 @@
 1&lt;&lt;2 0100 改
 1&lt;&lt;3 1000 查
 假设flag=0
-添加增权限就是 flag=(flag|0001)=0001
 
-添加删权限就是 flag|0010=(0001|0010)=0011
+添加增权限就是 ：
+flag=(flag|0001)=0001
+
+
+删除 增的这个权限（0001）就是：
+flag&amp;=～0001
+
+1、 ～0001=1000（去反数）
+2、0001&amp;（1000）=0000 （再和原来的数取与）
+
+
+
+
+判断限就是
+&amp; 是两个都是1 才会大于0
+flag&amp;0010=(0001&amp;0001)&gt;0
+
+ public static class RoleCodeMask {
+        //教师0001
+        public static final int teacherRoleCode = 1 &lt;&lt; 0;
+        //校长0010
+        public static final int principalRoleCode = 1 &lt;&lt; 1;
+        //教导0100
+        public static final int subjectLeaderRoleCode = 1 &lt;&lt; 2;
+        //当前状态
+        private int currentStatus;
+
+        public void add(int code) {
+            currentStatus = currentStatus | code;
+        }
+
+        public boolean contains(int code) {
+            return (currentStatus &amp; code) &gt; 0;
+        }
+
+        // 当前权限是 0111 教师、校长、教导
+        // 删除教师权限0001，则 0111 &amp;
+        public void delete(int more){
+        // 如果非操作不好理解，可以理解为 减（－）操作也是可以的
+            // currentStatus = currentStatus - more;
+            currentStatus &amp;= ~more;
+        }
+
+
+    }
 </code></pre><h3 id="进制之间转化"><a href="#进制之间转化" class="headerlink" title="进制之间转化"></a>进制之间转化</h3><pre><code>核心思路是求余数求商
 例如10进制转2进制
    int i=110112;
@@ -512,7 +566,7 @@
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg"
+               src="https://avatar.csdnimg.cn/1/E/3/ggj20ss.jpg"
                alt="ggj2010" />
           <p class="site-author-name" itemprop="name">ggj2010</p>
            
@@ -524,7 +578,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-count">42</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -624,7 +678,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

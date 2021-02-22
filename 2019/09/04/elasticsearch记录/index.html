@@ -94,7 +94,7 @@
 <meta property="og:site_name" content="高广金博客">
 <meta property="og:description" content="公司内容团队的服务底层使用的是es，抽时间看看代码顺带着回归下es相关功能   搜索核心就是倒排索引，es有很多版本2.x,5.x, 6.x, and 7.x 不同版本api都需要注意 whymysql无法高性能的完成全文检索功能，因为like太低效率，同时也无法支持分词搜索功能 es还支持相关性评分召回，mysql对记录的查询只有匹配或者不匹配 好处* 支持全文检索、结构化检索、数据分析">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-03-12T03:56:25.775Z">
+<meta property="og:updated_time" content="2020-08-01T09:43:38.413Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="elasticsearch记录">
 <meta name="twitter:description" content="公司内容团队的服务底层使用的是es，抽时间看看代码顺带着回归下es相关功能   搜索核心就是倒排索引，es有很多版本2.x,5.x, 6.x, and 7.x 不同版本api都需要注意 whymysql无法高性能的完成全文检索功能，因为like太低效率，同时也无法支持分词搜索功能 es还支持相关性评分召回，mysql对记录的查询只有匹配或者不匹配 好处* 支持全文检索、结构化检索、数据分析">
@@ -285,7 +285,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ggj2010">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg">
+      <meta itemprop="image" content="https://avatar.csdnimg.cn/1/E/3/ggj20ss.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -364,8 +364,9 @@ es还支持相关性评分召回，mysql对记录的查询只有匹配或者不�
 <li>报表分析</li>
 <li>多表关联或者负载的多表查询<h2 id="文档相关"><a href="#文档相关" class="headerlink" title="文档相关"></a>文档相关</h2>文档：<a href="https://www.elastic.co/guide/en/elasticsearch/client/java-rest/6.3/index.html?spm=a2c4g.11186623.2.15.39c97cdfk5qpQ9" target="_blank" rel="external">https://www.elastic.co/guide/en/elasticsearch/client/java-rest/6.3/index.html?spm=a2c4g.11186623.2.15.39c97cdfk5qpQ9</a><br>下载地址：<a href="https://www.elastic.co/cn/downloads/" target="_blank" rel="external">https://www.elastic.co/cn/downloads/</a><h2 id="插件"><a href="#插件" class="headerlink" title="插件"></a>插件</h2><h2 id="ik分词"><a href="#ik分词" class="headerlink" title="ik分词"></a>ik分词</h2>参考：<a href="https://www.jianshu.com/p/653f7b33e63c" target="_blank" rel="external">https://www.jianshu.com/p/653f7b33e63c</a><br>git地址：<a href="https://github.com/medcl/elasticsearch-analysis-ik" target="_blank" rel="external">https://github.com/medcl/elasticsearch-analysis-ik</a><br>bin/elasticsearch-plugin install <a href="https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v1.10.6/elasticsearch-analysis-ik-1.10.6.zip" target="_blank" rel="external">https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v1.10.6/elasticsearch-analysis-ik-1.10.6.zip</a></li>
 </ul>
-<h2 id="pinying分词"><a href="#pinying分词" class="headerlink" title="pinying分词"></a>pinying分词</h2><p>   git 地址：<br>    <a href="https://github.com/medcl/elasticsearch-analysis-pinyin" target="_blank" rel="external">https://github.com/medcl/elasticsearch-analysis-pinyin</a><br>    安装命令：<br>    bin/plugin install <a href="https://github.com/medcl/elasticsearch-analysis-pinyin/releases/download/v1.8.0/elasticsearch-analysis-pinyin-1.8.0.zip" target="_blank" rel="external">https://github.com/medcl/elasticsearch-analysis-pinyin/releases/download/v1.8.0/elasticsearch-analysis-pinyin-1.8.0.zip</a><br>    如果找不到对应的版本，可以自己打包放到plugins目录下解压</p>
-<h3 id="elasticsearch-head"><a href="#elasticsearch-head" class="headerlink" title="elasticsearch-head"></a>elasticsearch-head</h3><pre><code>git地址：https://github.com/mobz/elasticsearch-head
+<h2 id="pinying分词"><a href="#pinying分词" class="headerlink" title="pinying分词"></a>pinying分词</h2><p>   git 地址：<br>    <a href="https://github.com/medcl/elasticsearch-analysis-pinyin" target="_blank" rel="external">https://github.com/medcl/elasticsearch-analysis-pinyin</a><br>    安装命令：<br>    bin/plugin install <a href="https://github.com/medcl/elasticsearch-analysis-pinyin/releases/download/v1.8.0/elasticsearch-analysis-pinyin-1.8.0.zip" target="_blank" rel="external">https://github.com/medcl/elasticsearch-analysis-pinyin/releases/download/v1.8.0/elasticsearch-analysis-pinyin-1.8.0.zip</a></p>
+<pre><code>如果找不到对应的版本，可以自己打包放到plugins目录下解压
+</code></pre><h3 id="elasticsearch-head"><a href="#elasticsearch-head" class="headerlink" title="elasticsearch-head"></a>elasticsearch-head</h3><pre><code>git地址：https://github.com/mobz/elasticsearch-head
 安装：
 for Elasticsearch 5.x, 6.x, and 7.x: site plugins are not supported. Run as a standalone server
 for Elasticsearch 2.x: sudo elasticsearch/bin/plugin install mobz/elasticsearch-head
@@ -389,7 +390,7 @@ ElasticSearch对字符串拥有两种完全不同的搜索方式. 你可以按�
  Text：会分词，然后进行索引
        支持模糊、精确查询
        不支持聚合
-keyword：不进行分词，直接索引
+ keyword：不进行分词，直接索引
        支持模糊、精确查询
        支持聚合
 text用于全文搜索的, 而keyword用于关键词搜索
@@ -421,6 +422,230 @@ termQuery：不会对搜索词进行分词处理，而是作为一个整体与�
 2、搜索时加上?refresh=wait_for，表示如果1秒内有请求立即更新并可见
 3、更新的时候设置refresh=true
 </code></pre><h3 id="es更新mapping"><a href="#es更新mapping" class="headerlink" title="es更新mapping"></a>es更新mapping</h3><pre><code>1、创建索引时候设置别名
+</code></pre><h3 id="相关参考代码"><a href="#相关参考代码" class="headerlink" title="相关参考代码"></a>相关参考代码</h3><pre><code> public void createIndex() throws IOException {
+        GetIndexRequest getIndexRequest = new GetIndexRequest();
+        getIndexRequest.indices(elasticsearchConfig.getIndexName());
+        //索引是否存在
+        boolean getIndexResponse = restHighLevelClient.indices().exists(getIndexRequest, RequestOptions.DEFAULT);
+        if (getIndexResponse) {
+            DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest(elasticsearchConfig.getIndexName());
+            restHighLevelClient.indices().delete(deleteIndexRequest);
+        }
+
+        /*************创建**************/
+        CreateIndexRequest request = new CreateIndexRequest(elasticsearchConfig.getIndexName());
+        //设置分片与副本
+        request.settings(Settings.builder()
+                .put(&quot;index.number_of_shards&quot;, 5)
+                .put(&quot;index.number_of_replicas&quot;, 1)
+        );
+        String mappingJsonStr = &quot;{\&quot;properties\&quot;:{\&quot;id\&quot;:{\&quot;type\&quot;:\&quot;long\&quot;},\&quot;name\&quot;:{\&quot;type\&quot;:\&quot;text\&quot;,\&quot;analyzer\&quot;:\&quot;ik_max_word\&quot;,\&quot;search_analyzer\&quot;:\&quot;ik_smart\&quot;},\&quot;provinceCode\&quot;:{\&quot;type\&quot;:\&quot;keyword\&quot;},\&quot;cityCode\&quot;:{\&quot;type\&quot;:\&quot;keyword\&quot;},\&quot;areaCode\&quot;:{\&quot;type\&quot;:\&quot;keyword\&quot;},\&quot;tagIdList\&quot;:{\&quot;type\&quot;:\&quot;long\&quot;}}}&quot;;
+        //创建mapping
+        request.mapping(ElasticSeachTypeEnum.DEPARTMENT_TAG.getTypeName(), mappingJsonStr, XContentType.JSON);
+        restHighLevelClient.indices().createAsync(request, RequestOptions.DEFAULT, new ActionListener() {
+            @Override
+            public void onResponse(Object o) {
+                log.info(&quot;create index successful&quot;);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                log.error(&quot;create index error&quot;, e);
+            }
+        });
+    }
+
+    /**
+     * 线上数据量不多 无须分页
+     */
+    public void syncData() {
+        try {
+            SessionManager.changeSafeMode(SafeMode.KERNEL);
+            long beginTime = System.currentTimeMillis();
+            ResultWrapper&lt;List&lt;DepartmentBo&gt;&gt; allDepartmentBoList = departmentService.list();
+            if (CollectionUtils.isEmpty(allDepartmentBoList.getData())) {
+                return;
+            }
+            BulkRequest deleteRequest = new BulkRequest();
+            BulkRequest bulkRequest = new BulkRequest();
+            List&lt;Long&gt; departmentIdList = allDepartmentBoList.getData().stream().map(DepartmentBo::getId).collect(Collectors.toList());
+            Map&lt;Long, List&lt;BizDataTagBo&gt;&gt; departmentBizDataTagBoMap = departmentService.getDepartmentBizDataTagBoMap(departmentIdList);
+
+            ResultWrapper&lt;List&lt;DepartmentArea&gt;&gt; listDeparmentAreaWrapper = departmentService.findDepartmentAreaByDepartmentIdList(departmentIdList);
+
+            Map&lt;Long, DepartmentArea&gt; areaMap = listDeparmentAreaWrapper.getData().stream().collect(Collectors.toMap(DepartmentArea::getDepartmentId, Function.identity()));
+            allDepartmentBoList.getData().forEach(departmentBo -&gt; {
+                DepartmentArea departmentArea = areaMap.get(departmentBo.getId());
+                ESDepartmentBo esDepartmentBo = new ESDepartmentBo();
+                if (areaMap.containsKey(departmentBo.getId())) {
+                    esDepartmentBo.setAreaCode(departmentArea.getAreaCode());
+                    esDepartmentBo.setCityCode(departmentArea.getCityCode());
+                    esDepartmentBo.setProvinceCode(departmentArea.getProvinceCode());
+                }
+                esDepartmentBo.setId(departmentBo.getId());
+                esDepartmentBo.setName(departmentBo.getName());
+                if (departmentBizDataTagBoMap.containsKey(departmentBo.getId())) {
+                    esDepartmentBo.setTagIdList(departmentBizDataTagBoMap.get(departmentBo.getId()).stream().map(BizDataTagBo::getTagId).collect(Collectors.toList()));
+                }
+                bulkRequest.add(putData(esDepartmentBo));
+                deleteRequest.add(deleteData(departmentBo.getId()));
+            });
+
+
+            bulkRequest.setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE);
+            restHighLevelClient.bulk(deleteRequest, RequestOptions.DEFAULT);
+            restHighLevelClient.bulk(bulkRequest, RequestOptions.DEFAULT);
+            long endTime = System.currentTimeMillis();
+            log.info(&quot;costTime:{}ms,syncdata size:{}&quot;, endTime - beginTime, allDepartmentBoList.getData().size());
+        } catch (Exception e) {
+            log.error(&quot;syncData error&quot;, e);
+        }
+    }
+
+    private DeleteRequest deleteData(Long id) {
+        DeleteRequest deleteRequest = new DeleteRequest(elasticsearchConfig.getIndexName(), ElasticSeachTypeEnum.DEPARTMENT_TAG.getTypeName(), String.valueOf(id));
+        return deleteRequest;
+    }
+
+    public IndexRequest putData(ESDepartmentBo esDepartmentBo) {
+        IndexRequest indexRequest = new IndexRequest(elasticsearchConfig.getIndexName(), ElasticSeachTypeEnum.DEPARTMENT_TAG.getTypeName(), String.valueOf(esDepartmentBo.getId()));
+        indexRequest.source(JSONObject.toJSONString(esDepartmentBo), XContentType.JSON);
+        return indexRequest;
+    }
+
+public class DeparementESServiceImpl implements DeparementESService {
+    @Autowired
+    private ElasticSearchConfig elasticsearchConfig;
+    @Autowired
+    private RestHighLevelClient restHighLevelClient;
+
+    @Override
+    public ResultWrapper&lt;Boolean&gt; delete(List&lt;Long&gt; departmentIdList) {
+        ResultWrapper&lt;Boolean&gt; resultWrapper = new ResultWrapper&lt;Boolean&gt;(0, &quot;&quot;);
+        if (CollectionUtils.isEmpty(departmentIdList)) {
+            return resultWrapper;
+        }
+        BulkRequest deleteRequest = new BulkRequest();
+        departmentIdList.forEach(id -&gt; {
+            deleteRequest.add(new DeleteRequest(elasticsearchConfig.getIndexName(), ElasticSeachTypeEnum.DEPARTMENT_TAG.getTypeName(), String.valueOf(id)));
+        });
+        deleteRequest.setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE);
+        try {
+            restHighLevelClient.bulk(deleteRequest, RequestOptions.DEFAULT);
+        } catch (IOException e) {
+            log.error(&quot;delete error&quot;, e);
+        }
+        return resultWrapper;
+    }
+
+    @Override
+    public ResultWrapper&lt;Boolean&gt; save(List&lt;ESDepartmentBo&gt; esDepartmentBoList) {
+        ResultWrapper&lt;Boolean&gt; resultWrapper = new ResultWrapper&lt;Boolean&gt;(0, &quot;&quot;);
+        if (CollectionUtils.isEmpty(esDepartmentBoList)) {
+            return resultWrapper;
+        }
+        BulkRequest bulkRequest = new BulkRequest();
+        esDepartmentBoList.forEach(esDepartmentBo -&gt; {
+            IndexRequest indexRequest = new IndexRequest(elasticsearchConfig.getIndexName(), ElasticSeachTypeEnum.DEPARTMENT_TAG.getTypeName(), String.valueOf(esDepartmentBo.getId()));
+            indexRequest.source(JSONObject.toJSONString(esDepartmentBo), XContentType.JSON);
+            bulkRequest.add(indexRequest);
+        });
+        bulkRequest.setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE);
+        try {
+            restHighLevelClient.bulk(bulkRequest, RequestOptions.DEFAULT);
+        } catch (IOException e) {
+            log.error(&quot;save error&quot;, e);
+        }
+        return resultWrapper;
+    }
+
+    @Override
+    public ResultWrapper&lt;Boolean&gt; update(Map&lt;Long, Map&lt;String, Object&gt;&gt; mapMap) {
+        ResultWrapper&lt;Boolean&gt; resultWrapper = new ResultWrapper&lt;Boolean&gt;(0, &quot;&quot;);
+        if (mapMap==null) {
+            return resultWrapper;
+        }
+        BulkRequest bulkRequest = new BulkRequest();
+        mapMap.forEach((deparmentId,mapJson) -&gt; {
+            UpdateRequest updateRequest = new UpdateRequest(elasticsearchConfig.getIndexName(), ElasticSeachTypeEnum.DEPARTMENT_TAG.getTypeName(), String.valueOf(deparmentId));
+            updateRequest.doc(mapJson);
+            bulkRequest.add(updateRequest);
+        });
+        bulkRequest.setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE);
+        try {
+            restHighLevelClient.bulk(bulkRequest, RequestOptions.DEFAULT);
+        } catch (IOException e) {
+            log.error(&quot;save error&quot;, e);
+        }
+        return null;
+    }
+
+    @Override
+    public ResultWrapper&lt;List&lt;Long&gt;&gt; search(QueryDepartmentRequest queryDepartmentRequest) {
+        ResultWrapper&lt;List&lt;Long&gt;&gt; resultWrapper = new ResultWrapper&lt;List&lt;Long&gt;&gt;(0, &quot;&quot;);
+        List&lt;Long&gt; depatementIdList = new ArrayList&lt;&gt;();
+        resultWrapper.setData(depatementIdList);
+        SearchRequest searchRequest = new SearchRequest(elasticsearchConfig.getIndexName());
+        searchRequest.types(ElasticSeachTypeEnum.DEPARTMENT_TAG.getTypeName());
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+        if (StringUtils.isNotBlank(queryDepartmentRequest.getName())) {
+            boolQuery.must().add(QueryBuilders.matchQuery(&quot;name&quot;, queryDepartmentRequest.getName()));
+        }
+
+        if (StringUtils.isNotBlank(queryDepartmentRequest.getProvinceCode()) &amp;&amp; !(&quot;-1&quot;).equals(queryDepartmentRequest.getProvinceCode())) {
+             boolQuery.must().add(QueryBuilders.termQuery(&quot;provinceCode&quot;, queryDepartmentRequest.getProvinceCode()));
+        }
+        if (StringUtils.isNotBlank(queryDepartmentRequest.getAreaCode()) &amp;&amp; !(&quot;-1&quot;).equals(queryDepartmentRequest.getAreaCode())) {
+             boolQuery.must().add(QueryBuilders.termQuery(&quot;areaCode&quot;, queryDepartmentRequest.getAreaCode()));
+        }
+        if (StringUtils.isNotBlank(queryDepartmentRequest.getCityCode()) &amp;&amp; !(&quot;-1&quot;).equals(queryDepartmentRequest.getCityCode())) {
+             boolQuery.must().add(QueryBuilders.termQuery(&quot;cityCode&quot;, queryDepartmentRequest.getCityCode()));
+        }
+        if (CollectionUtils.isNotEmpty(queryDepartmentRequest.getTagIdList())) {
+             boolQuery.must().add(QueryBuilders.termsQuery(&quot;tagIdList&quot;, queryDepartmentRequest.getTagIdList()));
+        }
+        if (CollectionUtils.isNotEmpty(queryDepartmentRequest.getDepartmentIdList())) {
+            boolQuery.must().add(QueryBuilders.termsQuery(&quot;id&quot;, queryDepartmentRequest.getDepartmentIdList()));
+        }
+        searchSourceBuilder.query(boolQuery);
+        searchRequest.source(searchSourceBuilder);
+        try {
+            Scroll scroll = new Scroll(TimeValue.timeValueMinutes(1L));
+            searchRequest.scroll(scroll);
+            SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+            String scrollId = searchResponse.getScrollId();
+            log.info(&quot;total:{}&quot;, searchResponse.getHits().getTotalHits());
+            SearchHit[] searchHits = searchResponse.getHits().getHits();
+            if (searchHits == null) {
+                return resultWrapper;
+            } else {
+                for (SearchHit searchHit : searchHits) {
+                    depatementIdList.add(Long.parseLong(searchHit.getId()));
+                }
+            }
+            while (searchHits != null &amp;&amp; searchHits.length &gt; 0) {
+                SearchScrollRequest scrollRequest = new SearchScrollRequest(scrollId);
+                scrollRequest.scroll(scroll);
+                searchResponse = restHighLevelClient.scroll(scrollRequest, RequestOptions.DEFAULT);
+                scrollId = searchResponse.getScrollId();
+                searchHits = searchResponse.getHits().getHits();
+                if (searchHits != null) {
+                    for (SearchHit searchHit : searchHits) {
+                        depatementIdList.add(Long.parseLong(searchHit.getId()));
+                    }
+                }
+            }
+            ClearScrollRequest clearScrollRequest = new ClearScrollRequest();
+            clearScrollRequest.addScrollId(scrollId);
+            ClearScrollResponse clearScrollResponse = restHighLevelClient.clearScroll(clearScrollRequest, RequestOptions.DEFAULT);
+            resultWrapper.setData(depatementIdList);
+        } catch (IOException e) {
+            log.error(&quot;&quot;, e);
+        }
+        return resultWrapper;
+    }
+}
 </code></pre>
       
     </div>
@@ -523,7 +748,7 @@ termQuery：不会对搜索词进行分词处理，而是作为一个整体与�
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg"
+               src="https://avatar.csdnimg.cn/1/E/3/ggj20ss.jpg"
                alt="ggj2010" />
           <p class="site-author-name" itemprop="name">ggj2010</p>
            
@@ -535,7 +760,7 @@ termQuery：不会对搜索词进行分词处理，而是作为一个整体与�
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-count">42</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -612,7 +837,7 @@ termQuery：不会对搜索词进行分词处理，而是作为一个整体与�
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#why"><span class="nav-number">1.</span> <span class="nav-text">why</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#好处"><span class="nav-number">2.</span> <span class="nav-text">好处</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#场景"><span class="nav-number">3.</span> <span class="nav-text">场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文档相关"><span class="nav-number">4.</span> <span class="nav-text">文档相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插件"><span class="nav-number">5.</span> <span class="nav-text">插件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ik分词"><span class="nav-number">6.</span> <span class="nav-text">ik分词</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pinying分词"><span class="nav-number">7.</span> <span class="nav-text">pinying分词</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#elasticsearch-head"><span class="nav-number">7.1.</span> <span class="nav-text">elasticsearch-head</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#es定义的字段类型"><span class="nav-number">8.</span> <span class="nav-text">es定义的字段类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#index"><span class="nav-number">8.1.</span> <span class="nav-text">index</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#store"><span class="nav-number">8.2.</span> <span class="nav-text">store</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Text-vs-keyword"><span class="nav-number">8.3.</span> <span class="nav-text">Text vs. keyword</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询条件"><span class="nav-number">9.</span> <span class="nav-text">查询条件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#match-all"><span class="nav-number">9.1.</span> <span class="nav-text">match_all</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#match-全文查询"><span class="nav-number">9.2.</span> <span class="nav-text">match 全文查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Term-基于词项的查询"><span class="nav-number">9.3.</span> <span class="nav-text">Term 基于词项的查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#terms"><span class="nav-number">9.4.</span> <span class="nav-text">terms</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Wildcard"><span class="nav-number">9.5.</span> <span class="nav-text">Wildcard</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bool"><span class="nav-number">9.6.</span> <span class="nav-text">Bool</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Fuzzy"><span class="nav-number">9.7.</span> <span class="nav-text">Fuzzy</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分片与备份"><span class="nav-number">10.</span> <span class="nav-text">分片与备份</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用注意事项"><span class="nav-number">11.</span> <span class="nav-text">常用注意事项</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#es延迟"><span class="nav-number">11.1.</span> <span class="nav-text">es延迟</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#es更新mapping"><span class="nav-number">11.2.</span> <span class="nav-text">es更新mapping</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#why"><span class="nav-number">1.</span> <span class="nav-text">why</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#好处"><span class="nav-number">2.</span> <span class="nav-text">好处</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#场景"><span class="nav-number">3.</span> <span class="nav-text">场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文档相关"><span class="nav-number">4.</span> <span class="nav-text">文档相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插件"><span class="nav-number">5.</span> <span class="nav-text">插件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ik分词"><span class="nav-number">6.</span> <span class="nav-text">ik分词</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pinying分词"><span class="nav-number">7.</span> <span class="nav-text">pinying分词</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#elasticsearch-head"><span class="nav-number">7.1.</span> <span class="nav-text">elasticsearch-head</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#es定义的字段类型"><span class="nav-number">8.</span> <span class="nav-text">es定义的字段类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#index"><span class="nav-number">8.1.</span> <span class="nav-text">index</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#store"><span class="nav-number">8.2.</span> <span class="nav-text">store</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Text-vs-keyword"><span class="nav-number">8.3.</span> <span class="nav-text">Text vs. keyword</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询条件"><span class="nav-number">9.</span> <span class="nav-text">查询条件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#match-all"><span class="nav-number">9.1.</span> <span class="nav-text">match_all</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#match-全文查询"><span class="nav-number">9.2.</span> <span class="nav-text">match 全文查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Term-基于词项的查询"><span class="nav-number">9.3.</span> <span class="nav-text">Term 基于词项的查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#terms"><span class="nav-number">9.4.</span> <span class="nav-text">terms</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Wildcard"><span class="nav-number">9.5.</span> <span class="nav-text">Wildcard</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bool"><span class="nav-number">9.6.</span> <span class="nav-text">Bool</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Fuzzy"><span class="nav-number">9.7.</span> <span class="nav-text">Fuzzy</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分片与备份"><span class="nav-number">10.</span> <span class="nav-text">分片与备份</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用注意事项"><span class="nav-number">11.</span> <span class="nav-text">常用注意事项</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#es延迟"><span class="nav-number">11.1.</span> <span class="nav-text">es延迟</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#es更新mapping"><span class="nav-number">11.2.</span> <span class="nav-text">es更新mapping</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#相关参考代码"><span class="nav-number">11.3.</span> <span class="nav-text">相关参考代码</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -635,7 +860,7 @@ termQuery：不会对搜索词进行分词处理，而是作为一个整体与�
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

@@ -87,17 +87,17 @@
 
 
 
-<meta name="description" content="抽象类实现接口某个方法，再定义抽象方法抽象类定义的抽象方法都是让子类实现的，也就是说扩展的抽象方法都在子类定制，共性的方法都可以在抽象类里面实现 例如下面这个例子，我们想在某个接口方法执行的时候 再执行某些自定义方法 就可以再抽象类里面实现这个接口方法，然后再定义几个抽象方法让子类去实现 public interface Job {   void execute(JobExecutionConte">
+<meta name="description" content="抽象类实现接口某个方法，再定义抽象方法（模版方法设计模式）抽象类定义的抽象方法都是让子类实现的，也就是说扩展的抽象方法都在子类定制，共性的方法都可以在抽象类里面实现 例如下面这个例子，我们想在某个接口方法执行的时候 再执行某些自定义方法 就可以再抽象类里面实现这个接口方法，然后再定义几个抽象方法让子类去实现 public interface Job {   void execute(JobExec">
 <meta property="og:type" content="article">
 <meta property="og:title" content="个人代码库速查">
 <meta property="og:url" content="http://ggj2010.github.io/2020/02/26/个人代码库速查/index.html">
 <meta property="og:site_name" content="高广金博客">
-<meta property="og:description" content="抽象类实现接口某个方法，再定义抽象方法抽象类定义的抽象方法都是让子类实现的，也就是说扩展的抽象方法都在子类定制，共性的方法都可以在抽象类里面实现 例如下面这个例子，我们想在某个接口方法执行的时候 再执行某些自定义方法 就可以再抽象类里面实现这个接口方法，然后再定义几个抽象方法让子类去实现 public interface Job {   void execute(JobExecutionConte">
+<meta property="og:description" content="抽象类实现接口某个方法，再定义抽象方法（模版方法设计模式）抽象类定义的抽象方法都是让子类实现的，也就是说扩展的抽象方法都在子类定制，共性的方法都可以在抽象类里面实现 例如下面这个例子，我们想在某个接口方法执行的时候 再执行某些自定义方法 就可以再抽象类里面实现这个接口方法，然后再定义几个抽象方法让子类去实现 public interface Job {   void execute(JobExec">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-06-07T05:14:24.989Z">
+<meta property="og:updated_time" content="2021-01-26T03:24:19.749Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="个人代码库速查">
-<meta name="twitter:description" content="抽象类实现接口某个方法，再定义抽象方法抽象类定义的抽象方法都是让子类实现的，也就是说扩展的抽象方法都在子类定制，共性的方法都可以在抽象类里面实现 例如下面这个例子，我们想在某个接口方法执行的时候 再执行某些自定义方法 就可以再抽象类里面实现这个接口方法，然后再定义几个抽象方法让子类去实现 public interface Job {   void execute(JobExecutionConte">
+<meta name="twitter:description" content="抽象类实现接口某个方法，再定义抽象方法（模版方法设计模式）抽象类定义的抽象方法都是让子类实现的，也就是说扩展的抽象方法都在子类定制，共性的方法都可以在抽象类里面实现 例如下面这个例子，我们想在某个接口方法执行的时候 再执行某些自定义方法 就可以再抽象类里面实现这个接口方法，然后再定义几个抽象方法让子类去实现 public interface Job {   void execute(JobExec">
 
 
 
@@ -285,7 +285,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ggj2010">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg">
+      <meta itemprop="image" content="https://avatar.csdnimg.cn/1/E/3/ggj20ss.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -352,13 +352,14 @@
       
 
       
-        <h3 id="抽象类实现接口某个方法，再定义抽象方法"><a href="#抽象类实现接口某个方法，再定义抽象方法" class="headerlink" title="抽象类实现接口某个方法，再定义抽象方法"></a>抽象类实现接口某个方法，再定义抽象方法</h3><pre><code>抽象类定义的抽象方法都是让子类实现的，也就是说扩展的抽象方法都在子类定制，共性的方法都可以在抽象类里面实现
+        <h3 id="抽象类实现接口某个方法，再定义抽象方法（模版方法设计模式）"><a href="#抽象类实现接口某个方法，再定义抽象方法（模版方法设计模式）" class="headerlink" title="抽象类实现接口某个方法，再定义抽象方法（模版方法设计模式）"></a>抽象类实现接口某个方法，再定义抽象方法（模版方法设计模式）</h3><pre><code>抽象类定义的抽象方法都是让子类实现的，也就是说扩展的抽象方法都在子类定制，共性的方法都可以在抽象类里面实现
 例如下面这个例子，我们想在某个接口方法执行的时候 再执行某些自定义方法
 就可以再抽象类里面实现这个接口方法，然后再定义几个抽象方法让子类去实现
 public interface Job {
   void execute(JobExecutionContext context)
         throws JobExecutionException;
 }
+
 public abstract class AbstractJob implements Job {
 public abstract void beforeExecuteJob(JobExecutionContext jobExecutionContext) throws JobExecutionException;
 public abstract void afterExecuteJob(JobExecutionContext jobExecutionContext) throws JobExecutionException;
@@ -389,9 +390,8 @@ public void execute(JobExecutionContext jobExecutionContext) throws JobExecution
     this.afterExecuteJob(jobExecutionContext);
 }
 }
-</code></pre><h3 id="抽象类-策略模式"><a href="#抽象类-策略模式" class="headerlink" title="抽象类+策略模式"></a>抽象类+策略模式</h3><pre><code>父类定义的抽象方法子类都要实现，有时候某些方法不想子类实现，我们就可以使用
-抽象类+接口方式，如果子类一旦有点多，都实现这个接口就没发做到代码重用，
-这时候就可以使用策略模式
+</code></pre><h3 id="抽象类-策略模式"><a href="#抽象类-策略模式" class="headerlink" title="抽象类+策略模式"></a>抽象类+策略模式</h3><pre><code>父类定义的抽象方法子类都要实现，有时候某些方法不想子类实现，我们就可以使用抽象类+接口方式，
+如果子类一旦有点多，都实现这个接口就没发做到代码重用， 这时候就可以使用策略模式
 例如下面的flyable 就是变化的部分，我们把变化的部分抽象成接口
 abstarct class Duck{
  @Setter
@@ -588,6 +588,48 @@ protected String getWithLock(String key, String defaultValue) {
      }
 
  }
+</code></pre><h3 id="tempate"><a href="#tempate" class="headerlink" title="tempate"></a>tempate</h3><pre><code>public class RedisDaoTemplate {
+    @Autowired
+    private RedisPool redisPool;
+
+    public &lt;T&gt; T execute(RedisCallback&lt;T&gt; rc) throws Exception {
+        Jedis jedis = null;
+        List&lt;Object&gt; object = null;
+        try {
+            // 用默认的db 0;
+            jedis = redisPool.getJedis();
+            return rc.doInRedis(jedis);
+        }
+        finally {
+            redisPool.returnJedis(jedis);
+        }
+    }
+}
+public interface RedisCallback&lt;T&gt; {
+    T doInRedis(Jedis jedis) throws Exception;
+}
+</code></pre><h3 id="一些常用命名方式"><a href="#一些常用命名方式" class="headerlink" title="一些常用命名方式"></a>一些常用命名方式</h3><pre><code>xxProvider （ 定义了建立，配置，得到，管理和控制0个或多个对象Manager，一个应用在运行时可能访问0个或者多个）
+例如：CachingProvider、ConfigProvider
+
+xxManager（对象管理器）
+例如： CachingManager、ConfigManager
+
+xxListener(监听器，当有变动当时候，会通知)
+例如：
+    ConfigChangeListener
+    public interface ConfigChangeListener {
+        void onKeyUpdated(String key, String value);
+        void onKeyAdded(String key, String value);
+        void onKeyRemoved(String key);
+    }
+
+    NodeCacheListener:
+    public interface NodeCacheListener{
+        /**
+         * Called when a change has occurred
+         */
+        public void     nodeChanged() throws Exception;
+    }
 </code></pre>
       
     </div>
@@ -690,7 +732,7 @@ protected String getWithLock(String key, String defaultValue) {
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg"
+               src="https://avatar.csdnimg.cn/1/E/3/ggj20ss.jpg"
                alt="ggj2010" />
           <p class="site-author-name" itemprop="name">ggj2010</p>
            
@@ -702,7 +744,7 @@ protected String getWithLock(String key, String defaultValue) {
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-count">42</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -779,7 +821,7 @@ protected String getWithLock(String key, String defaultValue) {
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#抽象类实现接口某个方法，再定义抽象方法"><span class="nav-number">1.</span> <span class="nav-text">抽象类实现接口某个方法，再定义抽象方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#抽象类-策略模式"><span class="nav-number">2.</span> <span class="nav-text">抽象类+策略模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#double-check"><span class="nav-number">3.</span> <span class="nav-text">double check</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#去锁cas-boolean"><span class="nav-number">4.</span> <span class="nav-text">去锁cas-boolean</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#去锁-future"><span class="nav-number">5.</span> <span class="nav-text">去锁-future</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#抽象类实现接口某个方法，再定义抽象方法（模版方法设计模式）"><span class="nav-number">1.</span> <span class="nav-text">抽象类实现接口某个方法，再定义抽象方法（模版方法设计模式）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#抽象类-策略模式"><span class="nav-number">2.</span> <span class="nav-text">抽象类+策略模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#double-check"><span class="nav-number">3.</span> <span class="nav-text">double check</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#去锁cas-boolean"><span class="nav-number">4.</span> <span class="nav-text">去锁cas-boolean</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#去锁-future"><span class="nav-number">5.</span> <span class="nav-text">去锁-future</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tempate"><span class="nav-number">6.</span> <span class="nav-text">tempate</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一些常用命名方式"><span class="nav-number">7.</span> <span class="nav-text">一些常用命名方式</span></a></li></ol></div>
             
 
           </div>
@@ -802,7 +844,7 @@ protected String getWithLock(String key, String defaultValue) {
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

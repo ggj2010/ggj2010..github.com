@@ -96,7 +96,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://p0.meituan.net/education/46a20e6c35006adee3a26a9364e4ec51101089.png">
 <meta property="og:image" content="http://p1.meituan.net/education/ef57589df5d0e2f468aef7f1cc4fe51b94441.png">
-<meta property="og:updated_time" content="2017-12-13T09:37:44.000Z">
+<meta property="og:updated_time" content="2020-12-16T02:20:39.570Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="paxos算法记录">
 <meta name="twitter:description" content="Paxos是一个用于实现可容错的分布式系统的算法，主要用于保证分布式集群中多备份系统之间的操作和数据的 一致性。这样集群中的每台机器对外相当于完全一致，从而其互相之间可以互为备份，从而使得系统能够容忍一定 数量的机器出问题（宕机、断网、硬盘损坏等等）。 一、相关概念paxos是什么  Paxos算法是莱斯利·兰伯特（Leslie Lamport，就是 LaTeX 中的&amp;quot;La&amp;quo">
@@ -288,7 +288,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ggj2010">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg">
+      <meta itemprop="image" content="https://avatar.csdnimg.cn/1/E/3/ggj20ss.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -375,7 +375,7 @@ paxos算法适用的几种情况：一台机器中多个进程/线程达成数�
 <li>只有当一个值被接受后，proposers才知道那个值被接受了</li>
 </ul>
 <h3 id="二、推理过程"><a href="#二、推理过程" class="headerlink" title="二、推理过程"></a>二、推理过程</h3><pre><code>    整个流程可以简单描述为，proposers发出提案，然后acceptors投票表决提案，learners决定用那个提案。
-下面通过从简单到复杂的情况推理出算法。        
+下面通过从简单到复杂的情况推理出算法。
 </code></pre><h4 id="只有一个proposer，一个acceptor"><a href="#只有一个proposer，一个acceptor" class="headerlink" title="只有一个proposer，一个acceptor"></a>只有一个proposer，一个acceptor</h4><pre><code>因为只有一个提案被提出，当然应该被批准通过。假设没有失败或者消息丢失，即使仅有一个proposer提出了一个提案，
 我们也希望能选择一个提案。因此推导出以下约束
 </code></pre><p>  <strong>约束1：acceptor必须批准它接收到的第一个提案</strong>。</p>
@@ -422,7 +422,7 @@ S内所有acceptor要么从未接受过任何提案(当前面m提案被通过的
 </code></pre><p>   <strong>约束7：proposer询问acceptor是否能提出提案n时，必须要求acceptor给出一个保证，保证n提案之前的提案一定不被接受，<br>          或者acceptor可以批准一个编号为n的提案，当且仅当它没有回应过一个编号大于n的提案，从而保证约束6。</strong></p>
 <h3 id="三、算法流程"><a href="#三、算法流程" class="headerlink" title="三、算法流程"></a>三、算法流程</h3><h4 id="1、准备阶段"><a href="#1、准备阶段" class="headerlink" title="1、准备阶段"></a>1、准备阶段</h4><pre><code>prepare请求只需要带着提案号，而不需要带着值。
 1、proposer获取一个提案编号M，根据M向一个acceptor集合（超过半数）的所有acceptor询问当前是否有已经被
-批准的提案acceptor判断M是否大于自己已经批准过的所有的提案编号，如果是，则返回已批准的编号&lt;M且最大的提案。
+批准的提案，acceptor判断M是否大于自己已经批准过的所有的提案编号，如果是，则返回已批准的编号&lt;M且最大的提案。
 2、如果否，可以不响应，如果acceptor之前没有批准过任何提案，则返回空
 3、acceptor不再批准编号小于M的提案
 4、proposer收到acceptor的响应（acceptor超过半数），如果为空，则自己可以任意设置value的值，
@@ -545,7 +545,7 @@ S内所有acceptor要么从未接受过任何提案(当前面m提案被通过的
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg"
+               src="https://avatar.csdnimg.cn/1/E/3/ggj20ss.jpg"
                alt="ggj2010" />
           <p class="site-author-name" itemprop="name">ggj2010</p>
            
@@ -557,7 +557,7 @@ S内所有acceptor要么从未接受过任何提案(当前面m提案被通过的
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-count">42</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -657,7 +657,7 @@ S内所有acceptor要么从未接受过任何提案(当前面m提案被通过的
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

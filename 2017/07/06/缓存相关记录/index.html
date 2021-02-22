@@ -87,18 +87,18 @@
 
 
 
-<meta name="description" content="概念缓存乱用1、缓存大对象 2、缓存不常用的 3、缓存频繁更新的 4、没有及时的更新或者删除再缓存中已经过期或者失效的数据 缓存穿透、并发、失效、一致性穿透    一般缓存数据流程都是先查缓存系统，如果缓存系统不存在，再查db，然后异步更新缓存系统，正常的这样流程是没有 任何风险的，可当黑客攻击的时候，会模拟一个不存在的缓存KEY，导致缓存无法命中直接查询DB。 防止缓存穿透首先要过滤缓存key,">
+<meta name="description" content="概念缓存乱用1、缓存大对象 2、缓存不常用的 3、缓存频繁更新的 4、没有及时的更新或者删除再缓存中已经过期或者失效的数据 缓存穿透、并发、失效、一致性、雪崩缓存击穿热点key问题，永不失效或者并发回源 方案一，使用进程内的锁进行限制，这样每一个节点都可以以一个并发回源数据库； 方案二，不使用锁进行限制，而是使用类似Semaphore的工具限制并发数，比如限制为10， 这样既限制了回源并发数不至于">
 <meta property="og:type" content="article">
 <meta property="og:title" content="缓存相关记录">
 <meta property="og:url" content="http://ggj2010.github.io/2017/07/06/缓存相关记录/index.html">
 <meta property="og:site_name" content="高广金博客">
-<meta property="og:description" content="概念缓存乱用1、缓存大对象 2、缓存不常用的 3、缓存频繁更新的 4、没有及时的更新或者删除再缓存中已经过期或者失效的数据 缓存穿透、并发、失效、一致性穿透    一般缓存数据流程都是先查缓存系统，如果缓存系统不存在，再查db，然后异步更新缓存系统，正常的这样流程是没有 任何风险的，可当黑客攻击的时候，会模拟一个不存在的缓存KEY，导致缓存无法命中直接查询DB。 防止缓存穿透首先要过滤缓存key,">
+<meta property="og:description" content="概念缓存乱用1、缓存大对象 2、缓存不常用的 3、缓存频繁更新的 4、没有及时的更新或者删除再缓存中已经过期或者失效的数据 缓存穿透、并发、失效、一致性、雪崩缓存击穿热点key问题，永不失效或者并发回源 方案一，使用进程内的锁进行限制，这样每一个节点都可以以一个并发回源数据库； 方案二，不使用锁进行限制，而是使用类似Semaphore的工具限制并发数，比如限制为10， 这样既限制了回源并发数不至于">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://p0.meituan.net/education/1f8745786a2934b3dea4fee5ef2bd764564463.png">
-<meta property="og:updated_time" content="2020-03-29T04:57:55.223Z">
+<meta property="og:updated_time" content="2021-01-22T09:21:18.827Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="缓存相关记录">
-<meta name="twitter:description" content="概念缓存乱用1、缓存大对象 2、缓存不常用的 3、缓存频繁更新的 4、没有及时的更新或者删除再缓存中已经过期或者失效的数据 缓存穿透、并发、失效、一致性穿透    一般缓存数据流程都是先查缓存系统，如果缓存系统不存在，再查db，然后异步更新缓存系统，正常的这样流程是没有 任何风险的，可当黑客攻击的时候，会模拟一个不存在的缓存KEY，导致缓存无法命中直接查询DB。 防止缓存穿透首先要过滤缓存key,">
+<meta name="twitter:description" content="概念缓存乱用1、缓存大对象 2、缓存不常用的 3、缓存频繁更新的 4、没有及时的更新或者删除再缓存中已经过期或者失效的数据 缓存穿透、并发、失效、一致性、雪崩缓存击穿热点key问题，永不失效或者并发回源 方案一，使用进程内的锁进行限制，这样每一个节点都可以以一个并发回源数据库； 方案二，不使用锁进行限制，而是使用类似Semaphore的工具限制并发数，比如限制为10， 这样既限制了回源并发数不至于">
 <meta name="twitter:image" content="http://p0.meituan.net/education/1f8745786a2934b3dea4fee5ef2bd764564463.png">
 
 
@@ -287,7 +287,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ggj2010">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg">
+      <meta itemprop="image" content="https://avatar.csdnimg.cn/1/E/3/ggj20ss.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -358,10 +358,23 @@
 2、缓存不常用的
 3、缓存频繁更新的
 4、没有及时的更新或者删除再缓存中已经过期或者失效的数据
-</code></pre><h3 id="缓存穿透、并发、失效、一致性"><a href="#缓存穿透、并发、失效、一致性" class="headerlink" title="缓存穿透、并发、失效、一致性"></a>缓存穿透、并发、失效、一致性</h3><h4 id="穿透"><a href="#穿透" class="headerlink" title="穿透"></a>穿透</h4><pre><code>    一般缓存数据流程都是先查缓存系统，如果缓存系统不存在，再查db，然后异步更新缓存系统，正常的这样流程是没有
+</code></pre><h3 id="缓存穿透、并发、失效、一致性、雪崩"><a href="#缓存穿透、并发、失效、一致性、雪崩" class="headerlink" title="缓存穿透、并发、失效、一致性、雪崩"></a>缓存穿透、并发、失效、一致性、雪崩</h3><h4 id="缓存击穿"><a href="#缓存击穿" class="headerlink" title="缓存击穿"></a>缓存击穿</h4><pre><code>热点key问题，永不失效或者并发回源
+方案一，使用进程内的锁进行限制，这样每一个节点都可以以一个并发回源数据库；
+方案二，不使用锁进行限制，而是使用类似Semaphore的工具限制并发数，比如限制为10，
+这样既限制了回源并发数不至于太大，又能使得一定量的线程可以同时回源。
+</code></pre><h4 id="穿透"><a href="#穿透" class="headerlink" title="穿透"></a>穿透</h4><pre><code>    一般缓存数据流程都是先查缓存系统，如果缓存系统不存在，再查db，然后异步更新缓存系统，正常的这样流程是没有
 任何风险的，可当黑客攻击的时候，会模拟一个不存在的缓存KEY，导致缓存无法命中直接查询DB。
-防止缓存穿透首先要过滤缓存key,比如key不符合要求直接打回，如果key查询db后返回的结果为null,我们可以为这个key预设一个
+</code></pre><h5 id="方案一"><a href="#方案一" class="headerlink" title="方案一"></a>方案一</h5><pre><code>防止缓存穿透首先要过滤缓存key,比如key不符合要求直接打回，如果key查询db后返回的结果为null,我们可以为这个key预设一个
 特定的值比如“&amp;&amp;”，这样后续的查询返回的都是“&amp;&amp;”，就不会直接查询db了，但是缓存的失效时间需要短下
+这样会导致一个问题，会有大量的无用数据占据内存，
+</code></pre><h5 id="方案二（布隆过滤器）"><a href="#方案二（布隆过滤器）" class="headerlink" title="方案二（布隆过滤器）"></a>方案二（布隆过滤器）</h5><pre><code>布隆过滤器（Bloom Filter）是1970年由布隆提出的。它实际上是一个很长的二进制向量和一系列随机映射函数。
+布隆过滤器可以用于检索一个元素是否在一个集合中。它的优点是空间效率和查询时间都比一般的算法要好的多，缺点是有一定的误识别率和删除困难
+布隆过滤器有一定的误判概率，但是如果布隆过滤器判断某个元素不在布隆过滤器中，那么这个值就一定不在。
+可以使用guava实现布隆过滤器（BloomFilter ），布隆过滤器不保存原始值，空间效率很高
+
+将数据库中所有的查询条件，放入布隆过滤器中，
+当一个查询请求过来时，先经过布隆过滤器进行查，
+如果判断请求查询值存在，则继续查；如果判断请求查询不存在，直接丢弃
 </code></pre><h4 id="并发"><a href="#并发" class="headerlink" title="并发"></a>并发</h4><pre><code>    比如手机app首页的推荐位数据一般都是从缓存里面取的，比如在用户访问高峰期的时候缓存失效了，用户打开app首页的时候，加载的
 推荐位数据会并发请求到数据库，这种情况就需要对查询db的操作进行加分布式锁的功能了。可以使用一个锁，也可以初始化多个锁，保证
 打到数据库的请求是在可控范围。或者使用本地缓存，当nosql缓存失效的时候，直接先拿本地缓存挡着，但是要注意本地缓存的大小。
@@ -371,8 +384,41 @@
 </code></pre><h4 id="一致性"><a href="#一致性" class="headerlink" title="一致性"></a>一致性</h4><pre><code> 一般都是先修改DB然后再修改缓存，如果缓存系统突然挂了，就会导致db与缓存的数据不一致。
 如何解决：更新缓存系统的时候增加重试功能，比如更新个三四次，如果三四次还不成功那就往消息队列里面
 丢一条更新缓存的请求，异步的去更新缓存。
-</code></pre><h4 id="缓存雪崩"><a href="#缓存雪崩" class="headerlink" title="缓存雪崩"></a>缓存雪崩</h4><pre><code>当缓存服务器重启或者大量缓存集中在某一个时间段失效，
+</code></pre><h4 id="缓存雪崩"><a href="#缓存雪崩" class="headerlink" title="缓存雪崩"></a>缓存雪崩</h4><pre><code>缓存雪崩的常见解决方法有两种：更新锁机制和后台更新机制。
+当缓存服务器重启或者大量缓存集中在某一个时间段失效
 如果缓存服务器不是高可用了，使用hystrix拦截。
+</code></pre><h4 id="缓存热点"><a href="#缓存热点" class="headerlink" title="缓存热点"></a>缓存热点</h4><pre><code>缓存热点的解决方案就是复制多份缓存副本，将请求分散到多个缓存服务器上，减轻缓存热点导致的单台缓存服务器压力
+</code></pre><h3 id="缓存同步数据库策略"><a href="#缓存同步数据库策略" class="headerlink" title="缓存同步数据库策略"></a>缓存同步数据库策略</h3><h4 id="读"><a href="#读" class="headerlink" title="读"></a>读</h4><pre><code>如果服务存在缓存，则直接从缓存取，如果缓存不存在，则请求数据库。并且将数据放到缓存，同时返回值
+</code></pre><h4 id="写"><a href="#写" class="headerlink" title="写"></a>写</h4><pre><code>写的操作会导致数据库与缓存出现不一致的问题，目前缓存存在以下下三种策略
+1、cacha aside(旁路缓存)
+    1、更新缓存再更新db
+         如果db更新失败，不手动回滚缓存会导致一致性问题
+         同时多线程也会有aba导致数据不一致问题
+
+    2、更新db再更新缓存
+         多线程时候会有aba问题，同时如果每个资源都更新到缓存会导致性能问题
+         a和b 都顺序完成了更新db更新，但是更新缓存都顺序确是ba,导致缓存不一致
+
+    3、删除缓存，更新db
+        多线程也会有数据不一致问题，例如并发情况下，线程A删除了缓存。但是没有更新db
+        这时候线程b 看缓存为空。就会捞db的老值并且放到缓存里面。
+    4、更新db 然后删除缓存
+2、read/writ through ,around
+ 应用程序只需要维护缓存，数据库的维护工作由缓存代理了
+ 1、writ through 更新cache，再db
+ 2、writ around 更新db，删除缓存
+
+3、write behind cacahing
+该策略只更新缓存，不会立马更新数据库，只会在一定的时间异步的批量去操作数据库；
+这样的好处在于直接操作缓存，效率极高，并且操作数据是异步的，
+还可以将多次的操作数据库语句合并到一个事务中一起提交，因此效率很客观；
+
+
+关于缓存写入，至少有4种写入的策略
+THROUGH(&quot;through&quot;),   //发生在Cache层,应用程序只需要维护缓存，数据库的维护由缓存代理完成，先cache 再db
+AROUND(&quot;around&quot;),  //发生在Cache层，直接写入数据到数据库，不必写到缓存中。这个不必过多的解释，缓存的数据应该被立即过期
+BEHIND(&quot;behind&quot;),  //还是发生在Cache层，刚开始时，写入到缓存中，当设定的缓存容量达到上限，或等到一定的时间间隔后，再写到数据库中。
+ASIDE(&quot;aside&quot;);  //发生在应用层，应用层保证缓存结果同DB的数据一致性，应用层来负责写入到数据库和整理缓存，缓存层则不必插手此事。
 </code></pre><h2 id="redis相关"><a href="#redis相关" class="headerlink" title="redis相关"></a>redis相关</h2><h3 id="redis主从"><a href="#redis主从" class="headerlink" title="redis主从"></a>redis主从</h3><pre><code>redis一主可以对应多个从节点，主节点可以读写，从节点只能查询
 </code></pre><h4 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h4><pre><code>salve节点文件里面添加以下内容
 slaveof &lt;masterip&gt; &lt;masterport&gt; //主节点的ip
@@ -583,7 +629,7 @@ Cache是一个Map类型的数据结构，用来存储基于键的数据，很多
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg"
+               src="https://avatar.csdnimg.cn/1/E/3/ggj20ss.jpg"
                alt="ggj2010" />
           <p class="site-author-name" itemprop="name">ggj2010</p>
            
@@ -595,7 +641,7 @@ Cache是一个Map类型的数据结构，用来存储基于键的数据，很多
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-count">42</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -672,7 +718,7 @@ Cache是一个Map类型的数据结构，用来存储基于键的数据，很多
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概念"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存乱用"><span class="nav-number">1.1.</span> <span class="nav-text">缓存乱用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存穿透、并发、失效、一致性"><span class="nav-number">1.2.</span> <span class="nav-text">缓存穿透、并发、失效、一致性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#穿透"><span class="nav-number">1.2.1.</span> <span class="nav-text">穿透</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#并发"><span class="nav-number">1.2.2.</span> <span class="nav-text">并发</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#失效"><span class="nav-number">1.2.3.</span> <span class="nav-text">失效</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一致性"><span class="nav-number">1.2.4.</span> <span class="nav-text">一致性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#缓存雪崩"><span class="nav-number">1.2.5.</span> <span class="nav-text">缓存雪崩</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis相关"><span class="nav-number">2.</span> <span class="nav-text">redis相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#redis主从"><span class="nav-number">2.1.</span> <span class="nav-text">redis主从</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#配置文件"><span class="nav-number">2.1.1.</span> <span class="nav-text">配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#客户端实现"><span class="nav-number">2.1.2.</span> <span class="nav-text">客户端实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#缺点"><span class="nav-number">2.1.3.</span> <span class="nav-text">缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#redis-Sentinel"><span class="nav-number">2.1.4.</span> <span class="nav-text">redis Sentinel</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redis集群"><span class="nav-number">2.2.</span> <span class="nav-text">redis集群</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#memcache"><span class="nav-number">3.</span> <span class="nav-text">memcache</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存序列化与反序列化"><span class="nav-number">3.1.</span> <span class="nav-text">缓存序列化与反序列化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内存访问速度"><span class="nav-number">3.2.</span> <span class="nav-text">内存访问速度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#固态硬盘SSD与机械硬盘HDD"><span class="nav-number">3.3.</span> <span class="nav-text">固态硬盘SSD与机械硬盘HDD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RAID磁盘阵列"><span class="nav-number">3.4.</span> <span class="nav-text">RAID磁盘阵列</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#RAID0"><span class="nav-number">3.4.1.</span> <span class="nav-text">RAID0</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RAID1"><span class="nav-number">3.4.2.</span> <span class="nav-text">RAID1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RAID5"><span class="nav-number">3.4.3.</span> <span class="nav-text">RAID5</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Guava-Cache"><span class="nav-number">4.</span> <span class="nav-text">Guava Cache</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用场景"><span class="nav-number">4.1.</span> <span class="nav-text">使用场景</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JSR-107-cache规范"><span class="nav-number">5.</span> <span class="nav-text">JSR-107 cache规范</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#依赖"><span class="nav-number">5.1.</span> <span class="nav-text">依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#核心接口"><span class="nav-number">5.2.</span> <span class="nav-text">核心接口</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概念"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存乱用"><span class="nav-number">1.1.</span> <span class="nav-text">缓存乱用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存穿透、并发、失效、一致性、雪崩"><span class="nav-number">1.2.</span> <span class="nav-text">缓存穿透、并发、失效、一致性、雪崩</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#缓存击穿"><span class="nav-number">1.2.1.</span> <span class="nav-text">缓存击穿</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#穿透"><span class="nav-number">1.2.2.</span> <span class="nav-text">穿透</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#方案一"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">方案一</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#方案二（布隆过滤器）"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">方案二（布隆过滤器）</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#并发"><span class="nav-number">1.2.3.</span> <span class="nav-text">并发</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#失效"><span class="nav-number">1.2.4.</span> <span class="nav-text">失效</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一致性"><span class="nav-number">1.2.5.</span> <span class="nav-text">一致性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#缓存雪崩"><span class="nav-number">1.2.6.</span> <span class="nav-text">缓存雪崩</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#缓存热点"><span class="nav-number">1.2.7.</span> <span class="nav-text">缓存热点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存同步数据库策略"><span class="nav-number">1.3.</span> <span class="nav-text">缓存同步数据库策略</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#读"><span class="nav-number">1.3.1.</span> <span class="nav-text">读</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#写"><span class="nav-number">1.3.2.</span> <span class="nav-text">写</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis相关"><span class="nav-number">2.</span> <span class="nav-text">redis相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#redis主从"><span class="nav-number">2.1.</span> <span class="nav-text">redis主从</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#配置文件"><span class="nav-number">2.1.1.</span> <span class="nav-text">配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#客户端实现"><span class="nav-number">2.1.2.</span> <span class="nav-text">客户端实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#缺点"><span class="nav-number">2.1.3.</span> <span class="nav-text">缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#redis-Sentinel"><span class="nav-number">2.1.4.</span> <span class="nav-text">redis Sentinel</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redis集群"><span class="nav-number">2.2.</span> <span class="nav-text">redis集群</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#memcache"><span class="nav-number">3.</span> <span class="nav-text">memcache</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存序列化与反序列化"><span class="nav-number">3.1.</span> <span class="nav-text">缓存序列化与反序列化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内存访问速度"><span class="nav-number">3.2.</span> <span class="nav-text">内存访问速度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#固态硬盘SSD与机械硬盘HDD"><span class="nav-number">3.3.</span> <span class="nav-text">固态硬盘SSD与机械硬盘HDD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RAID磁盘阵列"><span class="nav-number">3.4.</span> <span class="nav-text">RAID磁盘阵列</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#RAID0"><span class="nav-number">3.4.1.</span> <span class="nav-text">RAID0</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RAID1"><span class="nav-number">3.4.2.</span> <span class="nav-text">RAID1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RAID5"><span class="nav-number">3.4.3.</span> <span class="nav-text">RAID5</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Guava-Cache"><span class="nav-number">4.</span> <span class="nav-text">Guava Cache</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用场景"><span class="nav-number">4.1.</span> <span class="nav-text">使用场景</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JSR-107-cache规范"><span class="nav-number">5.</span> <span class="nav-text">JSR-107 cache规范</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#依赖"><span class="nav-number">5.1.</span> <span class="nav-text">依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#核心接口"><span class="nav-number">5.2.</span> <span class="nav-text">核心接口</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -695,7 +741,7 @@ Cache是一个Map类型的数据结构，用来存储基于键的数据，很多
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

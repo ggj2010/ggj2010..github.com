@@ -96,7 +96,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://ocg3iebmc.bkt.clouddn.com/20160918105655_12.jpg">
 <meta property="og:image" content="http://ocg3iebmc.bkt.clouddn.com/011042300165927.png">
-<meta property="og:updated_time" content="2020-05-17T11:29:11.818Z">
+<meta property="og:updated_time" content="2021-01-09T04:32:19.014Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java基础原理记录">
 <meta name="twitter:description" content="八种基本数据类型常见概念1byte=8b(bit)，1KB=1024B，1MB=1024KB，1GB=1024MB 为什么1个字节为8位二进制勒？标准来自于IBM system/360，导致后来的硬件都是按照这个标签设计的 在UTF-8下中文占3个字节，在GBK下面中文占2字节， 英文在utf-8和gbk下面都是占一个字节 bytebyte的取值范围为-128~127（-2的7次方到2的7次方-1">
@@ -288,7 +288,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ggj2010">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg">
+      <meta itemprop="image" content="https://avatar.csdnimg.cn/1/E/3/ggj20ss.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -789,6 +789,8 @@ ABA问题是指在CAS操作时，其他线程将变量值A改为了B，但是又
 <li><p>ReentrantLock</p>
 <pre><code>ReentrantLock是基于AQS实现的，AbstractQueuedSynchronizer基础又是CAS
 </code></pre></li>
+</ul>
+<ul>
 <li><p>ThreadPool</p>
 <pre><code>线程重用的核心是，ThreadPoolExecutor里面维护一个workers Set，当我们添加线程的时候，
 如果workQueue队列的线程数小于核心线程 则创建新的worker,同时执行thread任务里面的run()方法，
@@ -848,6 +850,137 @@ final void runWorker(Worker w) {
 <h4 id="JDBC"><a href="#JDBC" class="headerlink" title="JDBC"></a>JDBC</h4><h5 id="jdbc中execute、executeQuery和executeUpdate的区别"><a href="#jdbc中execute、executeQuery和executeUpdate的区别" class="headerlink" title="jdbc中execute、executeQuery和executeUpdate的区别"></a>jdbc中execute、executeQuery和executeUpdate的区别</h5><pre><code>execute是指在不知道执行sql的类型情况下使用的，一般使用场景不多，当然如果我们
 执行存储过程，需要用 execute
 当我们知道DML的sql的场景就可以使用对应的executeQuery或者executeUpdate
+</code></pre><h4 id="java对象的内存布局"><a href="#java对象的内存布局" class="headerlink" title="java对象的内存布局"></a>java对象的内存布局</h4><pre><code>https://blog.csdn.net/qqHJQS/article/details/100944914
+https://blog.csdn.net/yunqiinsight/article/details/80431831
+</code></pre><h5 id="对象头-header"><a href="#对象头-header" class="headerlink" title="对象头 header"></a>对象头 header</h5><pre><code>1、用于存储对象自身的运行时数据，如哈希码（HashCode）、GC分代年龄、锁状态标志、线程持有的锁、偏向线程ID、偏向时间戳等，
+这部分数据的长度在32位和64位的虚拟机（未开启压缩指针）中分别为32bit和64bit，官方称它为&quot;Mark Word”
+占用4（32）/8（64）byte
+2、存储指向对象类型数据的指针oop
+    指针就是确定这个对象是哪个类的实例 也就是常说的 xxx.class
+</code></pre><p> 占用4（32）/8（64）byte<br>        3、java数组</p>
+<h5 id="实例数据-instance"><a href="#实例数据-instance" class="headerlink" title="实例数据 instance"></a>实例数据 instance</h5><pre><code>对象真正存储的有效信息，也是在程序代码中所定义的各种类型的字段内容。无论是从父类继承下来的，还是在子类中定义的，都需要记录起来
+</code></pre><h5 id="对齐填充-Padding"><a href="#对齐填充-Padding" class="headerlink" title="对齐填充 Padding"></a>对齐填充 Padding</h5><pre><code>对齐填充并不是必然存在的，也没有特别的含义，它仅仅起着占位符的作用。由于HotSpot VM的自动内存管理系统要求对象起始地址必须是8字节的整数倍，
+换句话说，就是对象的大小必须是8字节的整数倍。而对象头部分正好是8字节的倍数（1倍或者2倍），因此，当对象实例数据部分没有对齐时，
+就需要通过对齐填充来补全,HotSpot的对齐方式为8字节对齐：
+(Header + Instance Data + Paddding) % 8 = 0 并且 0 &lt;= padding &lt; 8
+</code></pre><h5 id="指针压缩"><a href="#指针压缩" class="headerlink" title="指针压缩"></a>指针压缩</h5><pre><code>开启指针压缩指令-XX:+UseCompressedOops,关闭指令-XX:-UseCompressedOops,只在64位才有效且默认开启，也就是说32位没有指针压缩的概念
+</code></pre><table>
+<thead>
+<tr>
+<th>名称</th>
+<th style="text-align:center">32位</th>
+<th style="text-align:center">64位</th>
+<th style="text-align:center">开启指针压缩</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>header</td>
+<td style="text-align:center">8</td>
+<td style="text-align:center">16</td>
+<td style="text-align:center">12</td>
+</tr>
+<tr>
+<td>ref</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">8</td>
+<td style="text-align:center">4</td>
+</tr>
+<tr>
+<td>arrayHeader</td>
+<td style="text-align:center">12</td>
+<td style="text-align:center">24</td>
+<td style="text-align:center">16</td>
+</tr>
+</tbody>
+</table>
+<h5 id="对象占用内存大小"><a href="#对象占用内存大小" class="headerlink" title="对象占用内存大小"></a>对象占用内存大小</h5><pre><code>java对象组成部分主要由
+1、 markoop+klassoop
+   如果是64位 8+8=16
+   如果是64位且开启了指针压缩，klassoop指针会从8压缩到4 占用内存8+4=12
+2、instance data
+ 如果开启了指针压缩，所有引用类型大小都占用4byte
+3、padding
+
+例子：
+   一、开启了指针压缩
+   static class NodeA{
+        int age;//占用4byte
+    }
+
+    对象头12+ instance4=16
+    OFFSET  SIZE   TYPE DESCRIPTION                               VALUE
+         0     4        (object header)                           01 00 00 00 (00000001 00000000 00000000 00000000) (1)
+         4     4        (object header)                           00 00 00 00 (00000000 00000000 00000000 00000000) (0)
+         8     4        (object header)                           43 c1 00 f8 (01000011 11000001 00000000 11111000) (-134168253)
+        12     4    int NodeA.age                                 0
+   二、开启了指针压缩
+   static class NodeA{
+        Integer age;// 开启了指针压缩占用4byte
+    }
+    对象头12+ instance4=16
+     OFFSET  SIZE                TYPE DESCRIPTION                               VALUE
+          0     4                     (object header)                           01 00 00 00 (00000001 00000000 00000000 00000000) (1)
+          4     4                     (object header)                           00 00 00 00 (00000000 00000000 00000000 00000000) (0)
+          8     4                     (object header)                           43 c1 00 f8 (01000011 11000001 00000000 11111000) (-134168253)
+         12     4   java.lang.Integer NodeA.age                                 null
+    Instance size: 16 bytes
+   三、不开启指针压缩
+    static class NodeA{
+                   Integer age;
+      }
+
+        对象头16+ instance 8=24
+    OFFSET  SIZE                TYPE DESCRIPTION                               VALUE
+         0     4                     (object header)                           01 00 00 00 (00000001 00000000 00000000 00000000) (1)
+         4     4                     (object header)                           00 00 00 00 (00000000 00000000 00000000 00000000) (0)
+         8     4                     (object header)                           30 37 40 27 (00110000 00110111 01000000 00100111) (658519856)
+        12     4                     (object header)                           02 00 00 00 (00000010 00000000 00000000 00000000) (2)
+        16     8   java.lang.Integer NodeA.age                                 null
+   Instance size: 24 bytes
+
+     三、不开启指针压缩
+        static class NodeA{
+           int age;
+       }
+        对象头16+ instance 4+ padding4 =24
+        OFFSET  SIZE   TYPE DESCRIPTION                               VALUE
+             0     4        (object header)                           01 00 00 00 (00000001 00000000 00000000 00000000) (1)
+             4     4        (object header)                           00 00 00 00 (00000000 00000000 00000000 00000000) (0)
+             8     4        (object header)                           30 e7 f1 09 (00110000 11100111 11110001 00001001) (166848304)
+            12     4        (object header)                           01 00 00 00 (00000001 00000000 00000000 00000000) (1)
+            16     4    int NodeA.age                                 0
+            20     4        (loss due to the next object alignment)
+       Instance size: 24 bytes
+</code></pre><h5 id="Shallow-与-Retained区别"><a href="#Shallow-与-Retained区别" class="headerlink" title="Shallow 与 Retained区别"></a>Shallow 与 Retained区别</h5><pre><code>Shallow Size 对象自身占用的内存大小，不包括它引用的对象
+针对非数组类型的对象，它的大小就是对象与它所有的成员变量大小的总和。当然这里面还会包括一些java语言特性的数据存储单元。
+针对数组类型的对象，它的大小是数组元素对象的大小总和。
+Retained Size Retained Size=当前对象大小+当前对象可直接或间接引用到的对象的大小总和。(间接引用的含义：A-&gt;B-&gt;C, C就是间接引用)
+</code></pre><h4 id="Unsafe"><a href="#Unsafe" class="headerlink" title="Unsafe"></a>Unsafe</h4><pre><code>通过unsafe可以计算对象的field的内存偏移量
+ private static void offsetTest() {
+        MemoryUtil.NodeA nodeA = new MemoryUtil.NodeA();
+        try {
+            long ageOffset = reflectGetUnsafe().objectFieldOffset(nodeA.getClass().getDeclaredField(&quot;age&quot;));
+            long nodeBOffset = reflectGetUnsafe().objectFieldOffset(nodeA.getClass().getDeclaredField(&quot;nodeB&quot;));
+            //markword 占用12，ageOffset为第一个变量所以偏移量12
+            log.info(&quot;ageOffset field offset {}&quot;, ageOffset);
+            //16
+            log.info(&quot;nodeBOffset field offset {}&quot;, nodeBOffset);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static Unsafe reflectGetUnsafe() {
+        try {
+            Field field = Unsafe.class.getDeclaredField(&quot;theUnsafe&quot;);
+            field.setAccessible(true);
+            return (Unsafe) field.get(null);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return null;
+        }
+    }
 </code></pre>
       
     </div>
@@ -950,7 +1083,7 @@ final void runWorker(Worker w) {
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://ocg3iebmc.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720160922230125.jpg"
+               src="https://avatar.csdnimg.cn/1/E/3/ggj20ss.jpg"
                alt="ggj2010" />
           <p class="site-author-name" itemprop="name">ggj2010</p>
            
@@ -962,7 +1095,7 @@ final void runWorker(Worker w) {
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-count">42</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1039,7 +1172,7 @@ final void runWorker(Worker w) {
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#八种基本数据类型"><span class="nav-number">1.</span> <span class="nav-text">八种基本数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#常见概念"><span class="nav-number">1.1.</span> <span class="nav-text">常见概念</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#byte"><span class="nav-number">1.2.</span> <span class="nav-text">byte</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#整型"><span class="nav-number">1.3.</span> <span class="nav-text">整型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#浮点型"><span class="nav-number">1.4.</span> <span class="nav-text">浮点型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#boolean型"><span class="nav-number">1.5.</span> <span class="nav-text">boolean型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#char型"><span class="nav-number">1.6.</span> <span class="nav-text">char型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#一些概念"><span class="nav-number">1.7.</span> <span class="nav-text">一些概念</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java-IO整理"><span class="nav-number">2.</span> <span class="nav-text">java IO整理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#字节与字符的区别"><span class="nav-number">2.1.</span> <span class="nav-text">字节与字符的区别</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#字节流与字符流"><span class="nav-number">2.2.</span> <span class="nav-text">字节流与字符流</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java类的整理"><span class="nav-number">3.</span> <span class="nav-text">java类的整理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#java类的生命周期"><span class="nav-number">3.1.</span> <span class="nav-text">java类的生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#加载"><span class="nav-number">3.1.1.</span> <span class="nav-text">加载</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#连接"><span class="nav-number">3.1.2.</span> <span class="nav-text">连接</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#初始化"><span class="nav-number">3.1.3.</span> <span class="nav-text">初始化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java字节码"><span class="nav-number">4.</span> <span class="nav-text">java字节码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#编译和查看编译内容"><span class="nav-number">5.</span> <span class="nav-text">编译和查看编译内容</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ClassFile结构体"><span class="nav-number">6.</span> <span class="nav-text">ClassFile结构体</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#magic"><span class="nav-number">6.1.</span> <span class="nav-text">magic</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#minor-version、major-version"><span class="nav-number">6.2.</span> <span class="nav-text">minor_version、major_version</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#constant-pool"><span class="nav-number">6.3.</span> <span class="nav-text">constant_pool[]</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#access-flags"><span class="nav-number">6.4.</span> <span class="nav-text">access_flags</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#String"><span class="nav-number">7.</span> <span class="nav-text">String</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java-util包源码分析"><span class="nav-number">8.</span> <span class="nav-text">java.util包源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Collection"><span class="nav-number">8.1.</span> <span class="nav-text">Collection</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#ArrayList"><span class="nav-number">8.1.1.</span> <span class="nav-text">ArrayList</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#LinkedList"><span class="nav-number">8.1.2.</span> <span class="nav-text">LinkedList</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Map"><span class="nav-number">8.2.</span> <span class="nav-text">Map</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#HashMap"><span class="nav-number">8.2.1.</span> <span class="nav-text">HashMap</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List"><span class="nav-number">8.3.</span> <span class="nav-text">List</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Thread"><span class="nav-number">9.</span> <span class="nav-text">Thread</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java-util-concurrent包下面常用类的原理"><span class="nav-number">10.</span> <span class="nav-text">java.util.concurrent包下面常用类的原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JDBC"><span class="nav-number">11.</span> <span class="nav-text">JDBC</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#jdbc中execute、executeQuery和executeUpdate的区别"><span class="nav-number">11.1.</span> <span class="nav-text">jdbc中execute、executeQuery和executeUpdate的区别</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#八种基本数据类型"><span class="nav-number">1.</span> <span class="nav-text">八种基本数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#常见概念"><span class="nav-number">1.1.</span> <span class="nav-text">常见概念</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#byte"><span class="nav-number">1.2.</span> <span class="nav-text">byte</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#整型"><span class="nav-number">1.3.</span> <span class="nav-text">整型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#浮点型"><span class="nav-number">1.4.</span> <span class="nav-text">浮点型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#boolean型"><span class="nav-number">1.5.</span> <span class="nav-text">boolean型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#char型"><span class="nav-number">1.6.</span> <span class="nav-text">char型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#一些概念"><span class="nav-number">1.7.</span> <span class="nav-text">一些概念</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java-IO整理"><span class="nav-number">2.</span> <span class="nav-text">java IO整理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#字节与字符的区别"><span class="nav-number">2.1.</span> <span class="nav-text">字节与字符的区别</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#字节流与字符流"><span class="nav-number">2.2.</span> <span class="nav-text">字节流与字符流</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java类的整理"><span class="nav-number">3.</span> <span class="nav-text">java类的整理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#java类的生命周期"><span class="nav-number">3.1.</span> <span class="nav-text">java类的生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#加载"><span class="nav-number">3.1.1.</span> <span class="nav-text">加载</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#连接"><span class="nav-number">3.1.2.</span> <span class="nav-text">连接</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#初始化"><span class="nav-number">3.1.3.</span> <span class="nav-text">初始化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java字节码"><span class="nav-number">4.</span> <span class="nav-text">java字节码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#编译和查看编译内容"><span class="nav-number">5.</span> <span class="nav-text">编译和查看编译内容</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ClassFile结构体"><span class="nav-number">6.</span> <span class="nav-text">ClassFile结构体</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#magic"><span class="nav-number">6.1.</span> <span class="nav-text">magic</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#minor-version、major-version"><span class="nav-number">6.2.</span> <span class="nav-text">minor_version、major_version</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#constant-pool"><span class="nav-number">6.3.</span> <span class="nav-text">constant_pool[]</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#access-flags"><span class="nav-number">6.4.</span> <span class="nav-text">access_flags</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#String"><span class="nav-number">7.</span> <span class="nav-text">String</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java-util包源码分析"><span class="nav-number">8.</span> <span class="nav-text">java.util包源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Collection"><span class="nav-number">8.1.</span> <span class="nav-text">Collection</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#ArrayList"><span class="nav-number">8.1.1.</span> <span class="nav-text">ArrayList</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#LinkedList"><span class="nav-number">8.1.2.</span> <span class="nav-text">LinkedList</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Map"><span class="nav-number">8.2.</span> <span class="nav-text">Map</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#HashMap"><span class="nav-number">8.2.1.</span> <span class="nav-text">HashMap</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List"><span class="nav-number">8.3.</span> <span class="nav-text">List</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Thread"><span class="nav-number">9.</span> <span class="nav-text">Thread</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java-util-concurrent包下面常用类的原理"><span class="nav-number">10.</span> <span class="nav-text">java.util.concurrent包下面常用类的原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JDBC"><span class="nav-number">11.</span> <span class="nav-text">JDBC</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#jdbc中execute、executeQuery和executeUpdate的区别"><span class="nav-number">11.1.</span> <span class="nav-text">jdbc中execute、executeQuery和executeUpdate的区别</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java对象的内存布局"><span class="nav-number">12.</span> <span class="nav-text">java对象的内存布局</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#对象头-header"><span class="nav-number">12.1.</span> <span class="nav-text">对象头 header</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#实例数据-instance"><span class="nav-number">12.2.</span> <span class="nav-text">实例数据 instance</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#对齐填充-Padding"><span class="nav-number">12.3.</span> <span class="nav-text">对齐填充 Padding</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#指针压缩"><span class="nav-number">12.4.</span> <span class="nav-text">指针压缩</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#对象占用内存大小"><span class="nav-number">12.5.</span> <span class="nav-text">对象占用内存大小</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Shallow-与-Retained区别"><span class="nav-number">12.6.</span> <span class="nav-text">Shallow 与 Retained区别</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Unsafe"><span class="nav-number">13.</span> <span class="nav-text">Unsafe</span></a></li></ol></div>
             
 
           </div>
@@ -1062,7 +1195,7 @@ final void runWorker(Worker w) {
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
