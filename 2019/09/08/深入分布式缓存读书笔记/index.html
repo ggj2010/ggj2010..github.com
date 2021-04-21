@@ -94,7 +94,7 @@
 <meta property="og:site_name" content="高广金博客">
 <meta property="og:description" content="缓存为王为什么使用缓存提高用户体验 客户端缓存页面缓存 浏览器缓存 app缓存 网络缓存反向代理缓存（nginx） 服务端缓存数据库缓存： mysql的查询缓存 query_cache_type=0 为off =1为on ，当数据量不频繁更新时候可以使用 query_cache_size 设置缓存当内存大小  innodb的缓存性能 innodb_buffer_pool_size 用来存储inno">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-09-08T12:26:43.258Z">
+<meta property="og:updated_time" content="2021-03-02T02:36:10.524Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入分布式缓存读书笔记">
 <meta name="twitter:description" content="缓存为王为什么使用缓存提高用户体验 客户端缓存页面缓存 浏览器缓存 app缓存 网络缓存反向代理缓存（nginx） 服务端缓存数据库缓存： mysql的查询缓存 query_cache_type=0 为off =1为on ，当数据量不频繁更新时候可以使用 query_cache_size 设置缓存当内存大小  innodb的缓存性能 innodb_buffer_pool_size 用来存储inno">
@@ -405,7 +405,24 @@ query_cache_size 设置缓存当内存大小
 </ul>
 <h2 id="分布式系统理论-1"><a href="#分布式系统理论-1" class="headerlink" title="分布式系统理论"></a>分布式系统理论</h2><h3 id="CAP理论"><a href="#CAP理论" class="headerlink" title="CAP理论"></a>CAP理论</h3><pre><code>AP:高可用，众多nosql用的比较多
 CA:关系型数据库用的比较多
-CP:分布式事物
+CP:分布式事物、Zookeeper
+
+CAP三选二原则，CA适用于支付、交易、票务等强一致性的行业，宁愿业务不可用，也不能容忍脏数据
+因为，在分布式系统内，P 是必然的发生的，不选 P，一旦发生分区错误，整个分布式系统就完全无法使用了，
+这是不符合实际需要的。所以，对于分布式系统，我们只能能考虑当发生分区错误时，如何选择一致性和可用性。
+开源的分布式系统往往又被分为 CP 系统和 AP 系统
+
+CP 系统，经典的比如 Zookeeper
+AP、 Eureka
+</code></pre><h4 id="为什么cap只能二选一"><a href="#为什么cap只能二选一" class="headerlink" title="为什么cap只能二选一"></a>为什么cap只能二选一</h4><pre><code>1：满足C和A，那么P能不能满足呢？
+满足C需要所有的服务器的数据要一样，也就是说要实现数据的同步，那么同步要不要时间？肯定是要的，并且机器越多，同步的时间肯定越慢，这里问题就来了，我们同时也满足了A，也就是说，我要同步时间短才行。这样的话，机器就不能太多了，也就是说P是满足不了的
+2：满足C和P，那么A能不能满足呢？
+满足P需要很多服务器，假设有1000台服务器，同时满足了C，也就是说要保证每台机器的数据都一样，那么同步的时间可就很大，在这种情况下，我们肯定是不能保证用户随时访问每台服务器获取到的数据都是最新的，想要获取最新的，可以，你就等吧，等全部同步完了，你就可以获取到了，但是我们的A要求短时间就可以拿到想要的数据啊，这不就是矛盾了，所以说这里A是满足不了了
+
+3：满足A和P，那么C能不能满足呢？
+
+满足P的话，需要多台服务器，而满足C的话，只有一台服务器才可以满足，这和P矛盾。
+</code></pre><h3 id="BASE"><a href="#BASE" class="headerlink" title="BASE"></a>BASE</h3><pre><code>BASE 理论是对 CAP 理论的延伸，核心思想是即使无法做到强一致性（Strong Consistency），但应用可以采用适合的方式达到最终一致性（Eventual Consitency）
 </code></pre><h3 id="分布式系统涉及策略"><a href="#分布式系统涉及策略" class="headerlink" title="分布式系统涉及策略"></a>分布式系统涉及策略</h3><pre><code>如何检测你还活着
 如何保证高可用
 容错处理
@@ -628,7 +645,7 @@ CP:分布式事物
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#缓存为王"><span class="nav-number">1.</span> <span class="nav-text">缓存为王</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么使用缓存"><span class="nav-number">1.1.</span> <span class="nav-text">为什么使用缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#客户端缓存"><span class="nav-number">1.2.</span> <span class="nav-text">客户端缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络缓存"><span class="nav-number">1.3.</span> <span class="nav-text">网络缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务端缓存"><span class="nav-number">1.4.</span> <span class="nav-text">服务端缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库缓存："><span class="nav-number">1.4.1.</span> <span class="nav-text">数据库缓存：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#平台级别缓存"><span class="nav-number">1.4.2.</span> <span class="nav-text">平台级别缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用级别缓存"><span class="nav-number">1.4.3.</span> <span class="nav-text">应用级别缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#公有云缓存服务"><span class="nav-number">1.4.4.</span> <span class="nav-text">公有云缓存服务</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分布式系统理论"><span class="nav-number">2.</span> <span class="nav-text">分布式系统理论</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#分布式系统概念"><span class="nav-number">2.1.</span> <span class="nav-text">分布式系统概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分布式系统理论-1"><span class="nav-number">2.2.</span> <span class="nav-text">分布式系统理论</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CAP理论"><span class="nav-number">2.2.1.</span> <span class="nav-text">CAP理论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分布式系统涉及策略"><span class="nav-number">2.2.2.</span> <span class="nav-text">分布式系统涉及策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分布式系统设计实践"><span class="nav-number">2.2.3.</span> <span class="nav-text">分布式系统设计实践</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#手动写缓存"><span class="nav-number">3.</span> <span class="nav-text">手动写缓存</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#缓存为王"><span class="nav-number">1.</span> <span class="nav-text">缓存为王</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么使用缓存"><span class="nav-number">1.1.</span> <span class="nav-text">为什么使用缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#客户端缓存"><span class="nav-number">1.2.</span> <span class="nav-text">客户端缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络缓存"><span class="nav-number">1.3.</span> <span class="nav-text">网络缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务端缓存"><span class="nav-number">1.4.</span> <span class="nav-text">服务端缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库缓存："><span class="nav-number">1.4.1.</span> <span class="nav-text">数据库缓存：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#平台级别缓存"><span class="nav-number">1.4.2.</span> <span class="nav-text">平台级别缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用级别缓存"><span class="nav-number">1.4.3.</span> <span class="nav-text">应用级别缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#公有云缓存服务"><span class="nav-number">1.4.4.</span> <span class="nav-text">公有云缓存服务</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分布式系统理论"><span class="nav-number">2.</span> <span class="nav-text">分布式系统理论</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#分布式系统概念"><span class="nav-number">2.1.</span> <span class="nav-text">分布式系统概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分布式系统理论-1"><span class="nav-number">2.2.</span> <span class="nav-text">分布式系统理论</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CAP理论"><span class="nav-number">2.2.1.</span> <span class="nav-text">CAP理论</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#为什么cap只能二选一"><span class="nav-number">2.2.1.1.</span> <span class="nav-text">为什么cap只能二选一</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BASE"><span class="nav-number">2.2.2.</span> <span class="nav-text">BASE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分布式系统涉及策略"><span class="nav-number">2.2.3.</span> <span class="nav-text">分布式系统涉及策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分布式系统设计实践"><span class="nav-number">2.2.4.</span> <span class="nav-text">分布式系统设计实践</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#手动写缓存"><span class="nav-number">3.</span> <span class="nav-text">手动写缓存</span></a></li></ol></div>
             
 
           </div>

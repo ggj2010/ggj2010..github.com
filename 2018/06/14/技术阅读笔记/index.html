@@ -98,7 +98,7 @@
 <meta property="og:image" content="https://tech.meituan.com/img/dp_account_high_avaliable_road/account_multi_alive_redis_before.png">
 <meta property="og:image" content="https://tech.meituan.com/img/dp_account_high_avaliable_road/account_sync_dirty_data.png">
 <meta property="og:image" content="https://tech.meituan.com/img/dp_account_high_avaliable_road/account_multi_alive_redis_after.png">
-<meta property="og:updated_time" content="2021-01-11T05:50:06.150Z">
+<meta property="og:updated_time" content="2021-02-24T12:20:21.180Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="技术阅读笔记">
 <meta name="twitter:description" content="好记性不如烂笔头。 日志级别动态调整   日志级别动态调整——小工具解决大问题     日志是每个项目必备的组件，这几年从开始工作接触的log4j到后来的logback，再到现在用的log4j2,日志文件 的查看从最开始的登录单台机器查看，到shell脚本一次性查看多台机器，再到后来ELK搜索搭建的可视化日志查询 系统。     日志使用不当对于高qps的服务来说会导致的线上严重的故障，所以统一化">
@@ -392,6 +392,8 @@ ctx.updateLoggers();
 </code></pre><h4 id="mysql-性能容量评估"><a href="#mysql-性能容量评估" class="headerlink" title="mysql 性能容量评估"></a>mysql 性能容量评估</h4><p>   <a href="&quot;https://www.cnblogs.com/Aiapple/p/5697912.html&quot;">参考</a></p>
 <pre><code>数据库业务特点关键词
    OLTP/OLAP
+    OLTP看中服务器CPU,内存，写事务较多或内存不够则依赖磁盘IO
+    OLAP看中磁盘扫描的IO能力，部分依赖内存排序
    并发请求
    读写比例
    数据量

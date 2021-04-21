@@ -94,7 +94,7 @@
 <meta property="og:site_name" content="高广金博客">
 <meta property="og:description" content="应用场景1、分布式协调分布式协调简单说就是有人对ZooKeeper中的数据做了监听，如果修改了ZooKeeper中被监听的数据，ZooKeeper反过来会告诉给发起监听的人数据的变更 2、元数据管理3、高可用支持主从选举 4、分布式锁支持分布式锁，高并发场景有性能问题 ZooKeeper集群架构leader领导者为客户端提供读和写功能，负责投票的发起与决议，集群里面只有leader才有写的功能 f">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-12-31T11:13:54.959Z">
+<meta property="og:updated_time" content="2021-04-15T08:49:35.520Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="zookeeper记录">
 <meta name="twitter:description" content="应用场景1、分布式协调分布式协调简单说就是有人对ZooKeeper中的数据做了监听，如果修改了ZooKeeper中被监听的数据，ZooKeeper反过来会告诉给发起监听的人数据的变更 2、元数据管理3、高可用支持主从选举 4、分布式锁支持分布式锁，高并发场景有性能问题 ZooKeeper集群架构leader领导者为客户端提供读和写功能，负责投票的发起与决议，集群里面只有leader才有写的功能 f">
@@ -384,7 +384,7 @@ leader接受到写请求就会往其他节点同步，如果有超过一半的�
 </code></pre><h5 id="两阶段提交-过半写机制"><a href="#两阶段提交-过半写机制" class="headerlink" title="两阶段提交+过半写机制"></a>两阶段提交+过半写机制</h5><pre><code>leader节点会把数据通过proposal请求发到所有节点，节点收到数据后会存储到磁盘上面，然后发送一个ack给leader
 ,如果leader接收到过半节点发送到ack响应，就会发送commit消息给各个节点，各个节点就会把消息放到内存里面（保证性能）
 ，这样这个消息用户就可以看到了。
-</code></pre><h4 id="zk选举过程"><a href="#zk选举过程" class="headerlink" title="zk选举过程"></a>zk选举过程</h4><pre><code>zk每个节点都会包含以下两个即诶单
+</code></pre><h4 id="zk选举过程"><a href="#zk选举过程" class="headerlink" title="zk选举过程"></a>zk选举过程</h4><pre><code>zk每个节点都会包含以下两个数据
 zxid：数据ID，每次数据变动都会自增，初始都是0（编号越大在选择算法中的权重越大。）
 sid: 该投票信息所属的serverId （越大说明数据越新，在选举算法中数据越新权重越大。）
 </code></pre><h5 id="规则"><a href="#规则" class="headerlink" title="规则"></a>规则</h5><pre><code>1、第一次投票都是给自己投票
@@ -397,9 +397,7 @@ sid: 该投票信息所属的serverId （越大说明数据越新，在选举算
 
 第二次投票：
  第一台机器收到的收到的是 （2，0），首先zxid一样，但是sid比自己大，所以投票改成（2，0）
-
  第二台机器收到的是（ 1，0），首先zxid一样，但是sid没有自己大，所以投票改成自己（2，0）
-
 因为已经超过半数，所以机器2当选。
  如果集群在运行的过程中Follower节点宕机了，对Leader节点是不影响的，
  如果集群在运行的过程中Leader节点宕机了，就会进行重新选举，重新选举的流程跟上述一致
@@ -419,6 +417,15 @@ key为ZXID，Value为提案的信息。对outstandingProposals的访问逻辑如
 
 Leader是如何判断当前ZXID之前是否还有未提交提案的呢？由于前提是保证顺序提交的，
 所以Leader只需判断outstandingProposals里，当前ZXID的前一个ZXID是否存在
+</code></pre><h4 id="Zab协议"><a href="#Zab协议" class="headerlink" title="Zab协议"></a>Zab协议</h4><pre><code>Zab协议 的全称是 Zookeeper Atomic Broadcast （Zookeeper原子广播）
+Zab协议是为分布式协调服务Zookeeper专门设计的一种 支持崩溃恢复 的 原子广播协议
+，是Zookeeper保证数据一致性的核心算法。Zab借鉴了Paxos算法，但又不像Paxos那样，
+是一种通用的分布式一致性算法。它是特别为Zookeeper设计的支持崩溃恢复的原子广播协议
+</code></pre><h4 id="zookeeper与Eureka-对比"><a href="#zookeeper与Eureka-对比" class="headerlink" title="zookeeper与Eureka 对比"></a>zookeeper与Eureka 对比</h4><pre><code>zk保证CP
+注册中心一般对可用性对要求高于一致性，因为ZK选举过程中 zk集群是不可用的。
+Eureka保证AP
+在设计的时候优先保证可用性，几个节点挂掉不会影响正常节点的工作，其余节点一眼可以提供注册和查询服务
+同时eureka还有自我保护功能，在15分钟内 85%的节点都没正常心跳，此时不会从注册中心摘掉因为长时间没有心跳而过期的服务
 </code></pre>
       
     </div>
@@ -610,7 +617,7 @@ Leader是如何判断当前ZXID之前是否还有未提交提案的呢？由于�
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#应用场景"><span class="nav-number">1.</span> <span class="nav-text">应用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1、分布式协调"><span class="nav-number">1.1.</span> <span class="nav-text">1、分布式协调</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2、元数据管理"><span class="nav-number">1.2.</span> <span class="nav-text">2、元数据管理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3、高可用"><span class="nav-number">1.3.</span> <span class="nav-text">3、高可用</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4、分布式锁"><span class="nav-number">1.4.</span> <span class="nav-text">4、分布式锁</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ZooKeeper集群架构"><span class="nav-number">2.</span> <span class="nav-text">ZooKeeper集群架构</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#leader领导者"><span class="nav-number">2.1.</span> <span class="nav-text">leader领导者</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#follower跟随者"><span class="nav-number">2.2.</span> <span class="nav-text">follower跟随者</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#observer观察者"><span class="nav-number">2.3.</span> <span class="nav-text">observer观察者</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#client"><span class="nav-number">2.4.</span> <span class="nav-text">client</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#zookeeper读写机制"><span class="nav-number">3.</span> <span class="nav-text">zookeeper读写机制</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#读"><span class="nav-number">3.1.</span> <span class="nav-text">读</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#写"><span class="nav-number">3.2.</span> <span class="nav-text">写</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#zk特点"><span class="nav-number">4.</span> <span class="nav-text">zk特点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#zk如何保证数据一致性"><span class="nav-number">5.</span> <span class="nav-text">zk如何保证数据一致性</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#两阶段提交-过半写机制"><span class="nav-number">5.1.</span> <span class="nav-text">两阶段提交+过半写机制</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#zk选举过程"><span class="nav-number">6.</span> <span class="nav-text">zk选举过程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#规则"><span class="nav-number">6.1.</span> <span class="nav-text">规则</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#例子"><span class="nav-number">6.2.</span> <span class="nav-text">例子</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ZooKeeper是如何保证事务顺序的呢？"><span class="nav-number">7.</span> <span class="nav-text">ZooKeeper是如何保证事务顺序的呢？</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#应用场景"><span class="nav-number">1.</span> <span class="nav-text">应用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1、分布式协调"><span class="nav-number">1.1.</span> <span class="nav-text">1、分布式协调</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2、元数据管理"><span class="nav-number">1.2.</span> <span class="nav-text">2、元数据管理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3、高可用"><span class="nav-number">1.3.</span> <span class="nav-text">3、高可用</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4、分布式锁"><span class="nav-number">1.4.</span> <span class="nav-text">4、分布式锁</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ZooKeeper集群架构"><span class="nav-number">2.</span> <span class="nav-text">ZooKeeper集群架构</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#leader领导者"><span class="nav-number">2.1.</span> <span class="nav-text">leader领导者</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#follower跟随者"><span class="nav-number">2.2.</span> <span class="nav-text">follower跟随者</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#observer观察者"><span class="nav-number">2.3.</span> <span class="nav-text">observer观察者</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#client"><span class="nav-number">2.4.</span> <span class="nav-text">client</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#zookeeper读写机制"><span class="nav-number">3.</span> <span class="nav-text">zookeeper读写机制</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#读"><span class="nav-number">3.1.</span> <span class="nav-text">读</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#写"><span class="nav-number">3.2.</span> <span class="nav-text">写</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#zk特点"><span class="nav-number">4.</span> <span class="nav-text">zk特点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#zk如何保证数据一致性"><span class="nav-number">5.</span> <span class="nav-text">zk如何保证数据一致性</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#两阶段提交-过半写机制"><span class="nav-number">5.1.</span> <span class="nav-text">两阶段提交+过半写机制</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#zk选举过程"><span class="nav-number">6.</span> <span class="nav-text">zk选举过程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#规则"><span class="nav-number">6.1.</span> <span class="nav-text">规则</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#例子"><span class="nav-number">6.2.</span> <span class="nav-text">例子</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ZooKeeper是如何保证事务顺序的呢？"><span class="nav-number">7.</span> <span class="nav-text">ZooKeeper是如何保证事务顺序的呢？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Zab协议"><span class="nav-number">8.</span> <span class="nav-text">Zab协议</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#zookeeper与Eureka-对比"><span class="nav-number">9.</span> <span class="nav-text">zookeeper与Eureka 对比</span></a></li></ol></div>
             
 
           </div>

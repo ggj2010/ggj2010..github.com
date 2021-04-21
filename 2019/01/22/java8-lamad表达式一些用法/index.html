@@ -94,7 +94,7 @@
 <meta property="og:site_name" content="高广金博客">
 <meta property="og:description" content="用lamad写了几天业务代码，发现方便不少。 map可以理解成是对对象里面部分属性的提取或者加工转化  filter：过滤某些数据 collect：是输出指定的集合类型，比如 collect(Collectors.toMap(TestBean::getId,  Function.identity())) collect(Collectors.groupingBy(TestBean::getName">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-12-22T04:03:39.060Z">
+<meta property="og:updated_time" content="2021-02-24T06:12:00.457Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java8 lamad表达式一些用法">
 <meta name="twitter:description" content="用lamad写了几天业务代码，发现方便不少。 map可以理解成是对对象里面部分属性的提取或者加工转化  filter：过滤某些数据 collect：是输出指定的集合类型，比如 collect(Collectors.toMap(TestBean::getId,  Function.identity())) collect(Collectors.groupingBy(TestBean::getName">
@@ -476,7 +476,7 @@ boxed()是装箱过程
 </code></pre><h4 id="逗号分割"><a href="#逗号分割" class="headerlink" title="逗号分割"></a>逗号分割</h4><pre><code>String courseIds = packList.stream()
       .filter(e -&gt; e.getCourse() != null)
       .map(PackageCourse::getCourseId).map(String::valueOf).distinct()
-        .collect(joining(&quot;,&quot;));
+        .collect(Collectors.joining(&quot;,&quot;));
 </code></pre>
       
     </div>
